@@ -63,7 +63,7 @@ card, a section with a drawing in the guide.
 | 2 | SOS: emergency status in presence (`sos {t}`), banner + generic notification for everyone in the mesh, card in Nearby, guide entry | done (`lib/features/sos/`) |
 | 3 | Offline messages ("the message waits for its owner") | done — see below |
 | 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | done — see below |
-| 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | todo |
+| 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | done — social preview = `docs/images/banner.en.png` (already 1280×640, the owner uploads it in GitHub settings); `fastlane/metadata/android/{en-US,ar}` + `docs/FDROID.md` (**blocker: play-services-nearby is proprietary** — options there); `docs/AUDIT.md`; `docs/SIGNING.md` (proposal, waits for the owner) |
 | 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | todo |
 
 ### Step 3 — offline messages (done)
@@ -182,4 +182,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
   outbox kept for saved chats, mesh test, PROTOCOL §9, SECURITY, guide. Next: step 4 (Wasl network suggestion + QR).
 - 2026-11-27 — 1.4 step 4 done: Wi-Fi QR on the hosting card, one-phone suggestion to open a Wasl network when
   many people are on Bluetooth only. Next: step 5 (social preview, F-Droid metadata, audit brief, signing design).
+- 2026-11-27 — 1.4 step 5 done (docs only). Owner asked for a new feature: "share Wasl" in Settings (two QR codes:
+  the hotspot + a download page served from the phone). Plan sent, waiting for "تمام" before coding.
 

@@ -1,0 +1,5 @@
+• Games inside chats: 6 for two, 5 for groups, each with a help page.
+• New "Khayamiya" look and icon.
+• Wasl network: your phone opens its own Wi-Fi, people nearby join with one tap.
+• Wasl guide: every way to connect, drawn.
+• Fixes for large text and Wi-Fi changes.
