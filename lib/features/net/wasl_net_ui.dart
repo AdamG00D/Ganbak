@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../l10n/l10n.dart';
+import '../../mesh/dual_link.dart';
 import '../../mesh/mesh_router.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/identity.dart';
@@ -207,6 +208,18 @@ class _Secret extends StatelessWidget {
   }
 }
 
+/// أنا أصلاً على واي فاي ومعايا ناس عليه: منزنّش بعرض شبكة تانية (الدخول هيقطعنا عنهم).
+bool _onWifiWithPeople(ChatHub hub) {
+  final link = hub.link;
+  final router = hub.router;
+  if (link is! DualLink || router == null) return false;
+  for (final n in hub.people) {
+    final l = router.linkOf(n.id);
+    if (l != null && link.isWifi(l)) return true;
+  }
+  return false;
+}
+
 /// شريط فوق الصفحات: "فلان فاتح شبكة وصل جنبك — ادخلها".
 class WaslNetOfferBanner extends StatelessWidget {
   const WaslNetOfferBanner({super.key, required this.kind});
@@ -221,7 +234,7 @@ class WaslNetOfferBanner extends StatelessWidget {
       listenable: Listenable.merge([net, hub]),
       builder: (context, _) {
         final offers = net.offersFrom(hub.people);
-        if (offers.isEmpty) return const SizedBox.shrink();
+        if (offers.isEmpty || _onWifiWithPeople(hub)) return const SizedBox.shrink();
         final node = offers.first;
         final p = context.palette;
         final l = context.l10n;

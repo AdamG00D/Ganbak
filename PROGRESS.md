@@ -122,5 +122,10 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — Wasl network implemented (see its section): Kotlin + Dart + UI + guide + docs + tests; screenshots
   reviewed; the large-text check also caught an old overflow in the Nearby list (fixed). Release notes: added to 1.3
   because 1.3 was never published — ask the owner whether to ship one release or split 1.3 / 1.4.
+- 2026-11-27 — security pass on games + Wasl network: group player→host messages must be sealed; malformed host
+  states dropped (`ViewGuard`) and read safely (`ViewRead`); invite / reaction / chat flood limits; no evicting
+  running rooms; refusing to reveal (battleships, RPS) = cheat after 20 s; direct rematch needs both players; kicked
+  members can't send sealed game moves; Kotlin join can't hang; offer banner hidden when already on Wi-Fi with
+  people. Tests: games_test (+5), games_ui_test (every game with real and junk state). Docs updated.
 - 2026-11-27 — owner: ship everything as one release, 1.3 (games + identity + guide + Wasl network). Version stays
   1.3.0+4; release notes already cover all of it. Next: owner's OK to build, then the real-phone test.

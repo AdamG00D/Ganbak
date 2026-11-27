@@ -9,10 +9,11 @@ import '../../../widgets/identity.dart';
 import '../../../widgets/ui.dart';
 import '../core/game_engine.dart';
 import '../core/game_room.dart';
+import '../core/view_read.dart';
 import '../engines/secret_games.dart';
 import 'game_screen.dart';
 
-List<String> _order(GameRoom room) => (room.view['o'] as List?)?.cast<String>() ?? room.players;
+List<String> _order(GameRoom room) => ViewRead.order(room.view, room.players);
 
 // =====================================================================
 // حجر ورقة مقص
@@ -46,12 +47,12 @@ class RpsBoard extends StatelessWidget {
     final order = _order(room);
     final me = room.myId;
     final other = order.firstWhere((x) => x != me, orElse: () => order.last);
-    final ready = (v['ready'] as List?)?.cast<String>() ?? const [];
-    final hist = (v['hist'] as List?)?.cast<Map>() ?? const [];
-    final score = {for (final e in (v['s'] as Map? ?? const {}).entries) '${e.key}': (e.value as num).toInt()};
+    final ready = ViewRead.strs(v['ready']);
+    final hist = [for (final h in (v['hist'] is List ? v['hist'] as List : const [])) if (h is Map) h];
+    final score = ViewRead.intMap(v['s']);
     final iPicked = ready.contains(me);
     final last = hist.isEmpty ? null : hist.last;
-    final cheat = v['cheat'] as String?;
+    final cheat = ViewRead.str(v['cheat']);
     return Column(
       children: [
         DuelHeader(room: room, scores: score),
@@ -127,7 +128,7 @@ class _Throw extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
-    final mine = last[me] as String?, theirs = last[other] as String?;
+    final mine = ViewRead.str(last[me]), theirs = ViewRead.str(last[other]);
     final w = last['w'];
     Widget hand(String? c, bool won) => Column(
       children: [
@@ -257,8 +258,8 @@ class _BattleshipBoardState extends State<BattleshipBoard> {
     final order = _order(room);
     final me = room.myId;
     final other = order.firstWhere((x) => x != me, orElse: () => order.last);
-    final ready = (v['ready'] as List?)?.cast<String>() ?? const [];
-    final shots = v['shots'] as Map? ?? const {};
+    final ready = ViewRead.strs(v['ready']);
+    final shots = ViewRead.map(v['shots']);
     final myShots = _shotMap(shots[me]);
     final theirShots = _shotMap(shots[other]);
     final placed = room.local['boardRound'] == room.round && room.local['board'] is String;
@@ -302,8 +303,8 @@ class _BattleshipBoardState extends State<BattleshipBoard> {
 
     final myTurn = v['turn'] == me && v['pending'] == null && !room.over;
     final lastMine = _lastResult(myShots);
-    final revealed = v['revealed'] as Map? ?? const {};
-    final theirBoard = revealed[other] as String?;
+    final revealed = ViewRead.map(v['revealed']);
+    final theirBoard = ViewRead.str(revealed[other]);
     return Column(
       children: [
         DuelHeader(room: room, scores: hits),
@@ -390,7 +391,7 @@ class _BattleshipBoardState extends State<BattleshipBoard> {
                           ),
                           if (v['cheat'] != null)
                             Text(
-                              l.gameCheated(room.nameOf(v['cheat'] as String)),
+                              l.gameCheated(room.nameOf('${v['cheat']}')),
                               style: TextStyle(color: p.danger, fontWeight: FontWeight.w700),
                             ),
                         ],

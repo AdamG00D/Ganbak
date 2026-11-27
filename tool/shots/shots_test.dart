@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -337,7 +338,14 @@ void main() {
     testWidgets('net offer', (tester) async {
       Shots.phone(tester);
       await world(tester);
-      hub.router!.nodes[Sample.karim]!.wifi = offer;
+      // الناس الوهميين بيختفوا بعد شوية لو الصور كلها اشتغلت ورا بعض: نرجّع كريم لو مش موجود
+      hub.router!.nodes.putIfAbsent(
+        Sample.karim,
+        () => MeshNode(Sample.karim, Uint8List(32))
+          ..name = 'كريم'
+          ..cartoon = 7
+          ..hops = 1,
+      ).wifi = offer;
       await Shots.shoot(tester, 'net-offer', () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetOfferBanner(kind: TransportKind.both)]))));
       await Shots.shoot(tester, 'net-offer-bt', () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetOfferBanner(kind: TransportKind.bluetooth)]))));
     });

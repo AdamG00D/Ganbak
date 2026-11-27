@@ -7,10 +7,14 @@ import '../../../core/theme/app_theme.dart';
 import '../../../widgets/cartoon_avatar.dart';
 import '../../../widgets/identity.dart';
 import '../core/game_room.dart';
+import '../core/view_read.dart';
 import 'game_screen.dart';
 
-List<String> _order(GameRoom room) => (room.view['o'] as List?)?.cast<String>() ?? room.players;
-List<int> _ints(Object? raw) => [for (final x in (raw as List? ?? const [])) (x as num).toInt()];
+List<String> _order(GameRoom room) => ViewRead.order(room.view, room.players);
+List<int> _ints(Object? raw) => ViewRead.ints(raw);
+
+/// لون اللاعب رقم [i] (برقم برا الحدود = أول لون).
+Color _playerColor(int i) => GameColors.players[i < 0 ? 0 : i % GameColors.players.length];
 
 bool _myTurn(GameRoom room) => room.view['turn'] == room.myId && !room.over;
 
@@ -52,7 +56,7 @@ class XoBoard extends StatelessWidget {
     final board = _ints(room.view['b']);
     final line = _ints(room.view['line']);
     final mine = _myTurn(room);
-    final colors = {for (var i = 0; i < order.length; i++) order[i]: GameColors.players[i]};
+    final colors = {for (var i = 0; i < order.length; i++) order[i]: _playerColor(i)};
     return Column(
       children: [
         DuelHeader(room: room, colors: colors),
@@ -98,7 +102,7 @@ class XoBoard extends StatelessWidget {
                                       builder: (_, t, _) => CustomPaint(
                                         painter: _XoMark(
                                           cross: board[i] == 0,
-                                          color: GameColors.players[board[i]],
+                                          color: _playerColor(board[i]),
                                           t: t,
                                           glow: line.contains(i),
                                         ),
@@ -193,7 +197,7 @@ class Connect4Board extends StatelessWidget {
     final line = _ints(room.view['line']);
     final last = room.view['last'];
     final mine = _myTurn(room);
-    final colors = {for (var i = 0; i < order.length; i++) order[i]: GameColors.players[i]};
+    final colors = {for (var i = 0; i < order.length; i++) order[i]: _playerColor(i)};
     final hole = p.isDark ? const Color(0xFF0F1226) : const Color(0xFFF5F6FA);
     return Column(
       children: [
@@ -230,7 +234,7 @@ class Connect4Board extends StatelessWidget {
                                       child: _Disc(
                                         size: d,
                                         hole: hole,
-                                        color: board[r * cols + c] == -1 ? null : GameColors.players[board[r * cols + c]],
+                                        color: board[r * cols + c] == -1 ? null : _playerColor(board[r * cols + c]),
                                         dropFrom: last == r * cols + c ? r + 1 : 0,
                                         ring: line.contains(r * cols + c),
                                       ),
@@ -313,13 +317,13 @@ class DotsBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final order = _order(room);
-    final n = (room.view['n'] as num?)?.toInt() ?? 4;
+    final n = ViewRead.integer(room.view['n']) ?? 4;
     final h = _ints(room.view['h']);
     final v = _ints(room.view['v']);
     final boxes = _ints(room.view['box']);
     final scores = _ints(room.view['s']);
     final mine = _myTurn(room);
-    final colors = [for (var i = 0; i < order.length; i++) GameColors.players[i]];
+    final colors = [for (var i = 0; i < order.length; i++) _playerColor(i)];
     return Column(
       children: [
         if (order.length == 2)
@@ -366,7 +370,7 @@ class DotsBoard extends StatelessWidget {
                         names: [for (final id in order) room.nameOf(id)],
                         dot: p.text,
                         empty: p.border,
-                        last: room.view['last'] as String?,
+                        last: ViewRead.str(room.view['last']),
                       ),
                     ),
                   );
@@ -434,12 +438,12 @@ class _DotsPainter extends CustomPainter {
     for (var r = 0; r < n; r++) {
       for (var c = 0; c < n; c++) {
         final o = boxes[r * n + c];
-        if (o < 0) continue;
+        if (o < 0 || o >= colors.length) continue;
         final rect = Rect.fromLTWH(c * cell, r * cell, cell, cell).deflate(4);
         canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(8)), Paint()..color = colors[o].withValues(alpha: 0.28));
         final tp = TextPainter(
           text: TextSpan(
-            text: names[o].characters.first,
+            text: o < names.length && names[o].isNotEmpty ? names[o].characters.first : '?',
             style: TextStyle(color: colors[o], fontWeight: FontWeight.w700, fontSize: cell * 0.36, fontFamily: AppTheme.fontFamily),
           ),
           textDirection: TextDirection.rtl,
@@ -452,7 +456,7 @@ class _DotsPainter extends CustomPainter {
       ..strokeWidth = 2.5
       ..strokeCap = StrokeCap.round;
     void line(Offset a, Offset b, int who, bool isLast) {
-      if (who < 0) {
+      if (who < 0 || who >= colors.length) {
         StitchPainter.drawStitch(canvas, a, b, emptyPaint, dash: 4, gap: 5);
         return;
       }
@@ -507,7 +511,7 @@ class MemoryBoard extends StatelessWidget {
     final scores = _ints(room.view['s']);
     final miss = room.view['miss'] == true;
     final mine = _myTurn(room) && !miss && open.length < 2;
-    final colors = [for (var i = 0; i < order.length; i++) GameColors.players[i]];
+    final colors = [for (var i = 0; i < order.length; i++) _playerColor(i)];
     final cols = 4;
     final rows = (faces.length / cols).ceil();
     return Column(
@@ -534,7 +538,7 @@ class MemoryBoard extends StatelessWidget {
                 for (var i = 0; i < faces.length; i++)
                   _MemoryCard(
                     face: faces[i],
-                    owner: own[i] < 0 ? null : colors[own[i]],
+                    owner: own[i] < 0 || own[i] >= colors.length ? null : colors[own[i]],
                     open: open.contains(i),
                     onTap: mine && faces[i] < 0
                         ? () {

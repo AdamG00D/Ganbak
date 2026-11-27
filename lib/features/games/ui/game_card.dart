@@ -7,6 +7,7 @@ import '../../chat/core/chat_session.dart';
 import '../../hub/chat_hub.dart';
 import '../core/game_kind.dart';
 import '../core/game_room.dart';
+import '../core/view_read.dart';
 import 'game_look.dart';
 import 'game_screen.dart';
 
@@ -33,11 +34,9 @@ class GameCard extends StatelessWidget {
     final g = message.game!;
     final color = GameLook.color(kind);
     final live = room != null && room.phase != RoomPhase.closed;
-    final wins = <String, int>{
-      for (final e in ((room?.wins ?? g['w']) as Map? ?? const {}).entries) '${e.key}': (e.value as num).toInt(),
-    };
-    final names = g['nm'] as Map? ?? const {};
-    String nameOf(String id) => room?.nameOf(id) ?? (names[id] as String? ?? '…');
+    final wins = room?.wins ?? ViewRead.intMap(g['w']);
+    final names = ViewRead.strMap(g['nm']);
+    String nameOf(String id) => room?.nameOf(id) ?? (names[id] ?? '…');
 
     String status;
     Widget? action;

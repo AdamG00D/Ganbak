@@ -88,6 +88,7 @@ Future<void> settle() => Future<void>.delayed(const Duration(milliseconds: 30));
 
 void main() {
   setUp(() {
+    GameCenter.newRoomEvery = const Duration(seconds: 8);
     GameRoom.heartbeat = const Duration(seconds: 5);
     GameRoom.hostSilence = const Duration(seconds: 25);
   });
@@ -201,6 +202,43 @@ void main() {
       expect(g.winners, [a]);
     });
 
+    test('حجر ورقة مقص: اللي مبيكشفش بعد ما التاني كشف بيخسر', () {
+      RpsEngine.revealTime = Duration.zero;
+      final g = RpsEngine([a, b], Random(1));
+      final sa = GameEngine.newSalt();
+      g.act(a, {'t': 'commit', 'h': GameEngine.commit('r', sa)});
+      g.act(b, {'t': 'commit', 'h': GameEngine.commit('s', GameEngine.newSalt())});
+      expect(g.tick(DateTime.now()), isFalse, reason: 'لسه محدش كشف');
+      g.act(a, {'t': 'reveal', 'c': 'r', 's': sa});
+      expect(g.tick(DateTime.now().add(const Duration(seconds: 1))), isTrue);
+      expect(g.cheat, b);
+      expect(g.winners, [a]);
+      RpsEngine.revealTime = const Duration(seconds: 20);
+    });
+
+    test('حرب السفن: اللي مبيكشفش لوحه في الآخر بيتحسب غشاش', () {
+      BattleshipEngine.revealTime = Duration.zero;
+      final g = BattleshipEngine([a, b], Random(1));
+      final boardB = BattleshipEngine.randomBoard(Random(2));
+      final sa = GameEngine.newSalt(), sb = GameEngine.newSalt();
+      final boardA = BattleshipEngine.randomBoard(Random(3));
+      g.act(a, {'t': 'ready', 'h': GameEngine.commit(boardA, sa)});
+      g.act(b, {'t': 'ready', 'h': GameEngine.commit(boardB, sb)});
+      for (var i = 0; i < 64; i++) {
+        if (boardB[i] == '.') continue;
+        g.act(a, {'t': 'shot', 'i': i});
+        g.act(b, {'t': 'ans', 'i': i, 'r': 1});
+      }
+      expect(g.over, isTrue);
+      expect(g.winners, [a]);
+      // a كشف لوحه، b لأ
+      g.act(a, {'t': 'reveal', 'b': boardA, 's': sa});
+      expect(g.tick(DateTime.now().add(const Duration(seconds: 1))), isTrue);
+      expect(g.cheat, b);
+      expect(g.winners, [a]);
+      BattleshipEngine.revealTime = const Duration(seconds: 20);
+    });
+
     test('مين الجاسوس: جاسوس واحد، والكلمة مبتظهرش في الحالة العامة', () {
       final g = SpyEngine([a, b, c, d], Random(7))..host = a;
       final spies = [a, b, c, d].where((p) => g.viewFor(p)!['spy'] == true).toList();
@@ -309,11 +347,12 @@ void main() {
       expect(rb.winners, [a]);
       expect(rb.wins[a], 1);
       expect(pb.session.messages.single.game!['w'], {a: 1});
-      // ماتش تاني: الاتنين لازم يوافقوا، واللي بيبدأ يتبدّل
-      rb.act({'t': 'again'});
+      // ماتش تاني: الاتنين لازم يوافقوا (حتى لو صاحب الغرفة طلب الأول)، واللي بيبدأ يتبدّل
+      room.act({'t': 'again'});
       await settle();
       expect(room.round, 0);
-      room.act({'t': 'again'});
+      expect(rb.view['again'], [a]);
+      rb.act({'t': 'again'});
       await settle();
       expect(rb.round, 1);
       expect(rb.over, isFalse);
@@ -475,6 +514,55 @@ void main() {
       await waitFor(() => rb.phase == RoomPhase.closed, timeout: const Duration(seconds: 5));
       expect(rb.end, RoomEnd.hostLeft);
       expect(pb.session.messages.single.game!['st'], 'done');
+    });
+
+    test('الأمان: في الجروب حركة مش مقفولة (ممكن تكون مزوّرة) بتترمي', () async {
+      final net = _Net();
+      final peers = [net.add(a, 'آدم'), net.add(b, 'كريم'), net.add(c, 'سلمى')];
+      final room = peers[0].center.invite(GameKind.spy)!;
+      await settle();
+      for (final p in peers.skip(1)) {
+        p.room(room.id).join();
+      }
+      await settle();
+      room.start();
+      await settle();
+      final turn = room.view['turn'] as String;
+      final clue = room.view['clue'];
+      // حد بيبعت "خلصت" باسم اللي عليه الدور في رسالة جروب عامة (من غير المفتاح المشترك)
+      net.deliver(turn == a ? b : turn, null, {'g': room.id, 'y': 'act', 'c': 99, 'a': {'t': 'done'}});
+      await settle();
+      expect(room.view['clue'], clue);
+      expect(room.view['turn'], turn);
+    });
+
+    test('الأمان: عزومات كتير ورا بعض من نفس الشخص بتترمي', () async {
+      final net = _Net();
+      final pb = net.add(b, 'كريم', group: false);
+      for (var i = 0; i < 10; i++) {
+        pb.center.receive(a, {'g': '0123456789a$i', 'y': 'inv', 'kind': 'xo', 'hn': 'آدم'}, private: false);
+      }
+      expect(pb.center.rooms, hasLength(1));
+      expect(pb.session.messages.where((m) => m.game != null), hasLength(1));
+    });
+
+    test('الأمان: حالة بايظة الشكل من صاحب الغرفة بتترمي', () async {
+      final net = _Net();
+      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final room = pa.center.invite(GameKind.xo)!;
+      await settle();
+      final rb = pb.room(room.id)..join();
+      await settle();
+      final good = rb.view;
+      for (final bad in [
+        {'o': [a, b], 'b': [0, 0, 0]}, // لوح ناقص
+        {'o': [a, b], 'b': List.filled(9, 7)}, // لاعب مش موجود
+        {'o': [a, b], 'b': List.filled(9, 'x')},
+        {'o': 'nope', 'b': List.filled(9, -1)},
+      ]) {
+        rb.receive(a, {'g': room.id, 'y': 'view', 'n': rb.n + 1, 'v': bad}, private: false);
+      }
+      expect(rb.view, same(good));
     });
 
     test('رسايل غريبة بتترمي', () async {

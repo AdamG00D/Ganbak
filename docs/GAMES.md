@@ -42,7 +42,12 @@ lib/features/games/
   host could read them (see SECURITY.md).
 - **Commitments.** Rock-paper-scissors picks and battleship boards stay in `room.local` on the owner's phone; only
   `commit(value, salt)` (SHA-256) is sent until the reveal. `autoMoves()` reveals and answers shots automatically,
-  even when the game screen is closed. The engine marks whoever reveals something that doesn't match as `cheat`.
+  even when the game screen is closed. The engine marks whoever reveals something that doesn't match as `cheat`, and
+  also whoever doesn't reveal within 20 s (the honest app reveals at once).
+- **Hardening.** In groups the host accepts player messages (`join`, `act`, …) only sealed (a forged group packet
+  can't move for someone else). Players drop malformed states (`ViewGuard`) and the screens read state through
+  `ViewRead` (wrong types become empty). One new room per person every 8 s, one running room per host; reactions
+  and game chat are throttled per person.
 - **Reliability.** The host re-sends the state every 5 s; players re-send unacknowledged acts every 3 s (the state
   carries `ac`, the last act number seen per player); 25 s without the host closes the room for everyone.
 - **Cards.** Each room has a card in the conversation (`ChatMessage.game`), saved with the chat if the chat is saved.

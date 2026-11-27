@@ -9,6 +9,7 @@ import '../../../widgets/ui.dart';
 import '../../hub/chat_hub.dart';
 import '../core/game_kind.dart';
 import '../core/game_room.dart';
+import '../core/view_read.dart';
 import '../data/quiz_bank.dart';
 import 'boards_classic.dart';
 import 'boards_party.dart';
@@ -117,7 +118,10 @@ class _GameScreenState extends State<GameScreen> {
       case RoomPhase.closed:
         return _Closed(room: room);
       case RoomPhase.playing:
-        if (room.view.isEmpty) return const Center(child: CircularProgressIndicator());
+        // مفيش حالة لسه، أو حالة شكلها بايظ (طبقة تانية ورا الفحص اللي في GameRoom)
+        if (room.view.isEmpty || !ViewGuard.valid(room.kind, room.view)) {
+          return const Center(child: CircularProgressIndicator());
+        }
         return switch (room.kind) {
           GameKind.xo => XoBoard(room: room),
           GameKind.connect4 => Connect4Board(room: room),
@@ -405,7 +409,7 @@ class ResultBar extends StatelessWidget {
         : room.joined && w.length == 1
         ? (room.players.length <= 2 ? l.gameYouLost : l.gameWinner(room.nameOf(w.single)))
         : l.gameWinner(w.map(room.nameOf).join('، '));
-    final again = (room.view['again'] as List?)?.cast<String>() ?? const [];
+    final again = ViewRead.strs(room.view['again']);
     final iAsked = again.contains(me);
     final canAgain = room.joined && (room.autoStart || room.isHost);
     final asked = again.where((x) => x != me).toList();
@@ -587,7 +591,7 @@ class DuelHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
-    final order = (room.view['o'] as List?)?.cast<String>() ?? room.players;
+    final order = ViewRead.order(room.view, room.players);
     final me = room.myId;
     final mine = order.contains(me) ? me : order.first;
     final other = order.firstWhere((x) => x != mine, orElse: () => mine);
@@ -621,7 +625,7 @@ class DuelHeader extends StatelessWidget {
         ? null
         : turn == me
         ? l.gameYourTurn
-        : l.gameTheirTurn(room.nameOf(turn as String));
+        : l.gameTheirTurn(room.nameOf('$turn'));
     return Column(
       children: [
         Container(
@@ -687,8 +691,8 @@ class ScoreStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final l = context.l10n;
-    final order = (room.view['o'] as List?)?.cast<String>() ?? room.players;
-    final gone = (room.view['gone'] as List?)?.cast<String>() ?? const [];
+    final order = ViewRead.order(room.view, room.players);
+    final gone = ViewRead.strs(room.view['gone']);
     final turn = room.view['turn'];
     return Column(
       children: [
@@ -753,7 +757,7 @@ class ScoreStrip extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                turn == room.myId ? l.gameYourTurn : l.gameTheirTurn(room.nameOf(turn as String)),
+                turn == room.myId ? l.gameYourTurn : l.gameTheirTurn(room.nameOf('$turn')),
                 style: TextStyle(
                   color: turn == room.myId ? p.ink : p.textMuted,
                   fontWeight: FontWeight.w700,

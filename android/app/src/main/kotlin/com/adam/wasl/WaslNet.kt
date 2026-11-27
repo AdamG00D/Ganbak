@@ -31,6 +31,9 @@ object WaslNet {
     private var reservation: WifiManager.LocalOnlyHotspotReservation? = null
     private var joinCallback: ConnectivityManager.NetworkCallback? = null
 
+    /** رد Flutter على طلب الدخول اللي لسه مستني (عشان لو خرجنا قبل ما يخلص منسيبش Flutter مستني على طول). */
+    private var pendingJoin: ((Boolean) -> Unit)? = null
+
     private val wifi get() = app.getSystemService(Context.WIFI_SERVICE) as WifiManager
     private val connectivity get() = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
@@ -157,25 +160,25 @@ object WaslNet {
             .setNetworkSpecifier(spec)
             .build()
         var answered = false
+        val answer: (Boolean) -> Unit = { ok ->
+            main.post {
+                if (!answered) {
+                    answered = true
+                    pendingJoin = null
+                    result.success(ok)
+                }
+            }
+        }
+        pendingJoin = answer
         val cb = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 // كل الاتصالات الجديدة في التطبيق تمشي على الشبكة دي (مفيهاش إنترنت، وده المطلوب)
                 connectivity.bindProcessToNetwork(network)
-                main.post {
-                    if (!answered) {
-                        answered = true
-                        result.success(true)
-                    }
-                }
+                answer(true)
             }
 
             override fun onUnavailable() {
-                main.post {
-                    if (!answered) {
-                        answered = true
-                        result.success(false)
-                    }
-                }
+                answer(false)
                 joinCallback = null
             }
 
@@ -190,6 +193,8 @@ object WaslNet {
     }
 
     private fun leave() {
+        pendingJoin?.invoke(false)
+        pendingJoin = null
         val cb = joinCallback ?: return
         joinCallback = null
         connectivity.bindProcessToNetwork(null)

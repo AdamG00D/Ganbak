@@ -61,6 +61,14 @@ Games have no server, so the phone that opens a game (the **room host**) is the 
   with someone you wouldn't trust to deal the cards.
 - **Memory:** the card layout comes from the host, so a modified host could know it.
 - Game chat and reactions in groups are encrypted with the group key, like group messages (limitation 2 applies).
+- **Public game state in groups can be forged by a malicious member.** The host broadcasts the board/state with the
+  group key, and (limitation 2) a member with a modified app can fake the host as the source. Players' own moves,
+  votes and answers can't be forged: they travel sealed to the host. The app ignores malformed states.
+- **Quiz speed is measured on each player's phone**, so a modified app could claim to be faster.
+- **Refusing to reveal is cheating too:** in Battleships and Rock paper scissors whoever doesn't reveal within 20 s
+  of the end (or of the other player's reveal) loses.
+- Invites are rate-limited (one new room per person every 8 s, one running room per host) and reactions / game chat
+  are throttled, so nobody can flood a chat with games.
 
 ## Wasl network (hotspot)
 
@@ -69,6 +77,10 @@ and password in the presence it broadcasts, so phones nearby can join it with on
 mesh running Wasl can see that password and join that Wi-Fi network**. It only gives them a local link — the same
 thing Bluetooth already gives them: private chats stay end-to-end encrypted and groups stay as described above. Turn
 the network off when you don't need it; it also closes when Wasl closes.
+
+Joining one is always your choice (a tap, then Android's own prompt showing the network name). A nearby device could
+advertise a network of its own; joining it only moves Wasl's local traffic there — private chats stay end-to-end
+encrypted — and the offer is shown only for phones directly next to you.
 
 ## Cryptography
 

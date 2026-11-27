@@ -6,11 +6,12 @@ import '../../../l10n/l10n.dart';
 import '../../../widgets/identity.dart';
 import '../../../widgets/ui.dart';
 import '../core/game_room.dart';
+import '../core/view_read.dart';
 import 'game_look.dart';
 import 'game_screen.dart';
 
-List<String> _order(GameRoom room) => (room.view['o'] as List?)?.cast<String>() ?? room.players;
-List<String> _strings(Object? raw) => [for (final x in (raw as List? ?? const [])) if (x is String) x];
+List<String> _order(GameRoom room) => ViewRead.order(room.view, room.players);
+List<String> _strings(Object? raw) => ViewRead.strs(raw);
 
 /// "عربي|إنجليزي" ← النص بلغة التطبيق.
 String _pick(BuildContext context, Object? pair) {
@@ -140,7 +141,7 @@ class SpyBoard extends StatelessWidget {
     final phase = v['phase'];
     final spy = s['spy'] == true;
     final voted = _strings(v['voted']);
-    final turn = v['turn'] as String?;
+    final turn = ViewRead.str(v['turn']);
     final children = <Widget>[];
 
     if (room.joined && s.isNotEmpty) {
@@ -171,7 +172,7 @@ class SpyBoard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            l.spyClues('${(v['clue'] as num? ?? 0).toInt() + 1}', '${v['clues']}'),
+            l.spyClues('${(ViewRead.integer(v['clue']) ?? 0) + 1}', '${ViewRead.integer(v['clues']) ?? 0}'),
             textAlign: TextAlign.center,
             style: TextStyle(color: p.textMuted, fontSize: 12.5),
           ),
@@ -218,7 +219,7 @@ class SpyBoard extends StatelessWidget {
             ),
         ]);
       case 'guess':
-        final caught = v['caught'] as String?;
+        final caught = ViewRead.str(v['caught']);
         final options = _strings(v['options']);
         children.addAll([
           const SizedBox(height: 14),
@@ -247,8 +248,8 @@ class SpyBoard extends StatelessWidget {
           ),
         ]);
       case 'done':
-        final spyId = v['spy'] as String?;
-        final caught = v['caught'] as String?;
+        final spyId = ViewRead.str(v['spy']);
+        final caught = ViewRead.str(v['caught']);
         children.addAll([
           const SizedBox(height: 14),
           StitchedBox(
@@ -362,19 +363,19 @@ class QuizBoard extends StatelessWidget {
     final me = room.myId;
     final phase = v['phase'];
     final order = _order(room);
-    final score = {for (final e in (v['s'] as Map? ?? const {}).entries) '${e.key}': (e.value as num).toInt()};
+    final score = ViewRead.intMap(v['s']);
     final ranking = [...order]..sort((a, b) => (score[b] ?? 0).compareTo(score[a] ?? 0));
 
     if (phase == 'done') return _Podium(room: room, ranking: ranking, score: score);
 
-    final index = (v['i'] as num?)?.toInt() ?? 0;
+    final index = ViewRead.integer(v['i']) ?? 0;
     final shown = _shownAt(index);
     final answered = _strings(v['answered']);
     final opts = _strings(v['opts']);
-    final right = (v['right'] as num?)?.toInt();
-    final picks = v['picks'] as Map? ?? const {};
-    final gain = v['gain'] as Map? ?? const {};
-    final myPick = (picks[me] as num?)?.toInt() ?? (room.local['ans$index@${room.round}'] as int?);
+    final right = ViewRead.integer(v['right']);
+    final picks = ViewRead.intMap(v['picks']);
+    final gain = ViewRead.intMap(v['gain']);
+    final myPick = picks[me] ?? (room.local['ans$index@${room.round}'] as int?);
     final iAnswered = answered.contains(me) || room.local.containsKey('ans$index@${room.round}');
 
     return ListView(
@@ -612,10 +613,10 @@ class MafiaBoard extends StatelessWidget {
     final me = room.myId;
     final order = _order(room);
     final alive = _strings(v['alive']);
-    final phase = v['phase'] as String?;
-    final role = s['role'] as String?;
+    final phase = ViewRead.str(v['phase']);
+    final role = ViewRead.str(s['role']);
     final iAmAlive = alive.contains(me);
-    final roles = v['roles'] as Map? ?? const {};
+    final roles = ViewRead.strMap(v['roles']);
     final night = phase == 'night';
     final children = <Widget>[];
 
@@ -667,7 +668,7 @@ class MafiaBoard extends StatelessWidget {
         if (!iAmAlive || role == null || role == 'citizen') {
           children.add(_Banner(icon: Icons.nightlight_round, text: l.mafiaNightWait, color: p.accentInk));
         } else if (role == 'mafia') {
-          final kills = s['kills'] as Map? ?? const {};
+          final kills = ViewRead.strMap(s['kills']);
           final team = _strings(s['team']);
           children.addAll([
             Text(l.mafiaPickKill, style: const TextStyle(fontWeight: FontWeight.w700)),
@@ -675,19 +676,19 @@ class MafiaBoard extends StatelessWidget {
             _PickList(
               room: room,
               ids: targets.where((x) => !team.contains(x)).toList(),
-              selected: kills[me] as String?,
+              selected: kills[me],
               onPick: (id) => room.act({'t': 'kill', 'for': id}),
             ),
             for (final e in kills.entries)
               if (e.key != me)
                 Padding(
                   padding: const EdgeInsets.only(top: 4),
-                  child: Text('${room.nameOf('${e.key}')} → ${room.nameOf('${e.value}')}', style: TextStyle(color: p.textMuted, fontSize: 12.5)),
+                  child: Text('${room.nameOf(e.key)} → ${room.nameOf(e.value)}', style: TextStyle(color: p.textMuted, fontSize: 12.5)),
                 ),
           ]);
         } else if (role == 'doctor') {
-          final saved = s['saved'] as String?;
-          final noSave = s['noSave'] as String?;
+          final saved = ViewRead.str(s['saved']);
+          final noSave = ViewRead.str(s['noSave']);
           children.addAll([
             Text(l.mafiaPickSave, style: const TextStyle(fontWeight: FontWeight.w700)),
             if (noSave != null) Text(l.mafiaNoSameTwice, style: TextStyle(color: p.textMuted, fontSize: 12)),
@@ -702,7 +703,7 @@ class MafiaBoard extends StatelessWidget {
                   ),
           ]);
         } else if (role == 'detective') {
-          final checked = s['checked'] as String?;
+          final checked = ViewRead.str(s['checked']);
           children.addAll([
             Text(l.mafiaPickCheck, style: const TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 6),
@@ -711,8 +712,9 @@ class MafiaBoard extends StatelessWidget {
           ]);
         }
         if (role == 'detective') {
-          for (final c in (s['checks'] as List? ?? const []).reversed) {
-            final who = (c as List)[0] as String;
+          for (final c in (s['checks'] is List ? s['checks'] as List : const []).reversed) {
+            if (c is! List || c.length < 2 || c[0] is! String) continue;
+            final who = c[0] as String;
             final bad = c[1] == true;
             children.add(_Banner(
               icon: bad ? Icons.warning_rounded : Icons.verified_rounded,
@@ -722,7 +724,7 @@ class MafiaBoard extends StatelessWidget {
           }
         }
       case 'morning' || 'talk':
-        final died = v['died'] as String?;
+        final died = ViewRead.str(v['died']);
         children.add(_Banner(
           icon: died != null ? Icons.sentiment_very_dissatisfied_rounded : Icons.wb_sunny_rounded,
           text: died != null
@@ -736,7 +738,7 @@ class MafiaBoard extends StatelessWidget {
         final voted = _strings(v['voted']);
         children.add(Text(l.mafiaVotedCount('${voted.length}', '${alive.length}'), style: TextStyle(color: p.textMuted)));
         if (iAmAlive) {
-          final mine = s['myVote'] as String?;
+          final mine = ViewRead.str(s['myVote']);
           children.add(const SizedBox(height: 6));
           children.add(_PickList(
             room: room,
@@ -747,10 +749,10 @@ class MafiaBoard extends StatelessWidget {
           ));
         }
       case 'out':
-        final out = v['out'] as String?;
+        final out = ViewRead.str(v['out']);
         children.add(_Banner(
           icon: out != null ? Icons.how_to_vote_rounded : Icons.balance_rounded,
-          text: out != null ? l.mafiaOut(room.nameOf(out), roleName(roles[out] as String?, l)) : l.mafiaNoOut,
+          text: out != null ? l.mafiaOut(room.nameOf(out), roleName(roles[out], l)) : l.mafiaNoOut,
           color: out != null ? p.accentInk : p.textMuted,
         ));
     }
@@ -777,7 +779,7 @@ class MafiaBoard extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(3),
                           decoration: BoxDecoration(color: p.surface, shape: BoxShape.circle, border: Border.all(color: p.border)),
-                          child: Text(roleEmoji(roles[id] as String?), style: const TextStyle(fontSize: 13)),
+                          child: Text(roleEmoji(roles[id]), style: const TextStyle(fontSize: 13)),
                         ),
                       ),
                   ],

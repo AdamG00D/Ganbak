@@ -217,6 +217,8 @@ Every message has `g` (room id, 8–32 hex chars) and `y` (type). `kind` (a `Gam
 Rules:
 
 - A `view`, `lobby`, `pv`, `bye` or `psay` is accepted only from the room's host; `pv`/`psay` only if private.
+- In groups, `join`/`unjoin`/`quit`/`sync`/`act` are accepted by the host only when private (sealed). A `view` whose
+  shape is wrong for its game is dropped. A phone accepts at most one new room per sender every 8 s.
 - The host re-sends `view` every 5 s; players re-send acts the host hasn't acknowledged (`ac`) every 3 s; the host
   drops an act whose `c` it has already applied. No message from the host for 25 s → the room closes.
 - Hidden choices (rock-paper-scissors picks, battleship boards) are sent as `commit = hex(SHA-256("wasl/game/commit|"

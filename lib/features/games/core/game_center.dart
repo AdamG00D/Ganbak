@@ -52,6 +52,9 @@ class GameCenter extends ChangeNotifier implements RoomLink {
   @override
   String get myName => transport.myName;
 
+  @override
+  bool get trustedPublic => !group;
+
   /// الغرفة اللي أنا فيها دلوقتي (لو فيه).
   GameRoom? get current {
     GameRoom? found;
@@ -84,13 +87,15 @@ class GameCenter extends ChangeNotifier implements RoomLink {
       autoStart: !group,
       rng: _rng,
     );
-    rooms[id] = room;
-    // الغرف القديمة المقفولة بتتشال
-    if (rooms.length > maxRooms) {
-      final old = rooms.values.firstWhere((r) => r.phase == RoomPhase.closed, orElse: () => rooms.values.first);
-      rooms.remove(old.id);
-      old.dispose();
+    // الغرف القديمة المقفولة بتتشال (الشغالة لأ)
+    if (rooms.length >= maxRooms) {
+      final old = rooms.values.where((r) => r.phase == RoomPhase.closed).firstOrNull;
+      if (old != null) {
+        rooms.remove(old.id);
+        old.dispose();
+      }
     }
+    rooms[id] = room;
     _timer ??= Timer.periodic(const Duration(seconds: 1), (_) => _pulse());
     notifyListeners();
     return room;
@@ -110,6 +115,7 @@ class GameCenter extends ChangeNotifier implements RoomLink {
       if (y != 'inv' && y != 'lobby' && y != 'view') return;
       final kind = GameKind.byId(m['kind']);
       if (kind == null || (group ? !kind.group : !kind.direct)) return;
+      if (!_acceptNewRoom(from)) return;
       final hn = m['hn'];
       final nm = m['nm'];
       final hostName = hn is String ? hn : (nm is Map && nm[from] is String ? nm[from] as String : null);
@@ -119,6 +125,24 @@ class GameCenter extends ChangeNotifier implements RoomLink {
       if (y == 'inv') return;
     }
     room.receive(from, m, private: private);
+  }
+
+  final Map<String, DateTime> _lastRoomFrom = {};
+  static Duration newRoomEvery = const Duration(seconds: 8);
+
+  /// حد بيغرق المحادثة عزومات: غرفة جديدة واحدة كل [newRoomEvery] من كل شخص، وكل شخص ليه غرفة شغالة واحدة
+  /// (الجديدة بتقفل القديمة — زي ما التطبيق نفسه بيعمل). ولو الغرف الشغالة كترت أوي منقبلش جديد.
+  bool _acceptNewRoom(String host) {
+    final now = DateTime.now();
+    final last = _lastRoomFrom[host];
+    if (last != null && now.difference(last) < newRoomEvery) return false;
+    final active = rooms.values.where((r) => r.phase != RoomPhase.closed).length;
+    if (active >= maxRooms) return false;
+    _lastRoomFrom[host] = now;
+    for (final r in rooms.values) {
+      if (r.host == host && r.phase != RoomPhase.closed) r.receive(host, {'g': r.id, 'y': 'bye', 'why': 'end'}, private: true);
+    }
+    return true;
   }
 
   /// حد خرج من الشبكة.

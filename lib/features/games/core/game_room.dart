@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import '../../../mesh/mesh_router.dart';
 import 'game_engine.dart';
 import 'game_kind.dart';
+import 'view_read.dart';
 
 enum RoomPhase {
   /// صاحب الغرفة عزم الناس ومستني يبدأ.
@@ -25,6 +26,10 @@ enum RoomEnd { ended, hostLeft, canceled }
 abstract class RoomLink {
   String get myId;
   String get myName;
+
+  /// الرسايل "العامة" هنا موثّقة بمصدرها؟ (الشات الخاص: أيوه — القناة مشفرة مع شخص واحد.
+  /// الجروب: لأ — أي عضو بتطبيق معدّل يقدر يزوّر مصدر رسالة جروب، فرسايل اللاعب لصاحب الغرفة لازم تيجي مقفولة.)
+  bool get trustedPublic;
 
   /// للكل (اللي في المحادثة).
   void sendAll(Map<String, dynamic> m);
@@ -204,6 +209,9 @@ class GameRoom extends ChangeNotifier {
   void receive(String from, Map<String, dynamic> m, {required bool private}) {
     if (phase == RoomPhase.closed) return;
     final y = m['y'];
+    // في الجروب: اللي رايح لصاحب الغرفة (دخول، حركات، أصوات) لازم يكون مقفول بمفتاح بيني وبين اللي بعته
+    final authentic = private || link.trustedPublic;
+    if (isHost && !authentic && const {'join', 'unjoin', 'quit', 'sync', 'act'}.contains(y)) return;
     if (from == host && !isHost) heard = DateTime.now();
     switch (y) {
       case 'lobby' when from == host && !isHost:
@@ -214,7 +222,8 @@ class GameRoom extends ChangeNotifier {
         final vn = GameEngine.intOf(m['n']);
         if (vn == null || vn < n) return;
         final v = m['v'];
-        if (v is! Map<String, dynamic>) return;
+        // حالة بايظة الشكل (صاحب غرفة بتطبيق معدّل) بتترمي — الشاشة بتفضل على آخر حالة سليمة
+        if (v is! Map<String, dynamic> || !ViewGuard.valid(kind, v)) return;
         n = vn;
         _readPlayers(m);
         view = v;
@@ -223,8 +232,9 @@ class GameRoom extends ChangeNotifier {
         final w = m['w'];
         if (w is Map) {
           wins = {
-            for (final e in w.entries)
-              if (e.key is String && e.value is num) e.key as String: (e.value as num).toInt(),
+            for (final e in w.entries.take(16))
+              if (e.key is String && MeshRouter.isId(e.key as String) && e.value is num)
+                e.key as String: (e.value as num).toInt().clamp(0, 1 << 20),
           };
         }
         phase = RoomPhase.playing;
@@ -248,11 +258,13 @@ class GameRoom extends ChangeNotifier {
         _close(m['why'] == 'left' ? RoomEnd.hostLeft : (m['why'] == 'cancel' ? RoomEnd.canceled : RoomEnd.ended));
       case 'rx':
         final e = m['e'];
-        if (e is String && ChatReactions.valid(e) && (players.contains(from) || from == host)) _addReaction(from, e);
+        if (e is String && ChatReactions.valid(e) && (players.contains(from) || from == host) && _allow('rx', from, 400)) {
+          _addReaction(from, e);
+        }
       case 'say':
         final t = m['t'];
         if (t is! String || t.isEmpty || t.length > GameSay.maxLength || !players.contains(from)) return;
-        if (!_canSay(from)) return;
+        if (!_canSay(from) || !_allow('say', from, 500)) return;
         _addSay(from, t, secret: false);
       case 'psay' when from == host && private:
         final t = m['t'], f = m['f'];
@@ -276,6 +288,18 @@ class GameRoom extends ChangeNotifier {
     }
   }
 
+  final Map<String, DateTime> _lastFrom = {};
+
+  /// حد بيغرق الغرفة تفاعلات أو كلام: واحدة كل [ms] ملّي ثانية بالكتير من كل شخص.
+  bool _allow(String what, String from, int ms) {
+    final key = '$what|$from';
+    final now = DateTime.now();
+    final last = _lastFrom[key];
+    if (last != null && now.difference(last).inMilliseconds < ms) return false;
+    _lastFrom[key] = now;
+    return true;
+  }
+
   /// شات اللعبة مقفول على حد (الميتين في المافيا) — صاحب الغرفة بيقول في الحالة.
   bool _canSay(String id) {
     final muted = view['mute'];
@@ -292,8 +316,9 @@ class GameRoom extends ChangeNotifier {
     }
     final nm = m['nm'];
     if (nm is Map) {
-      for (final e in nm.entries) {
-        if (e.key is String && e.value is String) names[e.key as String] = _cleanName(e.value as String);
+      for (final e in nm.entries.take(kind.maxPlayers + 4)) {
+        final id = e.key;
+        if (id is String && MeshRouter.isId(id) && e.value is String) names[id] = _cleanName(e.value as String);
       }
     }
   }
@@ -422,7 +447,7 @@ class GameRoom extends ChangeNotifier {
       if (!e.over) return;
       _again.add(from);
       // في الخاص الاتنين لازم يوافقوا، في الجروب صاحب الغرفة بيقرر
-      if (from == host || _again.containsAll(players)) {
+      if ((!autoStart && from == host) || _again.containsAll(players)) {
         round++;
         start();
       } else {

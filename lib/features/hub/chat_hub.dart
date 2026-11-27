@@ -1132,6 +1132,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         final node = r.nodes[src];
         final d = m['d'];
         if (g == null || node == null || d is! String || d.length > 96 * 1024) return;
+        // اللي اتشال من الجروب ميلعبش فيه
+        if (g.info.banned.contains(src)) return;
         try {
           final key = await _gameKey(src, node.publicKey);
           final clear = await Box.open(key, base64.decode(d), utf8.encode('wasl/game|$gid|$src|$myId'));

@@ -23,8 +23,12 @@ class RpsEngine extends GameEngine {
   bool _over = false;
   List<String> _winners = const [];
 
-  /// اللي كشف حاجة غير اللي كان باعت بصمتها.
+  /// اللي كشف حاجة غير اللي كان باعت بصمتها، أو مكشفش خالص بعد ما التاني كشف.
   String? cheat;
+
+  /// أول كشف في الرمية دي إمتى (اللي مبيكشفش بعد [revealTime] بيخسر — التطبيق السليم بيكشف على طول).
+  DateTime? _firstReveal;
+  static Duration revealTime = const Duration(seconds: 20);
 
   @override
   bool get over => _over;
@@ -58,13 +62,28 @@ class RpsEngine extends GameEngine {
           return true;
         }
         reveals[by] = c;
+        _firstReveal ??= DateTime.now();
         if (reveals.length == players.length) _resolve();
         return true;
     }
     return false;
   }
 
+  @override
+  bool tick(DateTime now) {
+    final since = _firstReveal;
+    if (_over || since == null || now.difference(since) < revealTime) return false;
+    // واحد كشف والتاني ساكت (يمكن شاف الكشف وعرف إنه خسران): الساكت خسر
+    final silent = players.firstWhere((p) => !reveals.containsKey(p), orElse: () => '');
+    if (silent.isEmpty) return false;
+    cheat = silent;
+    _over = true;
+    _winners = [for (final p in players) if (p != silent) p];
+    return true;
+  }
+
   void _resolve() {
+    _firstReveal = null;
     final a = players[0], b = players[1];
     final r = beats(reveals[a]!, reveals[b]!);
     final w = r == 0 ? null : (r > 0 ? a : b);
@@ -129,6 +148,10 @@ class BattleshipEngine extends GameEngine {
   final Map<String, String> revealed = {};
   String? cheat;
 
+  /// اللعبة خلصت إمتى: اللي مكشفش لوحه بعد [revealTime] بيتحسب غشاش (التطبيق السليم بيكشف على طول).
+  DateTime? _overAt;
+  static Duration revealTime = const Duration(seconds: 20);
+
   String get current => players[turn];
   String other(String p) => players[0] == p ? players[1] : players[0];
 
@@ -169,6 +192,7 @@ class BattleshipEngine extends GameEngine {
           final h = hits[current] = (hits[current] ?? 0) + 1;
           if (h >= shipCells) {
             _over = true;
+            _overAt = DateTime.now();
             _winners = [current];
           }
           // إصابة = تضرب تاني
@@ -270,6 +294,17 @@ class BattleshipEngine extends GameEngine {
     final shipCellsOf = [for (var i = 0; i < board.length; i++) if (board[i] == ch) i];
     final sunk = shipCellsOf.every((c) => c == cell || hitBefore.contains(c));
     return sunk ? 2 : 1;
+  }
+
+  @override
+  bool tick(DateTime now) {
+    final at = _overAt;
+    if (at == null || cheat != null || revealed.length == players.length || now.difference(at) < revealTime) return false;
+    final silent = players.firstWhere((p) => !revealed.containsKey(p));
+    cheat = silent;
+    _winners = [other(silent)];
+    _overAt = null;
+    return true;
   }
 
   @override
