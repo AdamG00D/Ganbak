@@ -40,20 +40,25 @@ void main() {
   });
 
   test('محدش يقدر يبعت باسم حد تاني أو يغيّر الرسالة', () async {
-    // كريم بيقفل رسالة لبسمة ويدّعي إنها من أحمد
+    // كريم بيقفل رسالة لبسمة ويحط معرّف أحمد ومفاتيحه في الجزء اللي فيه المرسل (مش معاه مفتاح أحمد الخاص)
     final fake = await MailCrypto.seal(
-      me: c.keyPair, myKey: c.publicKey, mySignKey: c.signKey, myId: c.id, myName: 'أحمد', to: b.id, recipientKey: b.publicKey, text: 'هات فلوس');
-    final forged = Envelope(
-        id: fake.id, from: a.id, to: b.id, senderKey: fake.senderKey, signKey: fake.signKey, ephemeral: fake.ephemeral, box: fake.box);
-    expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: forged), isNull);
-    // ولو حط مفتاح أحمد: الصندوق ميتفكش (الجزء الثابت محتاج مفتاح أحمد الخاص)
-    final forged2 = Envelope(
-        id: fake.id, from: a.id, to: b.id, senderKey: base64.encode(a.publicKey), signKey: base64.encode(a.signKey), ephemeral: fake.ephemeral, box: fake.box);
-    expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: forged2), isNull);
+      me: c.keyPair, myKey: a.publicKey, mySignKey: a.signKey, myId: a.id, myName: 'أحمد',
+      to: b.id, recipientKey: b.publicKey, text: 'هات فلوس');
+    expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: fake), isNull);
     // تغيير الرقم أو الصندوق
     final env = await sealAtoB('أهلاً');
-    final renamed = Envelope(id: 'ffffffffffffffff', from: env.from, to: env.to, senderKey: env.senderKey, signKey: env.signKey, ephemeral: env.ephemeral, box: env.box);
+    final renamed = Envelope(id: 'ffffffffffffffff', ephemeral: env.ephemeral, header: env.header, box: env.box);
     expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: renamed), isNull);
+    final other = await sealAtoB('رسالة تانية');
+    final swapped = Envelope(id: env.id, ephemeral: env.ephemeral, header: env.header, box: other.box);
+    expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: swapped), isNull);
+  });
+
+  test('الظرف مفيهوش مين المرسل ولا المستلم', () async {
+    final wire = jsonEncode((await sealAtoB('سر')).toWire());
+    for (final leak in [a.id, b.id, base64.encode(a.publicKey), base64.encode(b.publicKey), base64.encode(a.signKey)]) {
+      expect(wire.contains(leak), isFalse);
+    }
   });
 
   test('رسالة قديمة (أقدم من 3 أيام) متتقبلش — محدش يعيدها بعد ما ننساها', () async {
@@ -93,23 +98,23 @@ void main() {
   });
 
   test('رسايل غريبة بتترمي', () {
-    expect(Envelope.fromWire({'m': 'zz'}), isNull);
-    expect(Envelope.fromWire({'m': '0123456789abcdef', 'f': a.id, 'to': a.id, 'sk': 'x', 'e': 'y', 'c': 'z'}), isNull,
-        reason: 'لنفسه');
-    expect(Envelope.fromWire({'m': '0123456789abcdef', 'f': a.id, 'to': b.id, 'sk': 'x', 'e': 'y', 'c': 'z' * 20000}), isNull);
+    expect(Envelope.fromWire({'v': 2, 'm': 'zz'}), isNull);
+    expect(Envelope.fromWire({'m': '0123456789abcdef', 'e': 'y', 'h': 'x', 'c': 'z'}), isNull, reason: 'من غير إصدار');
+    expect(Envelope.fromWire({'v': 2, 'm': '0123456789abcdef', 'e': 'y', 'h': 'x', 'c': 'z' * 20000}), isNull);
+    expect(Envelope.fromWire({'v': 2, 'm': '0123456789abcdef', 'e': 'y', 'h': 'x', 'c': 'z', 'hp': 9}), isNull);
   });
 
-  test('اللي شايل رسايل لغيره: حدود للعدد ولكل مرسل وللمدة', () async {
+  test('اللي شايل رسايل لغيره: حدود للعدد ولكل جار وللمدة', () async {
     final box = CarryBox();
     final env = await sealAtoB('1');
-    expect(box.add(env), isTrue);
-    expect(box.add(env), isFalse, reason: 'مكررة');
-    for (var i = 0; i < CarryBox.maxPerSender + 5; i++) {
-      box.add(await sealAtoB('$i'));
+    expect(box.add(env, c.id), isTrue);
+    expect(box.add(env, c.id), isFalse, reason: 'مكررة');
+    for (var i = 0; i < CarryBox.maxPerNeighbour + 5; i++) {
+      box.add(await sealAtoB('$i'), c.id);
     }
-    expect(box.items.values.where((x) => x.env.from == a.id).length, CarryBox.maxPerSender);
-    expect(box.dueFor(b.id).length, CarryBox.maxPerSender);
-    expect(box.dueFor(c.id), isEmpty);
+    expect(box.items.values.where((x) => x.via == c.id).length, CarryBox.maxPerNeighbour);
+    expect(box.offersFor(c.id), isEmpty, reason: 'مبنرجعهاش للي ادهالنا');
+    expect(box.offersFor(b.id).length, CarryBox.maxPerNeighbour);
     box.prune(DateTime.now().add(const Duration(hours: 49)));
     expect(box.items, isEmpty, reason: 'بعد 48 ساعة بتتشال');
     expect(box.bytes, 0);

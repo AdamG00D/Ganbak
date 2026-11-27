@@ -41,7 +41,7 @@ void main() {
         myId: p.id,
         myName: p.name,
         keyOf: (id) => keys[id],
-        onMail: (from, _, _, mail) => got.putIfAbsent(p.id, () => []).add((from, mail)),
+        onMail: (mail) => got.putIfAbsent(p.id, () => []).add((mail.from, mail)),
         onDelivered: (_, id) => delivered.add(id),
       );
       r
@@ -71,7 +71,6 @@ void main() {
     await waitFor(() => (got[b.id] ?? []).isNotEmpty, what: 'بسمة استلمت');
     expect(got[b.id]!.single.$2.text, 'أنا جنب الباب الشمال');
     expect(got[b.id]!.single.$1, a.id);
-    await waitFor(() => !mc.carry.items.containsKey(id), what: 'كريم رمى نسخته');
     expect(delivered, isEmpty, reason: 'أحمد لسه معرفش');
 
     // أحمد يقرب تاني: الإيصال يوصله عن طريق كريم

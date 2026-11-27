@@ -365,6 +365,10 @@ S = {
     'impostorWarning': ('انتبه: ده مش {name} اللي كلمته قبل كده. لو غيّر موبايله أو مسح التطبيق، اتأكدوا من رمز الأمان.', 'Careful: this isn’t the {name} you talked to before. If they changed phones or reinstalled, check the safety code together.'),
     'guideIdentityTitle': ('مين ده فعلاً؟', 'Who is this really?'),
     'guideIdentityBody': ('الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه "بصمة" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك "مش هو؟". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.', 'Names in Wasl are free and can repeat, but everyone has a "fingerprint" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says "Not them?". You can also give anyone a name of your own. The sure way: the safety code, face to face.'),
+    # ---------------- الخصوصية ----------------
+    'mailFromAnyone': ('رسايل وانا مش موجود من أي حد', 'Waiting messages from anyone'),
+    'mailFromAnyoneOn': ('أي حد يقدر يسيبلك رسالة تستناك', 'Anyone can leave you a message that waits'),
+    'mailFromAnyoneOff': ('بس من الناس اللي اتكلمت معاهم قبل كده', 'Only from people you’ve talked to before'),
 }
 
 

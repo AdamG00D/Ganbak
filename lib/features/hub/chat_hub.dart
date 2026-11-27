@@ -1371,6 +1371,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       myName: _me.name,
       keyOf: (id) => _directs[id]?.publicKey ?? r.nodes[id]?.publicKey,
       onMail: _onMailArrived,
+      accept: (id) => AppSettings.instance.mailFromAnyone || (_directs[id] != null && isKnown(_directs[id]!)),
       onDelivered: (peer, id) {
         _saveOutbox();
         final msg = _queuedBubbles.remove(id);
@@ -1395,7 +1396,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     for (final e in saved.entries) {
       final envs = [
         for (final raw in e.value)
-          if (Envelope.fromWire(raw) case final env? when env.to == e.key && env.from == myId) env,
+          if (Envelope.fromWire(raw) case final env?) env,
       ];
       if (envs.isEmpty) continue;
       m.outbox.putIfAbsent(e.key, () => []).addAll(envs);
@@ -1449,7 +1450,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     _mailTimer = Timer(const Duration(milliseconds: 600), () => mail?.flush());
   }
 
-  void _onMailArrived(String from, Uint8List senderKey, Uint8List signKey, MailMessage m) {
+  void _onMailArrived(MailMessage m) {
+    final from = m.from, senderKey = m.senderKey, signKey = m.signKey;
     var chat = _directs[from];
     if (chat == null) {
       final node = router?.nodes[from];

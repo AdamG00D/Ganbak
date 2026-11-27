@@ -193,6 +193,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Divider(indent: 68, color: p.border),
                     SettingTile(
+                      icon: Icons.hourglass_top_rounded,
+                      title: l.mailFromAnyone,
+                      subtitle: s.mailFromAnyone ? l.mailFromAnyoneOn : l.mailFromAnyoneOff,
+                      trailing: Switch(value: s.mailFromAnyone, onChanged: s.setMailFromAnyone),
+                    ),
+                    Divider(indent: 68, color: p.border),
+                    SettingTile(
                       icon: Icons.lock_outline_rounded,
                       title: l.appLock,
                       subtitle: s.lockEnabled ? l.appLockOn : l.appLockOff,

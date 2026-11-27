@@ -22,6 +22,9 @@ class AppSettings extends ChangeNotifier {
   /// حفظ المحادثات على الجهاز (الافتراضي: لأ).
   bool saveChats = false;
 
+  /// "الرسالة تستنى صاحبها" من أي حد (الافتراضي: من الناس اللي اتكلمت معاهم قبل كده بس).
+  bool mailFromAnyone = false;
+
   /// قفل التطبيق برقم سري (اختياري).
   bool get lockEnabled => _pinHash != null;
   bool biometric = false;
@@ -39,6 +42,7 @@ class AppSettings extends ChangeNotifier {
     final lang = p.getString('language');
     language = const ['ar', 'en'].contains(lang) ? lang : null;
     saveChats = p.getBool('saveChats') ?? false;
+    mailFromAnyone = p.getBool('mailFromAnyone') ?? false;
     biometric = p.getBool('biometric') ?? false;
     lockAfterMinutes = p.getInt('lockAfter') ?? 1;
     _pinSalt = p.getString('pinSalt');
@@ -71,6 +75,12 @@ class AppSettings extends ChangeNotifier {
     saveChats = v;
     notifyListeners();
     await _prefs?.setBool('saveChats', v);
+  }
+
+  Future<void> setMailFromAnyone(bool v) async {
+    mailFromAnyone = v;
+    notifyListeners();
+    await _prefs?.setBool('mailFromAnyone', v);
   }
 
   Future<void> setBiometric(bool v) async {

@@ -2983,4 +2983,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get guideIdentityBody =>
       'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.';
+
+  @override
+  String get mailFromAnyone => 'رسايل وانا مش موجود من أي حد';
+
+  @override
+  String get mailFromAnyoneOn => 'أي حد يقدر يسيبلك رسالة تستناك';
+
+  @override
+  String get mailFromAnyoneOff => 'بس من الناس اللي اتكلمت معاهم قبل كده';
 }

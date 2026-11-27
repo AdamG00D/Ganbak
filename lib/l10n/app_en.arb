@@ -857,5 +857,8 @@
   "notHimSub": "New — not the {name} you talked to before",
   "impostorWarning": "Careful: this isn’t the {name} you talked to before. If they changed phones or reinstalled, check the safety code together.",
   "guideIdentityTitle": "Who is this really?",
-  "guideIdentityBody": "Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face."
+  "guideIdentityBody": "Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.",
+  "mailFromAnyone": "Waiting messages from anyone",
+  "mailFromAnyoneOn": "Anyone can leave you a message that waits",
+  "mailFromAnyoneOff": "Only from people you’ve talked to before"
 }

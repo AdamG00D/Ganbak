@@ -85,13 +85,12 @@ encrypted — and the offer is shown only for phones directly next to you.
 
 ## Messages that wait (offline messages)
 
-Text you write to someone who isn't around is sealed for that person alone (their identity key) and carried by
-phones near you for up to 48 hours. Carriers can't read it or change it unnoticed, but they do see **who wrote to
-whom, when and roughly how long** — the same metadata the mesh already shows for live chats. Delivery isn't
-guaranteed: carriers may drop messages, run out of room or never meet the recipient. "Delivered" appears only when a
-receipt sealed by the recipient comes back. Only text, and only to people whose key your phone already knows. A nearby device can make carriers drop their
-copies early (the "delivered, drop it" note isn't authenticated) — that only delays or loses a message, it can't
-read or change it.
+Text you write to someone who isn't around is sealed for that person alone and carried by phones near you for up to
+48 hours. Since 1.6 the envelope shows **neither who wrote it nor who it's for** — carriers see a random id and a
+padded size, and pass it to the neighbours they meet; only the recipient can tell it's theirs. By default you only
+accept such messages from people you've talked to before (Settings → Privacy). Delivery isn't guaranteed: carriers
+may drop messages, run out of room or never meet the recipient. "Delivered" appears only when a receipt sealed by the
+recipient comes back. Only text, and only to people whose key your phone already knows.
 
 ## Sharing the app ("Share Wasl")
 

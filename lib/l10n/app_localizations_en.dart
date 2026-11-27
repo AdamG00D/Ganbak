@@ -3017,4 +3017,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guideIdentityBody =>
       'Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.';
+
+  @override
+  String get mailFromAnyone => 'Waiting messages from anyone';
+
+  @override
+  String get mailFromAnyoneOn => 'Anyone can leave you a message that waits';
+
+  @override
+  String get mailFromAnyoneOff => 'Only from people you’ve talked to before';
 }

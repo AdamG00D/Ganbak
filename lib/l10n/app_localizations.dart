@@ -5245,6 +5245,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.'**
   String get guideIdentityBody;
+
+  /// No description provided for @mailFromAnyone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسايل وانا مش موجود من أي حد'**
+  String get mailFromAnyone;
+
+  /// No description provided for @mailFromAnyoneOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي حد يقدر يسيبلك رسالة تستناك'**
+  String get mailFromAnyoneOn;
+
+  /// No description provided for @mailFromAnyoneOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'بس من الناس اللي اتكلمت معاهم قبل كده'**
+  String get mailFromAnyoneOff;
 }
 
 class _AppLocalizationsDelegate

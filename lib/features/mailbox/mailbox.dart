@@ -10,68 +10,59 @@ import '../../core/crypto/sign.dart';
 import '../../core/profile/profile.dart';
 import '../../mesh/mesh_router.dart';
 
-/// رسالة مقفولة لشخص مش موجود دلوقتي — بتستنى صاحبها ("الرسالة تستنى صاحبها").
+/// رسالة مقفولة لشخص مش موجود دلوقتي ("الرسالة تستنى صاحبها") — الإصدار 2: الظرف مفيهوش لا مرسل ولا مستلم.
 ///
-/// التشفير (زي نمط Noise "X" في اتجاه واحد):
-///   المرسل بيعمل مفتاح مؤقت e لكل رسالة.
-///   المفتاح = HKDF( X25519(e, R) ‖ X25519(S, R) , "wasl/mailbox/v1", salt = e ‖ S ‖ R )
-///   S = مفتاح هوية المرسل الثابت، R = مفتاح هوية المستلم الثابت.
-///   الجزء التاني (S×R) بيثبت إن اللي قفلها هو صاحب S فعلاً — محدش يقدر يبعت باسم حد تاني.
-///   الصندوق = AES-256-GCM، والـ aad = "wasl/mailbox/v1|من|لمين|رقم الرسالة".
-/// اللي شايلين الرسالة في النص بيشوفوا من مين لمين بس (المعرّفات) — مش المحتوى.
+/// التشفير (زي نمط Noise "X"): المرسل S بيعمل مفتاح مؤقت e لكل رسالة، والمستلم R.
+///   k1 = HKDF(X25519(e,R), "wasl/mailbox/v2/hdr", salt e‖R)        → h = AES-GCM(k1, {f, sk, ek})  (مين المرسل)
+///   k2 = HKDF(X25519(e,R) ‖ X25519(S,R), "wasl/mailbox/v2", salt e‖S‖R) → c = AES-GCM(k2, {t, ts, n, to} + حشو)
+/// المستلم بس يقدر يفتح h (محتاج مفتاح R الخاص)، والجزء S×R بيثبت إن المرسل صاحب S فعلاً. اللي شايل الظرف بيشوف
+/// رقم عشوائي وحجم ثابت تقريباً — ميعرفش من مين ولا لمين.
 class Envelope {
-  Envelope({
-    required this.id,
-    required this.from,
-    required this.to,
-    required this.senderKey,
-    required this.signKey,
-    required this.ephemeral,
-    required this.box,
-  });
+  Envelope({required this.id, required this.ephemeral, required this.header, required this.box, this.hops = 0});
 
   /// رقم الرسالة (عشوائي، 16 هيكس).
   final String id;
-  final String from;
-  final String to;
-
-  /// مفتاح هوية المرسل الثابت (base64) — المستلم بيتأكد إنه بيتهاش لـ [from].
-  final String senderKey;
-
-  /// مفتاح توقيع المرسل (base64) — المعرّف = هاش المفتاحين، فمحدش يقدر يبدّله.
-  final String signKey;
   final String ephemeral;
+  final String header;
   final String box;
 
-  static const maxBox = 12 * 1024;
+  /// عدد المرات اللي اتسلّمت فيها من شايل لشايل (بيحد انتشارها).
+  int hops;
 
-  Map<String, dynamic> toWire() =>
-      {'m': id, 'f': from, 'to': to, 'sk': senderKey, 'ek': signKey, 'e': ephemeral, 'c': box};
+  static const maxBox = 12 * 1024;
+  static const maxHops = 3;
+
+  Map<String, dynamic> toWire() => {'v': 2, 'm': id, 'e': ephemeral, 'h': header, 'c': box, 'hp': hops};
 
   static Envelope? fromWire(Object? raw) {
-    if (raw is! Map) return null;
-    final m = raw['m'], f = raw['f'], to = raw['to'], sk = raw['sk'], ek = raw['ek'], e = raw['e'], c = raw['c'];
+    if (raw is! Map || raw['v'] != 2) return null;
+    final m = raw['m'], e = raw['e'], h = raw['h'], c = raw['c'], hp = raw['hp'];
     if (m is! String || !RegExp(r'^[0-9a-f]{16}$').hasMatch(m)) return null;
-    if (f is! String || to is! String || !MeshRouter.isId(f) || !MeshRouter.isId(to) || f == to) return null;
-    if (sk is! String || sk.length > 64 || e is! String || e.length > 64) return null;
-    if (ek is! String || ek.length > 64) return null;
+    if (e is! String || e.length > 64 || h is! String || h.isEmpty || h.length > 400) return null;
     if (c is! String || c.isEmpty || c.length > maxBox) return null;
-    return Envelope(id: m, from: f, to: to, senderKey: sk, signKey: ek, ephemeral: e, box: c);
+    final hops = hp is int ? hp : 0;
+    if (hops < 0 || hops > maxHops) return null;
+    return Envelope(id: m, ephemeral: e, header: h, box: c, hops: hops);
   }
 
-  int get size => box.length + 210;
-
-  /// مفتاح المرسل بيتهاش لمعرّفه؟ (المفتاحين مع بعض)
-  Future<bool> senderMatches() async {
-    final x = Sign.key(senderKey), s = Sign.key(signKey);
-    return x != null && s != null && await Profile.idOf(x, s) == from;
-  }
+  int get size => box.length + header.length + 120;
 }
 
 /// محتوى الرسالة بعد ما تتفك.
 class MailMessage {
-  const MailMessage({required this.id, required this.text, required this.sentAt, required this.name});
+  const MailMessage({
+    required this.id,
+    required this.from,
+    required this.senderKey,
+    required this.signKey,
+    required this.text,
+    required this.sentAt,
+    required this.name,
+  });
   final String id;
+  final String from;
+  final Uint8List senderKey;
+  final Uint8List signKey;
   final String text;
   final DateTime sentAt;
 
@@ -82,16 +73,18 @@ class MailMessage {
 class MailCrypto {
   MailCrypto._();
 
-  static const _info = 'wasl/mailbox/v1';
+  static const maxText = 4000;
+  static const _info = 'wasl/mailbox/v2';
 
   /// أقدم رسالة بنقبلها (نفس مدة تذكّر الرسايل اللي وصلت، عشان محدش يعيد رسالة قديمة).
   static const maxAge = Duration(days: 3);
-  static const maxText = 4000;
 
+  static List<int> _hdrAad(String id) => utf8.encode('$_info/hdr|$id');
   static List<int> _aad(String from, String to, String id) => utf8.encode('$_info|$from|$to|$id');
 
-  static Future<Uint8List> _key(List<int> dh1, List<int> dh2, List<int> e, List<int> s, List<int> r) =>
-      Kdf.hkdf([...dh1, ...dh2], _info, salt: [...e, ...s, ...r]);
+  static Future<List<int>> _dh(SimpleKeyPair kp, List<int> pub) async =>
+      (await X25519().sharedSecretKey(keyPair: kp, remotePublicKey: SimplePublicKey(pub, type: KeyPairType.x25519)))
+          .extractBytes();
 
   /// يقفل رسالة لـ [to] (مفتاحه [recipientKey]).
   static Future<Envelope> seal({
@@ -108,69 +101,69 @@ class MailCrypto {
   }) async {
     final r = rng ?? Random.secure();
     final id = List.generate(8, (_) => r.nextInt(256).toRadixString(16).padLeft(2, '0')).join();
-    final x = X25519();
-    final eph = await x.newKeyPair();
+    final eph = await X25519().newKeyPair();
     final ephPub = (await eph.extractPublicKey()).bytes;
-    final remote = SimplePublicKey(recipientKey, type: KeyPairType.x25519);
-    final dh1 = await (await x.sharedSecretKey(keyPair: eph, remotePublicKey: remote)).extractBytes();
-    final dh2 = await (await x.sharedSecretKey(keyPair: me, remotePublicKey: remote)).extractBytes();
-    final key = await _key(dh1, dh2, ephPub, myKey, recipientKey);
+    final dh1 = await _dh(eph, recipientKey);
+    final dh2 = await _dh(me, recipientKey);
+    final k1 = await Kdf.hkdf(dh1, '$_info/hdr', salt: [...ephPub, ...recipientKey]);
+    final k2 = await Kdf.hkdf([...dh1, ...dh2], _info, salt: [...ephPub, ...myKey, ...recipientKey]);
+    final header = await Box.seal(
+      k1,
+      utf8.encode(jsonEncode({'f': myId, 'sk': base64.encode(myKey), 'ek': base64.encode(mySignKey)})),
+      _hdrAad(id),
+    );
     final clipped = text.length > maxText ? text.substring(0, maxText) : text;
-    final body = utf8.encode(jsonEncode({
+    final body = SizePad.pad({
       't': clipped,
       'ts': (at ?? DateTime.now()).millisecondsSinceEpoch,
       'n': myName,
-    }));
-    final box = await Box.seal(key, body, _aad(myId, to, id));
-    return Envelope(
-      id: id,
-      from: myId,
-      to: to,
-      senderKey: base64.encode(myKey),
-      signKey: base64.encode(mySignKey),
-      ephemeral: base64.encode(ephPub),
-      box: base64.encode(box),
-    );
+      'to': to,
+    });
+    final box = await Box.seal(k2, utf8.encode(body), _aad(myId, to, id));
+    return Envelope(id: id, ephemeral: base64.encode(ephPub), header: base64.encode(header), box: base64.encode(box));
   }
 
-  /// يفتح رسالة ليّا. null = مش ليّا، أو المرسل مش صاحب المفتاح، أو اتعدلت.
+  /// يفتح رسالة لو ليّا. null = مش ليّا، أو المرسل مش صاحب مفاتيحه، أو اتعدلت، أو قديمة.
   static Future<MailMessage?> open({
     required SimpleKeyPair me,
     required List<int> myKey,
     required String myId,
     required Envelope env,
   }) async {
-    if (env.to != myId) return null;
     try {
-      final senderKey = base64.decode(env.senderKey);
       final ephPub = base64.decode(env.ephemeral);
-      if (senderKey.length != 32 || ephPub.length != 32) return null;
-      // المعرّف لازم يكون هاش المفتاح (محدش ينتحل معرّف غيره)
-      if (!await env.senderMatches()) return null;
-      final x = X25519();
-      final dh1 = await (await x.sharedSecretKey(
-        keyPair: me,
-        remotePublicKey: SimplePublicKey(ephPub, type: KeyPairType.x25519),
-      ))
-          .extractBytes();
-      final dh2 = await (await x.sharedSecretKey(
-        keyPair: me,
-        remotePublicKey: SimplePublicKey(senderKey, type: KeyPairType.x25519),
-      ))
-          .extractBytes();
-      final key = await _key(dh1, dh2, ephPub, senderKey, myKey);
-      final clear = await Box.open(key, base64.decode(env.box), _aad(env.from, env.to, env.id));
+      if (ephPub.length != 32) return null;
+      final dh1 = await _dh(me, ephPub);
+      final k1 = await Kdf.hkdf(dh1, '$_info/hdr', salt: [...ephPub, ...myKey]);
+      final hdr = await Box.open(k1, base64.decode(env.header), _hdrAad(env.id));
+      if (hdr == null) return null; // مش ليّا
+      final h = jsonDecode(utf8.decode(hdr));
+      if (h is! Map) return null;
+      final from = h['f'], sk = Sign.key(h['sk']), ek = Sign.key(h['ek']);
+      if (from is! String || !MeshRouter.isId(from) || from == myId || sk == null || ek == null) return null;
+      // المعرّف لازم يكون هاش المفتاحين (محدش ينتحل معرّف غيره)
+      if (await Profile.idOf(sk, ek) != from) return null;
+      final dh2 = await _dh(me, sk);
+      final k2 = await Kdf.hkdf([...dh1, ...dh2], _info, salt: [...ephPub, ...sk, ...myKey]);
+      final clear = await Box.open(k2, base64.decode(env.box), _aad(from, myId, env.id));
       if (clear == null) return null;
       final m = jsonDecode(utf8.decode(clear));
       if (m is! Map) return null;
       final t = m['t'], ts = m['ts'], n = m['n'];
-      if (t is! String || t.trim().isEmpty || t.length > maxText) return null;
+      if (m['to'] != myId || t is! String || t.trim().isEmpty || t.length > maxText) return null;
       // من غير وقت، أو أقدم من اللي بنفتكره (3 أيام): ممكن تكون رسالة قديمة بتتعاد — بنرميها
-      if (ts is! num) return null;
-      final sent = DateTime.fromMillisecondsSinceEpoch(ts.toInt());
+      if (ts is! int) return null;
+      final sent = DateTime.fromMillisecondsSinceEpoch(ts);
       if (DateTime.now().difference(sent) > maxAge) return null;
-      final name = n is String ? Profile.cleanName(n) : '';
-      return MailMessage(id: env.id, text: t, sentAt: sent.isAfter(DateTime.now()) ? DateTime.now() : sent, name: name);
+      return MailMessage(
+        id: env.id,
+        from: from,
+        senderKey: Uint8List.fromList(sk),
+        signKey: Uint8List.fromList(ek),
+        text: t,
+        sentAt: sent.isAfter(DateTime.now()) ? DateTime.now() : sent,
+        name: n is String ? Profile.cleanName(n) : '',
+      );
     } catch (_) {
       return null;
     }
@@ -197,23 +190,30 @@ class MailCrypto {
   }
 }
 
-/// رسالة شايلها لحد تاني (مقفولة — مبقدرش أقراها).
+/// رسالة شايلها لحد تاني (مقفولة — مبقدرش أقراها ولا أعرف لمين).
 class Carried {
-  Carried(this.env) : since = DateTime.now();
+  Carried(this.env, this.via) : since = DateTime.now();
   final Envelope env;
+
+  /// الجار اللي اداهاني (مبنرجعهاش له).
+  final String via;
   final DateTime since;
-  int deliveries = 0;
-  DateTime? lastTry;
+
+  /// الجيران اللي عرضتها عليهم.
+  final Set<String> offeredTo = {};
 }
 
 /// اللي موبايلي شايله لغيره: حدود عشان محدش يملا الموبايل.
 class CarryBox {
   static const maxTotal = 300;
-  static const maxPerSender = 30;
+
+  /// من نفس الجار (المرسل مش معروف للشايل، فالحد على اللي سلّمني).
+  static const maxPerNeighbour = 30;
   static const maxBytes = 2 * 1024 * 1024;
   static Duration lifetime = const Duration(hours: 48);
-  static const maxDeliveries = 3;
-  static Duration retryEvery = const Duration(minutes: 5);
+
+  /// بعرض الرسالة الواحدة على كام جار بالكتير.
+  static const maxOffers = 12;
 
   final Map<String, Carried> items = {};
   int _bytes = 0;
@@ -221,12 +221,12 @@ class CarryBox {
   int get bytes => _bytes;
 
   /// يشيل رسالة. false = مرفوضة (مكررة، أو الحدود اتملت).
-  bool add(Envelope env) {
+  bool add(Envelope env, String via) {
     prune();
     if (items.containsKey(env.id)) return false;
     if (items.length >= maxTotal || _bytes + env.size > maxBytes) return false;
-    if (items.values.where((c) => c.env.from == env.from).length >= maxPerSender) return false;
-    items[env.id] = Carried(env);
+    if (items.values.where((c) => c.via == via).length >= maxPerNeighbour) return false;
+    items[env.id] = Carried(env, via);
     _bytes += env.size;
     return true;
   }
@@ -239,26 +239,23 @@ class CarryBox {
   void prune([DateTime? now]) {
     final t = now ?? DateTime.now();
     for (final c in items.values.toList()) {
-      if (t.difference(c.since) > lifetime || c.deliveries >= maxDeliveries) remove(c.env.id);
+      if (t.difference(c.since) > lifetime || c.offeredTo.length >= maxOffers) remove(c.env.id);
     }
   }
 
-  /// الرسايل اللي أقدر أسلّمها لـ [peer] دلوقتي.
-  List<Carried> dueFor(String peer, [DateTime? now]) {
-    final t = now ?? DateTime.now();
-    return [
-      for (final c in items.values)
-        if (c.env.to == peer && (c.lastTry == null || t.difference(c.lastTry!) >= retryEvery)) c,
-    ];
-  }
+  /// الرسايل اللي لسه معرضتهاش على [neighbour].
+  List<Carried> offersFor(String neighbour) => [
+        for (final c in items.values)
+          if (c.via != neighbour && !c.offeredTo.contains(neighbour) && c.env.hops < Envelope.maxHops) c,
+      ];
 }
 
 /// خدمة "الرسالة تستنى صاحبها" على موبايل واحد: رسايلي المستنية، واللي شايله لغيري، والإيصالات.
 ///
-/// رسايل تحكم (U) — النسخ القديمة بتتجاهلها:
-///   {t: mb, m, f, to, sk, e, c}   رسالة مقفولة: لصاحبها، أو لجار مباشر يشيلها
-///   {t: mbd, m, d?}               من المستلم: d = إيصال مقفول للمرسل • من غير d = "ارمي نسختك"
-///   {t: mbd, m, ok: true}         من المرسل: الإيصال وصل (بطّل تبعته)
+/// رسايل تحكم (U) — بتمشي بالأكواد السرية زي باقي الرسايل الخاصة:
+///   {t: mb, v: 2, m, e, h, c, hp}  ظرف: لصاحبه لو موجود، أو لجار مباشر يشيله ويعرضه على اللي يقابله
+///   {t: mbd, m, d}                 من المستلم للمرسل: إيصال مقفول
+///   {t: mbd, m, ok: true}          من المرسل: الإيصال وصل (بطّل تبعته)
 class MailService {
   MailService({
     required this.router,
@@ -271,6 +268,7 @@ class MailService {
     required this.onMail,
     required this.onDelivered,
     this.isBlocked,
+    this.accept,
   });
 
   final MeshRouter router;
@@ -283,12 +281,15 @@ class MailService {
   /// مفتاح هوية شخص (لو نعرفه) — عشان نتأكد من إيصالاته.
   final List<int>? Function(String id) keyOf;
 
-  /// رسالة وصلتني واتفتحت: (المرسل، مفتاحه، الرسالة).
-  final void Function(String from, Uint8List senderKey, Uint8List signKey, MailMessage mail) onMail;
+  /// رسالة وصلتني واتفتحت.
+  final void Function(MailMessage mail) onMail;
 
   /// رسالتي وصلت لصاحبها (رقمها).
   final void Function(String peer, String id) onDelivered;
   final bool Function(String id)? isBlocked;
+
+  /// أقبل رسايل من الشخص ده؟ (الافتراضي في التطبيق: من الناس اللي أعرفهم بس)
+  final bool Function(String id)? accept;
 
   final CarryBox carry = CarryBox();
 
@@ -299,9 +300,16 @@ class MailService {
   final Map<String, DateTime> _seen = {};
   final Map<String, DateTime> _tried = {};
 
+  /// أظرف جربت أفتحها ومطلعتش ليّا (منجربهاش تاني).
+  final Set<String> _notMine = {};
+
+  /// كام ظرف حاولت أفتحه من كل جار في الدقيقة دي (محدش يشغّل موبايلي على الفاضي).
+  final Map<String, (int, int)> _opens = {};
+
   static const maxPerPeer = 50;
   static const maxSeen = 5000;
   static const maxPendingReceipts = 500;
+  static const maxOpensPerMinute = 60;
   static Duration resendEvery = const Duration(seconds: 20);
 
   /// يقفل رسالة لـ [to] ويحطها في الانتظار. يرجّع رقمها.
@@ -333,7 +341,7 @@ class MailService {
 
   void _send(String to, Map<String, dynamic> m) => router.sendControl(to, m).catchError((Object _) {});
 
-  /// يسلّم اللي يقدر يتسلّم دلوقتي، ويدّي نسخ لجيرانه المباشرين يشيلوها.
+  /// يسلّم اللي يقدر يتسلّم، ويدّي نسخ للجيران المباشرين، ويعرض اللي شايله على اللي قابلهم.
   void flush() {
     carry.prune();
     final neighbours = [for (final n in router.nodes.values) if (n.hops == 1) n.id];
@@ -346,20 +354,17 @@ class MailService {
         }
         final handed = _handedTo.putIfAbsent(env.id, () => {});
         for (final nb in neighbours) {
-          if (nb == peer || handed.contains(nb) || handed.length >= 8) continue;
+          if (handed.contains(nb) || handed.length >= 8) continue;
           handed.add(nb);
           _send(nb, {'t': 'mb', ...env.toWire()});
         }
       }
     }
-    for (final c in carry.items.values.toList()) {
-      final to = c.env.to;
-      if (!router.reachable(to)) continue;
-      for (final d in carry.dueFor(to)) {
-        d
-          ..lastTry = DateTime.now()
-          ..deliveries += 1;
-        _send(to, {'t': 'mb', ...d.env.toWire()});
+    // اللي شايله لغيري: بعرضه على كل جار جديد (مبعرفش هو لمين — صاحبه بس اللي هيعرف)
+    for (final nb in neighbours) {
+      for (final c in carry.offersFor(nb)) {
+        c.offeredTo.add(nb);
+        _send(nb, {'t': 'mb', ...c.env.toWire(), 'hp': c.env.hops + 1});
       }
     }
     for (final e in _pendingReceipts.entries.toList()) {
@@ -369,7 +374,7 @@ class MailService {
       }
     }
     final now = DateTime.now();
-    _seen.removeWhere((_, t) => now.difference(t) > const Duration(days: 3));
+    _seen.removeWhere((_, t) => now.difference(t) > MailCrypto.maxAge);
   }
 
   /// رسالة تحكم من نوع mb / mbd.
@@ -382,31 +387,37 @@ class MailService {
     }
   }
 
+  bool _canOpen(String src) {
+    final minute = DateTime.now().millisecondsSinceEpoch ~/ 60000;
+    final (at, n) = _opens[src] ?? (minute, 0);
+    final count = at == minute ? n + 1 : 1;
+    _opens[src] = (minute, count);
+    if (_opens.length > 500) _opens.remove(_opens.keys.first);
+    return count <= maxOpensPerMinute;
+  }
+
   Future<void> _onEnvelope(String src, Map<String, dynamic> m) async {
     final env = Envelope.fromWire(m);
-    if (env == null || (isBlocked?.call(env.from) ?? false)) return;
-    if (env.to != myId) {
-      // بنشيل بس من اللي جنبنا مباشرة (محدش يملا موبايلات بعيدة)، ولو مفتاح المرسل بيتهاش لمعرّفه
-      if (router.nodes[src]?.hops != 1) return;
-      if (!await env.senderMatches()) return;
-      if (carry.add(env)) flush();
-      return;
+    if (env == null || _seen.containsKey(env.id) || carry.items.containsKey(env.id)) return;
+    if (!_notMine.contains(env.id) && _canOpen(src)) {
+      final mail = await MailCrypto.open(me: me, myKey: myKey, myId: myId, env: env);
+      if (mail != null) {
+        _seen[env.id] = DateTime.now();
+        if (_seen.length > maxSeen) _seen.remove(_seen.keys.first);
+        if ((isBlocked?.call(mail.from) ?? false) || !(accept?.call(mail.from) ?? true)) return;
+        onMail(mail);
+        final sealed = await MailCrypto.receipt(me, myId, mail.senderKey, mail.from, env.id);
+        _pendingReceipts[env.id] = (mail.from, sealed);
+        if (_pendingReceipts.length > maxPendingReceipts) _pendingReceipts.remove(_pendingReceipts.keys.first);
+        flush();
+        return;
+      }
+      _notMine.add(env.id);
+      if (_notMine.length > maxSeen) _notMine.remove(_notMine.first);
     }
-    if (_seen.containsKey(env.id)) {
-      if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
-      return;
-    }
-    final mail = await MailCrypto.open(me: me, myKey: myKey, myId: myId, env: env);
-    if (mail == null) return;
-    _seen[env.id] = DateTime.now();
-    if (_seen.length > maxSeen) _seen.remove(_seen.keys.first);
-    final senderKey = Uint8List.fromList(base64.decode(env.senderKey));
-    onMail(env.from, senderKey, Uint8List.fromList(Sign.key(env.signKey)!), mail);
-    if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
-    final sealed = await MailCrypto.receipt(me, myId, senderKey, env.from, env.id);
-    _pendingReceipts[env.id] = (env.from, sealed);
-    if (_pendingReceipts.length > maxPendingReceipts) _pendingReceipts.remove(_pendingReceipts.keys.first);
-    flush();
+    // مش ليّا: بشيله بس لو من جار مباشر ولسه مسافرش كتير
+    if (router.nodes[src]?.hops != 1 || env.hops > Envelope.maxHops) return;
+    if (carry.add(env, src)) flush();
   }
 
   Future<void> _onReceipt(String src, Map<String, dynamic> m) async {
@@ -417,8 +428,6 @@ class MailService {
       if (p != null && p.$1 == src) _pendingReceipts.remove(mid);
       return;
     }
-    final carried = carry.items[mid];
-    if (carried != null && carried.env.to == src) carry.remove(mid);
     final d = m['d'];
     final list = outbox[src];
     final key = keyOf(src);
@@ -440,5 +449,7 @@ class MailService {
     _handedTo.clear();
     _pendingReceipts.clear();
     _tried.clear();
+    _notMine.clear();
+    _opens.clear();
   }
 }
