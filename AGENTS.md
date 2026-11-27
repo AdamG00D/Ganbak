@@ -184,6 +184,10 @@ android/app/src/main/kotlin/com/adam/wasl/
   + `U {t: gm}` sealed per recipient with `Box.pairKey(..., 'wasl/game')` (acts, secrets, secret chat). The host runs
   the engine; `view`/`pv`/`bye`/`psay` only from the host; acts are numbered and re-sent until acknowledged (`ac`);
   25 s of host silence closes the room. RPS picks and battleship boards are commitments, revealed later.
+- **Privacy (1.6)**: nodes with `pr: 1` get `D`/`U` frames addressed by rotating route tags (`mesh/route_tags.dart`,
+  10-min epochs, per-pair key `wasl/route/v1`) instead of ids; payloads padded (`SizePad`); private-group members
+  announce `gt` tags (`groups/group_tags.dart`), only owner/admins advertise the ad; offline-message envelopes (v2) have
+  no sender/recipient in clear; group invites `U {t: gi}` sealed per recipient. Keep tests in `privacy_test.dart` green.
 - **Wasl network**: presence `w {s, p, x}` only while hosting; offered to direct neighbours only; `LanLink` re-reads
   its addresses every 3 s and reopens the beacon socket when they change (needed after hosting / joining).
 - **Saving**: default off. A conversation is written to disk only if `saveOverride ?? AppSettings.saveChats`; media of

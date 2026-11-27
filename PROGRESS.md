@@ -262,4 +262,12 @@ a phone's large-font setting): any text that spills out of its box fails the run
   **1.5 built and published** (owner's OK): https://github.com/AdamG00D/Wasl/releases/tag/v1.5 — tag v1.5 at d104409,
   4 APKs + SHA256SUMS, certificate fa4ecf16…c341, versionCode 6. 1.3 / 1.4 were never published (one release rule).
   Next: owner finishes Search Console; then the Jisr Bluetooth library (plan first).
+- 2026-11-27 — 1.6 privacy, parts 1–3 done (not released yet): route tags for D/U frames (all mesh tests now run
+  through them), padding, mailbox v2 (no ids in clear, carriers offer to every neighbour, ≤ 3 hand-overs, trial-open
+  ≤ 60/min/neighbour, accept from known people by default + setting "waiting messages from anyone"), hidden membership
+  in private groups (`gt`), group invites (`gi`; ask-mode = owner only, pre-approves). Security review: invite with a
+  forged owner for a visible group is dropped. Website: download button = `releases/latest/download/Wasl-android.apk`
+  (build script now also writes `Wasl-android.apk` / `Wasl-android-universal.apk`; both added to the v1.5 release);
+  "protests" removed from the site (README / fastlane still mention it — ask the owner).
+  Waiting for the owner: OK on the games plan (crypto dealing for spy, dealing + role commitment for mafia).
 
