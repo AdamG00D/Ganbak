@@ -20,7 +20,7 @@ nearby talk directly over **Bluetooth** or the same **Wi-Fi / hotspot**, and rel
 **mesh**, so a message can reach someone well beyond your own phone's range. Private chats are end-to-end encrypted
 automatically — no accounts, no phone numbers, no passwords.
 
-Built for places where the network is down, overloaded or untrusted: protests, festivals, trips, campuses, power
+Built for places where the network is down, overloaded or untrusted: festivals, stadiums, trips, campuses, power
 cuts. The interface is in Arabic and English — it follows
 the phone's language, and you can switch it in Settings.
 
