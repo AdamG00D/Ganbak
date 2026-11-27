@@ -2222,7 +2222,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpSpyHow =>
-      'The app picks a category (food, places…) and a word.\nEveryone sees the word on their phone, except one player who sees \"You\'re the spy\" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps \"Done\".\nAfter the hints, everyone votes for the spy.\nIf the spy is caught, they get one last chance to guess the word out of 8.';
+      'The app picks a category (food, places…), and all the phones take part in dealing the roles and the word so nobody can cheat — not even whoever opened the game knows who the spy is.\nEveryone sees the word on their phone, except one player who sees \"You\'re the spy\" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps \"Done\".\nAfter the hints, everyone votes for the spy.\nThe phone of the caught player shows their card: if they are the spy, they get one last chance to guess the word from the category.\nAt the end every phone reveals its secrets and checks that nobody cheated.';
 
   @override
   String get helpSpyRoles =>
@@ -3077,4 +3077,38 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inviteOnly => 'This group is invite-only';
+
+  @override
+  String spyDealing(String step, String total) {
+    return 'Dealing roles… ($step/$total)';
+  }
+
+  @override
+  String get spyDealingSub =>
+      'Every phone takes part in the deal: nobody knows who the spy is except the spy — not even whoever opened the game — and nobody picked the word alone.';
+
+  @override
+  String spyProving(String name) {
+    return '$name is showing their card…';
+  }
+
+  @override
+  String get spyChecking => 'Checking that nobody cheated…';
+
+  @override
+  String spyCheat(String names) {
+    return '⚠️ Cheating or a missing reveal: $names';
+  }
+
+  @override
+  String get spyFailed =>
+      'The deal didn’t finish (someone left or didn’t answer) — start a new match.';
+
+  @override
+  String get mafiaRolesChanged =>
+      '⚠️ Roles changed mid-game — whoever opened the game cheated';
+
+  @override
+  String get mafiaRolesChecked =>
+      'Checked: the roles didn’t change since the start';
 }

@@ -203,10 +203,23 @@ class GameSamples {
 
   static Future<GameRoom> lobby(String me) async => (await party(me, GameKind.mafia, players: 3)).$1;
 
-  static Future<GameRoom> spy(String me, {bool vote = false}) async {
+  static Future<GameRoom> spy(String me, {bool vote = false, bool deal = false}) async {
     final (room, net, id) = await party(me, GameKind.spy);
     room.start();
-    await _settle();
+    if (deal) {
+      // لسه بيتوزع: نوقف في نص الخلط
+      for (var k = 0; k < 200 && room.view['phase'] != 'mix'; k++) {
+        await _settle();
+      }
+      return room;
+    }
+    // التوزيع العادل بيمشي لوحده بين الموبايلات (الوهمية)
+    for (var k = 0; k < 400 && room.view['phase'] != 'clue'; k++) {
+      await _settle();
+    }
+    for (var k = 0; k < 50 && room.local['role@${room.round}'] == null; k++) {
+      await _settle();
+    }
     if (vote) {
       for (var i = 0; i < 8; i++) {
         final who = room.view['turn'] as String;

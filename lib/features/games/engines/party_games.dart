@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../core/fair_deal.dart';
 import '../core/game_engine.dart';
 import '../core/game_room.dart';
 import '../data/quiz_bank.dart';
@@ -36,39 +37,63 @@ Map<String, int> _tally(Iterable<String> votes) {
 // =====================================================================
 
 /// الكل بياخد نفس الكلمة إلا واحد (الجاسوس) بياخد الفئة بس.
-/// تلميحات بالدور ← تصويت ← لو الجاسوس اتمسك يخمّن الكلمة من 8.
+/// توزيع عادل ← تلميحات بالدور ← تصويت ← اللي اتمسك يكشف كارته ← لو جاسوس يخمّن الكلمة ← الكل يكشف ونتأكد.
+///
+/// صاحب الغرفة مبيعرفش مين الجاسوس ولا الكلمة: الأدوار بتتوزع بـ [FairDeal] (كل موبايل بيخلط ويفك دوره)،
+/// وكل لاعب بيعرف دوره لوحده. صاحب الغرفة بس بينظّم الخطوات، وفي الآخر الكل بيكشف أسراره والنتيجة بتتحسب
+/// وبتتأكد على كل الموبايلات.
 class SpyEngine extends GameEngine {
   SpyEngine(super.players, super.rng) {
     final cats = SpyWords.categoryKeys;
     category = cats[rng.nextInt(cats.length)];
-    final words = SpyWords.categories[category]!;
-    word = words[rng.nextInt(words.length)];
-    spy = players[rng.nextInt(players.length)];
-    final others = List.of(words)..remove(word)..shuffle(rng);
-    options = [word, ...others.take(7)]..shuffle(rng);
+    words = SpyWords.categories[category]!;
     // 4 لاعبين أو أقل: لفّتين تلميحات
     rounds = players.length <= 4 ? 2 : 1;
+    stepEnds = DateTime.now().add(dealTime);
   }
 
   late final String category;
-  late final String word;
-  late final String spy;
-  late final List<String> options;
+  late final List<String> words;
   late final int rounds;
 
-  /// clue ← vote ← guess ← done
-  String phase = 'clue';
+  /// give ← mix ← strip ← clue ← vote ← prove ← guess ← open ← done
+  String phase = 'give';
+
+  // ---- التوزيع ----
+  final Map<String, List<String>> _cols = {};
+  final Map<String, String> blankHash = {};
+  final Map<String, Map<String, String>> boxes = {};
+
+  /// المفتاح العام لكل لاعب (e·G) — عشان محدش يكشف مفتاح غير بتاعه.
+  final Map<String, String> pk = {};
+  List<List<String>>? matrix;
+  int chain = 0;
+  DateTime? stepEnds;
+  static Duration dealTime = const Duration(seconds: 45);
+
+  // ---- اللعب ----
   int turn = 0;
   int clueCount = 0;
   final Map<String, String> votes = {};
+  final Set<String> gone = {};
   String? caught;
+
+  /// اللي اتمسك كشف كارته: spy / not / cheat.
+  String? proved;
   int? guess;
-  bool _over = false;
-  List<String> _winners = const [];
-  DateTime? voteEnds;
+  DateTime? voteEnds, proveEnds, guessEnds, openEnds;
   static Duration voteTime = const Duration(seconds: 60);
   static Duration guessTime = const Duration(seconds: 45);
-  DateTime? guessEnds;
+  static Duration revealTime = const Duration(seconds: 30);
+
+  // ---- الآخر ----
+  final Map<String, Map<String, dynamic>> opened = {};
+  String? spy;
+  int? word;
+  final Set<String> cheats = {};
+  bool _over = false;
+  bool failed = false;
+  List<String> _winners = const [];
 
   @override
   bool get over => _over;
@@ -76,18 +101,37 @@ class SpyEngine extends GameEngine {
   @override
   List<String> get winners => _winners;
 
-  String get current => players[turn % players.length];
+  int get n => players.length;
+  List<String> get _active => [for (final p in players) if (!gone.contains(p)) p];
+  String get current => players[turn % n];
 
-  void _spyWins() {
+  void _fail() {
     _over = true;
+    failed = true;
     phase = 'done';
-    _winners = [spy];
+    _winners = const [];
   }
 
-  void _othersWin() {
-    _over = true;
-    phase = 'done';
-    _winners = [for (final p in players) if (p != spy) p];
+  bool _validMatrix(Object? raw) => FairDeal.matrixFrom(raw, n) != null;
+
+  void _next() {
+    chain++;
+    stepEnds = DateTime.now().add(dealTime);
+    if (chain < n) return;
+    chain = 0;
+    if (phase == 'mix') {
+      phase = 'strip';
+    } else {
+      phase = 'clue';
+      stepEnds = null;
+      _skipGone();
+    }
+  }
+
+  void _skipGone() {
+    for (var k = 0; k < n && gone.contains(current); k++) {
+      turn++;
+    }
   }
 
   void _startVote() {
@@ -97,11 +141,81 @@ class SpyEngine extends GameEngine {
 
   void _count() {
     caught = _top(votes.values);
-    if (caught == spy) {
+    if (caught == null) {
+      _startOpen();
+    } else {
+      phase = 'prove';
+      proveEnds = DateTime.now().add(revealTime);
+    }
+  }
+
+  void _startOpen() {
+    phase = 'open';
+    openEnds = DateTime.now().add(revealTime);
+    if (opened.length >= _active.length) _finish();
+  }
+
+  /// اللي اتمسك كشف مفتاحه: بنفك صفه ونشوف هو الجاسوس ولا لأ.
+  void _prove(String who, BigInt e) {
+    final row = players.indexOf(who);
+    final m = FairDeal.matrixFrom(matrix, n);
+    if (m == null) return;
+    final plain = [for (final x in m[row]) FairDeal.mul(FairDeal.inverse(e), x)];
+    final blank = [for (var c = 0; c < n; c++) FairDeal.hashPoint(plain[c]) == blankHash[players[c]]];
+    final share = [for (var c = 0; c < n; c++) boxes[players[c]]!.containsKey(DealSecrets.tag(plain[c]))];
+    if (blank.every((b) => b)) {
+      proved = 'spy';
+      spy = who;
       phase = 'guess';
       guessEnds = DateTime.now().add(guessTime);
     } else {
-      _spyWins();
+      proved = share.every((b) => b) ? 'not' : 'cheat';
+      if (proved == 'cheat') cheats.add(who);
+      _startOpen();
+    }
+  }
+
+  void _finish() {
+    final secrets = <DealSecrets>[];
+    for (final p in players) {
+      final s = DealSecrets.fromJson(opened[p], n);
+      if (s == null) {
+        cheats.add(p);
+      } else {
+        secrets.add(s);
+      }
+    }
+    final m = FairDeal.matrixFrom(matrix, n);
+    (int, int)? check;
+    if (secrets.length == n && m != null) {
+      check = DealCheck.verify(
+        finalMatrix: m,
+        secrets: secrets,
+        blankHashes: [for (final p in players) blankHash[p]!],
+        boxes: [for (final p in players) boxes[p]!],
+        wordCount: words.length,
+      );
+      if (check == null) failed = true;
+    }
+    _over = true;
+    phase = 'done';
+    if (check != null) {
+      spy = players[check.$1];
+      word = check.$2;
+    }
+    final s = spy;
+    if (s == null) {
+      // مش عارفين مين الجاسوس (حد مكشفش أو غش): محدش كسب
+      _winners = const [];
+      return;
+    }
+    final others = [for (final p in players) if (p != s && !cheats.contains(p)) p];
+    if (proved == 'spy') {
+      _winners = word != null && guess == word ? [s] : others;
+    } else if (cheats.contains(s)) {
+      _winners = others;
+    } else {
+      _winners = [s];
     }
   }
 
@@ -109,31 +223,70 @@ class SpyEngine extends GameEngine {
   bool act(String by, Map<String, dynamic> a) {
     if (_over || !players.contains(by)) return false;
     switch (a['t']) {
+      case 'give' when phase == 'give' && !_cols.containsKey(by):
+        final col = a['col'], bh = a['bh'], bx = a['bx'], key = a['pk'];
+        if (col is! List || col.length != n || !col.every((x) => FairDeal.dec(x) != null)) return false;
+        if (bh is! String || !RegExp(r'^[0-9a-f]{64}$').hasMatch(bh) || FairDeal.dec(key) == null) return false;
+        if (bx is! Map || bx.length != n - 1) return false;
+        final box = <String, String>{};
+        for (final e in bx.entries) {
+          if (e.key is! String || e.value is! String) return false;
+          if (!RegExp(r'^[0-9a-f]{16}$').hasMatch(e.key as String) || !RegExp(r'^[0-9a-f]{16}$').hasMatch(e.value as String)) {
+            return false;
+          }
+          box[e.key as String] = e.value as String;
+        }
+        _cols[by] = col.cast<String>();
+        blankHash[by] = bh;
+        boxes[by] = box;
+        pk[by] = key as String;
+        if (_cols.length == n) {
+          matrix = [for (var r = 0; r < n; r++) [for (final p in players) _cols[p]![r]]];
+          phase = 'mix';
+          chain = 0;
+          stepEnds = DateTime.now().add(dealTime);
+        }
+        return true;
+      case 'mix' || 'strip' when phase == a['t'] && by == players[chain]:
+        if (!_validMatrix(a['m'])) return false;
+        matrix = [for (final r in a['m'] as List) [for (final x in r as List) x as String]];
+        _next();
+        return true;
       case 'done' when phase == 'clue':
         // اللي عليه الدور خلّص تلميحه (أو صاحب الغرفة بيعدّي دوره)
         if (by != current && by != host) return false;
         clueCount++;
         turn++;
-        if (clueCount >= players.length * rounds) _startVote();
+        _skipGone();
+        if (clueCount >= _active.length * rounds) _startVote();
         return true;
       case 'skip' when phase == 'clue' && by == host:
         _startVote();
         return true;
-      case 'vote' when phase == 'vote':
-        final f = _pick(a, players.where((p) => p != by));
+      case 'vote' when phase == 'vote' && !gone.contains(by):
+        final f = _pick(a, _active.where((p) => p != by));
         if (f == null) return false;
         votes[by] = f;
-        if (votes.length == players.length) _count();
+        if (votes.length >= _active.length) _count();
+        return true;
+      case 'prove' when phase == 'prove' && by == caught:
+        final e = BigInt.tryParse('${a['e']}', radix: 16);
+        if (e == null || e <= BigInt.one || e >= FairDeal.order) return false;
+        // المفتاح لازم يطابق اللي أعلنه في الأول (محدش يكشف مفتاح مزيف)
+        if (FairDeal.enc(FairDeal.mul(e, FairDeal.base)) != pk[by]) return false;
+        _prove(by, e);
         return true;
       case 'guess' when phase == 'guess' && by == spy:
-        final i = GameEngine.intOf(a['i'], max: options.length - 1);
+        final i = GameEngine.intOf(a['i'], max: words.length - 1);
         if (i == null) return false;
         guess = i;
-        if (options[i] == word) {
-          _spyWins();
-        } else {
-          _othersWin();
-        }
+        _startOpen();
+        return true;
+      case 'open' when phase == 'open' && !opened.containsKey(by):
+        final s = DealSecrets.fromJson(a['s'], n);
+        if (s == null || FairDeal.enc(FairDeal.mul(s.e, FairDeal.base)) != pk[by]) return false;
+        opened[by] = s.toJson();
+        if (opened.length >= _active.length) _finish();
         return true;
     }
     return false;
@@ -141,12 +294,29 @@ class SpyEngine extends GameEngine {
 
   @override
   bool tick(DateTime now) {
+    final ends = stepEnds;
+    if ((phase == 'give' || phase == 'mix' || phase == 'strip') && ends != null && now.isAfter(ends)) {
+      _fail();
+      return true;
+    }
     if (phase == 'vote' && voteEnds != null && now.isAfter(voteEnds!)) {
       _count();
       return true;
     }
+    if (phase == 'prove' && proveEnds != null && now.isAfter(proveEnds!)) {
+      // رفض يكشف كارته: بنعتبره الجاسوس واتمسك
+      cheats.add(caught!);
+      proved = 'spy';
+      spy = caught;
+      _startOpen();
+      return true;
+    }
     if (phase == 'guess' && guessEnds != null && now.isAfter(guessEnds!)) {
-      _othersWin();
+      _startOpen();
+      return true;
+    }
+    if (phase == 'open' && openEnds != null && now.isAfter(openEnds!)) {
+      _finish();
       return true;
     }
     return false;
@@ -154,19 +324,35 @@ class SpyEngine extends GameEngine {
 
   @override
   void leave(String player) {
-    if (_over) return;
-    if (player == spy) {
-      _othersWin();
+    if (_over || !players.contains(player)) return;
+    if (phase == 'give' || phase == 'mix' || phase == 'strip') {
+      _fail();
       return;
     }
-    players.remove(player);
+    gone.add(player);
     votes.remove(player);
     votes.removeWhere((_, v) => v == player);
-    if (players.length < 3) {
-      _spyWins();
-    } else if (phase == 'vote' && votes.length == players.length) {
+    if (_active.length < 3) {
+      _fail();
+    } else if (phase == 'clue') {
+      _skipGone();
+    } else if (phase == 'vote' && votes.length >= _active.length) {
       _count();
+    } else if (phase == 'open' && opened.length >= _active.length) {
+      _finish();
     }
+  }
+
+  Map<String, dynamic>? _left() {
+    final DateTime? ends = switch (phase) {
+      'give' || 'mix' || 'strip' => stepEnds,
+      'vote' => voteEnds,
+      'prove' => proveEnds,
+      'guess' => guessEnds,
+      'open' => openEnds,
+      _ => null,
+    };
+    return ends == null ? null : {'left': ends.difference(DateTime.now()).inMilliseconds};
   }
 
   @override
@@ -175,26 +361,33 @@ class SpyEngine extends GameEngine {
         'over': _over,
         'win': _winners,
         'phase': phase,
+        'cat': category,
+        'gone': gone.toList(),
+        ...?_left(),
+        if (phase == 'give') 'given': _cols.keys.toList(),
+        if (phase == 'mix' || phase == 'strip') 'step': players[chain],
+        if (phase == 'mix' || phase == 'strip') 'chain': chain,
+        if (matrix != null) 'm': matrix,
+        if (matrix != null) 'bh': [for (final p in players) blankHash[p]],
+        if (matrix != null) 'bx': [for (final p in players) boxes[p]],
+        if (matrix != null) 'pk': pk,
         'turn': phase == 'clue' ? current : null,
         'clue': clueCount,
-        'clues': players.length * rounds,
+        'clues': _active.length * rounds,
         'voted': votes.keys.toList(),
-        if (phase == 'vote') 'left': voteEnds!.difference(DateTime.now()).inMilliseconds,
-        if (phase == 'guess') 'left': guessEnds!.difference(DateTime.now()).inMilliseconds,
-        if (phase == 'guess' || _over) 'caught': caught,
-        if (phase == 'guess') 'options': options,
+        if (caught != null) 'caught': caught,
+        'proved': ?proved,
+        if (phase == 'guess') 'options': words,
         if (_over) ...{
           'spy': spy,
-          'word': word,
-          'cat': category,
+          'word': word == null ? null : words[word!],
           'votes': votes,
-          'guess': guess == null ? null : options[guess!],
+          'guess': guess == null ? null : words[guess!],
+          'secrets': opened,
+          'cheat': cheats.toList(),
+          'failed': failed,
         },
       };
-
-  @override
-  Map<String, dynamic>? viewFor(String player) =>
-      player == spy ? {'spy': true, 'cat': category} : {'spy': false, 'cat': category, 'word': word};
 }
 
 // =====================================================================
@@ -354,8 +547,18 @@ class MafiaEngine extends GameEngine implements SecretChat {
                   : 'citizen';
     }
     alive.addAll(players);
+    // بصمة مقفولة للأدوار من الأول — في الآخر بتتكشف وكل موبايل بيتأكد إنها متغيرتش في النص
+    rolesSalt = GameEngine.newSalt();
+    rolesCommit = GameEngine.commit(rolesText(players, roles), rolesSalt);
     _night();
   }
+
+  late final String rolesSalt;
+  late final String rolesCommit;
+
+  /// شكل ثابت للأدوار عشان البصمة.
+  static String rolesText(List<String> players, Map<Object?, Object?> roles) =>
+      ([for (final p in players) '$p:${roles[p]}']..sort()).join(',');
 
   static Duration nightTime = const Duration(seconds: 60);
   static Duration morningTime = const Duration(seconds: 8);
@@ -568,6 +771,8 @@ class MafiaEngine extends GameEngine implements SecretChat {
       },
       // اللي مات أو خرج دوره بيتكشف
       'roles': _over ? roles : {for (final p in dead) p: roles[p]},
+      'rc': rolesCommit,
+      if (_over) 'rs': rolesSalt,
       if (_over) 'side': winSide,
     };
   }

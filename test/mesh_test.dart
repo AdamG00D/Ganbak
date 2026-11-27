@@ -922,12 +922,13 @@ void main() {
       await waitFor(() => room.players.length == 4, what: 'اللاعبين');
       room.start();
       final engine = room.engine! as SpyEngine;
-      await waitFor(() => centers.every((c) => c.rooms[room.id]!.secret.isNotEmpty), what: 'الأسرار');
-      for (var i = 0; i < ds.length; i++) {
-        final secret = centers[i].rooms[room.id]!.secret;
-        expect(secret['spy'], ds[i].id == engine.spy);
-        if (ds[i].id != engine.spy) expect(secret['word'], engine.word);
-      }
+      // التوزيع العادل بيمشي بين الموبايلات على الشبكة
+      await waitFor(() => centers.every((c) => c.rooms[room.id]!.local['role@0'] != null),
+          what: 'الأدوار', timeout: const Duration(seconds: 30));
+      final roles = [for (final c in centers) c.rooms[room.id]!.local['role@0'] as Map];
+      expect(roles.where((x) => x['spy'] == true), hasLength(1));
+      expect({for (final x in roles) if (x['spy'] != true) x['w']}, hasLength(1));
+      expect(engine.spy, isNull, reason: 'صاحب الغرفة ميعرفش مين الجاسوس');
       // الغريب (بيوصّل الحزم) معرفش حاجة
       expect(outsider.privateGame, isEmpty);
       expect(outsider.games, isEmpty);

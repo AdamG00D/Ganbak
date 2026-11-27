@@ -7,6 +7,7 @@ import '../../../widgets/identity.dart';
 import '../../../widgets/ui.dart';
 import '../core/game_room.dart';
 import '../core/view_read.dart';
+import '../data/spy_words.dart';
 import 'game_look.dart';
 import 'game_screen.dart';
 
@@ -135,8 +136,17 @@ class SpyBoard extends StatelessWidget {
     final p = context.palette;
     final l = context.l10n;
     final v = room.view;
-    final s = room.secret;
     final me = room.myId;
+    // دوري اتعرف على موبايلي من التوزيع العادل (صاحب الغرفة مبيعرفوش)
+    final role = room.local['role@${room.round}'];
+    final words = SpyWords.categories[v['cat']] ?? const <String>[];
+    final s = role is Map
+        ? {
+            'spy': role['spy'] == true,
+            'cat': v['cat'],
+            if (role['w'] is int && (role['w'] as int) < words.length) 'word': words[role['w'] as int],
+          }
+        : const <String, dynamic>{};
     final order = _order(room);
     final phase = v['phase'];
     final spy = s['spy'] == true;
@@ -161,7 +171,41 @@ class SpyBoard extends StatelessWidget {
       ));
     }
 
+    Widget waiting(String title, String? sub) => Padding(
+          padding: const EdgeInsets.only(top: 18),
+          child: StitchedBox(
+            color: p.isDark ? const Color(0xFF2A3060) : p.ink,
+            pattern: true,
+            radius: 22,
+            stitch: p.saffron.withValues(alpha: 0.45),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            child: Column(
+              children: [
+                SizedBox(width: 26, height: 26, child: CircularProgressIndicator(strokeWidth: 2.6, color: p.saffron)),
+                const SizedBox(height: 12),
+                Text(title, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16, height: 1.5)),
+                if (sub != null) ...[
+                  const SizedBox(height: 6),
+                  Text(sub, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.6)),
+                ],
+              ],
+            ),
+          ),
+        );
+
     switch (phase) {
+      case 'give' || 'mix' || 'strip':
+        final step = switch (phase) {
+          'give' => 0,
+          'mix' => 1 + (ViewRead.integer(v['chain']) ?? 0),
+          _ => 1 + order.length + (ViewRead.integer(v['chain']) ?? 0),
+        };
+        children.add(waiting(l.spyDealing('$step', '${2 * order.length + 1}'), l.spyDealingSub));
+      case 'prove':
+        final caught = ViewRead.str(v['caught']);
+        children.add(waiting(l.spyProving(room.nameOf(caught ?? '')), null));
+      case 'open':
+        children.add(waiting(l.spyChecking, null));
       case 'clue':
         children.addAll([
           const SizedBox(height: 14),
@@ -274,6 +318,16 @@ class SpyBoard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: p.accentInk, fontWeight: FontWeight.w600),
                 ),
+                if (_strings(v['cheat']).isNotEmpty || v['failed'] == true) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    _strings(v['cheat']).isEmpty
+                        ? l.spyFailed
+                        : l.spyCheat(_strings(v['cheat']).map(room.nameOf).join('، ')),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: p.danger, fontWeight: FontWeight.w700),
+                  ),
+                ],
               ],
             ),
           ),
@@ -669,6 +723,15 @@ class MafiaBoard extends StatelessWidget {
 
     if (!iAmAlive && room.joined && phase != 'done') {
       children.add(_Banner(icon: Icons.visibility_rounded, text: l.mafiaYouDied, color: p.textMuted));
+    }
+    // في الآخر: الأدوار اللي اتكشفت هي هي اللي اتوزعت؟ (البصمة المقفولة من الأول)
+    if (phase == 'done') {
+      final ok = room.local['rolesOk@${room.round}'];
+      if (ok == false) {
+        children.add(_Banner(icon: Icons.gpp_bad_rounded, text: l.mafiaRolesChanged, color: p.danger));
+      } else if (ok == true) {
+        children.add(_Banner(icon: Icons.verified_rounded, text: l.mafiaRolesChecked, color: p.success));
+      }
     }
 
     switch (phase) {

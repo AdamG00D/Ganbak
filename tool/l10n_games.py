@@ -137,7 +137,7 @@ S = {
     'helpMemoryTips': ('ركّز في الكروت اللي غيرك بيقلبها؛ دي معلومة ببلاش.', 'Watch what the others flip; that\'s free information.'),
     # الجاسوس
     'helpSpyGoal': ('لو إنت مش الجاسوس: اكتشفوه. لو إنت الجاسوس: متتكشفش، أو اعرف الكلمة.', 'Not the spy? Find them. The spy? Stay hidden, or work out the word.'),
-    'helpSpyHow': ('التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف "إنت الجاسوس" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس "خلصت".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.', 'The app picks a category (food, places…) and a word.\nEveryone sees the word on their phone, except one player who sees "You\'re the spy" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps "Done".\nAfter the hints, everyone votes for the spy.\nIf the spy is caught, they get one last chance to guess the word out of 8.'),
+    'helpSpyHow': ('التطبيق بيختار فئة (أكلات، أماكن…)، والموبايلات كلها بتشارك في توزيع الأدوار والكلمة بطريقة محدش يقدر يغش فيها — ولا حتى اللي فتح اللعبة يعرف مين الجاسوس.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف "إنت الجاسوس" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس "خلصت".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nاللي اتمسك موبايله بيكشف كارته: لو هو الجاسوس، ياخد فرصة أخيرة يخمّن الكلمة من كلمات الفئة.\nفي الآخر كل الموبايلات بتكشف أسرارها وبتتأكد إن محدش غش.', 'The app picks a category (food, places…), and all the phones take part in dealing the roles and the word so nobody can cheat — not even whoever opened the game knows who the spy is.\nEveryone sees the word on their phone, except one player who sees "You\'re the spy" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps "Done".\nAfter the hints, everyone votes for the spy.\nThe phone of the caught player shows their card: if they are the spy, they get one last chance to guess the word from the category.\nAt the end every phone reveals its secrets and checks that nobody cheated.'),
     'helpSpyRoles': ('🕵️ الجاسوس: مش عارف الكلمة، بيحاول يتصرف كأنه عارف.\n👤 الباقيين: عارفين الكلمة، بيحاولوا يكشفوه من غير ما يفضحوا الكلمة.', '🕵️ The spy: doesn\'t know the word and tries to act like they do.\n👤 Everyone else: knows the word and tries to unmask the spy without giving the word away.'),
     'helpSpyTips': ('التلميح لو واضح أوي الجاسوس هيعرف الكلمة، ولو غامض أوي هيشكّوا فيك.\nالجاسوس: اسمع تلميحات اللي قبلك كويس.', 'Hints that are too obvious give the word to the spy; too vague and people suspect you.\nSpy: listen closely to the hints before yours.'),
     # المسابقة
@@ -385,6 +385,15 @@ S = {
     'modeSecretExplain': ('محدش يشوفه خالص في "الجروبات حواليك"، والأعضاء مخفيين. الدخول بدعوة منك أو من مدير بس.', 'Nobody sees it under "Groups around you" and members stay hidden. People join only by an invite from you or an admin.'),
     'groupCreatedSecret': ('عملت جروب سري. محدش هيشوفه — ادعي الناس من بيانات الجروب ← ادعي حد.', 'You created a secret group. Nobody can see it — invite people from Group info → Invite someone.'),
     'inviteOnly': ('الجروب ده بالدعوة بس', 'This group is invite-only'),
+    # ---------------- التوزيع العادل في الجاسوس ----------------
+    'spyDealing': ('بنوزّع الأدوار… ({step}/{total})', 'Dealing roles… ({step}/{total})'),
+    'spyDealingSub': ('كل موبايل بيشارك في التوزيع: محدش يعرف مين الجاسوس غير الجاسوس نفسه — ولا حتى اللي فتح اللعبة — والكلمة محدش اختارها لوحده.', 'Every phone takes part in the deal: nobody knows who the spy is except the spy — not even whoever opened the game — and nobody picked the word alone.'),
+    'spyProving': ('{name} بيكشف كارته…', '{name} is showing their card…'),
+    'spyChecking': ('بنتأكد إن محدش غش…', 'Checking that nobody cheated…'),
+    'spyCheat': ('⚠️ فيه غش أو حد مكشفش: {names}', '⚠️ Cheating or a missing reveal: {names}'),
+    'spyFailed': ('التوزيع موقفش صح (حد خرج أو مردّش) — ابدأوا ماتش تاني.', 'The deal didn’t finish (someone left or didn’t answer) — start a new match.'),
+    'mafiaRolesChanged': ('⚠️ الأدوار اتغيرت في النص — اللي فتح اللعبة غش', '⚠️ Roles changed mid-game — whoever opened the game cheated'),
+    'mafiaRolesChecked': ('اتأكدنا: الأدوار متغيرتش من أول اللعبة', 'Checked: the roles didn’t change since the start'),
 }
 
 

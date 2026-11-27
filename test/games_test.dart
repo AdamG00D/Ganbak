@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wasl/features/chat/core/chat_session.dart';
+import 'package:wasl/features/games/core/fair_deal.dart';
 import 'package:wasl/features/games/core/game_center.dart';
 import 'package:wasl/features/games/core/game_engine.dart';
 import 'package:wasl/features/games/core/game_kind.dart';
@@ -239,32 +240,79 @@ void main() {
       BattleshipEngine.revealTime = const Duration(seconds: 20);
     });
 
-    test('مين الجاسوس: جاسوس واحد، والكلمة مبتظهرش في الحالة العامة', () {
-      final g = SpyEngine([a, b, c, d], Random(7))..host = a;
-      final spies = [a, b, c, d].where((p) => g.viewFor(p)!['spy'] == true).toList();
-      expect(spies, hasLength(1));
-      for (final p in [a, b, c, d]) {
-        if (p != g.spy) expect(g.viewFor(p)!['word'], g.word);
+    test('مين الجاسوس: توزيع عادل — صاحب الغرفة ميعرفش الجاسوس، وجاسوس واحد، والكل يتأكد في الآخر', () {
+      final ps = [a, b, c, d];
+      final g = SpyEngine(List.of(ps), Random(7))..host = a;
+      final sec = {for (final p in ps) p: DealSecrets.random(4)};
+      for (final p in ps) {
+        final s = sec[p]!;
+        expect(g.act(p, {
+          't': 'give',
+          'col': [for (final x in s.column()) FairDeal.enc(x)],
+          'bh': FairDeal.hashPoint(s.blank),
+          'bx': s.boxes(),
+          'pk': FairDeal.enc(FairDeal.mul(s.e, FairDeal.base)),
+        }), isTrue);
       }
-      expect(g.viewFor(g.spy)!.containsKey('word'), isFalse);
-      expect(jsonEncode(g.view()), isNot(contains(g.word)));
-      expect(jsonEncode(g.view()), isNot(contains(g.spy == a ? 'xx' : '"spy":"${g.spy}"')));
+      for (final step in ['mix', 'strip']) {
+        for (var k = 0; k < 4; k++) {
+          final who = g.view()['step'] as String;
+          final m = FairDeal.matrixFrom(g.view()['m'], 4)!;
+          final out = step == 'mix' ? sec[who]!.mix(m, ps.indexOf(who)) : sec[who]!.strip(m, ps.indexOf(who));
+          expect(g.act(who, {'t': step, 'm': FairDeal.matrixTo(out)}), isTrue);
+        }
+      }
+      expect(g.phase, 'clue');
+      expect(g.spy, isNull, reason: 'صاحب الغرفة ميعرفش الجاسوس');
+      final view = g.view();
+      final roles = {
+        for (final p in ps)
+          p: sec[p]!.open(
+            FairDeal.matrixFrom(view['m'], 4)![ps.indexOf(p)],
+            [for (final h in view['bh'] as List) '$h'],
+            [for (final b in view['bx'] as List) (b as Map).cast<String, String>()],
+          )!,
+      };
+      final spy = ps.firstWhere((p) => roles[p]!.$1);
+      expect(ps.where((p) => roles[p]!.$1), hasLength(1));
+      final word = dealWord(roles[ps.firstWhere((p) => p != spy)]!.$2, g.words.length);
+      expect(jsonEncode(g.view()), isNot(contains(g.words[word])), reason: 'الكلمة مش في الحالة العامة');
       // 4 لاعبين = لفّتين تلميحات
       for (var i = 0; i < 8; i++) {
         expect(g.act(g.current, {'t': 'done'}), isTrue);
       }
-      expect(g.phase, 'vote');
-      for (final p in [a, b, c, d]) {
-        final target = p == g.spy ? [a, b, c, d].firstWhere((x) => x != p) : g.spy;
-        expect(g.act(p, {'t': 'vote', 'for': target}), isTrue);
+      for (final p in ps) {
+        expect(g.act(p, {'t': 'vote', 'for': p == spy ? ps.firstWhere((x) => x != p) : spy}), isTrue);
       }
+      expect(g.phase, 'prove');
+      // مفتاح غلط بيترفض
+      expect(g.act(spy, {'t': 'prove', 'e': sec[ps.firstWhere((x) => x != spy)]!.e.toRadixString(16)}), isFalse);
+      expect(g.act(spy, {'t': 'prove', 'e': sec[spy]!.e.toRadixString(16)}), isTrue);
       expect(g.phase, 'guess');
-      expect(g.view().containsKey('word'), isFalse, reason: 'الاختيارات بس، مش الإجابة');
-      expect(g.view()['options'], contains(g.word));
-      final right = g.options.indexOf(g.word);
-      expect(g.act(g.spy, {'t': 'guess', 'i': right}), isTrue);
-      expect(g.winners, [g.spy]);
-      expect(g.view()['word'], g.word);
+      expect(g.view()['options'], g.words);
+      expect(g.act(spy, {'t': 'guess', 'i': word}), isTrue);
+      expect(g.phase, 'open');
+      // أسرار حد تاني بتترفض
+      expect(g.act(a, {'t': 'open', 's': sec[b]!.toJson()}), isFalse);
+      for (final p in ps) {
+        expect(g.act(p, {'t': 'open', 's': sec[p]!.toJson()}), isTrue);
+      }
+      expect(g.over, isTrue);
+      expect(g.spy, spy);
+      expect(g.winners, [spy], reason: 'خمّن الكلمة صح');
+      expect(g.view()['word'], g.words[word]);
+      expect(g.view()['cheat'], isEmpty);
+    });
+
+    test('المافيا: بصمة الأدوار من الأول، والملح ميبانش غير في الآخر', () {
+      final ps = ['aaaaaaaaaaaaaa01', 'aaaaaaaaaaaaaa02', 'aaaaaaaaaaaaaa03', 'aaaaaaaaaaaaaa04', 'aaaaaaaaaaaaaa05'];
+      final g = MafiaEngine(List.of(ps), Random(3));
+      final v = g.view();
+      expect(v['rc'], GameEngine.commit(MafiaEngine.rolesText(ps, g.roles), g.rolesSalt));
+      expect(v.containsKey('rs'), isFalse, reason: 'الملح بيتكشف في الآخر بس');
+      // تغيير أي دور بيبوّظ البصمة
+      final changed = Map.of(g.roles)..[ps[0]] = g.roles[ps[0]] == 'mafia' ? 'citizen' : 'mafia';
+      expect(GameEngine.commit(MafiaEngine.rolesText(ps, changed), g.rolesSalt), isNot(v['rc']));
     });
 
     test('المسابقة: النقط على الصح والسرعة، والإجابة مبتظهرش قبل ما السؤال يخلص', () {
@@ -443,17 +491,21 @@ void main() {
       room.start();
       await settle();
       final engine = room.engine! as SpyEngine;
-      // كل واحد وصله سره هو بس
-      for (final p in peers) {
-        final s = p.id == a ? room.secret : p.room(room.id).secret;
-        expect(s['spy'], p.id == engine.spy);
+      final rooms = [for (final p in peers) p.id == a ? room : p.room(room.id)];
+      // التوزيع العادل بيمشي لوحده بين الموبايلات
+      for (var k = 0; k < 400 && !rooms.every((r) => r.local['role@${r.round}'] != null); k++) {
+        await settle();
       }
-      final secrets = net.privateLog.where((x) => x.$3['y'] == 'pv');
-      for (final (_, to, m) in secrets) {
-        expect((m['v'] as Map)['spy'], to == engine.spy);
-      }
-      // الكلمة مبتعدّيش على الرسايل العامة
-      expect(net.publicLog.any((x) => jsonEncode(x.$2).contains(engine.word)), isFalse);
+      final roles = [for (final r in rooms) r.local['role@${r.round}'] as Map];
+      expect(roles.where((x) => x['spy'] == true), hasLength(1));
+      expect({for (final x in roles) if (x['spy'] != true) x['w']}, hasLength(1), reason: 'نفس الكلمة');
+      expect(engine.spy, isNull, reason: 'صاحب الغرفة ميعرفش');
+      final spyId = peers[roles.indexWhere((x) => x['spy'] == true)].id;
+      final word = engine.words[roles.firstWhere((x) => x['spy'] != true)['w'] as int];
+      // الكلمة مبتعدّيش على أي رسالة
+      expect(net.publicLog.any((x) => jsonEncode(x.$2).contains(word)), isFalse);
+      expect(net.privateLog.any((x) => jsonEncode(x.$3).contains(word)), isFalse);
+      expect(net.privateLog.where((x) => x.$3['y'] == 'pv'), isEmpty, reason: 'مفيش أسرار من صاحب الغرفة');
       // التلميحات بالدور
       for (var i = 0; i < 8; i++) {
         final who = room.view['turn'] as String;
@@ -462,13 +514,17 @@ void main() {
       }
       expect(room.view['phase'], 'vote');
       for (final p in peers) {
-        p.center.rooms[room.id]!.act({'t': 'vote', 'for': p.id == engine.spy ? (p.id == a ? b : a) : engine.spy});
+        p.center.rooms[room.id]!.act({'t': 'vote', 'for': p.id == spyId ? (p.id == a ? b : a) : spyId});
         await settle();
       }
       // الأصوات راحت لصاحب الغرفة بس
       expect(net.publicLog.any((x) => jsonEncode(x.$2).contains('"t":"vote"')), isFalse);
-      await settle();
+      // الجاسوس بيكشف كارته لوحده ← دوره يخمّن
+      for (var k = 0; k < 100 && peers[1].room(room.id).view['phase'] != 'guess'; k++) {
+        await settle();
+      }
       expect(peers[1].room(room.id).view['phase'], 'guess');
+      expect(peers[1].room(room.id).view['spy'], isNull, reason: 'اسم الجاسوس بيبان في الآخر بس');
     });
 
     test('المافيا على الشبكة: شات المافيا السري ميوصلش لغيرهم، والميت ميتكلمش', () async {
@@ -526,7 +582,9 @@ void main() {
       }
       await settle();
       room.start();
-      await settle();
+      for (var k = 0; k < 400 && room.view['phase'] != 'clue'; k++) {
+        await settle();
+      }
       final turn = room.view['turn'] as String;
       final clue = room.view['clue'];
       // حد بيبعت "خلصت" باسم اللي عليه الدور في رسالة جروب عامة (من غير المفتاح المشترك)

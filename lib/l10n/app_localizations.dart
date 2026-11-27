@@ -3947,7 +3947,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpSpyHow.
   ///
   /// In ar, this message translates to:
-  /// **'التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.'**
+  /// **'التطبيق بيختار فئة (أكلات، أماكن…)، والموبايلات كلها بتشارك في توزيع الأدوار والكلمة بطريقة محدش يقدر يغش فيها — ولا حتى اللي فتح اللعبة يعرف مين الجاسوس.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nاللي اتمسك موبايله بيكشف كارته: لو هو الجاسوس، ياخد فرصة أخيرة يخمّن الكلمة من كلمات الفئة.\nفي الآخر كل الموبايلات بتكشف أسرارها وبتتأكد إن محدش غش.'**
   String get helpSpyHow;
 
   /// No description provided for @helpSpyRoles.
@@ -5347,6 +5347,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الجروب ده بالدعوة بس'**
   String get inviteOnly;
+
+  /// No description provided for @spyDealing.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنوزّع الأدوار… ({step}/{total})'**
+  String spyDealing(String step, String total);
+
+  /// No description provided for @spyDealingSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل موبايل بيشارك في التوزيع: محدش يعرف مين الجاسوس غير الجاسوس نفسه — ولا حتى اللي فتح اللعبة — والكلمة محدش اختارها لوحده.'**
+  String get spyDealingSub;
+
+  /// No description provided for @spyProving.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} بيكشف كارته…'**
+  String spyProving(String name);
+
+  /// No description provided for @spyChecking.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنتأكد إن محدش غش…'**
+  String get spyChecking;
+
+  /// No description provided for @spyCheat.
+  ///
+  /// In ar, this message translates to:
+  /// **'⚠️ فيه غش أو حد مكشفش: {names}'**
+  String spyCheat(String names);
+
+  /// No description provided for @spyFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوزيع موقفش صح (حد خرج أو مردّش) — ابدأوا ماتش تاني.'**
+  String get spyFailed;
+
+  /// No description provided for @mafiaRolesChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'⚠️ الأدوار اتغيرت في النص — اللي فتح اللعبة غش'**
+  String get mafiaRolesChanged;
+
+  /// No description provided for @mafiaRolesChecked.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتأكدنا: الأدوار متغيرتش من أول اللعبة'**
+  String get mafiaRolesChecked;
 }
 
 class _AppLocalizationsDelegate

@@ -641,7 +641,7 @@
   "helpMemoryHow": "All cards are face down; every picture appears twice.\nOn your turn flip two cards.\nIf they match you keep them and go again.\nIf not, they flip back after a moment and the next player goes.\nWhen the cards run out, whoever has the most pairs wins.",
   "helpMemoryTips": "Watch what the others flip; that's free information.",
   "helpSpyGoal": "Not the spy? Find them. The spy? Stay hidden, or work out the word.",
-  "helpSpyHow": "The app picks a category (food, places…) and a word.\nEveryone sees the word on their phone, except one player who sees \"You're the spy\" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps \"Done\".\nAfter the hints, everyone votes for the spy.\nIf the spy is caught, they get one last chance to guess the word out of 8.",
+  "helpSpyHow": "The app picks a category (food, places…), and all the phones take part in dealing the roles and the word so nobody can cheat — not even whoever opened the game knows who the spy is.\nEveryone sees the word on their phone, except one player who sees \"You're the spy\" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps \"Done\".\nAfter the hints, everyone votes for the spy.\nThe phone of the caught player shows their card: if they are the spy, they get one last chance to guess the word from the category.\nAt the end every phone reveals its secrets and checks that nobody cheated.",
   "helpSpyRoles": "🕵️ The spy: doesn't know the word and tries to act like they do.\n👤 Everyone else: knows the word and tries to unmask the spy without giving the word away.",
   "helpSpyTips": "Hints that are too obvious give the word to the spy; too vague and people suspect you.\nSpy: listen closely to the hints before yours.",
   "helpQuizGoal": "Answer right and fast to score the most points.",
@@ -874,5 +874,13 @@
   "modeSecret": "Secret",
   "modeSecretExplain": "Nobody sees it under \"Groups around you\" and members stay hidden. People join only by an invite from you or an admin.",
   "groupCreatedSecret": "You created a secret group. Nobody can see it — invite people from Group info → Invite someone.",
-  "inviteOnly": "This group is invite-only"
+  "inviteOnly": "This group is invite-only",
+  "spyDealing": "Dealing roles… ({step}/{total})",
+  "spyDealingSub": "Every phone takes part in the deal: nobody knows who the spy is except the spy — not even whoever opened the game — and nobody picked the word alone.",
+  "spyProving": "{name} is showing their card…",
+  "spyChecking": "Checking that nobody cheated…",
+  "spyCheat": "⚠️ Cheating or a missing reveal: {names}",
+  "spyFailed": "The deal didn’t finish (someone left or didn’t answer) — start a new match.",
+  "mafiaRolesChanged": "⚠️ Roles changed mid-game — whoever opened the game cheated",
+  "mafiaRolesChecked": "Checked: the roles didn’t change since the start"
 }

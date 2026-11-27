@@ -2199,7 +2199,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get helpSpyHow =>
-      'التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.';
+      'التطبيق بيختار فئة (أكلات، أماكن…)، والموبايلات كلها بتشارك في توزيع الأدوار والكلمة بطريقة محدش يقدر يغش فيها — ولا حتى اللي فتح اللعبة يعرف مين الجاسوس.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nاللي اتمسك موبايله بيكشف كارته: لو هو الجاسوس، ياخد فرصة أخيرة يخمّن الكلمة من كلمات الفئة.\nفي الآخر كل الموبايلات بتكشف أسرارها وبتتأكد إن محدش غش.';
 
   @override
   String get helpSpyRoles =>
@@ -3042,4 +3042,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get inviteOnly => 'الجروب ده بالدعوة بس';
+
+  @override
+  String spyDealing(String step, String total) {
+    return 'بنوزّع الأدوار… ($step/$total)';
+  }
+
+  @override
+  String get spyDealingSub =>
+      'كل موبايل بيشارك في التوزيع: محدش يعرف مين الجاسوس غير الجاسوس نفسه — ولا حتى اللي فتح اللعبة — والكلمة محدش اختارها لوحده.';
+
+  @override
+  String spyProving(String name) {
+    return '$name بيكشف كارته…';
+  }
+
+  @override
+  String get spyChecking => 'بنتأكد إن محدش غش…';
+
+  @override
+  String spyCheat(String names) {
+    return '⚠️ فيه غش أو حد مكشفش: $names';
+  }
+
+  @override
+  String get spyFailed =>
+      'التوزيع موقفش صح (حد خرج أو مردّش) — ابدأوا ماتش تاني.';
+
+  @override
+  String get mafiaRolesChanged =>
+      '⚠️ الأدوار اتغيرت في النص — اللي فتح اللعبة غش';
+
+  @override
+  String get mafiaRolesChecked => 'اتأكدنا: الأدوار متغيرتش من أول اللعبة';
 }

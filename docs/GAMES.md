@@ -14,7 +14,7 @@ This page covers the rules as implemented, the architecture and how to add a gam
 | Rock paper scissors | `rps` | direct | 2 | first to 2 (option `bestOf: 5` → 3); commit → reveal, so nobody sees a pick early |
 | Dots and boxes | `dots` | direct + group | 2–4 | 4×4 boxes for 2 players, 5×5 for more; closing a box plays again |
 | Memory | `mem` | direct + group | 2–6 | 8 pairs (2 players) or 12 pairs; faces are the 24 cartoon avatars; a match plays again |
-| Who's the spy? | `spy` | group | 3–12 | everyone gets the word except the spy (category only); hints in turn (two rounds with ≤ 4 players); 60 s vote; a caught spy guesses among 8 words within 45 s; a tie or a wrong catch = spy wins |
+| Who's the spy? | `spy` | group | 3–12 | everyone gets the word except the spy (category only); hints in turn (two rounds with ≤ 4 players); 60 s vote; the caught player's phone proves their card; a caught spy guesses among the category's 15 words within 45 s; a tie or a wrong catch = spy wins. **Fair dealing**: roles and the word are dealt with `FairDeal` (below) — the host never knows the spy or the word |
 | Quiz | `quiz` | group | 2–15 | host picks a category (or mixed) and 5 / 10 / 20 questions; 15 s each; 500 points for a right answer + up to 500 for speed, timed on the player's phone |
 | Mafia | `mafia` | group | 5–15 | 1 mafia per ~4 players (1 for 5–7, 2 for 8–11, 3 for 12–15), one doctor, one detective; night 60 s → morning 8 s → discussion 3 min → vote 60 s → result 8 s; dead and voted-out roles are revealed; town wins when no mafia is left, mafia when they equal the rest |
 
@@ -40,6 +40,19 @@ lib/features/games/
 - **Secrets.** In group games every `act`, `pv` and secret chat line is sealed for one recipient with
   `Box.pairKey(me, them, 'wasl/game')`. The host's UI never shows other players' secrets, but a modified app on the
   host could read them (see SECURITY.md).
+- **Fair dealing (spy, 1.6)** — `core/fair_deal.dart`, mental poker on Curve25519 (commutative scalar
+  multiplication on u-coordinates, arbitrary scalars). Phases `give → mix → strip`: every player sends a column
+  `[e·B, e·K₁ … e·Kₙ₋₁]` (one blank, n-1 distinct share points), the blank's hash, "boxes" `tag(K) → ω ⊕ H(K)` and its
+  public key `e·G`; then each player in turn adds its layer and shuffles the rows (`mix`), then each removes its layer
+  from every row but its own (`strip`). Row r belongs to `players[r]`; its owner decrypts it: all blanks = spy, else it
+  opens the boxes and the word = `H(ω₁‖…‖ωₙ) mod 15`. Nobody picked the word and the host can't tell rows apart (all
+  n² values differ). The caught player proves their card by revealing `e` (checked against `e·G`); at the end everyone
+  reveals its secrets and `DealCheck.verify` (on the host and in every phone) checks exactly one blank row and every
+  share used once; a missing / wrong reveal is flagged as cheating. The steps run automatically in `spyMoves`.
+- **Role commitment (mafia, 1.6)** — the view carries `rc = commit(roles, salt)` from the first state; at the end
+  `roles` + `rs` (salt) are revealed and every phone checks them against the first `rc` and its own role
+  (`mafiaCheck`). The host still deals mafia roles and resolves the night (a modified host app could read them), but it
+  can't change roles mid-game unnoticed.
 - **Commitments.** Rock-paper-scissors picks and battleship boards stay in `room.local` on the owner's phone; only
   `commit(value, salt)` (SHA-256) is sent until the reveal. `autoMoves()` reveals and answers shots automatically,
   even when the game screen is closed. The engine marks whoever reveals something that doesn't match as `cheat`, and
