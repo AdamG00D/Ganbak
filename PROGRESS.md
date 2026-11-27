@@ -9,7 +9,7 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 (ask first, even at the very end), and **check the design visually**
 (see "Screenshots" below) — the owner cares a lot that nothing looks broken.
 
-## Current release: 1.3 — games + visual identity (in progress)
+## Current release: 1.3 — games, visual identity, guide and Wasl network (one release; not built yet)
 
 | # | Step | State |
 |---|------|-------|
@@ -35,7 +35,7 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
   The GitHub social preview (`../wasl_social_preview*.png`, outside the repo, uploaded by hand) is still the old look.
 - Dice / coin in chat was dropped from this release (not asked for again).
 
-## "Wasl network" (planned as 1.4) — implemented, folded into the unreleased 1.3 (ask the owner)
+## "Wasl network" — part of 1.3 (owner: one release, 2026-11-27)
 
 The app opens an Android Local-Only Hotspot (no internet) and puts `w {s, p, x}` in its presence; direct Bluetooth
 neighbours on "Both" get an offer banner and join with one tap (`WifiNetworkSpecifier`, Android 10+, then
@@ -122,3 +122,5 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — Wasl network implemented (see its section): Kotlin + Dart + UI + guide + docs + tests; screenshots
   reviewed; the large-text check also caught an old overflow in the Nearby list (fixed). Release notes: added to 1.3
   because 1.3 was never published — ask the owner whether to ship one release or split 1.3 / 1.4.
+- 2026-11-27 — owner: ship everything as one release, 1.3 (games + identity + guide + Wasl network). Version stays
+  1.3.0+4; release notes already cover all of it. Next: owner's OK to build, then the real-phone test.
