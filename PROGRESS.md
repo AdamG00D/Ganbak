@@ -9,7 +9,9 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 (ask first, even at the very end), and **check the design visually**
 (see "Screenshots" below) — the owner cares a lot that nothing looks broken.
 
-## Current release: 1.5 — published 2026-11-27 (everything since 1.2: games, identity, guide, Wasl network, offline messages, SOS, Share Wasl, signed identity)
+## Current release: 1.6 — published 2026-11-27 (privacy, secret groups, invites, fair spy dealing)
+
+### Previous: 1.5 — published 2026-11-27 (everything since 1.2: games, identity, guide, Wasl network, offline messages, SOS, Share Wasl, signed identity)
 
 ### Earlier: 1.3 — games, visual identity, guide and Wasl network (built, never published on its own)
 
@@ -283,4 +285,7 @@ a phone's large-font setting): any text that spills out of its box fails the run
   while hosting the app asks the system every 3 s and resets if the hotspot was closed from outside, password can be
   hidden again, "close the network" button on the Share page. Phone tests postponed by the owner. Search Console:
   sitemap still "couldn't fetch" (common for new github.io sites) — owner should use URL inspection → request indexing.
+- 2026-11-27 — **1.6 built and published** (owner's OK): https://github.com/AdamG00D/Wasl/releases/tag/v1.6 — tag at
+  ffaeba8, 6 APKs (incl. stable `Wasl-android*.apk` for the site button) + SHA256SUMS, certificate fa4ecf16…c341,
+  versionCode 7. The website's download button now serves 1.6. Next: plan for the Jisr Bluetooth library (plan first).
 
