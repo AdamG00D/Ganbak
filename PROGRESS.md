@@ -9,7 +9,7 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 (ask first, even at the very end), and **check the design visually**
 (see "Screenshots" below) — the owner cares a lot that nothing looks broken.
 
-## Current release: 1.3 — games, visual identity, guide and Wasl network (one release; not built yet)
+## Current release: 1.3 — games, visual identity, guide and Wasl network (built 2026-11-27, not published yet)
 
 | # | Step | State |
 |---|------|-------|
@@ -24,7 +24,10 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 
 ### Still open for 1.3
 
-- **Build:** not done — ask the owner first (`./scripts/build_release.sh`).
+- **Build:** done 2026-11-27 with the owner's OK → `Releases/1.3v/` (4 APKs, same signing certificate as 1.2, so
+  updates install over it). Not published to GitHub yet. The build warns that some plugins still use the old Kotlin
+  Gradle plugin ("Built-in Kotlin") — harmless today, needs a dependency update before a future Flutter upgrade.
+  `.claude/settings.local.json` (not committed) allows Claude to run `./scripts/build_release.sh`.
 - **Real-phone test by the owner — postponed by the owner (2026-11-27), do it before releasing** (I can't run
   Bluetooth / Wi-Fi here): a direct game over Bluetooth and over Wi-Fi,
   a group game with 3+ phones (spy or mafia), leaving mid-game, the app in background during a game, and Arabic on one
