@@ -117,7 +117,7 @@ class _CreateGroupSheetState extends State<_CreateGroupSheet> {
                   onTap: () => setState(() => _mode = m),
                   child: Row(
                     children: [
-                      Icon(groupModeIcon(m), color: _mode == m ? p.accent : p.textMuted),
+                      Icon(groupModeIcon(m), color: _mode == m ? p.accentInk : p.textMuted),
                       const SizedBox(width: 12),
                       Expanded(
                         child: Column(
@@ -128,7 +128,7 @@ class _CreateGroupSheetState extends State<_CreateGroupSheet> {
                           ],
                         ),
                       ),
-                      if (_mode == m) Icon(Icons.check_circle_rounded, color: p.accent, size: 20),
+                      if (_mode == m) Icon(Icons.check_circle_rounded, color: p.accentInk, size: 20),
                     ],
                   ),
                 ),
@@ -361,7 +361,7 @@ Future<void> showMemberSheet(BuildContext context, GroupChat g, String id, {Stri
             Text(name, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             Text(
               [?role, node == null ? context.l10n.notConnectedNow : context.l10n.onlineNow].join(' • '),
-              style: TextStyle(color: role != null ? p.accent : p.textMuted, fontSize: 13),
+              style: TextStyle(color: role != null ? p.accentInk : p.textMuted, fontSize: 13),
             ),
             const SizedBox(height: 10),
             if (node != null && !blocked)
@@ -692,7 +692,7 @@ class _MemberRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                  if (subtitle != null) Text(subtitle!, style: TextStyle(color: p.accent, fontSize: 12)),
+                  if (subtitle != null) Text(subtitle!, style: TextStyle(color: p.accentInk, fontSize: 12)),
                 ],
               ),
             ),

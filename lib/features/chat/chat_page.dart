@@ -208,9 +208,9 @@ class _ChatPageState extends State<ChatPage> {
               emojiViewConfig: EmojiViewConfig(columns: 8, emojiSizeMax: 30, backgroundColor: p.surface),
               categoryViewConfig: CategoryViewConfig(
                 backgroundColor: p.surface,
-                indicatorColor: p.accent,
+                indicatorColor: p.accentInk,
                 iconColor: p.textMuted,
-                iconColorSelected: p.accent,
+                iconColorSelected: p.accentInk,
                 dividerColor: p.border,
               ),
               bottomActionBarConfig: const BottomActionBarConfig(enabled: false),
@@ -693,7 +693,7 @@ class _ChatPageState extends State<ChatPage> {
             final (String label, Color color, IconData? icon) = () {
               if (!alive) return (l.chatClosed, p.textMuted, Icons.link_off_rounded);
               if (group != null) {
-                if (typingLabel != null) return ('$typingLabel...', p.accent, null);
+                if (typingLabel != null) return ('$typingLabel...', p.accentInk, null);
                 final n = group.members.length;
                 return (
                   n == 0 ? l.noMembersNearby : l.membersOnline(n),
@@ -703,7 +703,7 @@ class _ChatPageState extends State<ChatPage> {
               }
               final d = direct!;
               if (_hub.isBlocked(d.peerId)) return (l.blocked, p.danger, Icons.block_rounded);
-              if (s.peerTyping && s.state == SessionState.ready) return (l.typing, p.accent, null);
+              if (s.peerTyping && s.state == SessionState.ready) return (l.typing, p.accentInk, null);
               return switch (s.state) {
                 SessionState.ready when s.verified => (l.encryptedVerified, p.success, Icons.verified_user_rounded),
                 SessionState.ready => (l.e2eEncrypted, p.success, Icons.lock_rounded),
@@ -739,13 +739,13 @@ class _ChatPageState extends State<ChatPage> {
                         IconButton(
                           tooltip: l.videoCall,
                           visualDensity: VisualDensity.compact,
-                          icon: Icon(Icons.videocam_rounded, color: p.accent),
+                          icon: Icon(Icons.videocam_rounded, color: p.accentInk),
                           onPressed: () => _startCall(video: true),
                         ),
                         IconButton(
                           tooltip: l.voiceCall,
                           visualDensity: VisualDensity.compact,
-                          icon: Icon(Icons.call_rounded, color: p.accent),
+                          icon: Icon(Icons.call_rounded, color: p.accentInk),
                           onPressed: () => _startCall(video: false),
                         ),
                       ],
@@ -756,7 +756,7 @@ class _ChatPageState extends State<ChatPage> {
                           onPressed: () => GroupInfoScreen.open(context, group),
                           icon: Badge(
                             label: Text('${group.requests.length}'),
-                            child: Icon(Icons.person_add_alt_1_rounded, color: p.accent),
+                            child: Icon(Icons.person_add_alt_1_rounded, color: p.accentInk),
                           ),
                         ),
                       if (alive)

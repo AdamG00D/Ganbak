@@ -255,6 +255,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pinRepeat => 'Enter it again to confirm';
 
   @override
+  String get colorWasl => 'Wasl';
+
+  @override
   String get colorIndigo => 'Indigo';
 
   @override
@@ -1830,4 +1833,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String reactedOn(Object emoji, Object text) {
     return 'Reacted $emoji to: \"$text\"';
   }
+
+  @override
+  String get aroundYouNow => 'Around you now';
+
+  @override
+  String get helpMark => '?';
+
+  @override
+  String get howToPlay => 'How to play';
 }

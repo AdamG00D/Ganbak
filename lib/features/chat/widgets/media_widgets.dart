@@ -282,7 +282,7 @@ class _CompressDialogState extends State<_CompressDialog> {
     return PopScope(
       canPop: false,
       child: AlertDialog(
-        icon: Icon(Icons.movie_creation_rounded, color: p.accent, size: 32),
+        icon: Icon(Icons.movie_creation_rounded, color: p.accentInk, size: 32),
         title: Text(context.l10n.preparingVideo, textAlign: TextAlign.center),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -577,7 +577,7 @@ class _FileContent extends StatelessWidget {
                   ),
                   child: Icon(
                     media.failed ? Icons.error_outline_rounded : iconFor(name),
-                    color: media.failed && !mine ? p.danger : (mine ? fg : p.accent),
+                    color: media.failed && !mine ? p.danger : (mine ? fg : p.accentInk),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -608,7 +608,7 @@ class _FileContent extends StatelessWidget {
                     tooltip: l.saveToDownloads,
                     visualDensity: VisualDensity.compact,
                     onPressed: () => saveChatFile(context, media),
-                    icon: Icon(Icons.download_rounded, color: p.accent),
+                    icon: Icon(Icons.download_rounded, color: p.accentInk),
                   ),
               ],
             ),
@@ -619,8 +619,8 @@ class _FileContent extends StatelessWidget {
                 child: LinearProgressIndicator(
                   value: media.progress <= 0 ? null : media.progress,
                   minHeight: 4,
-                  color: mine ? fg : p.accent,
-                  backgroundColor: (mine ? fg : p.accent).withValues(alpha: 0.2),
+                  color: mine ? fg : p.accentInk,
+                  backgroundColor: (mine ? fg : p.accentInk).withValues(alpha: 0.2),
                 ),
               ),
             ],
@@ -692,7 +692,7 @@ class _Progress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final color = light ? Colors.white : p.accent;
+    final color = light ? Colors.white : p.accentInk;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

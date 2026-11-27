@@ -111,7 +111,7 @@ class _ToastViewState extends State<_ToastView> with SingleTickerProviderStateMi
             onTap: dismiss,
             onVerticalDragEnd: (_) => dismiss(),
             child: Material(
-              color: p.isDark ? const Color(0xFF1E293B) : const Color(0xFF0F172A),
+              color: p.isDark ? const Color(0xFF232846) : p.ink,
               elevation: 6,
               shadowColor: Colors.black38,
               borderRadius: BorderRadius.circular(14),
@@ -121,7 +121,7 @@ class _ToastViewState extends State<_ToastView> with SingleTickerProviderStateMi
                   children: [
                     Icon(
                       widget.error ? Icons.error_outline_rounded : Icons.check_circle_rounded,
-                      color: widget.error ? const Color(0xFFFCA5A5) : p.isDark ? p.accent : p.second,
+                      color: widget.error ? const Color(0xFFFCA5A5) : p.saffron,
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -179,7 +179,7 @@ Future<bool> confirmDialog(
   final result = await showDialog<bool>(
     context: context,
     builder: (ctx) => AlertDialog(
-      icon: icon == null ? null : Icon(icon, color: destructive ? p.danger : p.accent, size: 32),
+      icon: icon == null ? null : Icon(icon, color: destructive ? p.danger : p.accentInk, size: 32),
       title: Text(title, textAlign: icon == null ? null : TextAlign.center),
       content: Text(message),
       actions: [
@@ -215,7 +215,7 @@ Future<void> infoDialog(
   return showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      icon: icon == null ? null : Icon(icon, color: error ? p.danger : p.accent, size: 32),
+      icon: icon == null ? null : Icon(icon, color: error ? p.danger : p.accentInk, size: 32),
       title: Text(title, textAlign: icon == null ? null : TextAlign.center),
       content: Text(message),
       actions: [

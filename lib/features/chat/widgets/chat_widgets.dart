@@ -376,7 +376,7 @@ class _Bubble extends StatelessWidget {
               messageSpan(
                 m,
                 TextStyle(color: fg, fontSize: 15.5, height: 1.5, fontWeight: FontWeight.w500),
-                mine ? fg : p.accent,
+                mine ? fg : p.accentInk,
               ),
             ),
           const SizedBox(height: 2),
@@ -504,7 +504,7 @@ class _QuoteBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.palette;
     final fg = mine ? p.onAccent : p.text;
-    final barColor = mine ? p.onAccent : p.accent;
+    final barColor = mine ? p.onAccent : p.accentInk;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -603,7 +603,7 @@ class _SwipeToReplyState extends State<_SwipeToReply> with SingleTickerProviderS
                   child: CircleAvatar(
                     radius: 15,
                     backgroundColor: p.surfaceAlt,
-                    child: Icon(Icons.reply_rounded, size: 18, color: p.accent),
+                    child: Icon(Icons.reply_rounded, size: 18, color: p.accentInk),
                   ),
                 ),
               ),
@@ -660,7 +660,7 @@ class SafetyCodeCard extends StatelessWidget {
                 fontSize: 34,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 6,
-                color: p.accent,
+                color: p.accentInk,
               ),
             ),
           ),

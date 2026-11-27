@@ -170,7 +170,7 @@ class _LockScreenState extends State<LockScreen> {
               SizedBox(
                 height: 20,
                 child: _checking
-                    ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.4, color: p.accent))
+                    ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.4, color: p.accentInk))
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -241,7 +241,7 @@ class PinPad extends StatelessWidget {
               _PadKey(
                 onTap: onOk,
                 plain: true,
-                child: Icon(Icons.check_circle_rounded, size: 34, color: onOk == null ? p.border : p.accent),
+                child: Icon(Icons.check_circle_rounded, size: 34, color: onOk == null ? p.border : p.accentInk),
               ),
             ],
           ),

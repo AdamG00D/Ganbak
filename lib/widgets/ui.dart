@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../core/profile/profile.dart';
 import '../core/theme/app_theme.dart';
 import 'cartoon_avatar.dart';
+import 'identity.dart';
 
 /// أول حرف من الاسم (للأفاتار) — آمن مع الأسماء الفاضية.
 String initialOf(String name) {
@@ -310,7 +311,7 @@ class IconBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final c = color ?? p.accent;
+    final c = color ?? (filled ? p.accent : p.accentInk);
     return Container(
       width: size,
       height: size,
@@ -368,11 +369,14 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 92,
-              height: 92,
-              decoration: BoxDecoration(color: p.accentSoft, borderRadius: BorderRadius.circular(32)),
-              child: Icon(icon, size: 42, color: p.accent),
+            CustomPaint(
+              foregroundPainter: StitchBorderPainter(color: p.accentInk.withValues(alpha: 0.45), radius: 32, inset: 6),
+              child: Container(
+                width: 92,
+                height: 92,
+                decoration: BoxDecoration(color: p.accentSoft, borderRadius: BorderRadius.circular(32)),
+                child: Icon(icon, size: 40, color: p.accentInk),
+              ),
             ),
             const SizedBox(height: 20),
             Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700)),

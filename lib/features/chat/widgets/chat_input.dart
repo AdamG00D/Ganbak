@@ -417,10 +417,10 @@ class ChatInputBarState extends State<ChatInputBar> {
                     ),
                     categoryViewConfig: CategoryViewConfig(
                       backgroundColor: p.surface,
-                      indicatorColor: p.accent,
+                      indicatorColor: p.accentInk,
                       iconColor: p.textMuted,
-                      iconColorSelected: p.accent,
-                      backspaceColor: p.accent,
+                      iconColorSelected: p.accentInk,
+                      backspaceColor: p.accentInk,
                       dividerColor: p.border,
                     ),
                     bottomActionBarConfig: BottomActionBarConfig(
@@ -563,7 +563,7 @@ class ChatInputBarState extends State<ChatInputBar> {
           const SizedBox(width: 10),
           Expanded(
             child: locked
-                ? LiveWave(color: p.accent)
+                ? LiveWave(color: p.accentInk)
                 : Opacity(
                     opacity: (1 - slide / _cancelDistance).clamp(0.2, 1.0),
                     child: Transform.translate(
@@ -703,7 +703,7 @@ class _ReplyPreview extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: p.accent,
+                    color: p.accentInk,
                     fontWeight: FontWeight.w700,
                     fontSize: 13,
                   ),

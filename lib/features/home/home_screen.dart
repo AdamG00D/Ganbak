@@ -12,6 +12,7 @@ import '../../mesh/mesh_link.dart';
 import '../../mesh/mesh_router.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/focus_guard.dart';
+import '../../widgets/identity.dart';
 import '../../widgets/ui.dart';
 import '../chat/chat_page.dart';
 import '../chat/core/chat_errors.dart';
@@ -185,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     controller: _pages,
                     onPageChanged: (i) => setState(() => _tab = i),
                     children: [
-                      _KeepAlive(child: _ChatsTab(onNew: _openPeople)),
+                      _KeepAlive(child: _ChatsTab(onNew: _openPeople, onNearby: () => _goTo(2))),
                       _KeepAlive(child: _GroupsTab(onCreate: _createGroup)),
                       _KeepAlive(child: _PeopleTab(isWifi: widget.kind != TransportKind.bluetooth)),
                     ],
@@ -282,7 +283,7 @@ class _NavIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final i = Icon(icon, color: selected ? p.accent : p.textMuted);
+    final i = Icon(icon, color: selected ? p.accentInk : p.textMuted);
     if (count <= 0) return i;
     return Badge(
       label: Text(count > 99 ? '99+' : '$count'),
@@ -563,7 +564,7 @@ class _ConversationTile extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: typing ? p.accent : (c.unread > 0 ? p.text : p.textMuted),
+                      color: typing ? p.accentInk : (c.unread > 0 ? p.text : p.textMuted),
                       fontWeight: c.unread > 0 ? FontWeight.w600 : FontWeight.w400,
                       fontSize: 13.5,
                     ),
@@ -578,7 +579,7 @@ class _ConversationTile extends StatelessWidget {
                 if (last != null)
                   Text(
                     _timeLabel(last.time),
-                    style: TextStyle(color: c.unread > 0 ? p.accent : p.textMuted, fontSize: 12),
+                    style: TextStyle(color: c.unread > 0 ? p.accentInk : p.textMuted, fontSize: 12),
                   ),
                 const SizedBox(height: 5),
                 Row(
@@ -589,13 +590,13 @@ class _ConversationTile extends StatelessWidget {
                       const SizedBox(width: 4),
                     ],
                     if (mention) ...[
-                      Icon(Icons.alternate_email_rounded, size: 17, color: p.accent),
+                      Icon(Icons.alternate_email_rounded, size: 17, color: p.accentInk),
                       const SizedBox(width: 4),
                     ],
                     if (c.unread > 0)
                       CountBadge(c.unread)
                     else if (requests > 0)
-                      Icon(Icons.person_add_alt_1_rounded, size: 18, color: p.accent)
+                      Icon(Icons.person_add_alt_1_rounded, size: 18, color: p.accentInk)
                     else
                       const SizedBox(height: 22),
                   ],
@@ -610,9 +611,10 @@ class _ConversationTile extends StatelessWidget {
 }
 
 class _ChatsTab extends StatelessWidget {
-  const _ChatsTab({required this.onNew});
+  const _ChatsTab({required this.onNew, required this.onNearby});
 
   final VoidCallback onNew;
+  final VoidCallback onNearby;
 
   @override
   Widget build(BuildContext context) {
@@ -629,10 +631,99 @@ class _ChatsTab extends StatelessWidget {
         ),
       );
     }
+    final people = ChatHub.instance.people;
+    final strip = people.isEmpty ? 0 : 1;
     return ListView.builder(
       padding: const EdgeInsets.only(top: 4, bottom: 96),
-      itemCount: chats.length,
-      itemBuilder: (_, i) => _ConversationTile(key: ValueKey(chats[i].id), conversation: chats[i]),
+      itemCount: chats.length + strip,
+      itemBuilder: (_, i) {
+        if (i < strip) return _NearbyStrip(people: people, onTap: onNearby);
+        final c = chats[i - strip];
+        return _ConversationTile(key: ValueKey(c.id), conversation: c);
+      },
+    );
+  }
+}
+
+/// "حواليك دلوقتي": أفاتارات الناس القريبين متخيّطين ببعض (غرزة = اتصال).
+class _NearbyStrip extends StatelessWidget {
+  const _NearbyStrip({required this.people, required this.onTap});
+
+  final List<MeshNode> people;
+  final VoidCallback onTap;
+
+  static const _max = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final shown = people.take(_max).toList();
+    final more = people.length - shown.length;
+    final stitch = p.textMuted.withValues(alpha: 0.6);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 8),
+      child: Material(
+        color: p.surface,
+        borderRadius: BorderRadius.circular(18),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: CustomPaint(
+            foregroundPainter: StitchBorderPainter(color: p.textMuted.withValues(alpha: 0.35), radius: 18, inset: 0.8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.l10n.aroundYouNow,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700, height: 1.3),
+                        ),
+                        Text(
+                          context.l10n.peopleNearby(people.length),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: p.textMuted, fontSize: 12, height: 1.4),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  for (var i = 0; i < shown.length; i++) ...[
+                    if (i > 0) SizedBox(width: 12, child: StitchLine(color: stitch)),
+                    Avatar(
+                      name: shown[i].name,
+                      color: shown[i].color,
+                      avatarHash: shown[i].avatar,
+                      cartoon: shown[i].cartoon,
+                      size: 32,
+                    ),
+                  ],
+                  if (more > 0) ...[
+                    SizedBox(width: 12, child: StitchLine(color: stitch)),
+                    Container(
+                      width: 32,
+                      height: 32,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(color: p.saffron, borderRadius: BorderRadius.circular(11)),
+                      child: Text(
+                        '+$more',
+                        textDirection: TextDirection.ltr,
+                        style: TextStyle(color: p.ink, fontWeight: FontWeight.w700, fontSize: 12.5),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -740,7 +831,7 @@ class _NearbyGroupCard extends StatelessWidget {
                                 ? context.l10n.requestJoin
                                 : context.l10n.join,
                         style: TextStyle(
-                          color: hub.pendingJoins.contains(g.ad.id) ? p.textMuted : p.accent,
+                          color: hub.pendingJoins.contains(g.ad.id) ? p.textMuted : p.accentInk,
                           fontWeight: FontWeight.w700,
                           fontSize: 13.5,
                         ),
@@ -950,7 +1041,7 @@ class _PersonRow extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.chat_bubble_outline_rounded, color: p.accent, size: 20),
+            Icon(Icons.chat_bubble_outline_rounded, color: p.accentInk, size: 20),
           ],
         ),
       ),
@@ -984,7 +1075,7 @@ class _RequirementsView extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconBadge(icon: r.icon, color: r.ok ? p.success : p.accent, size: 42),
+                IconBadge(icon: r.icon, color: r.ok ? p.success : p.accentInk, size: 42),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(

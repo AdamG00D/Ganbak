@@ -205,7 +205,7 @@ class VoiceBubbleContent extends StatelessWidget {
     final media = m.media!;
     final mine = m.kind == MessageKind.mine;
     final fg = mine ? p.onAccent : p.text;
-    final accent = mine ? p.onAccent : p.accent;
+    final accent = mine ? p.onAccent : p.accentInk;
     final totalMs = media.durationMs ?? 0;
     final wave = media.waveform ?? _fakeWave(m.id);
 

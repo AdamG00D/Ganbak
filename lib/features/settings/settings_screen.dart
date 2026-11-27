@@ -410,7 +410,7 @@ class _AboutHeader extends StatelessWidget {
             child: Text(
               'v${AppConfig.appVersion}',
               textDirection: TextDirection.ltr,
-              style: TextStyle(color: p.accent, fontWeight: FontWeight.w700, fontSize: 13),
+              style: TextStyle(color: p.accentInk, fontWeight: FontWeight.w700, fontSize: 13),
             ),
           ),
         ],
@@ -551,7 +551,7 @@ class _PinSetupState extends State<_PinSetup> {
             SizedBox(
               height: 20,
               child: _busy
-                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.4, color: p.accent))
+                  ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.4, color: p.accentInk))
                   : Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

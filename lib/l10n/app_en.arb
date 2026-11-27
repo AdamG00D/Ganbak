@@ -76,6 +76,7 @@
   "pinEnterCurrent": "Enter your current PIN",
   "pinChoose": "Choose a PIN (4 to 8 digits)",
   "pinRepeat": "Enter it again to confirm",
+  "colorWasl": "Wasl",
   "colorIndigo": "Indigo",
   "colorTeal": "Teal",
   "colorEmerald": "Green",
@@ -529,5 +530,8 @@
   "noLongerAdmin": "{name} is no longer an admin",
   "byRenamed": "{by} renamed the group to \"{name}\"",
   "mentionedYou": "Mentioned you: {text}",
-  "reactedOn": "Reacted {emoji} to: \"{text}\""
+  "reactedOn": "Reacted {emoji} to: \"{text}\"",
+  "aroundYouNow": "Around you now",
+  "helpMark": "?",
+  "howToPlay": "How to play"
 }

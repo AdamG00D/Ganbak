@@ -17,6 +17,8 @@ class AccentTheme {
   Color second(Brightness b) => b == Brightness.dark ? darkSecond : lightSecond;
 
   static const all = <AccentTheme>[
+    // هوية وصل (الخيامية): زعفراني + كهرماني — الافتراضي
+    AccentTheme('wasl', Color(0xFFF4B400), Color(0xFFF08C00), Color(0xFFF6BE2C), Color(0xFFF59E0B)),
     AccentTheme('indigo', Color(0xFF4F46E5), Color(0xFF7C3AED), Color(0xFF818CF8), Color(0xFFA78BFA)),
     AccentTheme('teal', Color(0xFF0D9488), Color(0xFF0891B2), Color(0xFF2DD4BF), Color(0xFF22D3EE)),
     AccentTheme('emerald', Color(0xFF059669), Color(0xFF65A30D), Color(0xFF34D399), Color(0xFFA3E635)),
@@ -28,6 +30,8 @@ class AccentTheme {
   ];
 
   String label(AppLocalizations l) => switch (id) {
+        'wasl' => l.colorWasl,
+        'indigo' => l.colorIndigo,
         'teal' => l.colorTeal,
         'emerald' => l.colorEmerald,
         'coral' => l.colorCoral,
@@ -35,8 +39,11 @@ class AccentTheme {
         'sky' => l.colorSky,
         'pink' => l.colorPink,
         'graphite' => l.colorGraphite,
-        _ => l.colorIndigo,
+        _ => l.colorWasl,
       };
+
+  /// اللون ده فاتح لدرجة إن الكلام بيه على خلفية فاتحة مبيتقريش (الزعفراني).
+  bool get _paleOnLight => light.computeLuminance() > 0.4;
 
   static AccentTheme byId(String? id) => all.firstWhere((a) => a.id == id, orElse: () => all.first);
 }
@@ -74,6 +81,11 @@ class Palette extends ThemeExtension<Palette> {
     required this.success,
     required this.warning,
     required this.danger,
+    required this.accentInk,
+    required this.ink,
+    required this.saffron,
+    required this.tentRed,
+    required this.teal,
   });
 
   final bool isDark;
@@ -89,6 +101,24 @@ class Palette extends ThemeExtension<Palette> {
   final Color success;
   final Color warning;
   final Color danger;
+
+  /// لون التطبيق لما يبقى كلام أو أيقونة على الخلفية (الزعفراني في الفاتح بيغمق عشان يتقري).
+  /// [accent] للحاجات المليانة (زراير، فقاعاتي، شارات) و[accentInk] للكلام والأيقونات.
+  final Color accentInk;
+
+  // ---- ألوان الهوية (ثابتة مهما اللون اللي المستخدم اختاره) ----
+
+  /// حبر الليل: خلفية الكروت الغامقة والنص الأساسي في الفاتح.
+  final Color ink;
+
+  /// الزعفراني.
+  final Color saffron;
+
+  /// أحمر الخيمة: الألعاب والتنبيهات.
+  final Color tentRed;
+
+  /// الفيروزي: الاتصال والأمان.
+  final Color teal;
 
   Color get accentSoft => accent.withValues(alpha: isDark ? 0.18 : 0.10);
 
@@ -109,15 +139,21 @@ class Palette extends ThemeExtension<Palette> {
       accent: a,
       onAccent: onColor(a),
       second: accent.second(b),
-      bg: dark ? const Color(0xFF0B0B0F) : const Color(0xFFF6F6F8),
-      surface: dark ? const Color(0xFF15151B) : Colors.white,
-      surfaceAlt: dark ? const Color(0xFF1F1F28) : const Color(0xFFEDEDF2),
-      border: dark ? const Color(0x14FFFFFF) : const Color(0xFFE4E4EA),
-      text: dark ? const Color(0xFFF2F2F5) : const Color(0xFF111118),
-      textMuted: dark ? const Color(0xFF9A9AA8) : const Color(0xFF6B6B7B),
-      success: dark ? const Color(0xFF34D399) : const Color(0xFF059669),
-      warning: dark ? const Color(0xFFFBBF24) : const Color(0xFFD97706),
-      danger: dark ? const Color(0xFFF87171) : const Color(0xFFDC2626),
+      // محايدة فيها لمسة زرقا خفيفة (حبر الليل) — مش رمادي ميت ولا أسود
+      bg: dark ? const Color(0xFF0F1226) : const Color(0xFFF5F6FA),
+      surface: dark ? const Color(0xFF181C36) : Colors.white,
+      surfaceAlt: dark ? const Color(0xFF232846) : const Color(0xFFEBEDF5),
+      border: dark ? const Color(0x1AFFFFFF) : const Color(0xFFE1E3EE),
+      text: dark ? const Color(0xFFEEF0FA) : const Color(0xFF1B1F3B),
+      textMuted: dark ? const Color(0xFFA2A7C8) : const Color(0xFF5E6384),
+      success: dark ? const Color(0xFF2EC4B6) : const Color(0xFF0B7477),
+      warning: dark ? const Color(0xFFFBBF24) : const Color(0xFFB45309),
+      danger: dark ? const Color(0xFFFF6B7D) : const Color(0xFFC81E35),
+      accentInk: !dark && accent._paleOnLight ? const Color(0xFF8F5E00) : a,
+      ink: const Color(0xFF1B1F3B),
+      saffron: dark ? const Color(0xFFF6BE2C) : const Color(0xFFF4B400),
+      tentRed: dark ? const Color(0xFFF0475C) : const Color(0xFFD7263D),
+      teal: dark ? const Color(0xFF2EC4B6) : const Color(0xFF0F8B8D),
     );
   }
 
@@ -142,6 +178,11 @@ class Palette extends ThemeExtension<Palette> {
       success: l(success, other.success),
       warning: l(warning, other.warning),
       danger: l(danger, other.danger),
+      accentInk: l(accentInk, other.accentInk),
+      ink: l(ink, other.ink),
+      saffron: l(saffron, other.saffron),
+      tentRed: l(tentRed, other.tentRed),
+      teal: l(teal, other.teal),
     );
   }
 }
@@ -219,7 +260,7 @@ class AppTheme {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         hintStyle: TextStyle(color: p.textMuted, fontWeight: FontWeight.w500),
         labelStyle: TextStyle(color: p.textMuted),
-        floatingLabelStyle: TextStyle(color: p.accent, fontWeight: FontWeight.w700),
+        floatingLabelStyle: TextStyle(color: p.accentInk, fontWeight: FontWeight.w700),
         prefixIconColor: p.textMuted,
         suffixIconColor: p.textMuted,
         border: border(Colors.transparent),
@@ -257,7 +298,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: p.accent,
+          foregroundColor: p.accentInk,
           textStyle: const TextStyle(
             fontFamily: fontFamily,
             fontWeight: FontWeight.w700,
@@ -269,7 +310,7 @@ class AppTheme {
           backgroundColor: p.surface,
           foregroundColor: p.textMuted,
           selectedBackgroundColor: p.accentSoft,
-          selectedForegroundColor: p.accent,
+          selectedForegroundColor: p.accentInk,
           side: BorderSide(color: p.border),
           textStyle: const TextStyle(fontFamily: fontFamily, fontWeight: FontWeight.w700),
         ),
@@ -287,7 +328,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: p.isDark ? const Color(0xFF1E293B) : const Color(0xFF0F172A),
+        backgroundColor: p.isDark ? const Color(0xFF232846) : p.ink,
         contentTextStyle: const TextStyle(
           fontFamily: fontFamily,
           color: Colors.white,
@@ -332,14 +373,14 @@ class AppTheme {
       tooltipTheme: TooltipThemeData(
         textStyle: const TextStyle(fontFamily: fontFamily, color: Colors.white),
         decoration: BoxDecoration(
-          color: const Color(0xFF0F172A),
+          color: p.ink,
           borderRadius: BorderRadius.circular(10),
         ),
       ),
       textSelectionTheme: TextSelectionThemeData(
-        cursorColor: p.accent,
-        selectionColor: p.accent.withValues(alpha: 0.28),
-        selectionHandleColor: p.accent,
+        cursorColor: p.accentInk,
+        selectionColor: p.accent.withValues(alpha: 0.32),
+        selectionHandleColor: p.accentInk,
       ),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

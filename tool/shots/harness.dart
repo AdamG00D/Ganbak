@@ -40,7 +40,7 @@ class Shots {
       '/usr/share/fonts/google-noto-emoji-fonts/NotoEmoji-Regular.ttf',
     ]) {
       if (File(path).existsSync()) {
-        final emoji = FontLoader('Plex')..addFont(_bytes(path));
+        final emoji = FontLoader('ShotsEmoji')..addFont(_bytes(path));
         await emoji.load();
         break;
       }
@@ -62,7 +62,7 @@ class Shots {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       navigatorKey: rootNavigatorKey,
-      theme: AppTheme.build(AppSettings.instance.accent, brightness),
+      theme: _withEmoji(AppTheme.build(AppSettings.instance.accent, brightness)),
       locale: locale,
       supportedLocales: L10n.supported,
       localizationsDelegates: const [
@@ -77,6 +77,11 @@ class Shots {
   }
 
   static final _boundary = GlobalKey();
+
+  /// الموبايل بيرسم الإيموجي بخط النظام لوحده؛ هنا لازم نقوله صراحة.
+  static ThemeData _withEmoji(ThemeData t) => t.copyWith(
+        textTheme: t.textTheme.apply(fontFamilyFallback: const ['ShotsEmoji']),
+      );
 
   /// مقاس موبايل عادي (360×760 dp) بكثافة 1.5.
   static void phone(WidgetTester tester, {Size size = const Size(360, 760)}) {

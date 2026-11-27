@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/profile/profile.dart';
 import '../../core/theme/app_theme.dart';
 import '../../l10n/l10n.dart';
+import '../../widgets/identity.dart';
 import '../../widgets/ui.dart';
 import '../hub/chat_hub.dart';
 import '../settings/settings_screen.dart';
@@ -75,7 +76,7 @@ class TransportScreen extends StatelessWidget {
                   title: l.bluetooth,
                   subtitle: l.bluetoothDesc,
                   tags: [l.tagNoNetwork, 'Mesh'],
-                  gradient: [p.accent, p.second],
+                  color: p.isDark ? const Color(0xFF2A3060) : p.ink,
                   onTap: () => _open(context, TransportKind.bluetooth),
                 ),
                 const SizedBox(height: 14),
@@ -84,7 +85,7 @@ class TransportScreen extends StatelessWidget {
                   title: l.wifi,
                   subtitle: l.wifiDesc,
                   tags: [l.tagFaster, l.tagCalls, l.tagVideo],
-                  gradient: [p.second, p.accent],
+                  color: p.isDark ? const Color(0xFF0E6F71) : p.teal,
                   onTap: () => _open(context, TransportKind.wifi),
                 ),
                 const SizedBox(height: 14),
@@ -93,7 +94,7 @@ class TransportScreen extends StatelessWidget {
                   title: l.both,
                   subtitle: l.bothDesc,
                   tags: [l.tagBridge, l.tagRange, l.tagBattery],
-                  gradient: [p.accent, Color.lerp(p.accent, p.second, 0.5)!],
+                  color: p.isDark ? const Color(0xFFB3213A) : p.tentRed,
                   onTap: () => _open(context, TransportKind.both),
                 ),
               ],
@@ -105,13 +106,14 @@ class TransportScreen extends StatelessWidget {
   }
 }
 
+/// كارت اختيار طريقة الاتصال: قماش ملوّن بنقشة خيامية وغرزة على الحواف.
 class _Choice extends StatelessWidget {
   const _Choice({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.tags,
-    required this.gradient,
+    required this.color,
     required this.onTap,
   });
 
@@ -119,79 +121,56 @@ class _Choice extends StatelessWidget {
   final String title;
   final String subtitle;
   final List<String> tags;
-  final List<Color> gradient;
+  final Color color;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final fg = Palette.onColor(gradient.first);
-    return Material(
-      borderRadius: BorderRadius.circular(30),
-      clipBehavior: Clip.antiAlias,
-      child: Ink(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradient,
-            begin: AlignmentDirectional.topStart,
-            end: AlignmentDirectional.bottomEnd,
-          ),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          child: Stack(
+    final p = context.palette;
+    final fg = Palette.onColor(color);
+    return StitchedBox(
+      color: color,
+      radius: 28,
+      pattern: true,
+      onTap: onTap,
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              PositionedDirectional(
-                end: -24,
-                bottom: -30,
-                child: Icon(icon, size: 150, color: fg.withValues(alpha: 0.10)),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(color: p.saffron, borderRadius: BorderRadius.circular(18)),
+                child: Icon(icon, color: p.ink, size: 26),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(22, 22, 22, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: fg.withValues(alpha: 0.16),
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          child: Icon(icon, color: fg, size: 26),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(title, style: TextStyle(color: fg, fontSize: 24, fontWeight: FontWeight.w700)),
-                        ),
-                        Icon(Icons.east_rounded, color: fg),
-                      ],
-                    ),
-                    const SizedBox(height: 14),
-                    Text(subtitle, style: TextStyle(color: fg.withValues(alpha: 0.88), height: 1.65, fontSize: 14.5)),
-                    const SizedBox(height: 14),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
-                      children: [
-                        for (final t in tags)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                            decoration: BoxDecoration(
-                              color: fg.withValues(alpha: 0.16),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(t, style: TextStyle(color: fg, fontSize: 12.5, fontWeight: FontWeight.w600)),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Text(title, style: TextStyle(color: fg, fontSize: 24, fontWeight: FontWeight.w700)),
               ),
+              Icon(Directionality.of(context) == TextDirection.rtl ? Icons.west_rounded : Icons.east_rounded, color: fg),
             ],
           ),
-        ),
+          const SizedBox(height: 14),
+          Text(subtitle, style: TextStyle(color: fg.withValues(alpha: 0.9), height: 1.65, fontSize: 14.5)),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              for (final t in tags)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: fg.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(t, style: TextStyle(color: fg, fontSize: 12.5, fontWeight: FontWeight.w600)),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

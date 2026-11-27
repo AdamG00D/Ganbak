@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-يولّد أيقونة التطبيق (فقاعة محادثة جواها 3 أجهزة متوصلة = شبكة Mesh).
+يولّد أيقونة التطبيق: فقاعة زعفراني جواها 3 أجهزة متوصلة (شبكة Mesh) على خلفية حبر الليل
+بنقشة خيامية خفيفة — هوية "الخيامية" (شوف docs/DESIGN.md).
 
     python3 tool/generate_icon.py
 
@@ -13,15 +14,17 @@
 """
 from pathlib import Path
 
+import math
+
 from PIL import Image, ImageChops, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 RES = ROOT / "android/app/src/main/res"
 S = 1024  # الرسم بدقة عالية وبعدين بنصغّر
 
-TOP = (99, 102, 241)  # #6366F1
-BOTTOM = (124, 58, 237)  # #7C3AED
-INK = (79, 70, 229)  # #4F46E5
+NIGHT = (27, 31, 59)  # #1B1F3B حبر الليل
+SAFFRON = (244, 180, 0)  # #F4B400
+INK = NIGHT
 
 NODES = [(352, 508), (512, 372), (672, 508)]
 NODE_R = 54
@@ -29,11 +32,41 @@ LINE_W = 34
 
 
 def background() -> Image.Image:
-    """تدرّج قُطري من فوق-شمال لتحت-يمين."""
-    ramp = Image.linear_gradient("L").resize((S, S)).rotate(45, expand=False, resample=Image.BICUBIC)
-    # الأركان بعد اللف بتبقى سودا: بنكبّر الوسط عشان يغطي
-    ramp = ramp.resize((S * 2, S * 2)).crop((S // 2, S // 2, S // 2 + S, S // 2 + S))
-    return Image.composite(Image.new("RGB", (S, S), BOTTOM), Image.new("RGB", (S, S), TOP), ramp)
+    """حبر الليل + نقشة خيامية خفيفة (نجوم تمانية)."""
+    img = Image.new("RGB", (S, S), NIGHT)
+    layer = Image.new("RGBA", (S, S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    cell, r = 128, 30
+    color = SAFFRON + (34,)
+    for cy in range(cell // 2, S + cell, cell):
+        for cx in range(cell // 2, S + cell, cell):
+            for rot in (0, 45):
+                pts = []
+                for k in range(4):
+                    ang = math.radians(rot + 45 + 90 * k)
+                    pts.append((cx + r * math.sqrt(2) * math.cos(ang), cy + r * math.sqrt(2) * math.sin(ang)))
+                d.polygon(pts, outline=color, width=6)
+            d.ellipse((cx - 7, cy - 7, cx + 7, cy + 7), fill=color)
+    img.paste(layer, mask=layer)
+    return img
+
+
+def stitch_mask() -> Image.Image:
+    """غرزة (خط متقطع) جوه حواف الفقاعة."""
+    m = Image.new("L", (S, S), 0)
+    ring = Image.new("L", (S, S), 0)
+    d = ImageDraw.Draw(ring)
+    d.rounded_rectangle((214, 234, 810, 654), radius=140, outline=255, width=14)
+    # بنقطّع الحلقة لشرَط: نلغي أجزاء بالتبادل حسب الزاوية من النص
+    cut = Image.new("L", (S, S), 0)
+    dc = ImageDraw.Draw(cut)
+    cx, cy = 512, 444
+    for k in range(0, 360, 8):
+        a0, a1 = math.radians(k), math.radians(k + 4)
+        dc.polygon([(cx, cy), (cx + 2000 * math.cos(a0), cy + 2000 * math.sin(a0)),
+                    (cx + 2000 * math.cos(a1), cy + 2000 * math.sin(a1))], fill=255)
+    m.paste(ring, mask=cut)
+    return m
 
 
 def bubble_mask() -> Image.Image:
@@ -57,7 +90,8 @@ def graph_mask() -> Image.Image:
 
 def foreground() -> Image.Image:
     img = Image.new("RGBA", (S, S), (0, 0, 0, 0))
-    img.paste(Image.new("RGBA", (S, S), (255, 255, 255, 255)), mask=bubble_mask())
+    img.paste(Image.new("RGBA", (S, S), SAFFRON + (255,)), mask=bubble_mask())
+    img.paste(Image.new("RGBA", (S, S), INK + (110,)), mask=stitch_mask())
     img.paste(Image.new("RGBA", (S, S), INK + (255,)), mask=graph_mask())
     return img
 

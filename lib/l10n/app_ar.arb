@@ -90,6 +90,7 @@
   "pinEnterCurrent": "اكتب الرقم السري الحالي",
   "pinChoose": "اختار رقم سري (4 لـ 8 أرقام)",
   "pinRepeat": "اكتبه تاني للتأكيد",
+  "colorWasl": "وصل",
   "colorIndigo": "نيلي",
   "colorTeal": "فيروزي",
   "colorEmerald": "أخضر",
@@ -950,5 +951,8 @@
         "type": "Object"
       }
     }
-  }
+  },
+  "aroundYouNow": "حواليك دلوقتي",
+  "helpMark": "؟",
+  "howToPlay": "إزاي بتتلعب؟"
 }

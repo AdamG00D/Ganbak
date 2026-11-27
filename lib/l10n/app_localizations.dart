@@ -554,6 +554,12 @@ abstract class AppLocalizations {
   /// **'اكتبه تاني للتأكيد'**
   String get pinRepeat;
 
+  /// No description provided for @colorWasl.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل'**
+  String get colorWasl;
+
   /// No description provided for @colorIndigo.
   ///
   /// In ar, this message translates to:
@@ -3277,6 +3283,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تفاعل بـ {emoji} على: \"{text}\"'**
   String reactedOn(Object emoji, Object text);
+
+  /// No description provided for @aroundYouNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'حواليك دلوقتي'**
+  String get aroundYouNow;
+
+  /// No description provided for @helpMark.
+  ///
+  /// In ar, this message translates to:
+  /// **'؟'**
+  String get helpMark;
+
+  /// No description provided for @howToPlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزاي بتتلعب؟'**
+  String get howToPlay;
 }
 
 class _AppLocalizationsDelegate

@@ -255,6 +255,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pinRepeat => 'اكتبه تاني للتأكيد';
 
   @override
+  String get colorWasl => 'وصل';
+
+  @override
   String get colorIndigo => 'نيلي';
 
   @override
@@ -1809,4 +1812,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String reactedOn(Object emoji, Object text) {
     return 'تفاعل بـ $emoji على: \"$text\"';
   }
+
+  @override
+  String get aroundYouNow => 'حواليك دلوقتي';
+
+  @override
+  String get helpMark => '؟';
+
+  @override
+  String get howToPlay => 'إزاي بتتلعب؟';
 }

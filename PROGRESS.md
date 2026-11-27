@@ -13,8 +13,8 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 
 | # | Step | State |
 |---|------|-------|
-| 1 | Screenshot tool (`tool/shots/`) + this file | in progress |
-| 2 | Visual identity "Khayamiya" (palette, stitch line, pattern, bunting, launcher icon) | todo |
+| 1 | Screenshot tool (`tool/shots/`) + this file | done |
+| 2 | Visual identity "Khayamiya" (palette, stitch line, pattern, bunting, launcher icon) — see docs/DESIGN.md | done |
 | 3 | Game framework: invites, wire protocol, room host, picker sheet, game screen shell, help pages | todo |
 | 4 | Two-player games: tic-tac-toe, connect four, battleship, rock-paper-scissors, dots & boxes, memory, dice/coin | todo |
 | 5 | Group games: memory & dots (group), spy (مين الجاسوس), quiz, mafia | todo |
@@ -59,9 +59,13 @@ the default becomes "wasl". Preview the owner approved: https://claude.ai/artifa
 ## Screenshots (design check)
 
 `flutter test tool/shots/shots_test.dart` renders real screens with the real font into `build/shots/`
-(`<name>.<ar|en>.<light|dark>.png`). Use `--name <part>` to render a subset. Look at the PNGs after every UI change:
+(`<name>.<ar|en>.<light|dark>.png`). Use `--name <part>` to render a subset, then `python3 tool/shots/sheet.py`
+puts the four variants of each screen side by side in `build/shots/sheets/`. Sample people/chats: `tool/shots/sample.dart`. Look at the PNGs after every UI change:
 RTL and LTR, light and dark, long names, small phones. It is not part of `flutter test` (it lives under `tool/`).
 
 ## Log
 
-- 2026-11-27 — plan agreed with the owner; started step 1.
+- 2026-11-27 — plan agreed with the owner; step 1 (screenshot tool) done.
+- 2026-11-27 — step 2 (identity) done: `wasl` accent (default), `accentInk` for brand-coloured text, ink/saffron/
+  tentRed/teal tokens, stitch/pattern/bunting/help widgets, khayamiya transport cards, "around you now" strip on the
+  chats tab, stitched empty states, new launcher icon. Next: step 3 (game framework).
