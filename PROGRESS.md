@@ -19,8 +19,18 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 | 4 | Two-player games: tic-tac-toe, connect four, battleship, rock-paper-scissors, dots & boxes, memory | done (dice/coin dropped for now) |
 | 5 | Group games: memory & dots (group), spy (مين الجاسوس), quiz, mafia | done |
 | 6 | "Wasl guide" (دليل وصل) in settings + "؟" on the transport screen | done (`lib/features/guide/`) |
-| 7 | Docs (GAMES.md, DESIGN.md, PROTOCOL.md, SECURITY, READMEs, AGENTS.md), version 1.3, release notes | todo |
-| 8 | Full check: analyze, tests, screenshots of every screen reviewed, release build | todo |
+| 7 | Docs (GAMES.md, DESIGN.md, PROTOCOL.md, SECURITY, READMEs, AGENTS.md), version 1.3, release notes | done |
+| 8 | Full check: analyze, tests, screenshots of every screen reviewed, release build | checks done; **build waits for the owner's OK**; owner tests on real phones |
+
+### Still open for 1.3
+
+- **Build:** not done — ask the owner first (`./scripts/build_release.sh`).
+- **Real-phone test by the owner** (I can't run Bluetooth / Wi-Fi here): a direct game over Bluetooth and over Wi-Fi,
+  a group game with 3+ phones (spy or mafia), leaving mid-game, the app in background during a game, and Arabic on one
+  phone / English on the other.
+- **README images are out of date** (`docs/images/screenshots/*`, banners): the purple look. Retake them from a phone
+  (or render with `tool/shots/` + sample data) and regenerate the banners in the new colours.
+- Dice / coin in chat was dropped from this release (not asked for again).
 
 ## Next release: 1.4 — "Wasl network" (شبكة وصل)
 
@@ -90,3 +100,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
   `؟` on the transport screen), then step 7 (docs, version 1.3).
 - 2026-11-27 — step 6 done: the old "how Wasl works" sheet became a full guide page (connection methods with
   drawings, mesh, groups, games linking to each help page, safety). Next: step 7 (docs + version 1.3).
+- 2026-11-27 — large-text pass (1.3×) added to the screenshot tool; fixed every overflow it found.
+- 2026-11-27 — step 7 done: docs/GAMES.md, PROTOCOL §8, SECURITY (en/ar) games section, READMEs, CONTRIBUTING,
+  AGENTS.md, version 1.3.0+4, release notes. Waiting for the owner: real-phone test + OK to build.

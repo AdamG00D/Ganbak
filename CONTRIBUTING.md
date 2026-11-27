@@ -32,8 +32,9 @@ You don't need the signing key: the project builds with the debug key without it
   text and say so in the PR — a maintainer will translate. Issues and PRs in English or Arabic are both fine.
 - The layout flips between RTL (Arabic) and LTR (English): use `EdgeInsetsDirectional` / `AlignmentDirectional` /
   `PositionedDirectional`, never fixed left / right.
-- Colours only through `context.palette`. User messages via `showToast` (not `SnackBar`). Close the keyboard with
-  `hideKeyboard()`.
+- Colours only through `context.palette` (use `accentInk`, not `accent`, for brand-coloured text and icons — saffron
+  text on white is unreadable). User messages via `showToast` (not `SnackBar`). Close the keyboard with
+  `hideKeyboard()`. The look ("Khayamiya") is described in [docs/DESIGN.md](docs/DESIGN.md).
 - Line width 120. Don't reformat files your change doesn't touch.
 - Avoid new dependencies unless necessary — if you add one, explain why in the PR and give its license (it must be
   compatible with GPL-3.0).
@@ -58,6 +59,8 @@ You don't need the signing key: the project builds with the debug key without it
 
 - Mesh, crypto and group logic are tested in `test/` on an in-memory network (`test/support.dart`) — no phones needed.
 - For any bug fix: write a test that fails before the fix and passes after it.
+- UI changes: render the screens with `flutter test tool/shots/shots_test.dart` (then `python3 tool/shots/sheet.py`)
+  and look at them in Arabic and English, light and dark; the `big` group (1.3× text) must pass without overflows.
 
 ## Pull requests
 

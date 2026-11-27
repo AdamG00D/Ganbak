@@ -102,7 +102,7 @@ increasing `seq` (replays dropped). Heartbeat every 5 s; no traffic for 15 s →
 
 Packet kinds (`k`): `msg` (`id, text, ts, rp?, fw?`), `ack`, `typing`, `read {ids}`, `del {id}`, `edit {id, text}`,
 `react {id, e, by}`, `file-start / file-chunk / file-end / file-ack / file-cancel`, `call` (WebRTC signalling),
-`ping`, `bye`.
+`game` (a game message, §8), `ping`, `bye`.
 
 - Unknown kinds are ignored, so new kinds are backwards compatible. **Changing the meaning or shape of an existing
   one requires bumping `protocolVersion`.**
@@ -136,6 +136,7 @@ sender is not in the group's removed list.
 | `rd` | `ids` — "I read these" |
 | `rx` | `id, e, o` — reaction on message `id` whose author is `o` (`e` empty = remove) |
 | `join` / `leave` | — |
+| `gm` | `d` — a public game message (§8) |
 
 ## 6. Group administration (GroupOps)
 
@@ -174,3 +175,47 @@ The command JSON has `op`, a strictly increasing `n` per sender (replay protecti
 - A conversation is written only if `saveOverride ?? AppSettings.saveChats` (default off). Media of saved chats
   lives in `vault/media/<id>/`; everything else is in temp folders wiped when the hub stops.
 - Mute/pin choices for unsaved chats are dropped when the hub stops.
+
+## 8. Games
+
+Rules and architecture: [GAMES.md](GAMES.md). The phone that opens a game is the room **host** and runs the rules.
+
+Transport:
+
+- **Direct chat:** every game message is a `game` packet on the SecureChannel (the whole map, plus `k`/`seq`).
+- **Group, public:** a group packet `{k: "gm", d: message}` (group key, sender must equal the mesh source).
+- **Group, to one player:** a `U` control message, sealed per recipient:
+
+```
+{"t":"gm","g": group id,"d": base64(AES-256-GCM(pairKey(sender, recipient, "wasl/game"), json))}
+aad = "wasl/game|<group id>|<sender id>|<recipient id>"
+```
+
+Every message has `g` (room id, 8–32 hex chars) and `y` (type). `kind` (a `GameKind` id) rides along with
+`inv`, `lobby` and `view` so a phone that missed the invite can still join.
+
+| `y` | from → to | fields |
+|---|---|---|
+| `inv` | host → all | `kind, hn` (host name) |
+| `lobby` | host → all | `p` (players in order), `nm {id: name}` |
+| `join` / `unjoin` | player → host (private) | `nm` |
+| `view` | host → all | `n` (state number, increasing), `r` (match number), `p`, `nm`, `w {id: wins}`, `ac {id: last act}`, `v` (public state) |
+| `pv` | host → player (private) | `n`, `v` (that player's secret: role, word, …) |
+| `act` | player → host (private) | `c` (act number, increasing per player), `a` (the move; `{t: "again"}` = rematch, `{t: "msay"}` = secret chat) |
+| `sync` | player → host | — (send me the state) |
+| `quit` | player → host | — |
+| `bye` | host → all | `why`: `end` / `cancel` |
+| `rx` | anyone → all | `e` — quick reaction (one of a fixed set) |
+| `say` | anyone → all | `t` — game chat (≤ 300 chars; ignored from players the state mutes) |
+| `psay` | host → player (private) | `f, t` — secret chat line (mafia at night), relayed by the host |
+
+Rules:
+
+- A `view`, `lobby`, `pv`, `bye` or `psay` is accepted only from the room's host; `pv`/`psay` only if private.
+- The host re-sends `view` every 5 s; players re-send acts the host hasn't acknowledged (`ac`) every 3 s; the host
+  drops an act whose `c` it has already applied. No message from the host for 25 s → the room closes.
+- Hidden choices (rock-paper-scissors picks, battleship boards) are sent as `commit = hex(SHA-256("wasl/game/commit|"
+  + value + "|" + salt))` and revealed later; the engine checks them and flags the cheater.
+- Additive only: old versions ignore `game` / `gm` packets and unknown `kind`s. Changing the meaning of an existing
+  field needs a new game id.
+

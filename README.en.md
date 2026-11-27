@@ -58,6 +58,10 @@ the phone's language, and you can switch it in Settings.
   delete messages.
 - **Everything you'd expect from a chat app** — photos, files, voice notes, replies, edits, delete for everyone,
   emoji reactions, @mentions, forwarding, search, read receipts, "typing…", voice and video calls over Wi-Fi.
+- **Games inside chats** 🎮 — tic-tac-toe, four in a row, battleships, rock paper scissors, dots and boxes and memory
+  with a friend; who's the spy?, quiz and mafia with a group. Every game has a help page (the ? button), and nobody
+  can cheat at rock paper scissors or battleships.
+- **Wasl guide** in the app — every way to connect explained with drawings, plus groups, games and safety.
 - **Notifications** like a regular chat app, with quick reply; per-chat mute and pin.
 - **Private by default** — chats are kept in memory only unless you choose to save them; saved chats are encrypted
   with a key held in Android Keystore. Optional PIN / fingerprint lock. No analytics, no ads, no network calls.
@@ -112,10 +116,12 @@ hotspot), or two phones with Bluetooth next to each other.
 | `lib/mesh/` | Links (Wi-Fi, Bluetooth, both) and the mesh router |
 | `lib/features/chat/core/` | Encrypted channel, chat session, file transfer |
 | `lib/features/groups/` | Groups: keys, sessions, admin commands |
-| `lib/features/hub/chat_hub.dart` | Ties it together: network, conversations, storage, notifications |
+| `lib/features/hub/chat_hub.dart` | Ties it together: network, conversations, storage, notifications, games |
+| `lib/features/games/` | Games: rooms, rules, screens, help pages ([docs/GAMES.md](docs/GAMES.md)) |
 | `lib/core/` | Crypto, profile, encrypted storage, settings, theme |
 | `android/…/kotlin/` | Notifications, background service, Keystore, native crypto, media compression |
 | `test/` | Tests on an in-memory network (no phones needed) |
+| `tool/shots/` | Screenshots for design review (Arabic/English, light/dark, large text) |
 
 ## Contributing & security
 

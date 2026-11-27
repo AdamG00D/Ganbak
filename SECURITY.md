@@ -48,6 +48,20 @@ These are known and documented so nobody relies on something that isn't there:
    no complete protection.
 10. **No external audit yet.** The code is open so anyone can review it.
 
+## Games
+
+Games have no server, so the phone that opens a game (the **room host**) is the referee:
+
+- **Rock paper scissors and Battleships can't be cheated, not even by the host.** Each pick and each fleet is sent as a commitment
+  (SHA-256 with a random salt) and revealed afterwards; the app checks the reveal and every "hit / miss" answer and
+  names whoever lied.
+- **In Mafia, Who's the spy and Quiz the host's phone knows the secrets** (roles, the word, everyone's answers) to run the game. The
+  app never shows them to the host, and they travel sealed per player, so other phones relaying the mesh can't
+  read them. A host running a **modified** app could peek or cheat, though. These are party games: don't play them
+  with someone you wouldn't trust to deal the cards.
+- **Memory:** the card layout comes from the host, so a modified host could know it.
+- Game chat and reactions in groups are encrypted with the group key, like group messages (limitation 2 applies).
+
 ## Cryptography
 
 X25519 • HKDF-SHA256 • HMAC-SHA256 • AES-256-GCM • Argon2id (19 MiB, 2 passes) • SHA-256 — from the

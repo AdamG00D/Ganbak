@@ -8,7 +8,9 @@ password / join-request) with an owner and admins. Package `com.adam.wasl`. Open
 (`LICENSE`); human-facing docs come in English + Arabic pairs, keep both in sync: `README.md` is **Arabic** (the
 main one) with `README.en.md`; `CONTRIBUTING`, `SECURITY` (threat model + known limits) and `CODE_OF_CONDUCT`
 (Contributor Covenant 2.1) are English `X.md` with Arabic `X.ar.md`.
-`docs/PROTOCOL.md` (wire protocol, English only — keep it in sync with the code). README images live in
+`docs/PROTOCOL.md` (wire protocol, English only — keep it in sync with the code), `docs/GAMES.md` (games: rules,
+architecture, how to add one), `docs/DESIGN.md` (the "Khayamiya" look). **`PROGRESS.md` (repo root) is the work log:
+read it first, keep it current, and don't re-open the decisions recorded there.** README images live in
 `docs/images/` (banners `banner.en.png` / `banner.ar.png`, screenshots in `screenshots/`). It started from the chat part of the
 owner's older app ILN (`~/Downloads/ILN_App/iln_flutter`) — chat session, file transfer, voice, calls and the Kotlin
 helpers come from there.
@@ -17,8 +19,10 @@ helpers come from there.
 
 - The owner writes in **Egyptian Arabic**. Reply in Egyptian Arabic.
 - **Explain the plan first and wait for approval** before implementing anything non-trivial.
-- **Don't build the APK after each step.** Finish every change, run `flutter analyze` + `flutter test`, then build once
-  at the end (or give the build command).
+- **Don't build the APK after each step — and never build without the owner's explicit OK.** Finish every change, run
+  `flutter analyze` + `flutter test` + the screenshot tool, then ask before building.
+- **One commit per step**, and update `PROGRESS.md` in the same commit.
+- **Check the design visually** after every UI change (screenshot tool above): RTL and LTR, light and dark, large text.
 - **Never add AI attribution** (`Co-Authored-By`, "Generated with…") to commits or anything else.
 - When a request is ambiguous, ask instead of guessing.
 
@@ -26,9 +30,14 @@ helpers come from there.
 
 ```bash
 flutter analyze          # must say "No issues found!"
-flutter test             # mesh_test (routing, private chat, groups, group admin, storage), bridge_test, ui_test
+flutter test             # mesh_test (routing, private chat, groups, group admin, storage, games over the mesh),
+                         # games_test (rules + rooms), bridge_test, ui_test
+flutter test tool/shots/shots_test.dart && python3 tool/shots/sheet.py
+                         # screenshots of real screens → build/shots (ar/en × light/dark + 1.3× text) — look at them
+python3 tool/l10n_games.py && flutter gen-l10n   # game + guide strings (both ARB files)
 python3 tool/generate_icon.py   # regenerate launcher icon (needs Pillow)
 ./scripts/build_release.sh      # signed + obfuscated → Releases/<ver>v/ (uses JDK 21 from ~/Downloads/Files/toolchains)
+                                # ONLY after the owner explicitly says to build
 ```
 
 New version: bump `version` in `pubspec.yaml` **and** `appVersion` in `lib/core/config.dart`, and write
@@ -57,7 +66,8 @@ lib/
     storage/vault.dart      master key wrapped by Android Keystore; encrypted JSON files
     storage/chat_store.dart saved chats index + messages + joined groups + blocked ids + per-chat prefs (pin / mute)
     platform/               system_bridge.dart (channel wasl/system), secure_clipboard.dart
-    theme/app_theme.dart    Palette tokens (context.palette), AccentTheme presets, avatarColors
+    theme/app_theme.dart    Palette tokens (context.palette: accent / accentInk / ink / saffron / tentRed / teal…),
+                            AccentTheme presets ('wasl' = default), avatarColors, GameColors
   mesh/
     mesh_link.dart          MeshLink: neighbour links carrying string frames
     lan_link.dart           Wi-Fi: UDP beacons + one TCP connection per neighbour (smaller id dials)
@@ -75,13 +85,19 @@ lib/
       core/                 secure_channel.dart, chat_session.dart (messages + file transfer), frame_transport.dart,
                             chat_link.dart (session + supportsVideo for the input widgets), chat_errors, nearby_requirements
       call/, voice/, widgets/   WebRTC calls, voice notes, bubbles / input bar / media (from ILN)
+    games/                  core/ (GameKind, GameEngine, GameRoom, GameCenter), engines/ (rules of the 9 games,
+                            createEngine, autoMoves), data/ (spy words, quiz bank), ui/ (picker, chat card, game
+                            screen, boards, help page) — see docs/GAMES.md
+    guide/guide_screen.dart "Wasl guide" (settings + ؟ on the transport screen): connecting with drawings, groups,
+                            games, safety
     groups/                 group.dart (GroupInfo: keys, roles, admin state + GroupOps: sealed admin commands),
                             group_session.dart (GroupSession extends ChatSession),
                             group_ui.dart (create sheet, join flow, info screen, member sheet)
     home/                   transport_screen.dart (Bluetooth / Wi-Fi / both), home_screen.dart (swipeable pages:
                             chats incl. joined groups • groups • nearby people + groups)
     onboarding/profile_editor.dart, settings/settings_screen.dart, lock/app_lock.dart
-  widgets/                  ui.dart (Avatar, AppCard, buttons, EmptyState…), feedback.dart (showToast, dialogs,
+  widgets/                  identity.dart (stitch line/border, khayamiya pattern, bunting + celebrate(), HelpButton),
+                            ui.dart (Avatar, AppCard, buttons, EmptyState…), feedback.dart (showToast, dialogs,
                             showActionSheet), focus_guard.dart,
                             cartoon_avatar.dart (24 avatars painted in code), avatar_render.dart (avatar → PNG for notifications)
 android/app/src/main/kotlin/com/adam/wasl/
@@ -105,8 +121,10 @@ android/app/src/main/kotlin/com/adam/wasl/
   'en'. Code comments stay in Egyptian Arabic.
 - Layout flips RTL (Arabic) / LTR (English) — always `EdgeInsetsDirectional` / `AlignmentDirectional` /
   `PositionedDirectional`, never fixed left / right.
-- Colors only through `context.palette`; no hard-coded theme colors in screens. Font: IBM Plex Sans Arabic (`Plex`),
-  weights 400–700 only.
+- Colors only through `context.palette`; no hard-coded theme colors in screens. Brand-coloured **text/icons use
+  `accentInk`**, filled things use `accent` (saffron text on white is unreadable). Identity elements (stitch, pattern,
+  bunting) are used sparingly — see docs/DESIGN.md. Font: IBM Plex Sans Arabic (`Plex`), weights 400–700 only.
+- Game boards are always laid out LTR (both players must see the same board whatever their language).
 - Messages to the user: `showToast(context, ...)` (never `SnackBar`). Dialogs: `confirmDialog` / `infoDialog`.
   Bottom-sheet menus: `showActionSheet` (scrolls when the options don't fit — never a bare `Column` in
   `showModalBottomSheet`).
@@ -148,6 +166,10 @@ android/app/src/main/kotlin/com/adam/wasl/
   state always wins.
 - **Additive changes only**: new packet kinds / fields that old versions ignore are fine (`react`, `fw`, `mn`, `h`,
   `e`). Anything else on the direct channel needs a `protocolVersion` bump.
+- **Games** (`docs/PROTOCOL.md` §8): direct = `game` packets on the SecureChannel; group = `gm` group packets (public)
+  + `U {t: gm}` sealed per recipient with `Box.pairKey(..., 'wasl/game')` (acts, secrets, secret chat). The host runs
+  the engine; `view`/`pv`/`bye`/`psay` only from the host; acts are numbered and re-sent until acknowledged (`ac`);
+  25 s of host silence closes the room. RPS picks and battleship boards are commitments, revealed later.
 - **Saving**: default off. A conversation is written to disk only if `saveOverride ?? AppSettings.saveChats`; media of
   saved chats moves to `vault/media/<id>/`. Unsaved chats live in memory until the hub stops.
 
