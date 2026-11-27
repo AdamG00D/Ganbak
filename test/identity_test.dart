@@ -120,6 +120,25 @@ void main() {
       expect(sessions[b.id]!.messages.any((m) => m.text == 'رسالة مزيفة'), isFalse);
     });
 
+    test('تعديل قديم بيتعاد مبيرجّعش النص القديم', () async {
+      final sa = sessions[a.id]!, sb = sessions[b.id]!;
+      await sa.send('النسخة الأولى');
+      sb.receive(a.id, sent[a.id]!.last);
+      await settle();
+      final mine = sa.messages.lastWhere((m) => m.kind == MessageKind.mine);
+      await sa.edit(mine, 'تعديل 1');
+      final first = sent[a.id]!.last;
+      await sa.edit(mine, 'تعديل 2');
+      final second = sent[a.id]!.last;
+      sb.receive(a.id, first);
+      sb.receive(a.id, second);
+      await settle();
+      sb.receive(a.id, first); // كريم بيعيد التعديل القديم
+      await settle();
+      final theirs = sb.messages.lastWhere((m) => m.kind == MessageKind.theirs && m.senderId == a.id);
+      expect(theirs.text, 'تعديل 2');
+    });
+
     test('حزمة من غير توقيع (غير أجزاء الملفات وبيكتب) بتترمي', () async {
       final inner = jsonEncode({
         'k': 'msg', 'id': 'x3', 'text': 'من غير توقيع', 'ts': 1, 's': a.id, 'n': 'أحمد',

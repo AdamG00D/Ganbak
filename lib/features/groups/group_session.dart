@@ -120,6 +120,11 @@ class GroupSession extends ChatSession {
   /// المفاتيح اللي اتأكدنا إنها بتاعة المعرّف ده (عشان منحسبش الهاش كل مرة).
   final Map<String, String> _knownKeys = {};
 
+  int _lastAt = 0;
+
+  /// وقت آخر تعديل اتطبّق على كل رسالة (المرسل|الرقم).
+  final Map<String, int> _editAt = {};
+
   /// حزم مش بتتوقّع: أجزاء الملفات (الملف كله بيتأكد منه في الآخر ببصمة موقّعة) و"بيكتب".
   static const unsigned = {'fc', 'typ'};
 
@@ -154,6 +159,10 @@ class GroupSession extends ChatSession {
     packet['n'] = myName;
     packet['xk'] = myBoxKey;
     packet['ek'] = mySignKey;
+    // وقت الإرسال (جوه التوقيع، وبيزيد دايماً): تعديل قديم يتعاد مايرجّعش نص قديم
+    final now = DateTime.now().millisecondsSinceEpoch;
+    _lastAt = now > _lastAt ? now : _lastAt + 1;
+    packet['at'] = _lastAt;
     final inner = jsonEncode(packet);
     final sg = unsigned.contains(packet['k']) ? null : await sign(utf8.encode('wasl/group/v2|$groupId|$inner'));
     final box = await Box.seal(_key, utf8.encode(jsonEncode({'p': inner, 'sg': ?sg})), _aad);
@@ -565,6 +574,12 @@ class GroupSession extends ChatSession {
         final m = theirs();
         final text = '${p['text'] ?? ''}';
         if (m == null || m.media != null || text.isEmpty || text.length > SecureChannel.maxTextLength) return;
+        // تعديل أقدم من اللي اتطبّق (حد بيعيد بعت تعديل قديم) بيترمي
+        final at = p['at'] is int ? p['at'] as int : 0;
+        final key = '$sender|$id';
+        if (at <= (_editAt[key] ?? -1)) return;
+        _editAt[key] = at;
+        if (_editAt.length > 2000) _editAt.remove(_editAt.keys.first);
         m.text = text;
         m.edited = true;
         notifyListeners();

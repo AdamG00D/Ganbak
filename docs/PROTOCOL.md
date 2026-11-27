@@ -142,7 +142,8 @@ Body of a `G` frame = `base64(AES-256-GCM(groupKey, json))`, aad `wasl/group/v1|
 `check` = `HKDF(key, "wasl/group/check", 8 bytes)` hex; used to validate a password or a granted key.
 
 Inside the box: `{p: "<packet json>", sg: Ed25519(sender, "wasl/group/v2|<group id>|" + p)}`. Packet:
-`{k, s: sender id, n: sender name, xk: sender X25519 key, ek: sender Ed25519 key, …}`. **A packet is dropped unless
+`{k, s: sender id, n: sender name, xk: sender X25519 key, ek: sender Ed25519 key, at: send time ms (never goes back
+on the sender), …}`. An `edit` older (`at`) than the last edit applied to that message is ignored. **A packet is dropped unless
 `s` equals the mesh `src`, `xk`+`ek` hash to `s`, and `sg` verifies** — so a member who has the group key still can't
 post as someone else — and the sender is not in the group's removed list. `fc` (file chunks) and `typ` are not signed:
 a file is checked at the end against the SHA-256 in the signed `fe`, and a fake "typing" does no harm.

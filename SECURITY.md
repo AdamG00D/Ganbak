@@ -33,7 +33,7 @@ These are known and documented so nobody relies on something that isn't there:
 2. **Group members can't post as each other** (since 1.5): every group message is signed by its sender, so having the
    group key isn't enough to speak for someone else. File chunks and "typing…" aren't signed (the whole file is
    checked against a signed fingerprint at the end). A member can still re-send an old message that someone really
-   wrote; it shows with its original time.
+   wrote (it shows with its original time to whoever didn't have it); an old edit can't undo a newer one.
 3. **Open groups are not secret.** Their key is derived from the group id, so anyone nearby can read them. That is
    what "open" means.
 4. **Removing a member** re-keys **join-request** groups (a real removal). In **password** and **open** groups the
