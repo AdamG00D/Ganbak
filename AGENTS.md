@@ -90,6 +90,10 @@ lib/
                             screen, boards, help page) — see docs/GAMES.md
     net/                    "Wasl network": wasl_network.dart (WaslNetwork: host a Local-Only Hotspot / join one;
                             the offer rides in presence as `w`), wasl_net_ui.dart (card in Nearby, offer banner)
+    mailbox/mailbox.dart    offline messages: sealed envelopes, carry box, MailService (PROTOCOL §9)
+    sos/sos_ui.dart         SOS banner / card / sheet (signal rides in presence)
+    share/                  "Share Wasl": share_server.dart (local HTTP: page + installed APK, only while the screen
+                            is open), share_page.dart (the download page), share_screen.dart (two QR codes)
     guide/guide_screen.dart "Wasl guide" (settings + ؟ on the transport screen): connecting with drawings, groups,
                             games, safety
     groups/                 group.dart (GroupInfo: keys, roles, admin state + GroupOps: sealed admin commands),

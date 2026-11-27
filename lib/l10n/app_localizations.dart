@@ -5065,6 +5065,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'افتحها'**
   String get netOpenShort;
+
+  /// No description provided for @shareApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك وصل'**
+  String get shareApp;
+
+  /// No description provided for @shareAppSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'لموبايل مفيهوش وصل — من غير إنترنت'**
+  String get shareAppSub;
+
+  /// No description provided for @shareIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحبك مفيهوش وصل؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.'**
+  String get shareIntro;
+
+  /// No description provided for @shareStep1.
+  ///
+  /// In ar, this message translates to:
+  /// **'يدخل شبكة موبايلك'**
+  String get shareStep1;
+
+  /// No description provided for @shareStep1Idle.
+  ///
+  /// In ar, this message translates to:
+  /// **'موبايلك هيفتح شبكة واي فاي (من غير إنترنت) وصاحبك يدخلها.'**
+  String get shareStep1Idle;
+
+  /// No description provided for @shareSameWifi.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو انتوا الاتنين على نفس الواي فاي، روحوا للخطوة 2 على طول.'**
+  String get shareSameWifi;
+
+  /// No description provided for @shareStep1Scan.
+  ///
+  /// In ar, this message translates to:
+  /// **'يصوّر الكود بالكاميرا، أو يكتب الاسم والباسورد دول في إعدادات الواي فاي.'**
+  String get shareStep1Scan;
+
+  /// No description provided for @shareStep2.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحمّل التطبيق'**
+  String get shareStep2;
+
+  /// No description provided for @shareStep2Scan.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد ما يدخل الشبكة يصوّر الكود ده (أو يكتب اللينك في المتصفح): هتفتحله صفحة فيها زرار التحميل وخطوات التثبيت.'**
+  String get shareStep2Scan;
+
+  /// No description provided for @shareNeedNet.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الشبكة في الخطوة 1 الأول (أو ادخلوا نفس الواي فاي).'**
+  String get shareNeedNet;
+
+  /// No description provided for @shareFingerprint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بصمة الملف (نفسها بتظهر في صفحة التحميل)'**
+  String get shareFingerprint;
+
+  /// No description provided for @shareServed.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتحمّل {n} مرة'**
+  String shareServed(String n);
+
+  /// No description provided for @shareSplit.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل وصل من GitHub لما يبقى فيه نت.'**
+  String get shareSplit;
+
+  /// No description provided for @shareFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش نجهّز ملف التطبيق. اقفل الشاشة وافتحها تاني.'**
+  String get shareFailed;
+
+  /// No description provided for @shareWhileOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصفحة شغالة بس طول ما الشاشة دي مفتوحة.'**
+  String get shareWhileOpen;
+
+  /// No description provided for @guideShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك وصل مع حد مفيهوش'**
+  String get guideShareTitle;
+
+  /// No description provided for @guideShareBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.'**
+  String get guideShareBody;
 }
 
 class _AppLocalizationsDelegate

@@ -827,5 +827,22 @@
   "netQr": "Network QR",
   "netQrTitle": "Scan to join the network",
   "netQrSub": "If someone's phone can't join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi.",
-  "netOpenShort": "Open it"
+  "netOpenShort": "Open it",
+  "shareApp": "Share Wasl",
+  "shareAppSub": "With a phone that doesn't have it — no internet needed",
+  "shareIntro": "Your friend doesn't have Wasl? Give it to them from your phone in two steps, no internet needed.",
+  "shareStep1": "They join your phone’s network",
+  "shareStep1Idle": "Your phone opens a Wi-Fi network (no internet) for your friend to join.",
+  "shareSameWifi": "If you’re both on the same Wi-Fi already, go straight to step 2.",
+  "shareStep1Scan": "They scan the code with the camera, or type this name and password in their Wi-Fi settings.",
+  "shareStep2": "They download the app",
+  "shareStep2Scan": "Once on the network, they scan this code (or type the link in a browser): a page opens with the download button and install steps.",
+  "shareNeedNet": "Open the network in step 1 first (or join the same Wi-Fi).",
+  "shareFingerprint": "File fingerprint (the download page shows the same)",
+  "shareServed": "Downloaded {n} times",
+  "shareSplit": "This copy was installed from a store in parts and can't be shared from here. Your friend can get Wasl from GitHub once they have internet.",
+  "shareFailed": "Couldn't prepare the app file. Close this screen and open it again.",
+  "shareWhileOpen": "The page works only while this screen is open.",
+  "guideShareTitle": "Share Wasl with someone who doesn’t have it",
+  "guideShareBody": "Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed."
 }

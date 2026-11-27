@@ -13,6 +13,7 @@ import '../../l10n/l10n.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/ui.dart';
 import '../guide/guide_screen.dart';
+import '../share/share_screen.dart';
 import '../hub/chat_hub.dart';
 import '../lock/app_lock.dart';
 import '../onboarding/profile_editor.dart';
@@ -346,6 +347,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       subtitle: l.guideSub,
                       trailing: Icon(Icons.chevron_right_rounded, color: p.textMuted),
                       onTap: () => GuideScreen.open(context),
+                    ),
+                    Divider(indent: 68, color: p.border),
+                    SettingTile(
+                      icon: Icons.ios_share_rounded,
+                      title: l.shareApp,
+                      subtitle: l.shareAppSub,
+                      trailing: Icon(Icons.chevron_right_rounded, color: p.textMuted),
+                      onTap: () => ShareAppScreen.open(context),
                     ),
                   ],
                 ),

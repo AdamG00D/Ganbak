@@ -2870,4 +2870,66 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get netOpenShort => 'افتحها';
+
+  @override
+  String get shareApp => 'شارك وصل';
+
+  @override
+  String get shareAppSub => 'لموبايل مفيهوش وصل — من غير إنترنت';
+
+  @override
+  String get shareIntro =>
+      'صاحبك مفيهوش وصل؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.';
+
+  @override
+  String get shareStep1 => 'يدخل شبكة موبايلك';
+
+  @override
+  String get shareStep1Idle =>
+      'موبايلك هيفتح شبكة واي فاي (من غير إنترنت) وصاحبك يدخلها.';
+
+  @override
+  String get shareSameWifi =>
+      'لو انتوا الاتنين على نفس الواي فاي، روحوا للخطوة 2 على طول.';
+
+  @override
+  String get shareStep1Scan =>
+      'يصوّر الكود بالكاميرا، أو يكتب الاسم والباسورد دول في إعدادات الواي فاي.';
+
+  @override
+  String get shareStep2 => 'يحمّل التطبيق';
+
+  @override
+  String get shareStep2Scan =>
+      'بعد ما يدخل الشبكة يصوّر الكود ده (أو يكتب اللينك في المتصفح): هتفتحله صفحة فيها زرار التحميل وخطوات التثبيت.';
+
+  @override
+  String get shareNeedNet =>
+      'افتح الشبكة في الخطوة 1 الأول (أو ادخلوا نفس الواي فاي).';
+
+  @override
+  String get shareFingerprint => 'بصمة الملف (نفسها بتظهر في صفحة التحميل)';
+
+  @override
+  String shareServed(String n) {
+    return 'اتحمّل $n مرة';
+  }
+
+  @override
+  String get shareSplit =>
+      'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل وصل من GitHub لما يبقى فيه نت.';
+
+  @override
+  String get shareFailed =>
+      'مقدرناش نجهّز ملف التطبيق. اقفل الشاشة وافتحها تاني.';
+
+  @override
+  String get shareWhileOpen => 'الصفحة شغالة بس طول ما الشاشة دي مفتوحة.';
+
+  @override
+  String get guideShareTitle => 'شارك وصل مع حد مفيهوش';
+
+  @override
+  String get guideShareBody =>
+      'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.';
 }

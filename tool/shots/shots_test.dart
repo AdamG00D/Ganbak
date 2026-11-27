@@ -21,6 +21,8 @@ import 'package:wasl/features/games/ui/game_picker.dart';
 import 'package:wasl/features/games/ui/game_screen.dart';
 import 'package:wasl/features/guide/guide_screen.dart';
 import 'package:wasl/features/net/wasl_net_ui.dart';
+import 'package:wasl/features/share/share_screen.dart';
+import 'package:wasl/features/share/share_server.dart';
 import 'package:wasl/features/net/wasl_network.dart';
 import 'package:wasl/features/sos/sos_ui.dart';
 import 'package:wasl/mesh/mesh_router.dart';
@@ -261,9 +263,13 @@ void main() {
         await t.pump();
         await t.pump(const Duration(milliseconds: 600));
       });
+      const apk = ApkInfo(path: '/x', size: 31457280, sha256: '3f9a1c0be47d2a8851f0c6e2d93b7a4405e1c8f2a6b9d03e7c51f4a8b2e9d6c1');
+      await Shots.shoot(tester, 'share-ready', () => const ShareAppScreen(testApk: apk, testUrl: 'http://192.168.43.1:8080/'),
+          themes: light);
       WaslNetwork.instance
         ..state = NetState.idle
         ..hosted = null;
+      await Shots.shoot(tester, 'share-idle', () => const ShareAppScreen(testApk: apk), themes: light);
       await Shots.shoot(
         tester,
         'net-suggest',
@@ -376,6 +382,22 @@ void main() {
         'net-suggest',
         () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetSuggestCard(count: 4)]))),
       );
+    });
+
+    testWidgets('share app', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      const apk = ApkInfo(path: '/x', size: 31457280, sha256: '3f9a1c0be47d2a8851f0c6e2d93b7a4405e1c8f2a6b9d03e7c51f4a8b2e9d6c1');
+      await Shots.shoot(tester, 'share-idle', () => const ShareAppScreen(testApk: apk));
+      net
+        ..state = NetState.hosting
+        ..hosted = offer;
+      await Shots.shoot(tester, 'share-ready', () => const ShareAppScreen(testApk: apk, testUrl: 'http://192.168.43.1:8080/'));
+      await Shots.shoot(tester, 'share-ready-low', () => const ShareAppScreen(testApk: apk, testUrl: 'http://192.168.43.1:8080/'),
+          then: (t) async {
+        await t.drag(find.byType(ListView), const Offset(0, -900));
+        await t.pump(const Duration(milliseconds: 300));
+      });
     });
 
     testWidgets('net card joined', (tester) async {

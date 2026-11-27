@@ -333,6 +333,24 @@ S = {
     'netQr': ('كود الشبكة', 'Network QR'),
     'netQrTitle': ('صوّر الكود عشان تدخل الشبكة', 'Scan to join the network'),
     'netQrSub': ('لو موبايل حد مقدرش يدخل من جوه وصل (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح وصل على الواي فاي.', "If someone's phone can't join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi."),
+    # ---------------- شارك وصل ----------------
+    'shareApp': ('شارك وصل', 'Share Wasl'),
+    'shareAppSub': ('لموبايل مفيهوش وصل — من غير إنترنت', "With a phone that doesn't have it — no internet needed"),
+    'shareIntro': ('صاحبك مفيهوش وصل؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.', "Your friend doesn't have Wasl? Give it to them from your phone in two steps, no internet needed."),
+    'shareStep1': ('يدخل شبكة موبايلك', 'They join your phone’s network'),
+    'shareStep1Idle': ('موبايلك هيفتح شبكة واي فاي (من غير إنترنت) وصاحبك يدخلها.', 'Your phone opens a Wi-Fi network (no internet) for your friend to join.'),
+    'shareSameWifi': ('لو انتوا الاتنين على نفس الواي فاي، روحوا للخطوة 2 على طول.', 'If you’re both on the same Wi-Fi already, go straight to step 2.'),
+    'shareStep1Scan': ('يصوّر الكود بالكاميرا، أو يكتب الاسم والباسورد دول في إعدادات الواي فاي.', 'They scan the code with the camera, or type this name and password in their Wi-Fi settings.'),
+    'shareStep2': ('يحمّل التطبيق', 'They download the app'),
+    'shareStep2Scan': ('بعد ما يدخل الشبكة يصوّر الكود ده (أو يكتب اللينك في المتصفح): هتفتحله صفحة فيها زرار التحميل وخطوات التثبيت.', 'Once on the network, they scan this code (or type the link in a browser): a page opens with the download button and install steps.'),
+    'shareNeedNet': ('افتح الشبكة في الخطوة 1 الأول (أو ادخلوا نفس الواي فاي).', 'Open the network in step 1 first (or join the same Wi-Fi).'),
+    'shareFingerprint': ('بصمة الملف (نفسها بتظهر في صفحة التحميل)', 'File fingerprint (the download page shows the same)'),
+    'shareServed': ('اتحمّل {n} مرة', 'Downloaded {n} times'),
+    'shareSplit': ('النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل وصل من GitHub لما يبقى فيه نت.', "This copy was installed from a store in parts and can't be shared from here. Your friend can get Wasl from GitHub once they have internet."),
+    'shareFailed': ('مقدرناش نجهّز ملف التطبيق. اقفل الشاشة وافتحها تاني.', "Couldn't prepare the app file. Close this screen and open it again."),
+    'shareWhileOpen': ('الصفحة شغالة بس طول ما الشاشة دي مفتوحة.', 'The page works only while this screen is open.'),
+    'guideShareTitle': ('شارك وصل مع حد مفيهوش', 'Share Wasl with someone who doesn’t have it'),
+    'guideShareBody': ('من الإعدادات ← "شارك وصل": دوس "افتح شبكة وصل" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.', 'Settings → "Share Wasl": tap "Start a Wasl network", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.'),
 }
 
 

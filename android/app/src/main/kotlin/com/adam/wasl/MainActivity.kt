@@ -193,6 +193,33 @@ class MainActivity : FlutterActivity() {
                         }
                         result.success(ok)
                     }
+                    "apkInfo" -> {
+                        // نسخة التطبيق المتثبتة (لـ "شارك وصل"): المسار والحجم والبصمة — البصمة برا الخيط الرئيسي
+                        Thread {
+                            val out: Map<String, Any?>? = try {
+                                val info = applicationInfo
+                                val file = java.io.File(info.sourceDir)
+                                val md = java.security.MessageDigest.getInstance("SHA-256")
+                                file.inputStream().use { input ->
+                                    val buf = ByteArray(1 shl 16)
+                                    while (true) {
+                                        val n = input.read(buf)
+                                        if (n < 0) break
+                                        md.update(buf, 0, n)
+                                    }
+                                }
+                                mapOf(
+                                    "path" to file.absolutePath,
+                                    "size" to file.length(),
+                                    "sha256" to md.digest().joinToString("") { "%02x".format(it) },
+                                    "split" to !info.splitSourceDirs.isNullOrEmpty(),
+                                )
+                            } catch (e: Exception) {
+                                null
+                            }
+                            runOnUiThread { result.success(out) }
+                        }.start()
+                    }
                     "clearNotifications" -> {
                         Notifications.clear(this)
                         result.success(null)

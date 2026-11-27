@@ -90,6 +90,14 @@ whom, when and roughly how long** — the same metadata the mesh already shows f
 guaranteed: carriers may drop messages, run out of room or never meet the recipient. "Delivered" appears only when a
 receipt sealed by the recipient comes back. Only text, and only to people whose key your phone already knows.
 
+## Sharing the app ("Share Wasl")
+
+Settings → Share Wasl runs a tiny web server inside the app **only while that screen is open**. It answers two paths
+(`/` — the download page, and `/wasl.apk` — the installed copy of the app) on the local network and nothing else;
+at most 4 downloads at a time. The page is plain HTTP (there's no internet to get a certificate), so someone on the
+same Wi-Fi could in theory tamper with the download: the page and the sender's screen show the file's SHA-256
+fingerprint to compare, and Android refuses to install a modified copy over a genuine Wasl (different signature).
+
 ## Cryptography
 
 X25519 • HKDF-SHA256 • HMAC-SHA256 • AES-256-GCM • Argon2id (19 MiB, 2 passes) • SHA-256 — from the

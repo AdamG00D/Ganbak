@@ -168,6 +168,7 @@ class _GuideScreenState extends State<GuideScreen> {
                   ),
                   _Item(icon: Icons.hub_rounded, title: l.howMeshTitle, body: '${l.howMeshBody}\n${l.guideMeshHops}'),
                   _Item(icon: Icons.hourglass_top_rounded, title: l.guideMailTitle, body: l.guideMailBody),
+                  _Item(icon: Icons.ios_share_rounded, title: l.guideShareTitle, body: l.guideShareBody),
                   const SizedBox(height: 18),
                   _Heading(key: _keys[GuideSection.groups], icon: Icons.groups_rounded, text: l.guideGroupsTitle),
                   _Item(icon: Icons.groups_rounded, title: l.howGroupsTitle, body: l.howGroupsBody),

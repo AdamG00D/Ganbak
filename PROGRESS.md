@@ -92,6 +92,21 @@ card, a section with a drawing in the guide.
 - Tests in `test/net_test.dart`; screenshots `net-qr`, `net-suggest` (normal + big). Guide "how to start" mentions
   the QR. No wire change.
 
+### Extra (owner's request) — "Share Wasl" (done)
+
+- Settings → "Share Wasl" (`lib/features/share/`). Step 1: "Start a Wasl network" button (owner: only on tap, not
+  automatic) → Wi-Fi QR + name + password with copy. Step 2: QR of `http://<local ip>:8080/` served by
+  `ShareServer` (dart:io, only while the screen is open, GET/HEAD on `/` and `/wasl.apk` only, ≤ 4 downloads).
+  The page (`SharePage`) is self-contained HTML (no external fonts/images, CSP `default-src 'none'`), Khayamiya look,
+  Arabic/English from the browser (`?l=` switch), install steps, SHA-256 fingerprint (also on the sender's screen).
+- Android: `apkInfo` on `wasl/system` → installed APK path, size, SHA-256, split flag (a split install can't be
+  shared — the screen says so). An arm64-only APK won't install on 32-bit phones; the page says to get the universal
+  build.
+- Address: `ShareServer.pickAddress` prefers the hotspot interface while hosting, else wlan; skips mobile data/VPN.
+- Tests `test/share_test.dart` (page, file, refused paths, address choice); screenshots `share-idle`, `share-ready`
+  (+ big); the page itself was checked in Firefox (ar/en). Guide entry; SECURITY (en/ar) section.
+- **Needs the real-phone test**: interface names / addresses of the Local-Only Hotspot differ between phones.
+
 Notes:
 - `emoji_picker_flutter` and `flutter_webrtc` still apply the old Kotlin Gradle plugin (warning at build); they are at
   their latest versions — wait for upstream.
@@ -183,5 +198,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — 1.4 step 4 done: Wi-Fi QR on the hosting card, one-phone suggestion to open a Wasl network when
   many people are on Bluetooth only. Next: step 5 (social preview, F-Droid metadata, audit brief, signing design).
 - 2026-11-27 — 1.4 step 5 done (docs only). Owner asked for a new feature: "share Wasl" in Settings (two QR codes:
-  the hotspot + a download page served from the phone). Plan sent, waiting for "تمام" before coding.
+  the hotspot + a download page served from the phone). Plan agreed (network opens only on tap).
+- 2026-11-27 — "Share Wasl" done (see its section). Next: step 6 (docs, version 1.4, release notes), then ask to build.
 

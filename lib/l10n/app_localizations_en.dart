@@ -2902,4 +2902,68 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get netOpenShort => 'Open it';
+
+  @override
+  String get shareApp => 'Share Wasl';
+
+  @override
+  String get shareAppSub =>
+      'With a phone that doesn\'t have it — no internet needed';
+
+  @override
+  String get shareIntro =>
+      'Your friend doesn\'t have Wasl? Give it to them from your phone in two steps, no internet needed.';
+
+  @override
+  String get shareStep1 => 'They join your phone’s network';
+
+  @override
+  String get shareStep1Idle =>
+      'Your phone opens a Wi-Fi network (no internet) for your friend to join.';
+
+  @override
+  String get shareSameWifi =>
+      'If you’re both on the same Wi-Fi already, go straight to step 2.';
+
+  @override
+  String get shareStep1Scan =>
+      'They scan the code with the camera, or type this name and password in their Wi-Fi settings.';
+
+  @override
+  String get shareStep2 => 'They download the app';
+
+  @override
+  String get shareStep2Scan =>
+      'Once on the network, they scan this code (or type the link in a browser): a page opens with the download button and install steps.';
+
+  @override
+  String get shareNeedNet =>
+      'Open the network in step 1 first (or join the same Wi-Fi).';
+
+  @override
+  String get shareFingerprint =>
+      'File fingerprint (the download page shows the same)';
+
+  @override
+  String shareServed(String n) {
+    return 'Downloaded $n times';
+  }
+
+  @override
+  String get shareSplit =>
+      'This copy was installed from a store in parts and can\'t be shared from here. Your friend can get Wasl from GitHub once they have internet.';
+
+  @override
+  String get shareFailed =>
+      'Couldn\'t prepare the app file. Close this screen and open it again.';
+
+  @override
+  String get shareWhileOpen => 'The page works only while this screen is open.';
+
+  @override
+  String get guideShareTitle => 'Share Wasl with someone who doesn’t have it';
+
+  @override
+  String get guideShareBody =>
+      'Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.';
 }
