@@ -298,4 +298,13 @@ a phone's large-font setting): any text that spills out of its box fails the run
   versionCode 7. The website's download button now serves 1.6. Next: the Bluetooth library plan (kept locally).
 - 2026-11-27 — Bluetooth library plan approved and **postponed**; kept locally (not published).
   Next now: an Arabic promo/demo video made entirely by Claude (owner: no voice, no phone recordings needed).
+- 2026-11-27 — **Renamed to Ganbak (جنبك), version 2.0.0+8** (code, package `com.adam.ganbak`, Dart package `ganbak`,
+  docs, store texts, banners, README/store/site images; repo renamed to `AdamG00D/Ganbak`; site live at
+  `https://adamg00d.github.io/Ganbak/`). Protocol labels / Nearby service id kept, so 2.0 still talks to Wasl 1.6.
+  Not built yet — waiting for the owner's OK. Owner's name no longer appears in samples / screenshots (neutral name).
+- 2026-11-27 — Promo video made (Arabic, ~45 s, vertical 9:16 + horizontal 16:9, real app running on a simulated
+  mesh, original background music); the video tooling and files are kept locally, not in the repo.
+- 2026-11-27 — Websites for the owner's other apps Shen and Mongez (`adamg00d.github.io/Shen`, `/Mongez`), same
+  generator idea (`tool/site.py` in each repo, Pages workflow, download button finds the latest APK via the GitHub
+  API). Owner: add each site to Google Search Console.
 
