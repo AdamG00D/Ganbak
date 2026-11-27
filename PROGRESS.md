@@ -301,10 +301,16 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — **Renamed to Ganbak (جنبك), version 2.0.0+8** (code, package `com.adam.ganbak`, Dart package `ganbak`,
   docs, store texts, banners, README/store/site images; repo renamed to `AdamG00D/Ganbak`; site live at
   `https://adamg00d.github.io/Ganbak/`). Protocol labels / Nearby service id kept, so 2.0 still talks to Wasl 1.6.
-  Not built yet — waiting for the owner's OK. Owner's name no longer appears in samples / screenshots (neutral name).
+  Owner's name no longer appears in samples / screenshots (neutral name).
 - 2026-11-27 — Promo video made (Arabic, ~45 s, vertical 9:16 + horizontal 16:9, real app running on a simulated
   mesh, original background music); the video tooling and files are kept locally, not in the repo.
 - 2026-11-27 — Websites for the owner's other apps Shen and Mongez (`adamg00d.github.io/Shen`, `/Mongez`), same
   generator idea (`tool/site.py` in each repo, Pages workflow, download button finds the latest APK via the GitHub
   API). Owner: add each site to Google Search Console.
+- 2026-11-27 — Fixed: game scores were swapped in Arabic (the score text was forced LTR while the names flip in RTL;
+  now a Row that follows the direction; test added). **Ganbak 2.0 built and published** (owner kept 2.0):
+  https://github.com/AdamG00D/Ganbak/releases/tag/v2.0 — 7 files incl. `Ganbak-android*.apk`, same certificate,
+  versionCode 8, labels جنبك / Ganbak. The same Google verification file is live on /Ganbak/, /Shen/ and /Mongez/.
+  Folder rename: owner runs `~/Downloads/rename_ganbak_folders.sh` after closing VS Code (copies the Claude project
+  folder to the new path); then update the folder line in AGENTS.md.
 
