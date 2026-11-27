@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'share_server.dart';
 
-/// صفحة التحميل اللي بتفتح على الموبايل اللي مفيهوش وصل (من غير إنترنت: كل حاجة جوه الصفحة — مفيش خطوط
+/// صفحة التحميل اللي بتفتح على الموبايل اللي مفيهوش جنبك (من غير إنترنت: كل حاجة جوه الصفحة — مفيش خطوط
 /// ولا صور من برا). بهوية التطبيق: حبر الليل والزعفران ونقشة الخيامية.
 class SharePage {
   SharePage._();
 
   static const _t = {
     'ar': {
-      'title': 'حمّل وَصْل',
+      'title': 'حمّل جنبك',
       'tag': 'شات مشفّر من غير إنترنت ولا سيرفر — بالبلوتوث والواي فاي.',
       'download': 'حمّل التطبيق',
       'meta': 'الإصدار {v} • {s} ميجا • أندرويد 7 أو أحدث',
@@ -17,15 +17,15 @@ class SharePage {
       's1': 'دوس «حمّل التطبيق» واستنى لحد ما التحميل يخلص.',
       's2': 'افتح الملف من الإشعار أو من «التنزيلات».',
       's3': 'لو الموبايل قال إن التثبيت من المصدر ده مش مسموح: دوس «الإعدادات» وفعّل «السماح من المصدر ده»، وارجع دوس «تثبيت».',
-      's4': 'افتح وصل واختار «الواي فاي» أو «الاتنين مع بعض» عشان تلاقي اللي بعتهولك.',
+      's4': 'افتح جنبك واختار «الواي فاي» أو «الاتنين مع بعض» عشان تلاقي اللي بعتهولك.',
       'from': 'الملف جاي من موبايل صاحبك على طول، مش من الإنترنت. عاوز تتأكد إنه هو؟ قارن البصمة دي باللي ظاهرة على شاشته:',
-      'compat': 'لو الموبايل قال إن التطبيق «مش متوافق»، الموبايل ده محتاج النسخة الشاملة (universal) من صفحة وصل على GitHub لما يبقى فيه نت.',
-      'split': 'النسخة اللي على موبايل صاحبك متثبتة من متجر على أجزاء ومينفعش تتبعت كده. حمّل وصل من صفحته على GitHub لما يبقى فيه نت.',
+      'compat': 'لو الموبايل قال إن التطبيق «مش متوافق»، الموبايل ده محتاج النسخة الشاملة (universal) من صفحة جنبك على GitHub لما يبقى فيه نت.',
+      'split': 'النسخة اللي على موبايل صاحبك متثبتة من متجر على أجزاء ومينفعش تتبعت كده. حمّل جنبك من صفحته على GitHub لما يبقى فيه نت.',
       'other': 'English',
       'otherLang': 'en',
     },
     'en': {
-      'title': 'Get Wasl',
+      'title': 'Get Ganbak',
       'tag': 'Encrypted chat with no internet and no server — over Bluetooth and Wi-Fi.',
       'download': 'Download the app',
       'meta': 'Version {v} • {s} MB • Android 7 or newer',
@@ -33,10 +33,10 @@ class SharePage {
       's1': 'Tap “Download the app” and wait until it finishes.',
       's2': 'Open the file from the notification or from “Downloads”.',
       's3': 'If the phone says installs from this source aren’t allowed: tap “Settings”, turn on “Allow from this source”, go back and tap “Install”.',
-      's4': 'Open Wasl and pick “Wi-Fi” or “Both” to find whoever shared it with you.',
+      's4': 'Open Ganbak and pick “Wi-Fi” or “Both” to find whoever shared it with you.',
       'from': 'The file comes straight from your friend’s phone, not from the internet. Want to be sure it’s the same? Compare this fingerprint with the one on their screen:',
-      'compat': 'If the phone says the app is “not compatible”, it needs the universal build from Wasl’s GitHub page once you have internet.',
-      'split': 'Your friend’s copy was installed from a store in several parts and can’t be shared this way. Get Wasl from its GitHub page once you have internet.',
+      'compat': 'If the phone says the app is “not compatible”, it needs the universal build from Ganbak’s GitHub page once you have internet.',
+      'split': 'Your friend’s copy was installed from a store in several parts and can’t be shared this way. Get Ganbak from its GitHub page once you have internet.',
       'other': 'العربية',
       'otherLang': 'ar',
     },

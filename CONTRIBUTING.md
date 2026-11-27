@@ -1,6 +1,6 @@
 **English** | [العربية](CONTRIBUTING.ar.md)
 
-# Contributing to Wasl
+# Contributing to Ganbak
 
 Thanks for your interest! The project is small and written so anyone can read and change it. This guide helps your
 change get in smoothly.

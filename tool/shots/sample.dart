@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:wasl/features/chat/core/chat_session.dart';
-import 'package:wasl/features/hub/chat_hub.dart';
-import 'package:wasl/mesh/mesh_router.dart';
+import 'package:ganbak/features/chat/core/chat_session.dart';
+import 'package:ganbak/features/hub/chat_hub.dart';
+import 'package:ganbak/mesh/mesh_router.dart';
 
 /// بيانات تجريبية للصور: ناس حواليك، محادثات، جروبات.
 class Sample {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wasl/widgets/cartoon_avatar.dart';
-import 'package:wasl/widgets/identity.dart';
+import 'package:ganbak/widgets/cartoon_avatar.dart';
+import 'package:ganbak/widgets/identity.dart';
 
 /// بانر الـ README (1280×640): شبكة أفاتارات متخيّطة على حبر الليل بنقشة خيامية + الاسم والشعار.
 class ReadmeBanner extends StatelessWidget {
@@ -16,8 +16,8 @@ class ReadmeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = arabic ? 'وَصْل' : 'Wasl';
-    final other = arabic ? 'Wasl' : 'وَصْل';
+    final title = arabic ? 'جنبك' : 'Ganbak';
+    final other = arabic ? 'Ganbak' : 'جنبك';
     final tagline = arabic ? 'شات مشفّر من غير إنترنت ولا سيرفر' : 'Encrypted chat. No internet, no server.';
     final sub = arabic
         ? 'الرسايل بتتخيّط من موبايل لموبايل لحد ما توصل'

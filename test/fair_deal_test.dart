@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/features/games/core/fair_deal.dart';
+import 'package:ganbak/features/games/core/fair_deal.dart';
 
 /// التوزيع العادل: محاكاة لاعبين على موبايل واحد.
 void main() {

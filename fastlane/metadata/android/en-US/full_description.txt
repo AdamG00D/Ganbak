@@ -1,10 +1,10 @@
-<p><b>Wasl</b> ("connection" in Arabic) is a chat app that works <b>with no internet and no server</b>. Phones nearby talk directly over <b>Bluetooth</b> or the same <b>Wi-Fi / hotspot</b>, and relay messages for each other as a <b>mesh</b>, so a message can reach people well beyond your own phone's range.</p>
+<p><b>Ganbak</b> ("connection" in Arabic) is a chat app that works <b>with no internet and no server</b>. Phones nearby talk directly over <b>Bluetooth</b> or the same <b>Wi-Fi / hotspot</b>, and relay messages for each other as a <b>mesh</b>, so a message can reach people well beyond your own phone's range.</p>
 <p>Built for places where the network is down, overloaded or untrusted: festivals, stadiums, trips, campuses, power cuts.</p>
 <ul>
 <li><b>No account</b>: a name and an avatar; your identity is a key made on your phone.</li>
 <li><b>Private chats are end-to-end encrypted</b> automatically, no passwords.</li>
 <li><b>Groups</b>: open, password, or join-request, with an owner and admins.</li>
-<li><b>Wasl network</b>: no router? Your phone opens its own Wi-Fi and people nearby join with one tap.</li>
+<li><b>Ganbak network</b>: no router? Your phone opens its own Wi-Fi and people nearby join with one tap.</li>
 <li><b>Messages wait for their owner</b>: text for someone who isn't around is carried, sealed, by phones nearby until they show up.</li>
 <li><b>SOS</b>: ask everyone in the mesh for help.</li>
 <li>Photos, files, voice notes, calls over Wi-Fi, reactions, replies and mentions.</li>

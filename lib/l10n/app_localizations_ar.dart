@@ -249,7 +249,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pinRepeat => 'اكتبه تاني للتأكيد';
 
   @override
-  String get colorWasl => 'وصل';
+  String get colorWasl => 'جنبك';
 
   @override
   String get colorIndigo => 'نيلي';
@@ -479,7 +479,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profile => 'البروفايل';
 
   @override
-  String get appTitle => 'وَصْل';
+  String get appTitle => 'جنبك';
 
   @override
   String get createProfile => 'اعمل بروفايلك';
@@ -1975,7 +1975,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String gameOldVersion(String name) {
-    return 'مفيش رد… يمكن $name عنده نسخة قديمة من وصل';
+    return 'مفيش رد… يمكن $name عنده نسخة قديمة من جنبك';
   }
 
   @override
@@ -2546,7 +2546,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get spyYourCard => 'كلمتك';
 
   @override
-  String get guideTitle => 'دليل وصل';
+  String get guideTitle => 'دليل جنبك';
 
   @override
   String get guideSub => 'الاتصال، الجروبات، الألعاب والأمان';
@@ -2571,7 +2571,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideConnectIntro =>
-      'وصل مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:';
+      'جنبك مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:';
 
   @override
   String get guideWhat => 'إيه هو';
@@ -2599,7 +2599,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideBtHow =>
-      'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين وصل هيظهروا في \"القريبين\" لوحدهم.';
+      'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين جنبك هيظهروا في \"القريبين\" لوحدهم.';
 
   @override
   String get guideWifiWhat =>
@@ -2615,7 +2615,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideWifiHow =>
-      'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في وصل.\nاللي على نفس الشبكة هيظهروا لوحدهم.';
+      'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في جنبك.\nاللي على نفس الشبكة هيظهروا لوحدهم.';
 
   @override
   String get guideBothWhat =>
@@ -2631,7 +2631,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideBothHow =>
-      'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nوصل هيوصّل الكل ببعض لوحده.';
+      'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nجنبك هيوصّل الكل ببعض لوحده.';
 
   @override
   String get guideMeshHops =>
@@ -2651,10 +2651,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get guideSafetyTitle => 'الأمان والخصوصية';
 
   @override
-  String get netTitle => 'شبكة وصل';
+  String get netTitle => 'شبكة جنبك';
 
   @override
-  String get netOpen => 'افتح شبكة وصل';
+  String get netOpen => 'افتح شبكة جنبك';
 
   @override
   String get netOpenSub =>
@@ -2668,7 +2668,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get netHostingSub =>
-      'اللي جنبك وفاتحين وصل على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.';
+      'اللي جنبك وفاتحين جنبك على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.';
 
   @override
   String get netName => 'اسم الشبكة';
@@ -2687,7 +2687,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String netOfferTitle(String name) {
-    return '$name فاتح شبكة وصل جنبك';
+    return '$name فاتح شبكة جنبك جنبك';
   }
 
   @override
@@ -2746,36 +2746,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get netErrJoin => 'مقدرناش ندخل الشبكة (اترفضت أو بعيدة).';
 
   @override
-  String get netLost => 'شبكة وصل اللي كنت فيها وقفت';
+  String get netLost => 'شبكة جنبك اللي كنت فيها وقفت';
 
   @override
-  String get netHostLost => 'شبكة وصل بتاعتك اتقفلت';
+  String get netHostLost => 'شبكة جنبك بتاعتك اتقفلت';
 
   @override
-  String get guideNetTitle => 'شبكة وصل';
+  String get guideNetTitle => 'شبكة جنبك';
 
   @override
   String get guideNetWhat =>
-      'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.';
+      'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين جنبك بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.';
 
   @override
   String get guideNetWhen =>
-      'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.';
+      'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فجنبك بيعمل واحد.';
 
   @override
   String get guideNetFacts =>
-      'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.';
+      'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل جنبك.';
 
   @override
   String get guideNetHow =>
-      'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه وصل؟ دوس \"كود الشبكة\" وخليه يصوّره بالكاميرا.';
+      'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة جنبك\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه جنبك؟ دوس \"كود الشبكة\" وخليه يصوّره بالكاميرا.';
 
   @override
   String get sosAsk => 'محتاج مساعدة؟';
 
   @override
   String get sosAskSub =>
-      'ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.';
+      'ابعت استغاثة لكل اللي فاتحين جنبك حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.';
 
   @override
   String get sosOpen => 'استغاثة';
@@ -2791,7 +2791,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sosSheetBody =>
-      'كل اللي حواليك فاتحين وصل هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.';
+      'كل اللي حواليك فاتحين جنبك هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.';
 
   @override
   String get sosActive => 'إنت باعت استغاثة — اللي حواليك شايفينها';
@@ -2819,14 +2819,14 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get sosUnverified => 'الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.';
+  String get sosUnverified => 'الأسماء في جنبك مش موثّقة؛ اتأكد قبل ما تتحرك.';
 
   @override
   String get guideSosTitle => 'الاستغاثة';
 
   @override
   String get guideSosBody =>
-      'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.';
+      'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين جنبك في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.';
 
   @override
   String get statusQueued => 'مستنية صاحبها — هتوصله أول ما يظهر';
@@ -2856,7 +2856,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get netSuggestSub =>
-      'افتح شبكة وصل والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.';
+      'افتح شبكة جنبك والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.';
 
   @override
   String get netQr => 'كود الشبكة';
@@ -2866,20 +2866,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get netQrSub =>
-      'لو موبايل حد مقدرش يدخل من جوه وصل (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح وصل على الواي فاي.';
+      'لو موبايل حد مقدرش يدخل من جوه جنبك (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح جنبك على الواي فاي.';
 
   @override
   String get netOpenShort => 'افتحها';
 
   @override
-  String get shareApp => 'شارك وصل';
+  String get shareApp => 'شارك جنبك';
 
   @override
-  String get shareAppSub => 'لموبايل مفيهوش وصل — من غير إنترنت';
+  String get shareAppSub => 'لموبايل مفيهوش جنبك — من غير إنترنت';
 
   @override
   String get shareIntro =>
-      'صاحبك مفيهوش وصل؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.';
+      'صاحبك مفيهوش جنبك؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.';
 
   @override
   String get shareStep1 => 'يدخل شبكة موبايلك';
@@ -2917,7 +2917,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shareSplit =>
-      'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل وصل من GitHub لما يبقى فيه نت.';
+      'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل جنبك من GitHub لما يبقى فيه نت.';
 
   @override
   String get shareFailed =>
@@ -2927,11 +2927,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shareWhileOpen => 'الصفحة شغالة بس طول ما الشاشة دي مفتوحة.';
 
   @override
-  String get guideShareTitle => 'شارك وصل مع حد مفيهوش';
+  String get guideShareTitle => 'شارك جنبك مع حد مفيهوش';
 
   @override
   String get guideShareBody =>
-      'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.';
+      'من الإعدادات ← \"شارك جنبك\": دوس \"افتح شبكة جنبك\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.';
 
   @override
   String get aboutPerson => 'عنه';
@@ -2982,7 +2982,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideIdentityBody =>
-      'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.';
+      'الأسامي في جنبك حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، جنبك بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.';
 
   @override
   String get mailFromAnyone => 'رسايل وانا مش موجود من أي حد';

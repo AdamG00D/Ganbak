@@ -14,5 +14,5 @@ labels: enhancement
 
 **Notes / ملاحظات**
 
-<!-- Wasl works with no internet and no server; proposals need to fit that.
-     وصل شغال من غير إنترنت ومن غير سيرفر: أي اقتراح لازم يمشي مع ده. -->
+<!-- Ganbak works with no internet and no server; proposals need to fit that.
+     جنبك شغال من غير إنترنت ومن غير سيرفر: أي اقتراح لازم يمشي مع ده. -->

@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/features/share/share_page.dart';
-import 'package:wasl/features/share/share_server.dart';
+import 'package:ganbak/features/share/share_page.dart';
+import 'package:ganbak/features/share/share_server.dart';
 
 import 'support.dart';
 

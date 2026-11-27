@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/profile/names.dart';
-import 'package:wasl/core/theme/app_theme.dart';
-import 'package:wasl/widgets/fingerprint.dart';
+import 'package:ganbak/core/profile/names.dart';
+import 'package:ganbak/core/theme/app_theme.dart';
+import 'package:ganbak/widgets/fingerprint.dart';
 
 /// مقارنة الأسامي للتحذير، ورسم البصمة.
 void main() {

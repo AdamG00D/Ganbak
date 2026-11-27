@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- نصوص الجزء الـ native (الإشعارات والبصمة). العربي في values-ar. -->
 <resources>
+    <string name="app_name">Ganbak</string>
     <string name="channel_service">Active chat</string>
     <string name="channel_service_desc">Stays visible while the chat runs in the background</string>
     <string name="channel_messages">New messages</string>

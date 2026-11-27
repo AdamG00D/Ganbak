@@ -1,6 +1,6 @@
 # Brief for an external security audit
 
-Wasl is an offline mesh chat for Android (Flutter + Kotlin): no server, no accounts. This page tells an auditor what
+Ganbak is an offline mesh chat for Android (Flutter + Kotlin): no server, no accounts. This page tells an auditor what
 to look at first. Threat model and known limits: [SECURITY.md](../SECURITY.md). Wire format: [PROTOCOL.md](PROTOCOL.md).
 
 ## Scope, by priority
@@ -19,11 +19,11 @@ to look at first. Threat model and known limits: [SECURITY.md](../SECURITY.md). 
    of admin state, an admin escalating to owner, kicked members keeping access (documented for open / password groups).
 5. **Parsing hostile input** — every frame from the network: mesh frames and fragments (`mesh_router.dart`), group
    packets, file transfer (`chat_session.dart`, path handling, size limits), game messages (`features/games/core/`,
-   `ViewGuard`), Wasl network offers (`WifiOffer.fromWire`), SOS. Look for unbounded allocations, crashes, path
+   `ViewGuard`), Ganbak network offers (`WifiOffer.fromWire`), SOS. Look for unbounded allocations, crashes, path
    traversal.
 6. **Storage** — `core/storage/vault.dart` (master key wrapped by Android Keystore), `chat_store.dart`, the app lock
    (`features/lock/app_lock.dart`, `KeyVault.kt` biometric gate), media files and temp cleanup.
-7. **Android side** — `android/app/src/main/kotlin/com/adam/wasl/`: exported components, notification reply
+7. **Android side** — `android/app/src/main/kotlin/com/adam/ganbak/`: exported components, notification reply
    receiver, `WaslNet.kt` (hotspot / `bindProcessToNetwork`), file sharing (`ChatFiles.kt`).
 
 Out of scope: the documented limitations in SECURITY.md (unsigned names, group members not authenticated to each

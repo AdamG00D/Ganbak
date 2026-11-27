@@ -1,6 +1,6 @@
-# Wasl design — "Khayamiya" identity
+# Ganbak design — "Khayamiya" identity
 
-Wasl is used when people gather somewhere with no network. Its look comes from **khayamiya**, the hand-stitched
+Ganbak is used when people gather somewhere with no network. Its look comes from **khayamiya**, the hand-stitched
 appliqué cloth of Cairo's tent-makers (the tents of weddings, Ramadan and festivals): every message is passed from
 phone to phone like a stitch through cloth. Keep that idea; don't drift back to a generic purple chat app.
 

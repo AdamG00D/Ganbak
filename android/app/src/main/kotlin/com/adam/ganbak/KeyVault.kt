@@ -1,4 +1,4 @@
-package com.adam.wasl
+package com.adam.ganbak
 
 import android.app.Activity
 import android.content.pm.PackageManager

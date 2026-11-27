@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""يبني موقع وصل (GitHub Pages) في site/ — عربي (الأساسي) وإنجليزي، بهوية الخيامية.
+"""يبني موقع جنبك (GitHub Pages) في site/ — عربي (الأساسي) وإنجليزي، بهوية الخيامية.
 
 python3 tool/site.py   ← بعد أي تغيير في الكلام أو الصور. الموقع بيتنشر لوحده من .github/workflows/pages.yml.
 """
@@ -10,70 +10,70 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / 'site'
-BASE = 'https://adamg00d.github.io/Wasl/'
-REPO = 'https://github.com/AdamG00D/Wasl'
+BASE = 'https://adamg00d.github.io/Ganbak/'
+REPO = 'https://github.com/AdamG00D/Ganbak'
 # التحميل المباشر لآخر إصدار (أسامي ثابتة بيعملها scripts/build_release.sh)
-DOWNLOAD = REPO + '/releases/latest/download/Wasl-android.apk'
-DOWNLOAD_ALL = REPO + '/releases/latest/download/Wasl-android-universal.apk'
+DOWNLOAD = REPO + '/releases/latest/download/Ganbak-android.apk'
+DOWNLOAD_ALL = REPO + '/releases/latest/download/Ganbak-android-universal.apk'
 RELEASES = REPO + '/releases/latest'
 SHOTS = ['chats', 'group-chat', 'nearby', 'games', 'game-mafia', 'guide']
 
 T = {
     'ar': {
         'dir': 'rtl', 'path': '', 'other': 'en/', 'otherName': 'English',
-        'title': 'وَصْل (Wasl) — شات مشفّر من غير إنترنت ولا سيرفر لأندرويد',
-        'desc': 'وصل تطبيق شات لأندرويد بيشتغل من غير إنترنت ولا سيرفر: الموبايلات القريبة بتكلم بعض بالبلوتوث والواي فاي وبتوصّل الرسايل لبعض كشبكة Mesh. شات خاص مشفّر، جروبات، ألعاب، وشبكة واي فاي من موبايلك. مجاني ومفتوح المصدر.',
+        'title': 'جنبك: شات بلا نت — تطبيق تواصل مشفّر من غير إنترنت ولا سيرفر لأندرويد (Ganbak)',
+        'desc': 'جنبك تطبيق شات لأندرويد بيشتغل من غير إنترنت ولا سيرفر: الموبايلات القريبة بتكلم بعض بالبلوتوث والواي فاي وبتوصّل الرسايل لبعض كشبكة Mesh. شات خاص مشفّر، جروبات، ألعاب، وشبكة واي فاي من موبايلك. مجاني ومفتوح المصدر.',
         'hero': 'اتكلم مع اللي حواليك<br>من غير إنترنت',
-        'heroSub': 'وصل بيخلّي الموبايلات القريبة تكلم بعض بالبلوتوث والواي فاي، وتوصّل الرسايل لبعض كشبكة — من غير نت، ولا سيرفر، ولا حساب.',
-        'download': 'حمّل وصل لأندرويد', 'source': 'الكود على GitHub',
+        'heroSub': 'جنبك بيخلّي الموبايلات القريبة تكلم بعض بالبلوتوث والواي فاي، وتوصّل الرسايل لبعض كشبكة — من غير نت، ولا سيرفر، ولا حساب.',
+        'download': 'حمّل جنبك لأندرويد', 'source': 'الكود على GitHub',
         'meta': 'مجاني • مفتوح المصدر (GPL-3.0) • أندرويد 7 أو أحدث',
         'old': 'موبايل قديم أو التثبيت فشل؟ حمّل النسخة الشاملة', 'all': 'كل النسخ',
-        'featTitle': 'ليه وصل؟',
+        'featTitle': 'ليه جنبك؟',
         'feats': [
             ('📡', 'من غير إنترنت', 'بلوتوث، أو واي فاي / هوت سبوت، أو الاتنين مع بعض — وموبايلك يبقى كوبري بينهم.'),
             ('🕸️', 'الرسايل بتعدّي', 'كل موبايل بيوصّل للي بعده (لحد 6 موبايلات)، فالرسالة توصل أبعد بكتير من مدى موبايلك.'),
             ('🔒', 'شات خاص متشفّر', 'تشفير من طرف لطرف لوحده، واللي في النص مبيقدروش يقروا حاجة ولا يعرفوا مين بيكلم مين. ورمز أمان تتأكدوا بيه من بعض.'),
-            ('✍️', 'محدش يتكلم باسمك', 'اسمك ورسايلك متوقّعة بمفتاحك، ووصل بيحذّرك لو حد ظهر باسم واحد تعرفه بس مش هو.'),
-            ('📶', 'شبكة وصل', 'مفيش راوتر؟ موبايلك يعمل واي فاي لوحده واللي جنبك يدخلوه بضغطة أو بكود QR.'),
+            ('✍️', 'محدش يتكلم باسمك', 'اسمك ورسايلك متوقّعة بمفتاحك، وجنبك بيحذّرك لو حد ظهر باسم واحد تعرفه بس مش هو.'),
+            ('📶', 'شبكة جنبك', 'مفيش راوتر؟ موبايلك يعمل واي فاي لوحده واللي جنبك يدخلوه بضغطة أو بكود QR.'),
             ('⏳', 'الرسالة تستنى صاحبها', 'لو اللي بتكلمه مش موجود، الموبايلات اللي حواليك بتشيل رسالتك مقفولة لحد ما يظهر.'),
-            ('🆘', 'استغاثة', 'اطلب مساعدة من كل اللي فاتحين وصل حواليك بضغطة واحدة.'),
+            ('🆘', 'استغاثة', 'اطلب مساعدة من كل اللي فاتحين جنبك حواليك بضغطة واحدة.'),
             ('🎮', 'ألعاب جوه الشات', 'إكس أو، حرب السفن، الذاكرة، مين الجاسوس؟، المسابقة، المافيا وغيرهم.'),
             ('👥', 'جروبات', 'عامة، أو بكلمة سر، أو بطلب انضمام، أو سرية بالدعوة بس — بصاحب ومشرفين.'),
         ],
         'whenTitle': 'إمتى تحتاجه؟',
         'when': 'لما الشبكة تقع أو تبقى زحمة: الحفلات والملاعب، الرحلات والصحرا، الجامعات، وانقطاع الكهربا والطوارئ.',
         'shotsTitle': 'شكله',
-        'shareTitle': 'صاحبك مفيهوش وصل؟',
-        'share': 'من الإعدادات ← "شارك وصل": موبايلك يفتح شبكة، وصاحبك يصوّر كودين ويحمّل التطبيق من موبايلك على طول — من غير نت.',
+        'shareTitle': 'صاحبك مفيهوش جنبك؟',
+        'share': 'من الإعدادات ← "شارك جنبك": موبايلك يفتح شبكة، وصاحبك يصوّر كودين ويحمّل التطبيق من موبايلك على طول — من غير نت.',
         'faqTitle': 'أسئلة شائعة',
         'faq': [
-            ('وصل محتاج إنترنت؟', 'لأ. وصل بيشتغل بالبلوتوث والواي فاي بين الموبايلات القريبة، من غير إنترنت ولا باقة ولا سيرفر.'),
-            ('إزاي أكلم حد بعيد عني؟', 'الرسايل بتعدّي على موبايلات تانية فاتحة وصل (لحد 6). وكمان لو هو مش موجود دلوقتي، رسالتك بتستنى وتوصله أول ما يظهر.'),
+            ('جنبك محتاج إنترنت؟', 'لأ. جنبك بيشتغل بالبلوتوث والواي فاي بين الموبايلات القريبة، من غير إنترنت ولا باقة ولا سيرفر.'),
+            ('إزاي أكلم حد بعيد عني؟', 'الرسايل بتعدّي على موبايلات تانية فاتحة جنبك (لحد 6). وكمان لو هو مش موجود دلوقتي، رسالتك بتستنى وتوصله أول ما يظهر.'),
             ('الشات متشفّر؟', 'الشات الخاص متشفّر من طرف لطرف تلقائياً. التفاصيل والحدود المعروفة مكتوبة بصراحة في صفحة الأمان على GitHub.'),
-            ('وصل مجاني؟', 'أيوه، مجاني ومفتوح المصدر (GPL-3.0)، مفيهوش إعلانات ولا تحليلات.'),
-            ('بيشتغل على أنهي موبايلات؟', 'أندرويد 7 أو أحدث. شبكة وصل محتاجة أندرويد 8+، والدخول منها من جوه التطبيق أندرويد 10+.'),
+            ('جنبك مجاني؟', 'أيوه، مجاني ومفتوح المصدر (GPL-3.0)، مفيهوش إعلانات ولا تحليلات.'),
+            ('بيشتغل على أنهي موبايلات؟', 'أندرويد 7 أو أحدث. شبكة جنبك محتاجة أندرويد 8+، والدخول منها من جوه التطبيق أندرويد 10+.'),
         ],
-        'foot': 'وَصْل — مفتوح المصدر تحت رخصة GPL-3.0',
-        'shotAlt': {'chats': 'المحادثات', 'group-chat': 'شات جروب', 'nearby': 'القريبين', 'games': 'الألعاب', 'game-mafia': 'المافيا', 'guide': 'دليل وصل'},
+        'foot': 'جنبك — مفتوح المصدر تحت رخصة GPL-3.0',
+        'shotAlt': {'chats': 'المحادثات', 'group-chat': 'شات جروب', 'nearby': 'القريبين', 'games': 'الألعاب', 'game-mafia': 'المافيا', 'guide': 'دليل جنبك'},
     },
     'en': {
         'dir': 'ltr', 'path': 'en/', 'other': '../', 'otherName': 'العربية',
-        'title': 'Wasl (وَصْل) — offline encrypted chat for Android, no internet, no server',
-        'desc': 'Wasl is an offline chat app for Android: phones nearby talk over Bluetooth and Wi-Fi and relay messages as a mesh, with no internet and no server. End-to-end encrypted private chats, groups, games and your own Wi-Fi network. Free and open source.',
+        'title': 'Ganbak: Offline Chat — encrypted chat for Android with no internet and no server (جنبك)',
+        'desc': 'Ganbak is an offline chat app for Android: phones nearby talk over Bluetooth and Wi-Fi and relay messages as a mesh, with no internet and no server. End-to-end encrypted private chats, groups, games and your own Wi-Fi network. Free and open source.',
         'hero': 'Talk to people around you<br>with no internet',
-        'heroSub': 'Wasl lets nearby phones talk over Bluetooth and Wi-Fi and relay messages for each other as a mesh — no internet, no server, no account.',
-        'download': 'Get Wasl for Android', 'source': 'Source on GitHub',
+        'heroSub': 'Ganbak lets nearby phones talk over Bluetooth and Wi-Fi and relay messages for each other as a mesh — no internet, no server, no account.',
+        'download': 'Get Ganbak for Android', 'source': 'Source on GitHub',
         'meta': 'Free • Open source (GPL-3.0) • Android 7+',
         'old': 'Older phone or install failed? Get the universal build', 'all': 'All builds',
-        'featTitle': 'Why Wasl?',
+        'featTitle': 'Why Ganbak?',
         'feats': [
             ('📡', 'No internet needed', 'Bluetooth, Wi-Fi / hotspot, or both at once — your phone becomes a bridge between them.'),
             ('🕸️', 'Messages hop', 'Every phone relays to the next (up to 6), so a message reaches far beyond your own range.'),
             ('🔒', 'Encrypted private chats', 'End-to-end encryption by default; relays can’t read anything or tell who talks to whom. Safety codes to verify each other.'),
-            ('✍️', 'Nobody speaks for you', 'Your name and messages are signed with your key, and Wasl warns you when someone shows up with a name you know but isn’t them.'),
-            ('📶', 'Wasl network', 'No router? Your phone makes its own Wi-Fi and people nearby join with one tap or a QR code.'),
+            ('✍️', 'Nobody speaks for you', 'Your name and messages are signed with your key, and Ganbak warns you when someone shows up with a name you know but isn’t them.'),
+            ('📶', 'Ganbak network', 'No router? Your phone makes its own Wi-Fi and people nearby join with one tap or a QR code.'),
             ('⏳', 'Messages wait', 'If the person isn’t around, phones nearby carry your sealed message until they show up.'),
-            ('🆘', 'SOS', 'Ask everyone running Wasl around you for help with one tap.'),
+            ('🆘', 'SOS', 'Ask everyone running Ganbak around you for help with one tap.'),
             ('🎮', 'Games in chats', 'Tic-tac-toe, battleships, memory, who’s the spy?, quiz, mafia and more.'),
             ('👥', 'Groups', 'Open, password, join-request or invite-only secret groups, with an owner and admins.'),
         ],
@@ -81,17 +81,17 @@ T = {
         'when': 'When the network is down or overloaded: festivals, stadiums, trips and deserts, campuses, power cuts and emergencies.',
         'shotsTitle': 'What it looks like',
         'shareTitle': 'Your friend doesn’t have it?',
-        'share': 'Settings → “Share Wasl”: your phone opens a network, your friend scans two codes and downloads the app straight from your phone — no internet.',
+        'share': 'Settings → “Share Ganbak”: your phone opens a network, your friend scans two codes and downloads the app straight from your phone — no internet.',
         'faqTitle': 'FAQ',
         'faq': [
-            ('Does Wasl need the internet?', 'No. It works over Bluetooth and Wi-Fi between nearby phones, with no internet, no data plan and no server.'),
-            ('How do I reach someone far away?', 'Messages hop through other phones running Wasl (up to 6). And if they’re not around right now, your message waits and reaches them when they show up.'),
+            ('Does Ganbak need the internet?', 'No. It works over Bluetooth and Wi-Fi between nearby phones, with no internet, no data plan and no server.'),
+            ('How do I reach someone far away?', 'Messages hop through other phones running Ganbak (up to 6). And if they’re not around right now, your message waits and reaches them when they show up.'),
             ('Is it encrypted?', 'Private chats are end-to-end encrypted automatically. Details and known limits are written plainly in the security page on GitHub.'),
-            ('Is Wasl free?', 'Yes — free and open source (GPL-3.0), with no ads and no analytics.'),
-            ('Which phones?', 'Android 7 or newer. Starting a Wasl network needs Android 8+, joining one from inside the app Android 10+.'),
+            ('Is Ganbak free?', 'Yes — free and open source (GPL-3.0), with no ads and no analytics.'),
+            ('Which phones?', 'Android 7 or newer. Starting a Ganbak network needs Android 8+, joining one from inside the app Android 10+.'),
         ],
-        'foot': 'Wasl — open source under GPL-3.0',
-        'shotAlt': {'chats': 'Chats', 'group-chat': 'Group chat', 'nearby': 'Nearby', 'games': 'Games', 'game-mafia': 'Mafia', 'guide': 'Wasl guide'},
+        'foot': 'Ganbak — open source under GPL-3.0',
+        'shotAlt': {'chats': 'Chats', 'group-chat': 'Group chat', 'nearby': 'Nearby', 'games': 'Games', 'game-mafia': 'Mafia', 'guide': 'Ganbak guide'},
     },
 }
 
@@ -110,7 +110,7 @@ def page(lang: str) -> str:
     url = BASE + t['path']
     ld = {
         '@context': 'https://schema.org', '@type': 'SoftwareApplication',
-        'name': 'Wasl', 'alternateName': 'وَصْل', 'operatingSystem': 'Android 7.0+',
+        'name': 'Ganbak', 'alternateName': 'جنبك', 'operatingSystem': 'Android 7.0+',
         'applicationCategory': 'CommunicationApplication', 'description': t['desc'],
         'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'},
         'downloadUrl': DOWNLOAD, 'installUrl': DOWNLOAD, 'license': 'https://www.gnu.org/licenses/gpl-3.0.html',
@@ -157,7 +157,7 @@ def page(lang: str) -> str:
 </head>
 <body>
 <header class="hero">
-<nav><a class="brand" href="{up or './'}">{LOGO.format(s=36)}<span>{'وَصْل' if lang == 'ar' else 'Wasl'}</span></a>
+<nav><a class="brand" href="{up or './'}">{LOGO.format(s=36)}<span>{'جنبك' if lang == 'ar' else 'Ganbak'}</span></a>
 <a class="lang" href="{t['other']}" hreflang="{'en' if lang == 'ar' else 'ar'}">{t['otherName']}</a></nav>
 <div class="hero-in">
 {LOGO.format(s=96)}

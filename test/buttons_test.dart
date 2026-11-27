@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/theme/app_theme.dart';
-import 'package:wasl/widgets/ui.dart';
+import 'package:ganbak/core/theme/app_theme.dart';
+import 'package:ganbak/widgets/ui.dart';
 
 /// كلام الزراير عمره ما يتقص بـ "…" — لو طويل بينزل سطرين أو يصغر.
 void main() {

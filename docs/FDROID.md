@@ -14,7 +14,7 @@ there. Options, for the owner to decide:
 | Option | What it means | Cost |
 |---|---|---|
 | **A. IzzyOnDroid** (recommended first) | A third-party F-Droid repository that ships the APKs from GitHub releases. Users add the repo in the F-Droid client. | Ask for inclusion (issue / form on IzzyOnDroid). Their scanner will flag the Google library; check their current policy before applying. No code change. |
-| **B. A `foss` build flavour** | A second build without `nearby_connections`: Wi-Fi / hotspot / Wasl network only, no Bluetooth. Submitted to F-Droid's `fdroiddata` with the Flutter SDK as a submodule (srclib). | Real code work (split `NearbyLink` behind a flavour, hide Bluetooth in the UI), a second APK to test, and the F-Droid recipe. |
+| **B. A `foss` build flavour** | A second build without `nearby_connections`: Wi-Fi / hotspot / Ganbak network only, no Bluetooth. Submitted to F-Droid's `fdroiddata` with the Flutter SDK as a submodule (srclib). | Real code work (split `NearbyLink` behind a flavour, hide Bluetooth in the UI), a second APK to test, and the F-Droid recipe. |
 | **C. Own Bluetooth transport** | Replace Nearby with plain Bluetooth (RFCOMM / BLE) written in Kotlin. | Large: discovery, connection limits, background rules on every Android version. |
 
 Whatever the choice, the release APKs must stay **reproducible enough** for the store (same Flutter version, no

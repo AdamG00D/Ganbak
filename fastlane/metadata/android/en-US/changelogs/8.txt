@@ -1,0 +1,2 @@
+• Wasl is now Ganbak (جنبك): same app, new name. Install Ganbak, then remove Wasl.
+• Ganbak still talks to friends on Wasl 1.6.

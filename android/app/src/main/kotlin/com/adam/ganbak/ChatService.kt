@@ -1,4 +1,4 @@
-package com.adam.wasl
+package com.adam.ganbak
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -110,8 +110,8 @@ object Notifications {
 
     const val EXTRA_CHAT = "wasl_chat"
     const val EXTRA_REPLY = "wasl_reply"
-    const val ACTION_REPLY = "com.adam.wasl.NOTIF_REPLY"
-    const val ACTION_READ = "com.adam.wasl.NOTIF_READ"
+    const val ACTION_REPLY = "com.adam.ganbak.NOTIF_REPLY"
+    const val ACTION_READ = "com.adam.ganbak.NOTIF_READ"
 
     private class Line(val sender: String?, val text: String, val time: Long)
     private class Convo(var title: String, var group: Boolean, var avatar: Bitmap?) {
@@ -156,7 +156,7 @@ object Notifications {
             if (chat != null) {
                 putExtra(EXTRA_CHAT, chat)
                 // عشان كل محادثة يبقى ليها PendingIntent مختلف
-                action = "com.adam.wasl.OPEN_$chat"
+                action = "com.adam.ganbak.OPEN_$chat"
             }
         }
         return PendingIntent.getActivity(context, if (chat == null) 0 else idOf(chat), intent, immutable())

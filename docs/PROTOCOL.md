@@ -1,4 +1,4 @@
-# Wasl protocol
+# Ganbak protocol
 
 This is the reference for everything that goes over the air. The tests in `test/` cover these rules — keep them
 green, and update this file with any change.
@@ -74,12 +74,12 @@ Rules:
   flood.
 - **Presence** body: `{d: "<json>", sg: Ed25519(signing key, "wasl/presence/v2|" + d)}` where `d` is
   `{n: name, c: colour, k: X25519 key, s: Ed25519 key, a?: avatar hash, e?: cartoon avatar number, g: [group ads],
-  w?: Wasl network, sos?: SOS, nb: [neighbour ids], t: ms}`. Dropped unless `k`+`s` hash to `src`, the signature
+  w?: Ganbak network, sos?: SOS, nb: [neighbour ids], t: ms}`. Dropped unless `k`+`s` hash to `src`, the signature
   verifies, and `t` is not older than the last presence accepted from that node (`t` only grows on the sender, even if
   its clock goes back). The sender re-signs only when the content changes or every 5 minutes; receivers skip the
   signature check for a `d` they already verified. An `sos` is ignored when `t` is more than 30 minutes old (no
   replaying an SOS after it stopped). Sent every 3 s; a node silent for 11 s is gone.
-- **Wasl network** (`w`, only while the node hosts one): `{s: SSID (≤ 32), p: passphrase (8–63, empty if open),
+- **Ganbak network** (`w`, only while the node hosts one): `{s: SSID (≤ 32), p: passphrase (8–63, empty if open),
   x: security 0 open • 1 WPA2 • 2 WPA3 • 3 WPA3/WPA2}`. The node runs an Android Local-Only Hotspot (no internet);
   direct neighbours (hops = 1) are offered to join it, which moves their link to Wi-Fi (see §2). Invalid values
   drop the field, not the presence. Additive: older versions ignore it.

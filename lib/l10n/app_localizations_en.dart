@@ -46,7 +46,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bioConfirmTitle => 'Confirm fingerprint';
 
   @override
-  String get bioConfirmSubtitle => 'To unlock Wasl with it';
+  String get bioConfirmSubtitle => 'To unlock Ganbak with it';
 
   @override
   String get wipeTitle => 'Erase all chats?';
@@ -182,7 +182,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howMeshBody =>
-      'Every phone running Wasl relays for the ones around it, so your message can hop across several phones to reach someone far away.';
+      'Every phone running Ganbak relays for the ones around it, so your message can hop across several phones to reach someone far away.';
 
   @override
   String get howEncryptionTitle => 'Automatic encryption';
@@ -249,7 +249,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pinRepeat => 'Enter it again to confirm';
 
   @override
-  String get colorWasl => 'Wasl';
+  String get colorWasl => 'Ganbak';
 
   @override
   String get colorIndigo => 'Indigo';
@@ -308,7 +308,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errHandshakeHint =>
-      'Something went wrong while exchanging encryption keys. Make sure both phones have the latest Wasl and try again.';
+      'Something went wrong while exchanging encryption keys. Make sure both phones have the latest Ganbak and try again.';
 
   @override
   String get errNoPlayTitle => 'Nearby chat needs Google Play services';
@@ -395,7 +395,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notDelivered => 'Not delivered';
 
   @override
-  String get lockBioTitle => 'Unlock Wasl';
+  String get lockBioTitle => 'Unlock Ganbak';
 
   @override
   String get lockBioSubtitle => 'Your fingerprint instead of the PIN';
@@ -483,7 +483,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profile => 'Profile';
 
   @override
-  String get appTitle => 'Wasl';
+  String get appTitle => 'Ganbak';
 
   @override
   String get createProfile => 'Create your profile';
@@ -515,7 +515,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reqNearbyWhy =>
-      'So Wasl can find phones nearby and connect to them over Bluetooth. It doesn\'t use your location.';
+      'So Ganbak can find phones nearby and connect to them over Bluetooth. It doesn\'t use your location.';
 
   @override
   String get reqWifiTitle => 'Nearby Wi-Fi devices permission';
@@ -529,7 +529,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String reqLocationWhy(Object version) {
-    return 'Android $version requires the location permission for any nearby device search. Wasl doesn\'t read or store your location.';
+    return 'Android $version requires the location permission for any nearby device search. Ganbak doesn\'t read or store your location.';
   }
 
   @override
@@ -836,7 +836,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We need the storage permission to save the file';
 
   @override
-  String get savedToDownloads => 'Saved to Downloads → Wasl';
+  String get savedToDownloads => 'Saved to Downloads → Ganbak';
 
   @override
   String get saveFileFailed => 'Couldn\'t save the file';
@@ -1107,11 +1107,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchWifiHint =>
-      'Anyone with Wasl open on the same Wi-Fi (or connected to your hotspot) will show up here by itself.';
+      'Anyone with Ganbak open on the same Wi-Fi (or connected to your hotspot) will show up here by itself.';
 
   @override
   String get searchBtHint =>
-      'Anyone nearby with Wasl open on Bluetooth will show up here by itself. Searching takes from a few seconds to a minute.';
+      'Anyone nearby with Ganbak open on Bluetooth will show up here by itself. Searching takes from a few seconds to a minute.';
 
   @override
   String peopleTapToTalk(Object count) {
@@ -1996,7 +1996,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String gameOldVersion(String name) {
-    return 'No answer… $name may have an older version of Wasl';
+    return 'No answer… $name may have an older version of Ganbak';
   }
 
   @override
@@ -2572,7 +2572,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get spyYourCard => 'Your word';
 
   @override
-  String get guideTitle => 'Wasl guide';
+  String get guideTitle => 'Ganbak guide';
 
   @override
   String get guideSub => 'Connecting, groups, games and safety';
@@ -2597,7 +2597,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideConnectIntro =>
-      'Wasl needs no internet, no SIM and no account. Pick a way to connect that suits where you are:';
+      'Ganbak needs no internet, no SIM and no account. Pick a way to connect that suits where you are:';
 
   @override
   String get guideWhat => 'What it is';
@@ -2625,7 +2625,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideBtHow =>
-      'Tap \"Bluetooth\" on the first screen.\nAllow the permissions (Bluetooth and nearby devices).\nPeople around you with Wasl open show up under \"Nearby\" by themselves.';
+      'Tap \"Bluetooth\" on the first screen.\nAllow the permissions (Bluetooth and nearby devices).\nPeople around you with Ganbak open show up under \"Nearby\" by themselves.';
 
   @override
   String get guideWifiWhat =>
@@ -2641,7 +2641,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideWifiHow =>
-      'Join a Wi-Fi network, or turn on a hotspot in your phone\'s settings and have your friends join it.\nTap \"Wi-Fi\" in Wasl.\nEveryone on the same network shows up by themselves.';
+      'Join a Wi-Fi network, or turn on a hotspot in your phone\'s settings and have your friends join it.\nTap \"Wi-Fi\" in Ganbak.\nEveryone on the same network shows up by themselves.';
 
   @override
   String get guideBothWhat =>
@@ -2657,7 +2657,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideBothHow =>
-      'Join a Wi-Fi network or hotspot.\nTap \"Both\".\nWasl links everyone together by itself.';
+      'Join a Wi-Fi network or hotspot.\nTap \"Both\".\nGanbak links everyone together by itself.';
 
   @override
   String get guideMeshHops =>
@@ -2677,10 +2677,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guideSafetyTitle => 'Safety and privacy';
 
   @override
-  String get netTitle => 'Wasl network';
+  String get netTitle => 'Ganbak network';
 
   @override
-  String get netOpen => 'Start a Wasl network';
+  String get netOpen => 'Start a Ganbak network';
 
   @override
   String get netOpenSub =>
@@ -2694,7 +2694,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get netHostingSub =>
-      'People next to you running Wasl on \"Both\" are offered to join. Anyone else can join from Wi-Fi settings with this name and password.';
+      'People next to you running Ganbak on \"Both\" are offered to join. Anyone else can join from Wi-Fi settings with this name and password.';
 
   @override
   String get netName => 'Network name';
@@ -2713,7 +2713,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String netOfferTitle(String name) {
-    return '$name has a Wasl network next to you';
+    return '$name has a Ganbak network next to you';
   }
 
   @override
@@ -2775,36 +2775,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t join the network (declined or out of range).';
 
   @override
-  String get netLost => 'The Wasl network you were on stopped';
+  String get netLost => 'The Ganbak network you were on stopped';
 
   @override
-  String get netHostLost => 'Your Wasl network was turned off';
+  String get netHostLost => 'Your Ganbak network was turned off';
 
   @override
-  String get guideNetTitle => 'Wasl network';
+  String get guideNetTitle => 'Ganbak network';
 
   @override
   String get guideNetWhat =>
-      'Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a \"Join\" button and are in with one tap; nobody types a password.';
+      'Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Ganbak get a \"Join\" button and are in with one tap; nobody types a password.';
 
   @override
   String get guideNetWhen =>
-      'When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one.';
+      'When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Ganbak makes one.';
 
   @override
   String get guideNetFacts =>
-      'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on \"Both\" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.';
+      'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on \"Both\" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Ganbak.';
 
   @override
   String get guideNetHow =>
-      'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.\nA phone can\'t join from inside Wasl? Tap \"Network QR\" and let them scan it with the camera.';
+      'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Ganbak network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.\nA phone can\'t join from inside Ganbak? Tap \"Network QR\" and let them scan it with the camera.';
 
   @override
   String get sosAsk => 'Need help?';
 
   @override
   String get sosAskSub =>
-      'Send an SOS to everyone running Wasl around you, even far away through the phones in between.';
+      'Send an SOS to everyone running Ganbak around you, even far away through the phones in between.';
 
   @override
   String get sosOpen => 'SOS';
@@ -2820,7 +2820,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sosSheetBody =>
-      'Everyone around you running Wasl gets an alert that you need help, with your name and what you wrote, until you stop it.';
+      'Everyone around you running Ganbak gets an alert that you need help, with your name and what you wrote, until you stop it.';
 
   @override
   String get sosActive =>
@@ -2850,14 +2850,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sosUnverified =>
-      'Names in Wasl aren\'t verified; check before you act.';
+      'Names in Ganbak aren\'t verified; check before you act.';
 
   @override
   String get guideSosTitle => 'SOS';
 
   @override
   String get guideSosBody =>
-      'Under \"Nearby\" tap \"SOS\" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.';
+      'Under \"Nearby\" tap \"SOS\" and write where you are or what you need. Everyone running Ganbak in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.';
 
   @override
   String get statusQueued =>
@@ -2888,7 +2888,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get netSuggestSub =>
-      'Open a Wasl network and chats and photos get much faster for everyone. The others will be offered to join with one tap.';
+      'Open a Ganbak network and chats and photos get much faster for everyone. The others will be offered to join with one tap.';
 
   @override
   String get netQr => 'Network QR';
@@ -2898,13 +2898,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get netQrSub =>
-      'If someone\'s phone can\'t join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi.';
+      'If someone\'s phone can\'t join from inside Ganbak (an older Android, say): open the camera, scan this code, then open Ganbak on Wi-Fi.';
 
   @override
   String get netOpenShort => 'Open it';
 
   @override
-  String get shareApp => 'Share Wasl';
+  String get shareApp => 'Share Ganbak';
 
   @override
   String get shareAppSub =>
@@ -2912,7 +2912,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareIntro =>
-      'Your friend doesn\'t have Wasl? Give it to them from your phone in two steps, no internet needed.';
+      'Your friend doesn\'t have Ganbak? Give it to them from your phone in two steps, no internet needed.';
 
   @override
   String get shareStep1 => 'They join your phone’s network';
@@ -2951,7 +2951,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareSplit =>
-      'This copy was installed from a store in parts and can\'t be shared from here. Your friend can get Wasl from GitHub once they have internet.';
+      'This copy was installed from a store in parts and can\'t be shared from here. Your friend can get Ganbak from GitHub once they have internet.';
 
   @override
   String get shareFailed =>
@@ -2961,11 +2961,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareWhileOpen => 'The page works only while this screen is open.';
 
   @override
-  String get guideShareTitle => 'Share Wasl with someone who doesn’t have it';
+  String get guideShareTitle => 'Share Ganbak with someone who doesn’t have it';
 
   @override
   String get guideShareBody =>
-      'Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.';
+      'Settings → \"Share Ganbak\": tap \"Start a Ganbak network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.';
 
   @override
   String get aboutPerson => 'About';
@@ -3016,7 +3016,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideIdentityBody =>
-      'Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.';
+      'Names in Ganbak are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Ganbak says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.';
 
   @override
   String get mailFromAnyone => 'Waiting messages from anyone';

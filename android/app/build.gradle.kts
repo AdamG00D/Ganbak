@@ -16,7 +16,7 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.adam.wasl"
+    namespace = "com.adam.ganbak"
     // permission_handler 13 محتاج compileSdk 37 (الـ targetSdk زي ما هو)
     compileSdk = 37
     ndkVersion = flutter.ndkVersion
@@ -27,7 +27,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.adam.wasl"
+        applicationId = "com.adam.ganbak"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 24

@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/features/chat/core/chat_session.dart';
-import 'package:wasl/features/games/core/fair_deal.dart';
-import 'package:wasl/features/games/core/game_center.dart';
-import 'package:wasl/features/games/core/game_engine.dart';
-import 'package:wasl/features/games/core/game_kind.dart';
-import 'package:wasl/features/games/core/game_room.dart';
-import 'package:wasl/features/games/engines/engines.dart';
+import 'package:ganbak/features/chat/core/chat_session.dart';
+import 'package:ganbak/features/games/core/fair_deal.dart';
+import 'package:ganbak/features/games/core/game_center.dart';
+import 'package:ganbak/features/games/core/game_engine.dart';
+import 'package:ganbak/features/games/core/game_kind.dart';
+import 'package:ganbak/features/games/core/game_room.dart';
+import 'package:ganbak/features/games/engines/engines.dart';
 
 import 'support.dart';
 

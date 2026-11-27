@@ -1,10 +1,10 @@
-# Wasl (وَصْل) — guide for AI coding agents
+# Ganbak (جنبك) — guide for AI coding agents
 
-Wasl is an offline chat app for Android (Flutter, Arabic + English UI, RTL / LTR): people nearby talk over **Bluetooth** (Google
+Ganbak is an offline chat app for Android (Flutter, Arabic + English UI, RTL / LTR): people nearby talk over **Bluetooth** (Google
 Nearby Connections) or **Wi-Fi / hotspot** (UDP discovery + TCP) — or both at once, which turns the phone into a
 bridge between the two — with no internet and no server. Devices form a **mesh** (messages hop through other
 phones), private chats are end-to-end encrypted automatically (no passwords), and there are groups (open /
-password / join-request) with an owner and admins. Package `com.adam.wasl`. Open source, **GPL-3.0-or-later**
+password / join-request) with an owner and admins. Package `com.adam.ganbak`. Open source, **GPL-3.0-or-later**
 (`LICENSE`); human-facing docs come in English + Arabic pairs, keep both in sync: `README.md` is **Arabic** (the
 main one) with `README.en.md`; `CONTRIBUTING`, `SECURITY` (threat model + known limits) and `CODE_OF_CONDUCT`
 (Contributor Covenant 2.1) are English `X.md` with Arabic `X.ar.md`.
@@ -48,7 +48,7 @@ New version: bump `version` in `pubspec.yaml` **and** `appVersion` in `lib/core/
 script refuses to run without both. It builds arm64-v8a / armeabi-v7a / x86_64 / universal APKs with one shared
 versionCode, `SHA256SUMS.txt` and `github_release.md`, and prints the `gh release create` command.
 
-Folder layout on disk: `Wasl/Wasl_App/` (this repo) and `Wasl/Signing_Key/` (keystore + passwords — outside the repo
+Folder layout on disk: `Wasl/Wasl_App/` (this repo; the folder names kept the old name) and `Wasl/Signing_Key/` (keystore + passwords — outside the repo
 on purpose, never commit or print them). Without the key Gradle signs with the debug key (so contributors and CI can
 build); only `build_release.sh` insists on it.
 
@@ -92,13 +92,13 @@ lib/
     games/                  core/ (GameKind, GameEngine, GameRoom, GameCenter), engines/ (rules of the 9 games,
                             createEngine, autoMoves), data/ (spy words, quiz bank), ui/ (picker, chat card, game
                             screen, boards, help page) — see docs/GAMES.md
-    net/                    "Wasl network": wasl_network.dart (WaslNetwork: host a Local-Only Hotspot / join one;
+    net/                    "Ganbak network": wasl_network.dart (WaslNetwork: host a Local-Only Hotspot / join one;
                             the offer rides in presence as `w`), wasl_net_ui.dart (card in Nearby, offer banner)
     mailbox/mailbox.dart    offline messages: sealed envelopes, carry box, MailService (PROTOCOL §9)
     sos/sos_ui.dart         SOS banner / card / sheet (signal rides in presence)
-    share/                  "Share Wasl": share_server.dart (local HTTP: page + installed APK, only while the screen
+    share/                  "Share Ganbak": share_server.dart (local HTTP: page + installed APK, only while the screen
                             is open), share_page.dart (the download page), share_screen.dart (two QR codes)
-    guide/guide_screen.dart "Wasl guide" (settings + ؟ on the transport screen): connecting with drawings, groups,
+    guide/guide_screen.dart "Ganbak guide" (settings + ؟ on the transport screen): connecting with drawings, groups,
                             games, safety
     groups/                 group.dart (GroupInfo: keys, roles, admin state + GroupOps: sealed admin commands),
                             group_session.dart (GroupSession extends ChatSession),
@@ -110,7 +110,7 @@ lib/
                             ui.dart (Avatar, AppCard, buttons, EmptyState…), feedback.dart (showToast, dialogs,
                             showActionSheet), focus_guard.dart,
                             cartoon_avatar.dart (24 avatars painted in code), avatar_render.dart (avatar → PNG for notifications)
-android/app/src/main/kotlin/com/adam/wasl/
+android/app/src/main/kotlin/com/adam/ganbak/
   MainActivity.kt    channels: wasl/system (bluetooth/wifi/notify/service/files/language/openUrl) + wasl/vault
                      (keystore wrap, biometric)
   AppLanguage.kt     language of native strings (follows the app's choice, not the phone's)
@@ -188,7 +188,7 @@ android/app/src/main/kotlin/com/adam/wasl/
   10-min epochs, per-pair key `wasl/route/v1`) instead of ids; payloads padded (`SizePad`); private-group members
   announce `gt` tags (`groups/group_tags.dart`), only owner/admins advertise the ad; offline-message envelopes (v2) have
   no sender/recipient in clear; group invites `U {t: gi}` sealed per recipient. Keep tests in `privacy_test.dart` green.
-- **Wasl network**: presence `w {s, p, x}` only while hosting; offered to direct neighbours only; `LanLink` re-reads
+- **Ganbak network**: presence `w {s, p, x}` only while hosting; offered to direct neighbours only; `LanLink` re-reads
   its addresses every 3 s and reopens the beacon socket when they change (needed after hosting / joining).
 - **Saving**: default off. A conversation is written to disk only if `saveOverride ?? AppSettings.saveChats`; media of
   saved chats moves to `vault/media/<id>/`. Unsaved chats live in memory until the hub stops.

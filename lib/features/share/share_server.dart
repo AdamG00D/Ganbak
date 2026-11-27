@@ -106,7 +106,7 @@ class ShareServer {
           final file = File(apk.path);
           res.headers
             ..contentType = ContentType('application', 'vnd.android.package-archive')
-            ..set('Content-Disposition', 'attachment; filename="Wasl-${AppConfig.appVersion}.apk"')
+            ..set('Content-Disposition', 'attachment; filename="Ganbak-${AppConfig.appVersion}.apk"')
             ..contentLength = await file.length();
           if (req.method == 'HEAD') return;
           _downloads++;

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/crypto/kdf.dart';
-import 'package:wasl/core/profile/profile.dart';
-import 'package:wasl/mesh/dual_link.dart';
-import 'package:wasl/mesh/mesh_link.dart';
-import 'package:wasl/mesh/mesh_router.dart';
+import 'package:ganbak/core/crypto/kdf.dart';
+import 'package:ganbak/core/profile/profile.dart';
+import 'package:ganbak/mesh/dual_link.dart';
+import 'package:ganbak/mesh/mesh_link.dart';
+import 'package:ganbak/mesh/mesh_router.dart';
 
 import 'support.dart';
 

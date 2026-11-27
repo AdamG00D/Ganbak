@@ -545,7 +545,7 @@ abstract class AppLocalizations {
   /// No description provided for @colorWasl.
   ///
   /// In ar, this message translates to:
-  /// **'وصل'**
+  /// **'جنبك'**
   String get colorWasl;
 
   /// No description provided for @colorIndigo.
@@ -971,7 +971,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In ar, this message translates to:
-  /// **'وَصْل'**
+  /// **'جنبك'**
   String get appTitle;
 
   /// No description provided for @createProfile.
@@ -3557,7 +3557,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameOldVersion.
   ///
   /// In ar, this message translates to:
-  /// **'مفيش رد… يمكن {name} عنده نسخة قديمة من وصل'**
+  /// **'مفيش رد… يمكن {name} عنده نسخة قديمة من جنبك'**
   String gameOldVersion(String name);
 
   /// No description provided for @gameSpectating.
@@ -4511,7 +4511,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideTitle.
   ///
   /// In ar, this message translates to:
-  /// **'دليل وصل'**
+  /// **'دليل جنبك'**
   String get guideTitle;
 
   /// No description provided for @guideSub.
@@ -4559,7 +4559,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideConnectIntro.
   ///
   /// In ar, this message translates to:
-  /// **'وصل مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:'**
+  /// **'جنبك مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:'**
   String get guideConnectIntro;
 
   /// No description provided for @guideWhat.
@@ -4607,7 +4607,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideBtHow.
   ///
   /// In ar, this message translates to:
-  /// **'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين وصل هيظهروا في \"القريبين\" لوحدهم.'**
+  /// **'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين جنبك هيظهروا في \"القريبين\" لوحدهم.'**
   String get guideBtHow;
 
   /// No description provided for @guideWifiWhat.
@@ -4631,7 +4631,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideWifiHow.
   ///
   /// In ar, this message translates to:
-  /// **'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في وصل.\nاللي على نفس الشبكة هيظهروا لوحدهم.'**
+  /// **'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في جنبك.\nاللي على نفس الشبكة هيظهروا لوحدهم.'**
   String get guideWifiHow;
 
   /// No description provided for @guideBothWhat.
@@ -4655,7 +4655,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideBothHow.
   ///
   /// In ar, this message translates to:
-  /// **'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nوصل هيوصّل الكل ببعض لوحده.'**
+  /// **'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nجنبك هيوصّل الكل ببعض لوحده.'**
   String get guideBothHow;
 
   /// No description provided for @guideMeshHops.
@@ -4691,13 +4691,13 @@ abstract class AppLocalizations {
   /// No description provided for @netTitle.
   ///
   /// In ar, this message translates to:
-  /// **'شبكة وصل'**
+  /// **'شبكة جنبك'**
   String get netTitle;
 
   /// No description provided for @netOpen.
   ///
   /// In ar, this message translates to:
-  /// **'افتح شبكة وصل'**
+  /// **'افتح شبكة جنبك'**
   String get netOpen;
 
   /// No description provided for @netOpenSub.
@@ -4721,7 +4721,7 @@ abstract class AppLocalizations {
   /// No description provided for @netHostingSub.
   ///
   /// In ar, this message translates to:
-  /// **'اللي جنبك وفاتحين وصل على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.'**
+  /// **'اللي جنبك وفاتحين جنبك على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.'**
   String get netHostingSub;
 
   /// No description provided for @netName.
@@ -4757,7 +4757,7 @@ abstract class AppLocalizations {
   /// No description provided for @netOfferTitle.
   ///
   /// In ar, this message translates to:
-  /// **'{name} فاتح شبكة وصل جنبك'**
+  /// **'{name} فاتح شبكة جنبك جنبك'**
   String netOfferTitle(String name);
 
   /// No description provided for @netOfferSub.
@@ -4853,43 +4853,43 @@ abstract class AppLocalizations {
   /// No description provided for @netLost.
   ///
   /// In ar, this message translates to:
-  /// **'شبكة وصل اللي كنت فيها وقفت'**
+  /// **'شبكة جنبك اللي كنت فيها وقفت'**
   String get netLost;
 
   /// No description provided for @netHostLost.
   ///
   /// In ar, this message translates to:
-  /// **'شبكة وصل بتاعتك اتقفلت'**
+  /// **'شبكة جنبك بتاعتك اتقفلت'**
   String get netHostLost;
 
   /// No description provided for @guideNetTitle.
   ///
   /// In ar, this message translates to:
-  /// **'شبكة وصل'**
+  /// **'شبكة جنبك'**
   String get guideNetTitle;
 
   /// No description provided for @guideNetWhat.
   ///
   /// In ar, this message translates to:
-  /// **'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.'**
+  /// **'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين جنبك بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.'**
   String get guideNetWhat;
 
   /// No description provided for @guideNetWhen.
   ///
   /// In ar, this message translates to:
-  /// **'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.'**
+  /// **'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فجنبك بيعمل واحد.'**
   String get guideNetWhen;
 
   /// No description provided for @guideNetFacts.
   ///
   /// In ar, this message translates to:
-  /// **'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.'**
+  /// **'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل جنبك.'**
   String get guideNetFacts;
 
   /// No description provided for @guideNetHow.
   ///
   /// In ar, this message translates to:
-  /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه وصل؟ دوس \"كود الشبكة\" وخليه يصوّره بالكاميرا.'**
+  /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة جنبك\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه جنبك؟ دوس \"كود الشبكة\" وخليه يصوّره بالكاميرا.'**
   String get guideNetHow;
 
   /// No description provided for @sosAsk.
@@ -4901,7 +4901,7 @@ abstract class AppLocalizations {
   /// No description provided for @sosAskSub.
   ///
   /// In ar, this message translates to:
-  /// **'ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.'**
+  /// **'ابعت استغاثة لكل اللي فاتحين جنبك حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.'**
   String get sosAskSub;
 
   /// No description provided for @sosOpen.
@@ -4931,7 +4931,7 @@ abstract class AppLocalizations {
   /// No description provided for @sosSheetBody.
   ///
   /// In ar, this message translates to:
-  /// **'كل اللي حواليك فاتحين وصل هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.'**
+  /// **'كل اللي حواليك فاتحين جنبك هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.'**
   String get sosSheetBody;
 
   /// No description provided for @sosActive.
@@ -4979,7 +4979,7 @@ abstract class AppLocalizations {
   /// No description provided for @sosUnverified.
   ///
   /// In ar, this message translates to:
-  /// **'الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.'**
+  /// **'الأسماء في جنبك مش موثّقة؛ اتأكد قبل ما تتحرك.'**
   String get sosUnverified;
 
   /// No description provided for @guideSosTitle.
@@ -4991,7 +4991,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideSosBody.
   ///
   /// In ar, this message translates to:
-  /// **'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.'**
+  /// **'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين جنبك في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.'**
   String get guideSosBody;
 
   /// No description provided for @statusQueued.
@@ -5039,7 +5039,7 @@ abstract class AppLocalizations {
   /// No description provided for @netSuggestSub.
   ///
   /// In ar, this message translates to:
-  /// **'افتح شبكة وصل والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.'**
+  /// **'افتح شبكة جنبك والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.'**
   String get netSuggestSub;
 
   /// No description provided for @netQr.
@@ -5057,7 +5057,7 @@ abstract class AppLocalizations {
   /// No description provided for @netQrSub.
   ///
   /// In ar, this message translates to:
-  /// **'لو موبايل حد مقدرش يدخل من جوه وصل (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح وصل على الواي فاي.'**
+  /// **'لو موبايل حد مقدرش يدخل من جوه جنبك (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح جنبك على الواي فاي.'**
   String get netQrSub;
 
   /// No description provided for @netOpenShort.
@@ -5069,19 +5069,19 @@ abstract class AppLocalizations {
   /// No description provided for @shareApp.
   ///
   /// In ar, this message translates to:
-  /// **'شارك وصل'**
+  /// **'شارك جنبك'**
   String get shareApp;
 
   /// No description provided for @shareAppSub.
   ///
   /// In ar, this message translates to:
-  /// **'لموبايل مفيهوش وصل — من غير إنترنت'**
+  /// **'لموبايل مفيهوش جنبك — من غير إنترنت'**
   String get shareAppSub;
 
   /// No description provided for @shareIntro.
   ///
   /// In ar, this message translates to:
-  /// **'صاحبك مفيهوش وصل؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.'**
+  /// **'صاحبك مفيهوش جنبك؟ اديهوله من موبايلك في خطوتين، من غير إنترنت.'**
   String get shareIntro;
 
   /// No description provided for @shareStep1.
@@ -5141,7 +5141,7 @@ abstract class AppLocalizations {
   /// No description provided for @shareSplit.
   ///
   /// In ar, this message translates to:
-  /// **'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل وصل من GitHub لما يبقى فيه نت.'**
+  /// **'النسخة دي متثبتة من متجر على أجزاء ومينفعش تتبعت من هنا. صاحبك يحمّل جنبك من GitHub لما يبقى فيه نت.'**
   String get shareSplit;
 
   /// No description provided for @shareFailed.
@@ -5159,13 +5159,13 @@ abstract class AppLocalizations {
   /// No description provided for @guideShareTitle.
   ///
   /// In ar, this message translates to:
-  /// **'شارك وصل مع حد مفيهوش'**
+  /// **'شارك جنبك مع حد مفيهوش'**
   String get guideShareTitle;
 
   /// No description provided for @guideShareBody.
   ///
   /// In ar, this message translates to:
-  /// **'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.'**
+  /// **'من الإعدادات ← \"شارك جنبك\": دوس \"افتح شبكة جنبك\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.'**
   String get guideShareBody;
 
   /// No description provided for @aboutPerson.
@@ -5243,7 +5243,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideIdentityBody.
   ///
   /// In ar, this message translates to:
-  /// **'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.'**
+  /// **'الأسامي في جنبك حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، جنبك بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.'**
   String get guideIdentityBody;
 
   /// No description provided for @mailFromAnyone.

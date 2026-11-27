@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/theme/app_theme.dart';
-import 'package:wasl/features/games/core/game_kind.dart';
-import 'package:wasl/features/games/core/game_room.dart';
-import 'package:wasl/features/games/engines/engines.dart';
-import 'package:wasl/features/games/ui/game_help.dart';
-import 'package:wasl/features/games/ui/game_screen.dart';
-import 'package:wasl/l10n/l10n.dart';
+import 'package:ganbak/core/theme/app_theme.dart';
+import 'package:ganbak/features/games/core/game_kind.dart';
+import 'package:ganbak/features/games/core/game_room.dart';
+import 'package:ganbak/features/games/engines/engines.dart';
+import 'package:ganbak/features/games/ui/game_help.dart';
+import 'package:ganbak/features/games/ui/game_screen.dart';
+import 'package:ganbak/l10n/l10n.dart';
 
 class _Link implements RoomLink {
   @override

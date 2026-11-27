@@ -9,6 +9,18 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 (ask first, even at the very end), and **check the design visually**
 (see "Screenshots" below) — the owner cares a lot that nothing looks broken.
 
+
+## The app is now **Ganbak (جنبك)** — renamed from Wasl (2026-11-27, owner's decision)
+
+- Name chosen with the owner after checking GitHub, the web and the stores (Shabakni / Hawalik / Washwasha / … were
+  taken or had bad associations). Store title: «جنبك: شات بلا نت» / «Ganbak: Offline Chat».
+- Package `com.adam.ganbak`, Dart package `ganbak`, Kotlin sources in `android/app/src/main/kotlin/com/adam/ganbak/`,
+  repo `AdamG00D/Ganbak`, site `https://adamg00d.github.io/Ganbak/`, APKs `Ganbak-<ver>-*.apk` + `Ganbak-android*.apk`.
+- **Kept on purpose** (so Ganbak still talks to Wasl 1.6): every protocol label (`wasl/...` HKDF / AAD strings), the
+  Nearby service id `com.adam.wasl.mesh`, the LAN beacon fields, method-channel names. Code comments still say وصل.
+- Local folders on disk are still `Wasl/Wasl_App` and `Wasl/Signing_Key` (not renamed, nothing depends on them).
+- Older entries below talk about "Wasl" — that's history.
+
 ## Current release: 1.6 — published 2026-11-27 (privacy, secret groups, invites, fair spy dealing)
 
 ### Previous: 1.5 — published 2026-11-27 (everything since 1.2: games, identity, guide, Wasl network, offline messages, SOS, Share Wasl, signed identity)

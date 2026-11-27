@@ -1,8 +1,8 @@
-name: wasl
+name: ganbak
 description: "Wasl — وَصْل: شات مشفّر من غير إنترنت (بلوتوث / واي فاي) مع جروبات وشبكة Mesh."
 publish_to: 'none'
 
-version: 1.6.0+7
+version: 2.0.0+8
 
 environment:
   sdk: ">=3.9.0 <4.0.0"

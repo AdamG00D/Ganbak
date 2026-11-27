@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/crypto/kdf.dart';
-import 'package:wasl/core/profile/profile.dart';
-import 'package:wasl/features/mailbox/mailbox.dart';
+import 'package:ganbak/core/crypto/kdf.dart';
+import 'package:ganbak/core/profile/profile.dart';
+import 'package:ganbak/features/mailbox/mailbox.dart';
 
 /// "الرسالة تستنى صاحبها": القفل والفتح والإيصال وحدود اللي شايلين الرسايل.
 void main() {

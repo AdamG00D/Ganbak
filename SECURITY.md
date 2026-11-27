@@ -8,7 +8,7 @@
 **Report a vulnerability**. Include what the problem is, how to reproduce it and its impact. We'll reply as soon as
 we can and, if you like, credit you in the release notes.
 
-## What Wasl protects against
+## What Ganbak protects against
 
 | Threat | Protection |
 |---|---|
@@ -26,7 +26,7 @@ we can and, if you like, credit you in the release notes.
 These are known and documented so nobody relies on something that isn't there:
 
 1. **Names are not unique.** Since 1.5 a name, avatar and everything else someone announces is signed with their key,
-   so nobody can change it on the way. But anyone can *choose* any name — there is no server to reserve names. Wasl
+   so nobody can change it on the way. But anyone can *choose* any name — there is no server to reserve names. Ganbak
    compares keys, not names: it shows a small fingerprint next to two people with the same name and warns ("Not
    them?") when someone shows the name of a person you talked to before with another key. The sure way is still to
    **compare safety codes** face to face.
@@ -43,7 +43,7 @@ These are known and documented so nobody relies on something that isn't there:
    other. Since 1.6 private chats and control messages travel with rotating secret tags instead of ids, sizes are
    padded, members of private groups are hidden (only owner and admins advertise a group), and offline messages carry
    no sender or recipient — so relays can't tell **who talks to whom**. What remains: the phone right next to you sees
-   that *your* phone sent something (not to whom), and timing; phones on 1.5 still use plain ids. Wasl is not a full
+   that *your* phone sent something (not to whom), and timing; phones on 1.5 still use plain ids. Ganbak is not a full
    anonymity tool.
 7. **Notifications** show the sender and text unless the app lock is enabled. The phone's lock screen only ever
    shows "new message". Enable the app lock if you don't want content in notifications.
@@ -79,16 +79,16 @@ Games have no server, so the phone that opens a game (the **room host**) is the 
 - Invites are rate-limited (one new room per person every 8 s, one running room per host) and reactions / game chat
   are throttled, so nobody can flood a chat with games.
 
-## Wasl network (hotspot)
+## Ganbak network (hotspot)
 
-When you start a **Wasl network**, your phone opens an Android Local-Only Hotspot (no internet) and puts its name
+When you start a **Ganbak network**, your phone opens an Android Local-Only Hotspot (no internet) and puts its name
 and password in the presence it broadcasts, so phones nearby can join it with one tap. That means **anyone in the
-mesh running Wasl can see that password and join that Wi-Fi network**. It only gives them a local link — the same
+mesh running Ganbak can see that password and join that Wi-Fi network**. It only gives them a local link — the same
 thing Bluetooth already gives them: private chats stay end-to-end encrypted and groups stay as described above. Turn
-the network off when you don't need it; it also closes when Wasl closes.
+the network off when you don't need it; it also closes when Ganbak closes.
 
 Joining one is always your choice (a tap, then Android's own prompt showing the network name). A nearby device could
-advertise a network of its own; joining it only moves Wasl's local traffic there — private chats stay end-to-end
+advertise a network of its own; joining it only moves Ganbak's local traffic there — private chats stay end-to-end
 encrypted — and the offer is shown only for phones directly next to you.
 
 ## Secret groups
@@ -107,13 +107,13 @@ accept such messages from people you've talked to before (Settings → Privacy).
 may drop messages, run out of room or never meet the recipient. "Delivered" appears only when a receipt sealed by the
 recipient comes back. Only text, and only to people whose key your phone already knows.
 
-## Sharing the app ("Share Wasl")
+## Sharing the app ("Share Ganbak")
 
-Settings → Share Wasl runs a tiny web server inside the app **only while that screen is open**. It answers two paths
+Settings → Share Ganbak runs a tiny web server inside the app **only while that screen is open**. It answers two paths
 (`/` — the download page, and `/wasl.apk` — the installed copy of the app) on the local network and nothing else;
 at most 4 downloads at a time. The page is plain HTTP (there's no internet to get a certificate), so someone on the
 same Wi-Fi could in theory tamper with the download: the page and the sender's screen show the file's SHA-256
-fingerprint to compare, and Android refuses to install a modified copy over a genuine Wasl (different signature).
+fingerprint to compare, and Android refuses to install a modified copy over a genuine Ganbak (different signature).
 
 ## Cryptography
 

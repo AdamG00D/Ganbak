@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # بناء نسخة Release موقّعة ومشوّشة وتنظيمها في مجلد Releases (جوه المشروع، برا Git):
 #   Releases/<X.Y>v/
-#     Wasl-<X.Y>-arm64-v8a.apk     أغلب الموبايلات
-#     Wasl-<X.Y>-armeabi-v7a.apk   الموبايلات القديمة
-#     Wasl-<X.Y>-x86_64.apk        المحاكي / Chromebook
-#     Wasl-<X.Y>-universal.apk     أي موبايل (أكبر)
+#     Ganbak-<X.Y>-arm64-v8a.apk     أغلب الموبايلات
+#     Ganbak-<X.Y>-armeabi-v7a.apk   الموبايلات القديمة
+#     Ganbak-<X.Y>-x86_64.apk        المحاكي / Chromebook
+#     Ganbak-<X.Y>-universal.apk     أي موبايل (أكبر)
 #     SHA256SUMS.txt + Release_Notes.txt
-#   Wasl-android.apk / Wasl-android-universal.apk  ← نفس arm64 / الشاملة بأسامي ثابتة (لزرار التحميل في الموقع)
-#   Releases/Wasl.apk  ← آخر إصدار (النسخة الشاملة)
+#   Ganbak-android.apk / Ganbak-android-universal.apk  ← نفس arm64 / الشاملة بأسامي ثابتة (لزرار التحميل في الموقع)
+#   Releases/Ganbak.apk  ← آخر إصدار (النسخة الشاملة)
 #
 # كل النسخ بنفس رقم الإصدار الداخلي (versionCode): اللي سطّب نسخة يقدر يحدّث بأي نسخة تانية.
 set -euo pipefail
@@ -44,24 +44,24 @@ COMMON=(--release --obfuscate --split-debug-info="$SYMBOLS" -P force-version-cod
 APKS=build/app/outputs/flutter-apk
 OUT="Releases/${VERSION}v"
 mkdir -p "$OUT"
-rm -f "$OUT"/Wasl-*.apk "$OUT"/SHA256SUMS.txt
+rm -f "$OUT"/Ganbak-*.apk "$OUT"/SHA256SUMS.txt
 
 # 1) النسخة الشاملة
 flutter build apk "${COMMON[@]}"
-cp "$APKS/app-release.apk" "$OUT/Wasl-${VERSION}-universal.apk"
+cp "$APKS/app-release.apk" "$OUT/Ganbak-${VERSION}-universal.apk"
 
 # 2) نسخة لكل نوع معالج
 flutter build apk "${COMMON[@]}" --split-per-abi
 for ABI in arm64-v8a armeabi-v7a x86_64; do
-  cp "$APKS/app-${ABI}-release.apk" "$OUT/Wasl-${VERSION}-${ABI}.apk"
+  cp "$APKS/app-${ABI}-release.apk" "$OUT/Ganbak-${VERSION}-${ABI}.apk"
 done
 
 # نسخ بأسامي ثابتة: زرار التحميل في الموقع بيشاور على releases/latest/download/<الاسم> فبيجيب آخر إصدار على طول
-cp "$OUT/Wasl-${VERSION}-arm64-v8a.apk" "$OUT/Wasl-android.apk"
-cp "$OUT/Wasl-${VERSION}-universal.apk" "$OUT/Wasl-android-universal.apk"
+cp "$OUT/Ganbak-${VERSION}-arm64-v8a.apk" "$OUT/Ganbak-android.apk"
+cp "$OUT/Ganbak-${VERSION}-universal.apk" "$OUT/Ganbak-android-universal.apk"
 
 cp "$NOTES" "$OUT/Release_Notes.txt"
-(cd "$OUT" && sha256sum Wasl-*.apk > SHA256SUMS.txt)
+(cd "$OUT" && sha256sum Ganbak-*.apk > SHA256SUMS.txt)
 
 # ملاحظات GitHub: الإنجليزي فوق والعربي تحته
 {
@@ -70,14 +70,14 @@ cp "$NOTES" "$OUT/Release_Notes.txt"
   sed -e 's/^=\+$//' -e 's/^-\+$//' "$NOTES"
   printf '\n</div>\n'
 } > "$OUT/github_release.md"
-cp "$OUT/Wasl-${VERSION}-universal.apk" Releases/Wasl.apk
+cp "$OUT/Ganbak-${VERSION}-universal.apk" Releases/Ganbak.apk
 
 # نقفل Gradle عشان ميفضلش ماسك ~2 جيجا رام
 (cd android && ./gradlew --stop >/dev/null 2>&1) || true
 
 echo
 echo "✅ الإصدار ${VERSION}v جاهز في $(realpath "$OUT"):"
-(cd "$OUT" && ls -lh Wasl-*.apk | awk '{print "   " $5 "\t" $9}')
+(cd "$OUT" && ls -lh Ganbak-*.apk | awk '{print "   " $5 "\t" $9}')
 echo
 echo "النشر على GitHub (بعد ما تعمل تاج v${VERSION} وتعمل له push):"
-echo "   gh release create v${VERSION} $OUT/Wasl-*.apk $OUT/SHA256SUMS.txt --title \"Wasl ${VERSION}\" --notes-file $OUT/github_release.md"
+echo "   gh release create v${VERSION} $OUT/Ganbak-*.apk $OUT/SHA256SUMS.txt --title \"Ganbak ${VERSION}\" --notes-file $OUT/github_release.md"

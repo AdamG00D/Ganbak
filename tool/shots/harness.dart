@@ -6,10 +6,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/nav.dart';
-import 'package:wasl/core/settings/app_settings.dart';
-import 'package:wasl/core/theme/app_theme.dart';
-import 'package:wasl/l10n/l10n.dart';
+import 'package:ganbak/core/nav.dart';
+import 'package:ganbak/core/settings/app_settings.dart';
+import 'package:ganbak/core/theme/app_theme.dart';
+import 'package:ganbak/l10n/l10n.dart';
 
 /// أداة صور الشاشات: بترسم الشاشات الحقيقية بالخط الحقيقي وبتحفظها PNG في build/shots
 /// عشان نراجع التصميم بالعين (عربي/إنجليزي، فاتح/غامق) من غير موبايل.

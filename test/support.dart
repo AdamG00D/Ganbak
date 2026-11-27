@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:wasl/mesh/mesh_link.dart';
+import 'package:ganbak/mesh/mesh_link.dart';
 
 /// شبكة وهمية في الذاكرة: بنوصّل الأجهزة ببعض زي ما نحب (خط، نجمة...).
 class MemoryNet {

@@ -1,4 +1,4 @@
-package com.adam.wasl
+package com.adam.ganbak
 
 import android.content.Context
 import android.net.ConnectivityManager

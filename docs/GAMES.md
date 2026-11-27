@@ -1,4 +1,4 @@
-# Wasl games
+# Ganbak games
 
 Nine games played inside chats, with no server: the phone that opens a game (the **room host**) is the referee.
 This page covers the rules as implemented, the architecture and how to add a game. The wire format is in

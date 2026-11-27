@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:wasl/core/profile/profile.dart';
-import 'package:wasl/features/chat/core/chat_session.dart';
-import 'package:wasl/features/groups/group.dart';
-import 'package:wasl/features/groups/group_session.dart';
-import 'package:wasl/features/hub/chat_hub.dart';
-import 'package:wasl/mesh/mesh_router.dart';
-import 'package:wasl/mesh/peer_link.dart';
+import 'package:ganbak/core/profile/profile.dart';
+import 'package:ganbak/features/chat/core/chat_session.dart';
+import 'package:ganbak/features/groups/group.dart';
+import 'package:ganbak/features/groups/group_session.dart';
+import 'package:ganbak/features/hub/chat_hub.dart';
+import 'package:ganbak/mesh/mesh_router.dart';
+import 'package:ganbak/mesh/peer_link.dart';
 
 import '../../test/support.dart';
 

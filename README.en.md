@@ -1,21 +1,21 @@
 [العربية](README.md) | **English**
 
 <p align="center">
-  <img src="docs/images/banner.en.png" alt="Wasl — encrypted chat with no internet and no server" width="100%">
+  <img src="docs/images/banner.en.png" alt="Ganbak — encrypted chat with no internet and no server" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://github.com/AdamG00D/Wasl/actions/workflows/ci.yml"><img src="https://github.com/AdamG00D/Wasl/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/AdamG00D/Ganbak/actions/workflows/ci.yml"><img src="https://github.com/AdamG00D/Ganbak/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="GPL-3.0"></a>
   <img src="https://img.shields.io/badge/Android-7%2B-3DDC84?logo=android&logoColor=white" alt="Android 7+">
   <img src="https://img.shields.io/badge/Flutter-stable-02569B?logo=flutter&logoColor=white" alt="Flutter">
 </p>
 
-# Wasl — وَصْل
+# Ganbak — جنبك
 
-🌐 **Website:** [adamg00d.github.io/Wasl](https://adamg00d.github.io/Wasl/en/)
+🌐 **Website:** [adamg00d.github.io/Ganbak](https://adamg00d.github.io/Ganbak/en/)
 
-**Wasl** ("connection" in Arabic) is a chat app for Android that works **with no internet and no server**. Phones
+**Ganbak** ("connection" in Arabic) is a chat app for Android that works **with no internet and no server**. Phones
 nearby talk directly over **Bluetooth** or the same **Wi-Fi / hotspot**, and relay messages for each other as a
 **mesh**, so a message can reach someone well beyond your own phone's range. Private chats are end-to-end encrypted
 automatically — no accounts, no phone numbers, no passwords.
@@ -37,7 +37,7 @@ the phone's language, and you can switch it in Settings.
     <td align="center"><img src="docs/images/screenshots/en/games.png" width="200" alt="Games"><br><sub>Games inside chats 🎮</sub></td>
     <td align="center"><img src="docs/images/screenshots/en/game-connect4.png" width="200" alt="Four in a row"><br><sub>Four in a row with a friend</sub></td>
     <td align="center"><img src="docs/images/screenshots/en/game-mafia.png" width="200" alt="Mafia"><br><sub>Mafia with a group</sub></td>
-    <td align="center"><img src="docs/images/screenshots/en/guide.png" width="200" alt="Wasl guide"><br><sub>Wasl guide: connecting, drawn</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/guide.png" width="200" alt="Ganbak guide"><br><sub>Ganbak guide: connecting, drawn</sub></td>
   </tr>
 </table>
 
@@ -59,17 +59,17 @@ the phone's language, and you can switch it in Settings.
 - **No internet, no server, no account** — a name and an avatar; your identity is a key generated on your phone.
 - **Three ways to connect** — Bluetooth (no network at all), Wi-Fi / hotspot (faster, with video and calls), or
   **both at once**, which turns your phone into a bridge between a Wi-Fi network and people on Bluetooth.
-- **Wasl network** — no router? Your phone makes its own Wi-Fi network and people next to you join with one tap, no
+- **Ganbak network** — no router? Your phone makes its own Wi-Fi network and people next to you join with one tap, no
   password typing. Networks link up over Bluetooth, so the network grows with no router at all.
 - **Mesh** — messages hop through other phones (up to 6 hops); relays can't read private chats, and since 1.6 they can't
   tell who talks to whom either (rotating secret tags, fixed message sizes, hidden members in private groups).
 - **Messages wait for their owner** — text for someone who isn't around is sealed for them and carried by phones
   nearby until they show up (up to 48 hours); carriers can't read it.
-- **SOS** — ask everyone running Wasl in the mesh for help with one tap.
-- **Share Wasl** — give the app to a phone that doesn't have it, with no internet: two QR codes (join my network,
+- **SOS** — ask everyone running Ganbak in the mesh for help with one tap.
+- **Share Ganbak** — give the app to a phone that doesn't have it, with no internet: two QR codes (join my network,
   then download from my phone).
 - **Private chats** — end-to-end encrypted automatically, with an optional safety code to verify each other.
-- **Nobody can speak for you** — names and group messages are signed; everyone has a key fingerprint, and Wasl warns
+- **Nobody can speak for you** — names and group messages are signed; everyone has a key fingerprint, and Ganbak warns
   you ("Not them?") when someone shows up with the name of a person you know but another key.
 - **Groups** — open, password-protected, join-by-request or **secret** (invite-only, invisible), with an owner and admins
   who can remove members and delete messages, and invites with one tap.
@@ -78,26 +78,26 @@ the phone's language, and you can switch it in Settings.
 - **Games inside chats** 🎮 — tic-tac-toe, four in a row, battleships, rock paper scissors, dots and boxes and memory
   with a friend; who's the spy?, quiz and mafia with a group. Every game has a help page (the ? button), and nobody
   can cheat at rock paper scissors or battleships.
-- **Wasl guide** in the app — every way to connect explained with drawings, plus groups, games and safety.
+- **Ganbak guide** in the app — every way to connect explained with drawings, plus groups, games and safety.
 - **Notifications** like a regular chat app, with quick reply; per-chat mute and pin.
 - **Private by default** — chats are kept in memory only unless you choose to save them; saved chats are encrypted
   with a key held in Android Keystore. Optional PIN / fingerprint lock. No analytics, no ads, no network calls.
 
 ## Download
 
-Get the APK from the [latest release](https://github.com/AdamG00D/Wasl/releases/latest) (Android 7.0+):
+Get the APK from the [latest release](https://github.com/AdamG00D/Ganbak/releases/latest) (Android 7.0+):
 
 | File | For |
 |---|---|
-| `Wasl-<version>-arm64-v8a.apk` | **Most phones** (2017 and newer) — pick this if unsure |
-| `Wasl-<version>-armeabi-v7a.apk` | Older or low-end phones |
-| `Wasl-<version>-x86_64.apk` | Emulators and Chromebooks |
-| `Wasl-<version>-universal.apk` | Any device (larger download) |
+| `Ganbak-<version>-arm64-v8a.apk` | **Most phones** (2017 and newer) — pick this if unsure |
+| `Ganbak-<version>-armeabi-v7a.apk` | Older or low-end phones |
+| `Ganbak-<version>-x86_64.apk` | Emulators and Chromebooks |
+| `Ganbak-<version>-universal.apk` | Any device (larger download) |
 
 All variants share one version code, so you can switch between them when updating. Check downloads with
 `sha256sum -c SHA256SUMS.txt`.
 
-> Wasl is not on F-Droid: Bluetooth mode uses Google Nearby Connections, which is part of Google Play Services.
+> Ganbak is not on F-Droid: Bluetooth mode uses Google Nearby Connections, which is part of Google Play Services.
 
 ## How it works
 
@@ -148,9 +148,9 @@ hotspot), or two phones with Bluetooth next to each other.
 
 ## License
 
-Wasl is free software under the **GNU General Public License v3.0 or later** — see [LICENSE](LICENSE).
+Ganbak is free software under the **GNU General Public License v3.0 or later** — see [LICENSE](LICENSE).
 
-Copyright © 2026 Adam Ghanem and Wasl contributors.
+Copyright © 2026 Adam Ghanem and Ganbak contributors.
 
 Additional permission under GPLv3 section 7: you may link this program with the Google Play Services libraries
 (which include Nearby Connections) and distribute the result without those libraries becoming subject to this

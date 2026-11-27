@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wasl/core/crypto/box.dart';
-import 'package:wasl/core/crypto/kdf.dart';
-import 'package:wasl/core/profile/profile.dart';
-import 'package:wasl/features/chat/core/chat_session.dart';
-import 'package:wasl/features/groups/group.dart';
-import 'package:wasl/features/groups/group_session.dart';
-import 'package:wasl/mesh/mesh_router.dart';
+import 'package:ganbak/core/crypto/box.dart';
+import 'package:ganbak/core/crypto/kdf.dart';
+import 'package:ganbak/core/profile/profile.dart';
+import 'package:ganbak/features/chat/core/chat_session.dart';
+import 'package:ganbak/features/groups/group.dart';
+import 'package:ganbak/features/groups/group_session.dart';
+import 'package:ganbak/mesh/mesh_router.dart';
 
 import 'support.dart';
 
