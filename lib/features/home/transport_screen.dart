@@ -5,6 +5,7 @@ import '../../core/theme/app_theme.dart';
 import '../../l10n/l10n.dart';
 import '../../widgets/identity.dart';
 import '../../widgets/ui.dart';
+import '../guide/guide_screen.dart';
 import '../hub/chat_hub.dart';
 import '../settings/settings_screen.dart';
 import 'home_screen.dart';
@@ -61,9 +62,24 @@ class TransportScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 40),
-                Text(
-                  l.transportHeadline,
-                  style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w700, height: 1.3),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l.transportHeadline,
+                        style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w700, height: 1.3),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: HelpButton(
+                        size: 40,
+                        label: l.guideHelp,
+                        onPressed: () => GuideScreen.open(context, section: GuideSection.connect),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 8),
                 Text(

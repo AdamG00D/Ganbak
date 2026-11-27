@@ -171,12 +171,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noBrowser => 'مفيش متصفح يفتح اللينك — اتنسخ بداله';
 
   @override
-  String get howItWorks => 'إزاي Wasl بيشتغل؟';
-
-  @override
-  String get howItWorksSub => 'من غير إنترنت ومن غير سيرفر';
-
-  @override
   String get howNoInternetTitle => 'من غير إنترنت ولا سيرفر';
 
   @override
@@ -2550,4 +2544,109 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get spyYourCard => 'كلمتك';
+
+  @override
+  String get guideTitle => 'دليل وصل';
+
+  @override
+  String get guideSub => 'الاتصال، الجروبات، الألعاب والأمان';
+
+  @override
+  String get guideHelp => 'شرح طرق الاتصال';
+
+  @override
+  String get guideJumpConnect => 'الاتصال';
+
+  @override
+  String get guideJumpGroups => 'الجروبات';
+
+  @override
+  String get guideJumpGames => 'الألعاب';
+
+  @override
+  String get guideJumpSafety => 'الأمان';
+
+  @override
+  String get guideConnectTitle => 'طرق الاتصال';
+
+  @override
+  String get guideConnectIntro =>
+      'وصل مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:';
+
+  @override
+  String get guideWhat => 'إيه هو';
+
+  @override
+  String get guideWhen => 'إمتى تستخدمه';
+
+  @override
+  String get guideFacts => 'تعرف إيه';
+
+  @override
+  String get guideHow => 'تبدأ إزاي';
+
+  @override
+  String get guideBtWhat =>
+      'الموبايلات بتكلم بعض بالبلوتوث مباشرة، من غير أي شبكة خالص.';
+
+  @override
+  String get guideBtWhen =>
+      'لما مفيش واي فاي ولا هوت سبوت: في الشارع، في رحلة، أو لما الشبكة واقعة.';
+
+  @override
+  String get guideBtFacts =>
+      'المدى حوالي 10 لـ 30 متر بين كل موبايلين.\nكل موبايل بيتوصل بحوالي 5، والرسالة بتنط من موبايل للتاني لحد 6 مرات، فبتوصل لأبعد بكتير.\nرسايل وصور وملفات وفويس. الفيديو والمكالمات لأ (البلوتوث بطيء عليهم).';
+
+  @override
+  String get guideBtHow =>
+      'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين وصل هيظهروا في \"القريبين\" لوحدهم.';
+
+  @override
+  String get guideWifiWhat =>
+      'الموبايلات على نفس الواي فاي، أو واحد فاتح هوت سبوت والباقيين داخلين عليه. الشبكة دي مش لازم يكون فيها إنترنت.';
+
+  @override
+  String get guideWifiWhen =>
+      'لما تكونوا في نفس البيت أو القاعة أو الكافيه، أو لما حد يقدر يفتح هوت سبوت.';
+
+  @override
+  String get guideWifiFacts =>
+      'أسرع بكتير من البلوتوث، وفيه فيديو ومكالمات صوت وصورة.\nالهوت سبوت بيشيل عادةً من 5 لـ 10 موبايلات.\nبعض الراوترات العامة بتمنع الأجهزة تكلم بعض؛ ساعتها استخدم هوت سبوت.';
+
+  @override
+  String get guideWifiHow =>
+      'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في وصل.\nاللي على نفس الشبكة هيظهروا لوحدهم.';
+
+  @override
+  String get guideBothWhat =>
+      'البلوتوث والواي فاي مع بعض: موبايلك بيبقى كوبري بين اللي على الواي فاي واللي على البلوتوث.';
+
+  @override
+  String get guideBothWhen =>
+      'لما الناس متفرقين: شوية على هوت سبوت، وشوية بعيد مفيش معاهم غير البلوتوث. أو عشان توصّل هوت سبوتين ببعض.';
+
+  @override
+  String get guideBothFacts =>
+      'الشبكة بتكبر: كل موبايل على \"الاتنين\" بيربط الشبكتين ببعض.\nالمكالمات والفيديو بيفضلوا جوه نفس الواي فاي.\nبيصرف بطارية أكتر شوية.';
+
+  @override
+  String get guideBothHow =>
+      'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nوصل هيوصّل الكل ببعض لوحده.';
+
+  @override
+  String get guideMeshHops =>
+      'الرسالة بتعدّي على 6 موبايلات بالكتير، والموبايلات اللي في النص بتوصّل بس ومبتقدرش تقرا الشات الخاص.';
+
+  @override
+  String get guideGroupsTitle => 'الجروبات';
+
+  @override
+  String get guideGamesTitle => 'الألعاب';
+
+  @override
+  String get guideGamesBody =>
+      'في أي شات دوس 🎮 واختار لعبة. في الخاص صاحبك بيوافق واللعبة تبدأ، وفي الجروب اللي عايز يلعب يدوس \"انضم\" واللي فتح اللعبة يدوس \"ابدأ\". دوس على أي لعبة تحت عشان تعرف بتتلعب إزاي.';
+
+  @override
+  String get guideSafetyTitle => 'الأمان والخصوصية';
 }

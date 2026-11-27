@@ -95,11 +95,13 @@ void main() {
       // الافتراضي: الحفظ مقفول والقفل مقفول
       expect(AppSettings.instance.saveChats, isFalse);
       expect(AppSettings.instance.lockEnabled, isFalse);
-      await tester.scrollUntilVisible(find.text('إزاي Wasl بيشتغل؟'), 200, scrollable: find.byType(Scrollable).first);
-      await tester.ensureVisible(find.text('إزاي Wasl بيشتغل؟'));
+      await tester.scrollUntilVisible(find.text('دليل وصل'), 200, scrollable: find.byType(Scrollable).first);
+      await tester.ensureVisible(find.text('دليل وصل'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('إزاي Wasl بيشتغل؟'));
+      await tester.tap(find.text('دليل وصل'));
       await tester.pumpAndSettle();
+      expect(find.text('طرق الاتصال'), findsOneWidget);
+      await tester.scrollUntilVisible(find.text('شبكة Mesh'), 300, scrollable: find.byType(Scrollable).first);
       expect(find.text('شبكة Mesh'), findsOneWidget);
     });
   }

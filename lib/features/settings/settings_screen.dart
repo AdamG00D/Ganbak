@@ -12,6 +12,7 @@ import '../../core/theme/app_theme.dart';
 import '../../l10n/l10n.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/ui.dart';
+import '../guide/guide_screen.dart';
 import '../hub/chat_hub.dart';
 import '../lock/app_lock.dart';
 import '../onboarding/profile_editor.dart';
@@ -340,11 +341,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     Divider(indent: 68, color: p.border),
                     SettingTile(
-                      icon: Icons.hub_outlined,
-                      title: l.howItWorks,
-                      subtitle: l.howItWorksSub,
+                      icon: Icons.menu_book_rounded,
+                      title: l.guideTitle,
+                      subtitle: l.guideSub,
                       trailing: Icon(Icons.chevron_right_rounded, color: p.textMuted),
-                      onTap: () => _showHow(context),
+                      onTap: () => GuideScreen.open(context),
                     ),
                   ],
                 ),
@@ -417,57 +418,6 @@ class _AboutHeader extends StatelessWidget {
       ),
     );
   }
-}
-
-void _showHow(BuildContext context) {
-  final p = context.palette;
-  final l = context.l10n;
-  Widget item(IconData icon, String title, String body) => Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconBadge(icon: icon, size: 40),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-                  const SizedBox(height: 2),
-                  Text(body, style: TextStyle(color: p.textMuted, height: 1.65, fontSize: 13.5)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-  showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    builder: (ctx) => SafeArea(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(ctx).height * 0.82),
-        child: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-          children: [
-            Text(l.howItWorks, style: const TextStyle(fontSize: 21, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 18),
-            item(Icons.cloud_off_rounded, l.howNoInternetTitle, l.howNoInternetBody),
-            item(Icons.hub_rounded, l.howMeshTitle, l.howMeshBody),
-            item(Icons.lock_rounded, l.howEncryptionTitle, l.howEncryptionBody),
-            item(Icons.swap_horiz_rounded, l.howBothTitle, l.howBothBody),
-            item(Icons.groups_rounded, l.howGroupsTitle, l.howGroupsBody),
-            item(Icons.admin_panel_settings_outlined, l.howAdminTitle, l.howAdminBody),
-            item(Icons.notifications_none_rounded, l.howNotifTitle, l.howNotifBody),
-            item(Icons.bookmark_outline_rounded, l.howSaveTitle, l.howSaveBody),
-            item(Icons.verified_user_outlined, l.howSafetyTitle, l.howSafetyBody),
-          ],
-        ),
-      ),
-    ),
-  );
 }
 
 /// نافذة تحديد رقم سري جديد (مرتين) أو التأكد من الحالي.

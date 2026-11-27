@@ -18,6 +18,7 @@ import 'package:wasl/features/games/core/game_room.dart';
 import 'package:wasl/features/games/ui/game_help.dart';
 import 'package:wasl/features/games/ui/game_picker.dart';
 import 'package:wasl/features/games/ui/game_screen.dart';
+import 'package:wasl/features/guide/guide_screen.dart';
 import 'package:wasl/features/settings/settings_screen.dart';
 
 import 'harness.dart';
@@ -41,6 +42,16 @@ void main() {
   testWidgets('core transport', (tester) async {
     Shots.phone(tester);
     await Shots.shoot(tester, 'transport', () => const TransportScreen());
+  });
+
+  testWidgets('core guide', (tester) async {
+    Shots.phone(tester);
+    await Shots.shoot(tester, 'guide', () => const GuideScreen());
+    await Shots.shoot(tester, 'guide-wifi', () => const GuideScreen(), then: (t) async {
+      await t.drag(find.byType(Scrollable).first, const Offset(0, -900));
+      await t.pump(const Duration(milliseconds: 300));
+    });
+    await Shots.shoot(tester, 'guide-games', () => const GuideScreen(section: GuideSection.games), settle: const Duration(milliseconds: 900));
   });
 
   testWidgets('core settings', (tester) async {

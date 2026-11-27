@@ -360,10 +360,13 @@ class _CelebrationState extends State<_Celebration> with SingleTickerProviderSta
 
 /// زرار "؟" (أو "?" بالإنجليزي) بيفتح صفحة شرح.
 class HelpButton extends StatelessWidget {
-  const HelpButton({super.key, required this.onPressed, this.size = 36, this.onDark = false});
+  const HelpButton({super.key, required this.onPressed, this.size = 36, this.onDark = false, this.label});
 
   final VoidCallback onPressed;
   final double size;
+
+  /// وصف الزرار (الافتراضي "إزاي بتتلعب؟").
+  final String? label;
 
   /// فوق خلفية غامقة (كروت الألعاب).
   final bool onDark;
@@ -373,11 +376,12 @@ class HelpButton extends StatelessWidget {
     final p = context.palette;
     final bg = onDark ? Colors.white.withValues(alpha: 0.18) : (p.isDark ? p.surfaceAlt : p.ink);
     final fg = onDark ? Colors.white : p.saffron;
+    final text = label ?? context.l10n.howToPlay;
     return Semantics(
       button: true,
-      label: context.l10n.howToPlay,
+      label: text,
       child: Tooltip(
-        message: context.l10n.howToPlay,
+        message: text,
         child: Material(
           color: bg,
           shape: const CircleBorder(),

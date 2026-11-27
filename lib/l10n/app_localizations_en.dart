@@ -171,12 +171,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noBrowser => 'No browser to open the link — copied it instead';
 
   @override
-  String get howItWorks => 'How does Wasl work?';
-
-  @override
-  String get howItWorksSub => 'No internet and no server';
-
-  @override
   String get howNoInternetTitle => 'No internet, no server';
 
   @override
@@ -2576,4 +2570,109 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get spyYourCard => 'Your word';
+
+  @override
+  String get guideTitle => 'Wasl guide';
+
+  @override
+  String get guideSub => 'Connecting, groups, games and safety';
+
+  @override
+  String get guideHelp => 'How connecting works';
+
+  @override
+  String get guideJumpConnect => 'Connecting';
+
+  @override
+  String get guideJumpGroups => 'Groups';
+
+  @override
+  String get guideJumpGames => 'Games';
+
+  @override
+  String get guideJumpSafety => 'Safety';
+
+  @override
+  String get guideConnectTitle => 'Ways to connect';
+
+  @override
+  String get guideConnectIntro =>
+      'Wasl needs no internet, no SIM and no account. Pick a way to connect that suits where you are:';
+
+  @override
+  String get guideWhat => 'What it is';
+
+  @override
+  String get guideWhen => 'When to use it';
+
+  @override
+  String get guideFacts => 'Good to know';
+
+  @override
+  String get guideHow => 'How to start';
+
+  @override
+  String get guideBtWhat =>
+      'Phones talk to each other directly over Bluetooth, with no network at all.';
+
+  @override
+  String get guideBtWhen =>
+      'When there is no Wi-Fi and no hotspot: outdoors, on a trip, or when the network is down.';
+
+  @override
+  String get guideBtFacts =>
+      'Range is about 10–30 m between two phones.\nEach phone links to about 5 others, and a message can hop up to 6 times, so it reaches much further.\nMessages, photos, files and voice notes. No video or calls (Bluetooth is too slow for them).';
+
+  @override
+  String get guideBtHow =>
+      'Tap \"Bluetooth\" on the first screen.\nAllow the permissions (Bluetooth and nearby devices).\nPeople around you with Wasl open show up under \"Nearby\" by themselves.';
+
+  @override
+  String get guideWifiWhat =>
+      'Phones on the same Wi-Fi, or one phone runs a hotspot and the others join it. The network does not need internet.';
+
+  @override
+  String get guideWifiWhen =>
+      'When you share a home, hall or café, or when someone can turn on a hotspot.';
+
+  @override
+  String get guideWifiFacts =>
+      'Much faster than Bluetooth, with video and voice / video calls.\nA hotspot usually takes 5 to 10 phones.\nSome public routers stop devices talking to each other; use a hotspot then.';
+
+  @override
+  String get guideWifiHow =>
+      'Join a Wi-Fi network, or turn on a hotspot in your phone\'s settings and have your friends join it.\nTap \"Wi-Fi\" in Wasl.\nEveryone on the same network shows up by themselves.';
+
+  @override
+  String get guideBothWhat =>
+      'Bluetooth and Wi-Fi together: your phone becomes a bridge between people on Wi-Fi and people on Bluetooth.';
+
+  @override
+  String get guideBothWhen =>
+      'When people are spread out: some on a hotspot, some further away with only Bluetooth. Or to join two hotspots together.';
+
+  @override
+  String get guideBothFacts =>
+      'The network grows: every phone on \"Both\" joins the two networks together.\nCalls and video stay inside one Wi-Fi network.\nIt uses a bit more battery.';
+
+  @override
+  String get guideBothHow =>
+      'Join a Wi-Fi network or hotspot.\nTap \"Both\".\nWasl links everyone together by itself.';
+
+  @override
+  String get guideMeshHops =>
+      'A message crosses at most 6 phones, and phones in between only pass it on; they can\'t read private chats.';
+
+  @override
+  String get guideGroupsTitle => 'Groups';
+
+  @override
+  String get guideGamesTitle => 'Games';
+
+  @override
+  String get guideGamesBody =>
+      'In any chat tap 🎮 and pick a game. In a private chat your friend accepts and it starts; in a group, whoever wants to play taps \"Join\" and whoever opened it taps \"Start\". Tap any game below to see how it\'s played.';
+
+  @override
+  String get guideSafetyTitle => 'Safety and privacy';
 }

@@ -18,7 +18,7 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 | 3 | Game framework: invites, wire protocol, room host, picker sheet, game screen shell, help pages | done |
 | 4 | Two-player games: tic-tac-toe, connect four, battleship, rock-paper-scissors, dots & boxes, memory | done (dice/coin dropped for now) |
 | 5 | Group games: memory & dots (group), spy (مين الجاسوس), quiz, mafia | done |
-| 6 | "Wasl guide" (دليل وصل) in settings + "؟" on the transport screen | todo |
+| 6 | "Wasl guide" (دليل وصل) in settings + "؟" on the transport screen | done (`lib/features/guide/`) |
 | 7 | Docs (GAMES.md, DESIGN.md, PROTOCOL.md, SECURITY, READMEs, AGENTS.md), version 1.3, release notes | todo |
 | 8 | Full check: analyze, tests, screenshots of every screen reviewed, release build | todo |
 
@@ -87,3 +87,5 @@ RTL and LTR, light and dark, long names, small phones. It is not part of `flutte
 - 2026-11-27 — steps 3–5 (games) done: 9 games, picker, cards, help pages; screenshots reviewed (fixed: mirrored
   boards in Arabic, clipped grids, bidi of "{name}'s", narrow input field). Next: step 6 (Wasl guide in settings +
   `؟` on the transport screen), then step 7 (docs, version 1.3).
+- 2026-11-27 — step 6 done: the old "how Wasl works" sheet became a full guide page (connection methods with
+  drawings, mesh, groups, games linking to each help page, safety). Next: step 7 (docs + version 1.3).

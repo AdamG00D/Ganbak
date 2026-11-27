@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""نصوص الألعاب (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
+"""نصوص الألعاب ودليل وصل (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
 
     python3 tool/l10n_games.py && flutter gen-l10n
 
@@ -235,6 +235,37 @@ S = {
     'mafiaAlive': ('عايشين {n}', '{n} alive'),
     'mafiaVotedCount': ('صوّت {n} من {m}', '{n} of {m} voted'),
     'mafiaNoSameTwice': ('مينفعش تحمي نفس الشخص ليلتين ورا بعض', "You can't protect the same person two nights running"),
+    # ---------------- دليل وصل ----------------
+    'guideTitle': ('دليل وصل', 'Wasl guide'),
+    'guideSub': ('الاتصال، الجروبات، الألعاب والأمان', 'Connecting, groups, games and safety'),
+    'guideHelp': ('شرح طرق الاتصال', 'How connecting works'),
+    'guideJumpConnect': ('الاتصال', 'Connecting'),
+    'guideJumpGroups': ('الجروبات', 'Groups'),
+    'guideJumpGames': ('الألعاب', 'Games'),
+    'guideJumpSafety': ('الأمان', 'Safety'),
+    'guideConnectTitle': ('طرق الاتصال', 'Ways to connect'),
+    'guideConnectIntro': ('وصل مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:', 'Wasl needs no internet, no SIM and no account. Pick a way to connect that suits where you are:'),
+    'guideWhat': ('إيه هو', 'What it is'),
+    'guideWhen': ('إمتى تستخدمه', 'When to use it'),
+    'guideFacts': ('تعرف إيه', 'Good to know'),
+    'guideHow': ('تبدأ إزاي', 'How to start'),
+    'guideBtWhat': ('الموبايلات بتكلم بعض بالبلوتوث مباشرة، من غير أي شبكة خالص.', 'Phones talk to each other directly over Bluetooth, with no network at all.'),
+    'guideBtWhen': ('لما مفيش واي فاي ولا هوت سبوت: في الشارع، في رحلة، أو لما الشبكة واقعة.', 'When there is no Wi-Fi and no hotspot: outdoors, on a trip, or when the network is down.'),
+    'guideBtFacts': ('المدى حوالي 10 لـ 30 متر بين كل موبايلين.\nكل موبايل بيتوصل بحوالي 5، والرسالة بتنط من موبايل للتاني لحد 6 مرات، فبتوصل لأبعد بكتير.\nرسايل وصور وملفات وفويس. الفيديو والمكالمات لأ (البلوتوث بطيء عليهم).', 'Range is about 10–30 m between two phones.\nEach phone links to about 5 others, and a message can hop up to 6 times, so it reaches much further.\nMessages, photos, files and voice notes. No video or calls (Bluetooth is too slow for them).'),
+    'guideBtHow': ('دوس "بلوتوث" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين وصل هيظهروا في "القريبين" لوحدهم.', 'Tap "Bluetooth" on the first screen.\nAllow the permissions (Bluetooth and nearby devices).\nPeople around you with Wasl open show up under "Nearby" by themselves.'),
+    'guideWifiWhat': ('الموبايلات على نفس الواي فاي، أو واحد فاتح هوت سبوت والباقيين داخلين عليه. الشبكة دي مش لازم يكون فيها إنترنت.', 'Phones on the same Wi-Fi, or one phone runs a hotspot and the others join it. The network does not need internet.'),
+    'guideWifiWhen': ('لما تكونوا في نفس البيت أو القاعة أو الكافيه، أو لما حد يقدر يفتح هوت سبوت.', 'When you share a home, hall or café, or when someone can turn on a hotspot.'),
+    'guideWifiFacts': ('أسرع بكتير من البلوتوث، وفيه فيديو ومكالمات صوت وصورة.\nالهوت سبوت بيشيل عادةً من 5 لـ 10 موبايلات.\nبعض الراوترات العامة بتمنع الأجهزة تكلم بعض؛ ساعتها استخدم هوت سبوت.', 'Much faster than Bluetooth, with video and voice / video calls.\nA hotspot usually takes 5 to 10 phones.\nSome public routers stop devices talking to each other; use a hotspot then.'),
+    'guideWifiHow': ('اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس "واي فاي" في وصل.\nاللي على نفس الشبكة هيظهروا لوحدهم.', "Join a Wi-Fi network, or turn on a hotspot in your phone's settings and have your friends join it.\nTap \"Wi-Fi\" in Wasl.\nEveryone on the same network shows up by themselves."),
+    'guideBothWhat': ('البلوتوث والواي فاي مع بعض: موبايلك بيبقى كوبري بين اللي على الواي فاي واللي على البلوتوث.', 'Bluetooth and Wi-Fi together: your phone becomes a bridge between people on Wi-Fi and people on Bluetooth.'),
+    'guideBothWhen': ('لما الناس متفرقين: شوية على هوت سبوت، وشوية بعيد مفيش معاهم غير البلوتوث. أو عشان توصّل هوت سبوتين ببعض.', 'When people are spread out: some on a hotspot, some further away with only Bluetooth. Or to join two hotspots together.'),
+    'guideBothFacts': ('الشبكة بتكبر: كل موبايل على "الاتنين" بيربط الشبكتين ببعض.\nالمكالمات والفيديو بيفضلوا جوه نفس الواي فاي.\nبيصرف بطارية أكتر شوية.', 'The network grows: every phone on "Both" joins the two networks together.\nCalls and video stay inside one Wi-Fi network.\nIt uses a bit more battery.'),
+    'guideBothHow': ('اتوصل بواي فاي أو هوت سبوت.\nدوس "الاتنين مع بعض".\nوصل هيوصّل الكل ببعض لوحده.', 'Join a Wi-Fi network or hotspot.\nTap "Both".\nWasl links everyone together by itself.'),
+    'guideMeshHops': ('الرسالة بتعدّي على 6 موبايلات بالكتير، والموبايلات اللي في النص بتوصّل بس ومبتقدرش تقرا الشات الخاص.', "A message crosses at most 6 phones, and phones in between only pass it on; they can't read private chats."),
+    'guideGroupsTitle': ('الجروبات', 'Groups'),
+    'guideGamesTitle': ('الألعاب', 'Games'),
+    'guideGamesBody': ('في أي شات دوس 🎮 واختار لعبة. في الخاص صاحبك بيوافق واللعبة تبدأ، وفي الجروب اللي عايز يلعب يدوس "انضم" واللي فتح اللعبة يدوس "ابدأ". دوس على أي لعبة تحت عشان تعرف بتتلعب إزاي.', "In any chat tap 🎮 and pick a game. In a private chat your friend accepts and it starts; in a group, whoever wants to play taps \"Join\" and whoever opened it taps \"Start\". Tap any game below to see how it's played."),
+    'guideSafetyTitle': ('الأمان والخصوصية', 'Safety and privacy'),
 }
 
 

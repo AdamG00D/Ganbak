@@ -404,18 +404,6 @@ abstract class AppLocalizations {
   /// **'مفيش متصفح يفتح اللينك — اتنسخ بداله'**
   String get noBrowser;
 
-  /// No description provided for @howItWorks.
-  ///
-  /// In ar, this message translates to:
-  /// **'إزاي Wasl بيشتغل؟'**
-  String get howItWorks;
-
-  /// No description provided for @howItWorksSub.
-  ///
-  /// In ar, this message translates to:
-  /// **'من غير إنترنت ومن غير سيرفر'**
-  String get howItWorksSub;
-
   /// No description provided for @howNoInternetTitle.
   ///
   /// In ar, this message translates to:
@@ -4519,6 +4507,186 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'كلمتك'**
   String get spyYourCard;
+
+  /// No description provided for @guideTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دليل وصل'**
+  String get guideTitle;
+
+  /// No description provided for @guideSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتصال، الجروبات، الألعاب والأمان'**
+  String get guideSub;
+
+  /// No description provided for @guideHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'شرح طرق الاتصال'**
+  String get guideHelp;
+
+  /// No description provided for @guideJumpConnect.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتصال'**
+  String get guideJumpConnect;
+
+  /// No description provided for @guideJumpGroups.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجروبات'**
+  String get guideJumpGroups;
+
+  /// No description provided for @guideJumpGames.
+  ///
+  /// In ar, this message translates to:
+  /// **'الألعاب'**
+  String get guideJumpGames;
+
+  /// No description provided for @guideJumpSafety.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمان'**
+  String get guideJumpSafety;
+
+  /// No description provided for @guideConnectTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طرق الاتصال'**
+  String get guideConnectTitle;
+
+  /// No description provided for @guideConnectIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل مبيحتاجش إنترنت ولا شريحة ولا حساب. اختار الطريقة على حسب المكان اللي إنت فيه:'**
+  String get guideConnectIntro;
+
+  /// No description provided for @guideWhat.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيه هو'**
+  String get guideWhat;
+
+  /// No description provided for @guideWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'إمتى تستخدمه'**
+  String get guideWhen;
+
+  /// No description provided for @guideFacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعرف إيه'**
+  String get guideFacts;
+
+  /// No description provided for @guideHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبدأ إزاي'**
+  String get guideHow;
+
+  /// No description provided for @guideBtWhat.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموبايلات بتكلم بعض بالبلوتوث مباشرة، من غير أي شبكة خالص.'**
+  String get guideBtWhat;
+
+  /// No description provided for @guideBtWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما مفيش واي فاي ولا هوت سبوت: في الشارع، في رحلة، أو لما الشبكة واقعة.'**
+  String get guideBtWhen;
+
+  /// No description provided for @guideBtFacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدى حوالي 10 لـ 30 متر بين كل موبايلين.\nكل موبايل بيتوصل بحوالي 5، والرسالة بتنط من موبايل للتاني لحد 6 مرات، فبتوصل لأبعد بكتير.\nرسايل وصور وملفات وفويس. الفيديو والمكالمات لأ (البلوتوث بطيء عليهم).'**
+  String get guideBtFacts;
+
+  /// No description provided for @guideBtHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس \"بلوتوث\" في أول صفحة.\nوافق على الأذونات (البلوتوث والأجهزة القريبة).\nاللي حواليك فاتحين وصل هيظهروا في \"القريبين\" لوحدهم.'**
+  String get guideBtHow;
+
+  /// No description provided for @guideWifiWhat.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموبايلات على نفس الواي فاي، أو واحد فاتح هوت سبوت والباقيين داخلين عليه. الشبكة دي مش لازم يكون فيها إنترنت.'**
+  String get guideWifiWhat;
+
+  /// No description provided for @guideWifiWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما تكونوا في نفس البيت أو القاعة أو الكافيه، أو لما حد يقدر يفتح هوت سبوت.'**
+  String get guideWifiWhen;
+
+  /// No description provided for @guideWifiFacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسرع بكتير من البلوتوث، وفيه فيديو ومكالمات صوت وصورة.\nالهوت سبوت بيشيل عادةً من 5 لـ 10 موبايلات.\nبعض الراوترات العامة بتمنع الأجهزة تكلم بعض؛ ساعتها استخدم هوت سبوت.'**
+  String get guideWifiFacts;
+
+  /// No description provided for @guideWifiHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتوصل بالواي فاي، أو افتح هوت سبوت من إعدادات الموبايل وخلّي صحابك يدخلوا عليه.\nدوس \"واي فاي\" في وصل.\nاللي على نفس الشبكة هيظهروا لوحدهم.'**
+  String get guideWifiHow;
+
+  /// No description provided for @guideBothWhat.
+  ///
+  /// In ar, this message translates to:
+  /// **'البلوتوث والواي فاي مع بعض: موبايلك بيبقى كوبري بين اللي على الواي فاي واللي على البلوتوث.'**
+  String get guideBothWhat;
+
+  /// No description provided for @guideBothWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما الناس متفرقين: شوية على هوت سبوت، وشوية بعيد مفيش معاهم غير البلوتوث. أو عشان توصّل هوت سبوتين ببعض.'**
+  String get guideBothWhen;
+
+  /// No description provided for @guideBothFacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشبكة بتكبر: كل موبايل على \"الاتنين\" بيربط الشبكتين ببعض.\nالمكالمات والفيديو بيفضلوا جوه نفس الواي فاي.\nبيصرف بطارية أكتر شوية.'**
+  String get guideBothFacts;
+
+  /// No description provided for @guideBothHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتوصل بواي فاي أو هوت سبوت.\nدوس \"الاتنين مع بعض\".\nوصل هيوصّل الكل ببعض لوحده.'**
+  String get guideBothHow;
+
+  /// No description provided for @guideMeshHops.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسالة بتعدّي على 6 موبايلات بالكتير، والموبايلات اللي في النص بتوصّل بس ومبتقدرش تقرا الشات الخاص.'**
+  String get guideMeshHops;
+
+  /// No description provided for @guideGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجروبات'**
+  String get guideGroupsTitle;
+
+  /// No description provided for @guideGamesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الألعاب'**
+  String get guideGamesTitle;
+
+  /// No description provided for @guideGamesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'في أي شات دوس 🎮 واختار لعبة. في الخاص صاحبك بيوافق واللعبة تبدأ، وفي الجروب اللي عايز يلعب يدوس \"انضم\" واللي فتح اللعبة يدوس \"ابدأ\". دوس على أي لعبة تحت عشان تعرف بتتلعب إزاي.'**
+  String get guideGamesBody;
+
+  /// No description provided for @guideSafetyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمان والخصوصية'**
+  String get guideSafetyTitle;
 }
 
 class _AppLocalizationsDelegate
