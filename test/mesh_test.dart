@@ -17,6 +17,7 @@ import 'package:wasl/features/games/engines/engines.dart';
 import 'package:wasl/features/groups/group.dart';
 import 'package:wasl/features/groups/group_session.dart';
 import 'package:wasl/mesh/mesh_router.dart';
+import 'package:wasl/mesh/route_tags.dart';
 import 'package:wasl/mesh/peer_link.dart';
 
 import 'support.dart';
@@ -33,10 +34,21 @@ class Device {
         'c': profile.color,
         'k': base64.encode(profile.publicKey),
         's': base64.encode(profile.signKey),
+        'pr': 1,
         'g': [for (final g in groups.values) g.ad.toWire()],
       },
       sign: profile.sign,
     );
+    // كل الاختبارات بتمشي بالأكواد السرية زي التطبيق
+    router.tags = RouteTags(
+      myId: profile.id,
+      pairKey: (peer) async {
+        final key = router.nodes[peer]?.publicKey;
+        return key == null ? null : Box.pairKey(profile.keyPair, key, 'wasl/route/v1');
+      },
+    );
+    router.onRoutesChanged = () =>
+        router.tags!.refresh([for (final n in router.nodes.values) if (n.privateRoutes) n.id]);
     router.onData = _onData;
     router.onGroup = (g, src, body) => groupSessions[g]?.receive(src, body);
     router.onControl = (src, m) {

@@ -96,3 +96,25 @@ class Box {
     return Kdf.hkdf(await shared.extractBytes(), info, salt: utf8.encode('wasl-pair-v1'));
   }
 }
+
+/// حشو لحجم ثابت: الرسالة المشفرة بتبقى 256 أو 1024 أو 4096 بايت (أو مضاعفات 4096)، فاللي في النص ميعرفش من
+/// الحجم دي "تمام" ولا صورة. بيتحط كحقل `pd` في الـ JSON قبل التشفير (النسخ القديمة بتتجاهله).
+class SizePad {
+  SizePad._();
+
+  static int bucket(int n) {
+    if (n <= 256) return 256;
+    if (n <= 1024) return 1024;
+    return ((n + 4095) ~/ 4096) * 4096;
+  }
+
+  /// [map] مش فاضي — بيرجّع الـ JSON بعد الحشو.
+  static String pad(Map<String, dynamic> map) {
+    map.remove('pd');
+    final base = utf8.encode(jsonEncode(map)).length;
+    // `,"pd":"…"` = 8 بايت + الحشو
+    final pad = bucket(base + 8) - base - 8;
+    map['pd'] = '0' * pad;
+    return jsonEncode(map);
+  }
+}

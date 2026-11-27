@@ -165,7 +165,7 @@ class GroupSession extends ChatSession {
     packet['at'] = _lastAt;
     final inner = jsonEncode(packet);
     final sg = unsigned.contains(packet['k']) ? null : await sign(utf8.encode('wasl/group/v2|$groupId|$inner'));
-    final box = await Box.seal(_key, utf8.encode(jsonEncode({'p': inner, 'sg': ?sg})), _aad);
+    final box = await Box.seal(_key, utf8.encode(SizePad.pad({'p': inner, 'sg': ?sg})), _aad);
     await transmit(base64.encode(box));
   }
 

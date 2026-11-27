@@ -10,6 +10,7 @@ import '../core/profile/profile.dart';
 import '../l10n/l10n.dart';
 import '../widgets/cartoon_avatar.dart';
 import 'mesh_link.dart';
+import 'route_tags.dart';
 
 /// نوع الجروب.
 enum GroupMode {
@@ -166,6 +167,9 @@ class MeshNode {
   /// فاتح "شبكة وصل" (null = لأ).
   WifiOffer? wifi;
 
+  /// بيفهم الأكواد السرية بدل المعرّفات (1.6+).
+  bool privateRoutes = false;
+
   /// باعت استغاثة (null = لأ).
   SosSignal? sos;
   DateTime lastSeen = DateTime.now();
@@ -243,6 +247,9 @@ class MeshRouter extends ChangeNotifier {
   void Function(String src, Map<String, dynamic> message)? onControl;
   void Function(MeshNode node)? onNodeUp;
   void Function(MeshNode node)? onNodeDown;
+
+  /// حد بقى بيفهم الأكواد السرية (أو بطّل) — الـ hub بيحسب أكواده.
+  VoidCallback? onRoutesChanged;
 
   final Map<String, String> _linkToNode = {};
   final Map<String, String> _nodeToLink = {};
@@ -337,11 +344,28 @@ class MeshRouter extends ChangeNotifier {
   // ---------------- الإرسال ----------------
 
   /// بيانات محادثة خاصة لجهاز (ممكن تعدّي على أجهزة تانية).
-  Future<void> sendData(String dst, String body) => _unicast(_frame('D', dst, body), dst, null);
+  Future<void> sendData(String dst, String body) => _sendTo1('D', dst, body);
 
   /// رسالة تحكم لجهاز.
-  Future<void> sendControl(String dst, Map<String, dynamic> message) =>
-      _unicast(_frame('U', dst, jsonEncode(message)), dst, null);
+  Future<void> sendControl(String dst, Map<String, dynamic> message) => _sendTo1('U', dst, jsonEncode(message));
+
+  /// الأكواد السرية (null = بالمعرّفات زي زمان). بنستخدمها بس مع اللي بيعلن إنه بيفهمها ([MeshNode.privateRoutes]).
+  RouteTags? tags;
+
+  Future<void> _sendTo1(String kind, String peer, String body) async {
+    final t = tags;
+    if (t == null || !(nodes[peer]?.privateRoutes ?? false)) return _unicast(_frame(kind, peer, body), peer, null);
+    final pair = await t.outgoing(peer);
+    if (pair == null) return _unicast(_frame(kind, peer, body), peer, null);
+    final (src, dst) = pair;
+    final pid = '$_epoch${(_counter++).toRadixString(36)}';
+    _markSeen('$src$pid');
+    final frame = '$kind|$src|$dst|$pid|$maxHops|$body';
+    // جار مباشر: على وصلته على طول. غير كده: الطريق اللي آخر رسالة منه جت منه (بكوده)، أو بث.
+    final direct = _nodeToLink[peer];
+    if (direct != null) return _sendTo(direct, frame);
+    return _unicast(frame, dst, null);
+  }
 
   /// رسالة لكل أعضاء جروب (بث).
   Future<void> sendGroup(String groupId, String body) {
@@ -578,16 +602,18 @@ class MeshRouter extends ChangeNotifier {
         if (ttl > 1) _broadcast(forwarded(), linkId);
         onGroup?.call(dst, src, body);
       case 'D' || 'U':
-        if (dst == myId) {
+        // ليّا: بمعرّفي، أو بكود سري من حد بنستناه (المصدر بيتحوّل لمعرّفه)
+        final from = dst == myId ? src : tags?.peerOf(src, dst);
+        if (from != null) {
           if (kind == 'D') {
-            onData?.call(src, body);
+            onData?.call(from, body);
           } else {
             try {
               final m = jsonDecode(body);
-              if (m is Map<String, dynamic>) onControl?.call(src, m);
+              if (m is Map<String, dynamic>) onControl?.call(from, m);
             } catch (_) {}
           }
-        } else if (ttl > 1 && isId(dst)) {
+        } else if (ttl > 1 && isId(dst) && !(tags?.isMine(dst) ?? false)) {
           _unicast(forwarded(), dst, linkId).catchError((Object _) {});
         }
     }
@@ -680,6 +706,11 @@ class MeshRouter extends ChangeNotifier {
         node.cartoon != cartoon ||
         node.hops != newHops ||
         !_sameGroups(node.groups, groups);
+    final privateRoutes = m['pr'] == 1;
+    if (node.privateRoutes != privateRoutes) {
+      node.privateRoutes = privateRoutes;
+      onRoutesChanged?.call();
+    }
     node
       ..name = name.isEmpty ? tr.unknownName : name
       ..color = color

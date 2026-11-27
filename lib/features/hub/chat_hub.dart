@@ -21,6 +21,7 @@ import '../../mesh/dual_link.dart';
 import '../../mesh/lan_link.dart';
 import '../../mesh/mesh_link.dart';
 import '../../mesh/mesh_router.dart';
+import '../../mesh/route_tags.dart';
 import '../../mesh/nearby_link.dart';
 import '../../mesh/peer_link.dart';
 import '../../widgets/avatar_render.dart';
@@ -350,6 +351,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       ..onNodeDown = _onNodeDown
       ..addListener(_onRouterChanged);
     _startMail(r);
+    _startRouteTags(r);
 
     // المحادثات المحفوظة والجروبات اللي أنا فيها
     for (final sc in _store.index.values.toList()) {
@@ -438,6 +440,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     _mailTimer = null;
     _mailTick?.cancel();
     _mailTick = null;
+    _tagsTimer?.cancel();
+    _tagsTimer = null;
+    _routeKeys.clear();
     mail?.clear();
     mail = null;
     _queuedBubbles.clear();
@@ -481,6 +486,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         'c': _me.color,
         'k': base64.encode(_me.publicKey),
         's': base64.encode(_me.signKey),
+        'pr': 1,
         'a': ?_me.avatarHash,
         'e': ?_me.cartoon,
         'g': [for (final g in _groups.values.take(16)) g.info.ad.toWire()],
@@ -1310,6 +1316,36 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       fresh = true;
     }
     if (fresh) SystemBridge.notify('sos');
+  }
+
+  // ---------------- الأكواد السرية بدل المعرّفات ----------------
+
+  Timer? _tagsTimer;
+  final Map<String, (String, List<int>)> _routeKeys = {};
+
+  void _startRouteTags(MeshRouter r) {
+    r.tags = RouteTags(
+      myId: myId,
+      pairKey: (peer) async {
+        final key = router?.nodes[peer]?.publicKey ?? _directs[peer]?.publicKey;
+        if (key == null) return null;
+        final b64 = base64.encode(key);
+        final cached = _routeKeys[peer];
+        if (cached != null && cached.$1 == b64) return cached.$2;
+        final k = await Box.pairKey(_me.keyPair, key, 'wasl/route/v1');
+        _routeKeys[peer] = (b64, k);
+        return k;
+      },
+    );
+    r.onRoutesChanged = _refreshTags;
+    _tagsTimer = Timer.periodic(const Duration(seconds: 30), (_) => _refreshTags());
+  }
+
+  void _refreshTags() {
+    final r = router;
+    final t = r?.tags;
+    if (r == null || t == null) return;
+    t.refresh([for (final n in r.nodes.values) if (n.privateRoutes) n.id]).catchError((Object _) {});
   }
 
   // ---------------- الرسالة تستنى صاحبها ----------------

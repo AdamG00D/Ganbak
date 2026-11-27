@@ -5,6 +5,7 @@ import 'dart:isolate';
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/crypto/box.dart';
 import '../../../core/crypto/kdf.dart';
 import '../../../l10n/l10n.dart';
 import 'frame_transport.dart';
@@ -457,7 +458,7 @@ class SecureChannel {
     final key = _sendKey;
     if (key == null || !_confirmed || _closed) throw StateError('not ready');
     payload['seq'] = ++_sendSeq;
-    final clear = utf8.encode(jsonEncode(payload));
+    final clear = utf8.encode(SizePad.pad(payload));
     final sealed = clear.length > _isolateThreshold
         ? await _sealInIsolate(key, clear)
         : await _sealBox(key, clear);
