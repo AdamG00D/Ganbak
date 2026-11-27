@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""نصوص الألعاب ودليل وصل وشبكة وصل (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
+"""نصوص الألعاب ودليل وصل وشبكة وصل والاستغاثة (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
 
     python3 tool/l10n_games.py && flutter gen-l10n
 
@@ -301,6 +301,24 @@ S = {
     'guideNetWhen': ('لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.', "When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one."),
     'guideNetFacts': ('كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على "الاتنين مع بعض" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.', 'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on "Both" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.'),
     'guideNetHow': ('اختار "الاتنين مع بعض" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي "القريبين" دوس "افتح شبكة وصل".\nاللي جنبك هيطلعلهم "ادخلها": يدوسوها ويوافقوا على رسالة الموبايل.', 'Pick "Both" (so Bluetooth can pass the name and password to people next to you).\nUnder "Nearby" tap "Start a Wasl network".\nPeople next to you see "Join": they tap it and accept their phone\'s prompt.'),
+    # ---------------- الاستغاثة ----------------
+    'sosAsk': ('محتاج مساعدة؟', 'Need help?'),
+    'sosAskSub': ('ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.', 'Send an SOS to everyone running Wasl around you, even far away through the phones in between.'),
+    'sosOpen': ('استغاثة', 'SOS'),
+    'sosSheetTitle': ('ابعت استغاثة', 'Send an SOS'),
+    'sosHint': ('مكانك أو اللي محتاجه (اختياري)', 'Where you are or what you need (optional)'),
+    'sosSend': ('ابعت الاستغاثة', 'Send SOS'),
+    'sosSheetBody': ('كل اللي حواليك فاتحين وصل هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.', 'Everyone around you running Wasl gets an alert that you need help, with your name and what you wrote, until you stop it.'),
+    'sosActive': ('إنت باعت استغاثة — اللي حواليك شايفينها', "You're sending an SOS — people around you can see it"),
+    'sosStop': ('وقّفها', 'Stop'),
+    'sosFrom': ('{name} محتاج مساعدة!', '{name} needs help!'),
+    'sosNear': ('جنبك مباشرة', 'Right next to you'),
+    'sosChat': ('كلّمه', 'Message'),
+    'sosOk': ('تمام', 'OK'),
+    'sosMore': ('و{n} كمان', 'and {n} more'),
+    'sosUnverified': ('الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.', "Names in Wasl aren't verified; check before you act."),
+    'guideSosTitle': ('الاستغاثة', 'SOS'),
+    'guideSosBody': ('من صفحة "القريبين" دوس "استغاثة" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.', 'Under "Nearby" tap "SOS" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.'),
 }
 
 

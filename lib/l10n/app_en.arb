@@ -798,5 +798,22 @@
   "guideNetWhat": "Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a \"Join\" button and are in with one tap; nobody types a password.",
   "guideNetWhen": "When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one.",
   "guideNetFacts": "Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on \"Both\" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.",
-  "guideNetHow": "Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone's prompt."
+  "guideNetHow": "Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone's prompt.",
+  "sosAsk": "Need help?",
+  "sosAskSub": "Send an SOS to everyone running Wasl around you, even far away through the phones in between.",
+  "sosOpen": "SOS",
+  "sosSheetTitle": "Send an SOS",
+  "sosHint": "Where you are or what you need (optional)",
+  "sosSend": "Send SOS",
+  "sosSheetBody": "Everyone around you running Wasl gets an alert that you need help, with your name and what you wrote, until you stop it.",
+  "sosActive": "You're sending an SOS — people around you can see it",
+  "sosStop": "Stop",
+  "sosFrom": "{name} needs help!",
+  "sosNear": "Right next to you",
+  "sosChat": "Message",
+  "sosOk": "OK",
+  "sosMore": "and {n} more",
+  "sosUnverified": "Names in Wasl aren't verified; check before you act.",
+  "guideSosTitle": "SOS",
+  "guideSosBody": "Under \"Nearby\" tap \"SOS\" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting."
 }

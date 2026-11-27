@@ -98,4 +98,53 @@ void main() {
       expect(WaslNetwork.offersAmong(nodes, state: NetState.joining), isEmpty);
     });
   });
+
+  group('الاستغاثة', () {
+    test('بتتقري صح: النص بيتقص وحروف التحكم بتتشال', () {
+      expect(SosSignal.fromWire({'t': 'عند البوابة'})?.text, 'عند البوابة');
+      expect(SosSignal.fromWire({'t': 'x' * 500})?.text.length, SosSignal.maxLength);
+      expect(SosSignal.fromWire({'t': 'a\u0000b'})?.text, 'a b');
+      expect(SosSignal.fromWire({'t': 5})?.text, '', reason: 'من غير نص = استغاثة برضه');
+      expect(SosSignal.fromWire('x'), isNull);
+      expect(SosSignal.fromWire(null), isNull);
+    });
+
+    test('بتوصل للبعيد عن طريق اللي في النص وبتختفي لما تقف', () async {
+      final net = MemoryNet();
+      final routers = <MeshRouter>[];
+      SosSignal? sos;
+      Future<(Profile, MeshRouter)> dev(String name, {bool caller = false}) async {
+        final p = await Profile.fromSeed(Kdf.randomBytes(32), name: name, color: 1);
+        final r = MeshRouter(
+          link: net.add(p.id),
+          presenceEvery: const Duration(milliseconds: 100),
+          nodeTtl: const Duration(seconds: 5),
+          describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey), if (caller) 'sos': ?sos?.toWire()},
+        );
+        routers.add(r);
+        await r.start();
+        return (p, r);
+      }
+
+      final (pa, ra) = await dev('أحمد', caller: true);
+      final (pb, _) = await dev('بسمة');
+      final (pc, rc) = await dev('كريم');
+      net.connect(pa.id, pb.id);
+      net.connect(pb.id, pc.id);
+      await waitFor(() => rc.nodes.containsKey(pa.id));
+      expect(rc.nodes[pa.id]!.sos, isNull);
+      sos = const SosSignal('عند البوابة');
+      ra.announce();
+      await waitFor(() => rc.nodes[pa.id]!.sos != null);
+      expect(rc.nodes[pa.id]!.sos!.text, 'عند البوابة');
+      expect(rc.nodes[pa.id]!.hops, 2);
+      sos = null;
+      ra.announce();
+      await waitFor(() => rc.nodes[pa.id]!.sos == null);
+      for (final r in routers) {
+        await r.stop();
+        r.dispose();
+      }
+    });
+  });
 }

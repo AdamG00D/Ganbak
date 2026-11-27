@@ -416,6 +416,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     _callChat = null;
     // شبكة وصل اللي فتحناها بتتقفل، واللي دخلناها بنخرج منها
     await WaslNetwork.instance.shutdown();
+    mySos = null;
+    _sosAlerted.clear();
+    sosDismissed.clear();
     pendingJoins.clear();
     _requestedAds.clear();
     _syncedAt.clear();
@@ -459,6 +462,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         'e': ?_me.cartoon,
         'g': [for (final g in _groups.values.take(16)) g.info.ad.toWire()],
         'w': ?WaslNetwork.instance.hosted?.toWire(),
+        'sos': ?mySos?.toWire(),
       };
 
   // ---------------- القوايم (للواجهة) ----------------
@@ -718,6 +722,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     for (final n in router?.nodes.values ?? const <MeshNode>[]) {
       _syncNode(n);
     }
+    _checkSos();
     _syncGroups();
     notifyListeners();
   }
@@ -1173,6 +1178,61 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         notifyListeners();
         _joinResults.add((ad, false));
     }
+  }
+
+  // ---------------- الاستغاثة ----------------
+
+  /// استغاثتي (null = مش شغالة). بتتبعت مع "أنا موجود" لحد ما أوقفها أو الشبكة تقف.
+  SosSignal? mySos;
+
+  /// اللي استغاثتهم وصلتنا ونبّهنا عليها (عشان منكررش التنبيه كل إعلان).
+  final Map<String, SosSignal> _sosAlerted = {};
+
+  /// استغاثات اتقفلت من الشاشة ("تمام") — بترجع لو الشخص غيّر نصها.
+  final Map<String, SosSignal> sosDismissed = {};
+
+  Future<void> setSos(String text) async {
+    final t = text.replaceAll(RegExp(r'[\u0000-\u001f]'), ' ').trim();
+    mySos = SosSignal(t.length > SosSignal.maxLength ? t.substring(0, SosSignal.maxLength) : t);
+    router?.announce();
+    notifyListeners();
+  }
+
+  void stopSos() {
+    if (mySos == null) return;
+    mySos = null;
+    router?.announce();
+    notifyListeners();
+  }
+
+  /// الناس اللي باعتين استغاثة دلوقتي (الأقرب الأول، ومن غير المحظورين).
+  List<MeshNode> get sosNodes {
+    final list = [
+      for (final n in router?.nodes.values ?? const <MeshNode>[])
+        if (n.sos != null && !_store.blocked.contains(n.id)) n,
+    ]..sort((a, b) => a.hops.compareTo(b.hops));
+    return list.take(8).toList();
+  }
+
+  void dismissSos(MeshNode n) {
+    final s = n.sos;
+    if (s == null) return;
+    sosDismissed[n.id] = s;
+    notifyListeners();
+  }
+
+  /// استغاثة جديدة: تنبيه (من غير اسم ولا نص — شاشة القفل ممكن حد تاني يشوفها).
+  void _checkSos() {
+    final active = {for (final n in sosNodes) n.id: n.sos!};
+    _sosAlerted.removeWhere((id, _) => !active.containsKey(id));
+    sosDismissed.removeWhere((id, s) => active[id] != s);
+    var fresh = false;
+    for (final e in active.entries) {
+      if (_sosAlerted[e.key] == e.value) continue;
+      _sosAlerted[e.key] = e.value;
+      fresh = true;
+    }
+    if (fresh) SystemBridge.notify('sos');
   }
 
   // ---------------- الألعاب ----------------

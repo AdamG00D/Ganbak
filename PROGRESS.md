@@ -60,7 +60,7 @@ card, a section with a drawing in the guide.
 | # | Step | State |
 |---|------|-------|
 | 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — **gradle/compile not verified until the next build** |
-| 2 | SOS: emergency status in presence, banner + notification for everyone nearby | todo |
+| 2 | SOS: emergency status in presence (`sos {t}`), banner + generic notification for everyone in the mesh, card in Nearby, guide entry | done (`lib/features/sos/`) |
 | 3 | Offline messages: sealed to the recipient's static key, carried by relays, delivered when they show up | todo |
 | 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | todo |
 | 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | todo |

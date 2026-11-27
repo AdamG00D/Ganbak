@@ -9,6 +9,7 @@
     <string name="ongoing_chat">Chat is running</string>
     <string name="new_message">New message</string>
     <string name="new_request">New join request</string>
+    <string name="sos_nearby">Someone near you needs help</string>
     <string name="incoming_call">Incoming call</string>
     <string name="you">You</string>
     <string name="reply">Reply</string>

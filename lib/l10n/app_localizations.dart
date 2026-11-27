@@ -4891,6 +4891,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.'**
   String get guideNetHow;
+
+  /// No description provided for @sosAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'محتاج مساعدة؟'**
+  String get sosAsk;
+
+  /// No description provided for @sosAskSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.'**
+  String get sosAskSub;
+
+  /// No description provided for @sosOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'استغاثة'**
+  String get sosOpen;
+
+  /// No description provided for @sosSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعت استغاثة'**
+  String get sosSheetTitle;
+
+  /// No description provided for @sosHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكانك أو اللي محتاجه (اختياري)'**
+  String get sosHint;
+
+  /// No description provided for @sosSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابعت الاستغاثة'**
+  String get sosSend;
+
+  /// No description provided for @sosSheetBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل اللي حواليك فاتحين وصل هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.'**
+  String get sosSheetBody;
+
+  /// No description provided for @sosActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت باعت استغاثة — اللي حواليك شايفينها'**
+  String get sosActive;
+
+  /// No description provided for @sosStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقّفها'**
+  String get sosStop;
+
+  /// No description provided for @sosFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} محتاج مساعدة!'**
+  String sosFrom(String name);
+
+  /// No description provided for @sosNear.
+  ///
+  /// In ar, this message translates to:
+  /// **'جنبك مباشرة'**
+  String get sosNear;
+
+  /// No description provided for @sosChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلّمه'**
+  String get sosChat;
+
+  /// No description provided for @sosOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام'**
+  String get sosOk;
+
+  /// No description provided for @sosMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'و{n} كمان'**
+  String sosMore(String n);
+
+  /// No description provided for @sosUnverified.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.'**
+  String get sosUnverified;
+
+  /// No description provided for @guideSosTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستغاثة'**
+  String get guideSosTitle;
+
+  /// No description provided for @guideSosBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.'**
+  String get guideSosBody;
 }
 
 class _AppLocalizationsDelegate

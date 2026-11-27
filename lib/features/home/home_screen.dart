@@ -22,6 +22,7 @@ import '../chat/widgets/chat_widgets.dart';
 import '../groups/group_ui.dart';
 import '../hub/chat_hub.dart';
 import '../net/wasl_net_ui.dart';
+import '../sos/sos_ui.dart';
 import '../settings/settings_screen.dart';
 
 /// الصفحة الرئيسية بعد اختيار بلوتوث/واي فاي: المحادثات • الجروبات • القريبين.
@@ -181,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             body = Column(
               children: [
                 _LinkProblems(link: link),
+                const SosBanner(),
                 WaslNetOfferBanner(kind: widget.kind),
                 Expanded(
                   // اسحب يمين وشمال عشان تتنقل بين الصفحات
@@ -902,6 +904,7 @@ class _PeopleTabState extends State<_PeopleTab> {
       children: [
         // شبكة وصل: الموبايل يعمل شبكة واي فاي لوحده (في وضع الواي فاي أو الاتنين)
         if (lan != null) const WaslNetCard(),
+        const SosCard(),
         if (people.isEmpty) ...[
           const SizedBox(height: 18),
           Center(child: RadarPulse(icon: widget.isWifi ? Icons.wifi_rounded : Icons.bluetooth_searching_rounded)),

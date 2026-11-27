@@ -22,6 +22,7 @@ import 'package:wasl/features/games/ui/game_screen.dart';
 import 'package:wasl/features/guide/guide_screen.dart';
 import 'package:wasl/features/net/wasl_net_ui.dart';
 import 'package:wasl/features/net/wasl_network.dart';
+import 'package:wasl/features/sos/sos_ui.dart';
 import 'package:wasl/mesh/mesh_router.dart';
 import 'package:wasl/features/settings/settings_screen.dart';
 
@@ -357,6 +358,56 @@ void main() {
             scrollable: find.byType(Scrollable).first);
         await t.pump(const Duration(milliseconds: 300));
       });
+    });
+  });
+
+  group('sos', () {
+    final hub = ChatHub.instance;
+
+    Future<void> world(WidgetTester tester) async {
+      if (hub.running) return;
+      await tester.runAsync(() async {
+        await hub.start(TransportKind.wifi);
+        await Sample.fill(hub);
+      });
+    }
+
+    MeshNode karim() => hub.router!.nodes.putIfAbsent(
+          Sample.karim,
+          () => MeshNode(Sample.karim, Uint8List(32))
+            ..name = 'كريم'
+            ..cartoon = 7
+            ..hops = 2,
+        );
+
+    testWidgets('sos alert', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      karim()
+        ..sos = const SosSignal('عند البوابة الشمال، رجلي اتلوت ومش قادر أمشي')
+        ..hops = 2;
+      hub.sosDismissed.clear();
+      await Shots.shoot(tester, 'sos-alert', () => const HomeScreen(kind: TransportKind.wifi));
+      karim().sos = null;
+    });
+
+    testWidgets('sos mine and card', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      await Shots.shoot(tester, 'sos-card', () => const HomeScreen(kind: TransportKind.wifi), then: (t) async {
+        await t.tap(find.byType(NavigationDestination).at(2));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 900));
+      });
+      await Shots.shoot(tester, 'sos-sheet', () => Builder(builder: (context) => Scaffold(body: Center(child: Text(context.l10n.sosAsk)))),
+          then: (t) async {
+        showSosSheet(t.element(find.byType(Scaffold)));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 600));
+      });
+      await tester.runAsync(() => hub.setSos('عند البوابة'));
+      await Shots.shoot(tester, 'sos-mine', () => const HomeScreen(kind: TransportKind.wifi));
+      await tester.runAsync(() async => hub.stopSos());
     });
   });
 }

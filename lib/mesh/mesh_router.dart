@@ -61,6 +61,33 @@ class WifiOffer {
   int get hashCode => Object.hash(ssid, pass);
 }
 
+/// استغاثة: الشخص ده محتاج مساعدة (بتتبعت مع "أنا موجود" طول ما هو مشغّلها — فبتوصل للشبكة كلها
+/// حتى عن طريق النسخ القديمة اللي بتوصّل الإعلان زي ما هو).
+class SosSignal {
+  const SosSignal(this.text);
+
+  /// اللي كتبه (مكانه أو اللي محتاجه) — ممكن يبقى فاضي.
+  final String text;
+
+  static const maxLength = 140;
+
+  Map<String, dynamic> toWire() => {'t': text};
+
+  static SosSignal? fromWire(Object? raw) {
+    if (raw is! Map) return null;
+    final t = raw['t'];
+    if (t is! String) return const SosSignal('');
+    final clean = t.replaceAll(RegExp(r'[\u0000-\u001f]'), ' ').trim();
+    return SosSignal(clean.length > maxLength ? clean.substring(0, maxLength) : clean);
+  }
+
+  @override
+  bool operator ==(Object other) => other is SosSignal && other.text == text;
+
+  @override
+  int get hashCode => text.hashCode;
+}
+
 /// إعلان عن جروب (بيتبعت مع "أنا موجود" من كل عضو فيه).
 class GroupAd {
   const GroupAd({
@@ -123,6 +150,9 @@ class MeshNode {
 
   /// فاتح "شبكة وصل" (null = لأ).
   WifiOffer? wifi;
+
+  /// باعت استغاثة (null = لأ).
+  SosSignal? sos;
   DateTime lastSeen = DateTime.now();
 
   /// عدد القفزات لحد الجهاز ده (1 = جار مباشر).
@@ -551,8 +581,10 @@ class MeshRouter extends ChangeNotifier {
     final direct = isDirect(src);
     final newHops = direct ? 1 : hops.clamp(2, maxHops);
     final wifi = WifiOffer.fromWire(m['w']);
+    final sos = SosSignal.fromWire(m['sos']);
     final changed = isNew ||
         node.wifi != wifi ||
+        node.sos != sos ||
         node.name != name ||
         node.color != color ||
         node.avatar != avatar ||
@@ -566,6 +598,7 @@ class MeshRouter extends ChangeNotifier {
       ..cartoon = cartoon
       ..groups = groups
       ..wifi = wifi
+      ..sos = sos
       ..hops = newHops
       ..lastSeen = DateTime.now()
       .._lastPresence = raw;

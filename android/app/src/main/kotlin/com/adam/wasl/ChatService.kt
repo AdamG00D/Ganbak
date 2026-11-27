@@ -219,6 +219,7 @@ object Notifications {
             when (kind) {
                 "request" -> R.string.new_request
                 "call" -> R.string.incoming_call
+                "sos" -> R.string.sos_nearby
                 else -> R.string.new_message
             },
         )

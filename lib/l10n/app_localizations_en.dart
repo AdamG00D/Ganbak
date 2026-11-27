@@ -2798,4 +2798,64 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guideNetHow =>
       'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.';
+
+  @override
+  String get sosAsk => 'Need help?';
+
+  @override
+  String get sosAskSub =>
+      'Send an SOS to everyone running Wasl around you, even far away through the phones in between.';
+
+  @override
+  String get sosOpen => 'SOS';
+
+  @override
+  String get sosSheetTitle => 'Send an SOS';
+
+  @override
+  String get sosHint => 'Where you are or what you need (optional)';
+
+  @override
+  String get sosSend => 'Send SOS';
+
+  @override
+  String get sosSheetBody =>
+      'Everyone around you running Wasl gets an alert that you need help, with your name and what you wrote, until you stop it.';
+
+  @override
+  String get sosActive =>
+      'You\'re sending an SOS — people around you can see it';
+
+  @override
+  String get sosStop => 'Stop';
+
+  @override
+  String sosFrom(String name) {
+    return '$name needs help!';
+  }
+
+  @override
+  String get sosNear => 'Right next to you';
+
+  @override
+  String get sosChat => 'Message';
+
+  @override
+  String get sosOk => 'OK';
+
+  @override
+  String sosMore(String n) {
+    return 'and $n more';
+  }
+
+  @override
+  String get sosUnverified =>
+      'Names in Wasl aren\'t verified; check before you act.';
+
+  @override
+  String get guideSosTitle => 'SOS';
+
+  @override
+  String get guideSosBody =>
+      'Under \"Nearby\" tap \"SOS\" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.';
 }

@@ -2769,4 +2769,62 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get guideNetHow =>
       'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.';
+
+  @override
+  String get sosAsk => 'محتاج مساعدة؟';
+
+  @override
+  String get sosAskSub =>
+      'ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.';
+
+  @override
+  String get sosOpen => 'استغاثة';
+
+  @override
+  String get sosSheetTitle => 'ابعت استغاثة';
+
+  @override
+  String get sosHint => 'مكانك أو اللي محتاجه (اختياري)';
+
+  @override
+  String get sosSend => 'ابعت الاستغاثة';
+
+  @override
+  String get sosSheetBody =>
+      'كل اللي حواليك فاتحين وصل هيوصلهم تنبيه إنك محتاج مساعدة، ومعاه اسمك واللي كتبته، لحد ما توقفها.';
+
+  @override
+  String get sosActive => 'إنت باعت استغاثة — اللي حواليك شايفينها';
+
+  @override
+  String get sosStop => 'وقّفها';
+
+  @override
+  String sosFrom(String name) {
+    return '$name محتاج مساعدة!';
+  }
+
+  @override
+  String get sosNear => 'جنبك مباشرة';
+
+  @override
+  String get sosChat => 'كلّمه';
+
+  @override
+  String get sosOk => 'تمام';
+
+  @override
+  String sosMore(String n) {
+    return 'و$n كمان';
+  }
+
+  @override
+  String get sosUnverified => 'الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.';
+
+  @override
+  String get guideSosTitle => 'الاستغاثة';
+
+  @override
+  String get guideSosBody =>
+      'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.';
 }
