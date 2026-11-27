@@ -1821,4 +1821,733 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get howToPlay => 'إزاي بتتلعب؟';
+
+  @override
+  String get games => 'الألعاب';
+
+  @override
+  String playWith(String name) {
+    return 'العب مع $name';
+  }
+
+  @override
+  String get playWithGroup => 'العب مع الجروب';
+
+  @override
+  String get gamesTabDirect => 'اتنين';
+
+  @override
+  String get gamesTabGroup => 'جروب';
+
+  @override
+  String playersRange(String range) {
+    return '$range لاعبين';
+  }
+
+  @override
+  String gameInviteFrom(String name, String game) {
+    return '$name عازمك على $game';
+  }
+
+  @override
+  String gameInviteMine(String game) {
+    return 'إنت فتحت $game';
+  }
+
+  @override
+  String get gamePlay => 'العب';
+
+  @override
+  String get gameJoin => 'انضم';
+
+  @override
+  String get gameJoined => 'إنت جوه';
+
+  @override
+  String get gameNotNow => 'مش دلوقتي';
+
+  @override
+  String get gameStart => 'ابدأ';
+
+  @override
+  String get gameOpen => 'افتح اللعبة';
+
+  @override
+  String get gameWatch => 'اتفرج';
+
+  @override
+  String gameWaitingHost(String name) {
+    return 'مستنيين $name يبدأ';
+  }
+
+  @override
+  String gameWaitingPeer(String name) {
+    return 'مستنيين $name يوافق';
+  }
+
+  @override
+  String gameSeats(String n, String max) {
+    return '$n من $max';
+  }
+
+  @override
+  String gameNeedMore(String n) {
+    return 'محتاجين $n كمان عشان تبدأ';
+  }
+
+  @override
+  String get gameDoneCard => 'اللعبة خلصت';
+
+  @override
+  String get gameClosedCard => 'اللعبة اتقفلت';
+
+  @override
+  String get gameEnded => 'اللعبة خلصت';
+
+  @override
+  String get gameHostLeft => 'صاحب الغرفة خرج، فاللعبة اتقفلت';
+
+  @override
+  String get gameCanceled => 'اللعبة اتلغت';
+
+  @override
+  String gameRunningBanner(String game) {
+    return 'في لعبة شغالة: $game';
+  }
+
+  @override
+  String get gameBackToGame => 'ارجع لها';
+
+  @override
+  String get gameBackToChat => 'ارجع للشات';
+
+  @override
+  String get gameRematch => 'ماتش تاني';
+
+  @override
+  String gameRematchAsked(String name) {
+    return '$name عايز ماتش تاني';
+  }
+
+  @override
+  String get gameRematchWaiting => 'مستني التاني يوافق…';
+
+  @override
+  String get gameYouWon => 'إنت كسبت!';
+
+  @override
+  String get gameYouLost => 'المرة دي لأ… ماتش تاني؟';
+
+  @override
+  String gameWinner(String name) {
+    return '$name كسب!';
+  }
+
+  @override
+  String get gameDraw => 'تعادل';
+
+  @override
+  String get gameYourTurn => 'دورك';
+
+  @override
+  String gameTheirTurn(String name) {
+    return 'دور $name';
+  }
+
+  @override
+  String get gameQuitQ => 'تخرج من اللعبة؟';
+
+  @override
+  String get gameQuitBody => 'اللعبة هتكمل للباقيين من غيرك.';
+
+  @override
+  String get gameQuitBody2 => 'لو خرجت التاني هيكسب.';
+
+  @override
+  String get gameEndQ => 'تقفل اللعبة للكل؟';
+
+  @override
+  String get gameEndBody =>
+      'إنت صاحب الغرفة: لو خرجت اللعبة هتتقفل عند كل اللاعبين.';
+
+  @override
+  String get gameLeave => 'اخرج';
+
+  @override
+  String get gameNobody => 'مفيش حد متصل دلوقتي تلعب معاه';
+
+  @override
+  String get gameNeedConnection => 'استنى الاتصال يجهز الأول';
+
+  @override
+  String gameOldVersion(String name) {
+    return 'مفيش رد… يمكن $name عنده نسخة قديمة من وصل';
+  }
+
+  @override
+  String get gameSpectating => 'إنت بتتفرج';
+
+  @override
+  String get gameScore => 'النتيجة';
+
+  @override
+  String get gamePlayers => 'اللاعبين';
+
+  @override
+  String gameRound(String n) {
+    return 'الماتش $n';
+  }
+
+  @override
+  String get gameChatHint => 'اكتب للاعبين…';
+
+  @override
+  String get gameChatMuted => 'مينفعش تتكلم دلوقتي';
+
+  @override
+  String gameCheated(String name) {
+    return '$name غش! (غيّر اختياره أو كدب في رد)';
+  }
+
+  @override
+  String get gameHost => 'صاحب الغرفة';
+
+  @override
+  String get gameSkip => 'عدّي';
+
+  @override
+  String gameTimeLeft(String s) {
+    return 'فاضل $s ث';
+  }
+
+  @override
+  String get gameWins => 'مرات الكسب';
+
+  @override
+  String gameVsRecord(String a, String b) {
+    return 'بينكم: $a – $b';
+  }
+
+  @override
+  String get gameMore => 'ألعاب';
+
+  @override
+  String get gameXo => 'إكس أو';
+
+  @override
+  String get gameConnect4 => 'أربعة في صف';
+
+  @override
+  String get gameBattleship => 'حرب السفن';
+
+  @override
+  String get gameRps => 'حجر ورقة مقص';
+
+  @override
+  String get gameDots => 'مربعات ونقط';
+
+  @override
+  String get gameMemory => 'الذاكرة';
+
+  @override
+  String get gameSpy => 'مين الجاسوس؟';
+
+  @override
+  String get gameQuiz => 'المسابقة';
+
+  @override
+  String get gameMafia => 'المافيا';
+
+  @override
+  String get tagXo => '3 في صف تكسب';
+
+  @override
+  String get tagConnect4 => 'القطعة بتنزل، و4 في صف تكسب';
+
+  @override
+  String get tagBattleship => 'خبّي سفنك واضرب سفنه';
+
+  @override
+  String get tagRps => 'مين هيغلب مين؟';
+
+  @override
+  String get tagDots => 'اقفل المربع وخده';
+
+  @override
+  String get tagMemory => 'افتكر مكان الصور';
+
+  @override
+  String get tagSpy => 'الكل عارف الكلمة… إلا واحد';
+
+  @override
+  String get tagQuiz => 'مين أسرع وأشطر؟';
+
+  @override
+  String get tagMafia => 'اكشفوا القتلة قبل ما يخلّصوا عليكم';
+
+  @override
+  String get helpGoal => 'الهدف';
+
+  @override
+  String get helpHow => 'إزاي بتتلعب';
+
+  @override
+  String get helpRoles => 'الأدوار';
+
+  @override
+  String get helpTips => 'نصايح';
+
+  @override
+  String get helpFaq => 'أسئلة';
+
+  @override
+  String get helpWhereDirect => 'في الخاص';
+
+  @override
+  String get helpWhereGroup => 'في الجروبات';
+
+  @override
+  String helpMinutes(String range) {
+    return '$range دقيقة';
+  }
+
+  @override
+  String get helpFaqLeaveQ => 'لو حد فصل أو خرج؟';
+
+  @override
+  String get helpFaqLeaveA =>
+      'لو لاعب خرج، اللعبة بتكمل للباقيين ودوره بيتنط. لو صاحب الغرفة (اللي فتح اللعبة) خرج أو بعد أكتر من 25 ثانية، اللعبة بتتقفل عند الكل.';
+
+  @override
+  String get helpFaqHostQ => 'مين \"صاحب الغرفة\"؟';
+
+  @override
+  String get helpFaqHostA =>
+      'اللي فتح اللعبة. موبايله هو الحكم: بيشغّل القواعد، وبيوزّع الأدوار السرية، وبيعدّ الأصوات. بيلعب عادي زي أي حد، والتطبيق مبيوريهوش أسرار حد.';
+
+  @override
+  String get helpFaqCheatQ => 'حد يقدر يغش؟';
+
+  @override
+  String get helpFaqCheatA =>
+      'في حرب السفن وحجر ورقة مقص اختيارك بيتقفل ببصمة قبل ما التاني يشوفه، والتطبيق بيكشف أي حد غيّر اختياره أو كدب. في باقي الألعاب موبايل صاحب الغرفة هو الحكم.';
+
+  @override
+  String get helpXoGoal =>
+      'أول واحد يعمل 3 علامات في صف (أفقي أو رأسي أو مايل) يكسب.';
+
+  @override
+  String get helpXoHow =>
+      'اللي بيبدأ بياخد ✕ والتاني ○.\nكل واحد بدوره يدوس على خانة فاضية.\nلو اللوح اتملى ومحدش عمل 3 في صف يبقى تعادل.\nفي الماتش اللي بعده اللي بيبدأ بيتبدّل.';
+
+  @override
+  String get helpXoTips =>
+      'النص أقوى خانة في الأول.\nلو التاني عنده 2 في صف، اقفل عليه فوراً.';
+
+  @override
+  String get helpConnect4Goal => 'أول واحد يعمل 4 قطع من لونه في صف يكسب.';
+
+  @override
+  String get helpConnect4How =>
+      'اللوح 7 أعمدة و6 صفوف.\nدوس على أي عمود، والقطعة بتنزل لأوطى خانة فاضية فيه.\nالـ 4 ممكن يكونوا أفقي أو رأسي أو مايلين.\nلو اللوح اتملى من غير 4 في صف يبقى تعادل.';
+
+  @override
+  String get helpConnect4Tips =>
+      'العمود اللي في النص بيفتح لك فرص أكتر.\nبص على الخطوط المايلة؛ ناس كتير بتنساها.';
+
+  @override
+  String get helpBattleshipGoal => 'غرّق كل سفن التاني قبل ما يغرّق سفنك.';
+
+  @override
+  String get helpBattleshipHow =>
+      'كل واحد عنده بحر 8×8 فيه 4 سفن: طولها 4 و3 و3 و2.\nدوس \"رصّة تانية\" لحد ما الرصّة تعجبك، وبعدين \"جاهز\".\nبالدور دوس على خانة في بحر التاني عشان تضرب.\nالرد: مياه ○ أو إصابة ✕ أو غرّقت سفينة.\nلو أصبت بتضرب تاني، ولو جت مياه الدور بيروح.';
+
+  @override
+  String get helpBattleshipTips =>
+      'لما تصيب، جرّب الخانات اللي جنبها.\nالسفن مبتلمسش بعض، فحوالين السفينة الغرقانة كله مياه.\nسفنك مبتخرجش من موبايلك؛ في الآخر التطبيق بيتأكد إن محدش كدب.';
+
+  @override
+  String get helpRpsGoal => 'أول واحد يكسب رميتين يكسب الماتش.';
+
+  @override
+  String get helpRpsHow =>
+      'اختار حجر ✊ أو ورقة ✋ أو مقص ✌️.\nالحجر بيكسّر المقص، والمقص بيقص الورقة، والورقة بتلف الحجر.\nالاختيارين بيظهروا مع بعض بعد ما الاتنين يختاروا.\nلو اخترتوا نفس الحاجة الرمية بتتعاد.';
+
+  @override
+  String get helpRpsTips =>
+      'محدش يقدر يشوف اختيارك قبل ما يختار؛ التطبيق بيقفله ببصمة.';
+
+  @override
+  String get helpDotsGoal => 'خد أكتر عدد مربعات.';
+
+  @override
+  String get helpDotsHow =>
+      'بالدور، كل واحد يرسم خط بين نقطتين جنب بعض.\nاللي يرسم الضلع الرابع لمربع ياخده (بيتلوّن بلونه).\nلو قفلت مربع بتلعب تاني على طول.\nلما كل المربعات تتقفل، اللي معاه أكتر واحد يكسب.';
+
+  @override
+  String get helpDotsTips =>
+      'متدّيش للتاني ضلع تالت في مربع؛ هياخده.\nفي الآخر حاول تسيب للتاني سلسلة قصيرة وتاخد إنت الطويلة.';
+
+  @override
+  String get helpMemoryGoal => 'لِم أكتر عدد من الكروت المتشابهة.';
+
+  @override
+  String get helpMemoryHow =>
+      'الكروت مقلوبة، وكل صورة ليها كارتين.\nفي دورك اقلب كارتين.\nلو شبه بعض بتاخدهم وتلعب تاني.\nلو مش شبه بعض بيتقلبوا تاني بعد لحظة والدور بيروح للي بعدك.\nلما الكروت تخلص، اللي معاه أكتر يكسب.';
+
+  @override
+  String get helpMemoryTips =>
+      'ركّز في الكروت اللي غيرك بيقلبها؛ دي معلومة ببلاش.';
+
+  @override
+  String get helpSpyGoal =>
+      'لو إنت مش الجاسوس: اكتشفوه. لو إنت الجاسوس: متتكشفش، أو اعرف الكلمة.';
+
+  @override
+  String get helpSpyHow =>
+      'التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.';
+
+  @override
+  String get helpSpyRoles =>
+      '🕵️ الجاسوس: مش عارف الكلمة، بيحاول يتصرف كأنه عارف.\n👤 الباقيين: عارفين الكلمة، بيحاولوا يكشفوه من غير ما يفضحوا الكلمة.';
+
+  @override
+  String get helpSpyTips =>
+      'التلميح لو واضح أوي الجاسوس هيعرف الكلمة، ولو غامض أوي هيشكّوا فيك.\nالجاسوس: اسمع تلميحات اللي قبلك كويس.';
+
+  @override
+  String get helpQuizGoal => 'جاوب صح وبسرعة واجمع أكتر نقط.';
+
+  @override
+  String get helpQuizHow =>
+      'صاحب الغرفة بيختار الفئة وعدد الأسئلة.\nكل سؤال ليه 4 اختيارات و15 ثانية.\nالإجابة الصح بتاخد 500 نقطة، وكمان لحد 500 على السرعة.\nبعد كل سؤال الإجابة الصح والترتيب بيظهروا.';
+
+  @override
+  String get helpQuizTips =>
+      'الوقت بيتحسب على موبايلك من لحظة ما السؤال يظهر عندك، فبطء الشبكة مش هيظلمك.';
+
+  @override
+  String get helpMafiaGoal =>
+      'المواطنين: اكشفوا المافيا وطلّعوهم. المافيا: خلّصوا على الباقيين من غير ما تتكشفوا.';
+
+  @override
+  String get helpMafiaHow =>
+      'التطبيق بيوزّع الأدوار سرّي؛ كل واحد بيشوف دوره بس.\nالليل 🌙: المافيا يختاروا ضحية، والدكتور يحمي حد، والمحقق يسأل عن حد.\nالصبح ☀️: التطبيق يعلن مين اتقتل (أو إن الدكتور أنقذه).\nالنقاش: 3 دقايق تتكلموا وتتهموا بعض (صاحب الغرفة يقدر يختصر الوقت).\nالتصويت: اللي ياخد أكتر أصوات يخرج ودوره يتكشف. لو الأصوات اتعادلت محدش بيخرج.\nوبعدين ليل تاني… لحد ما فريق يكسب.';
+
+  @override
+  String get helpMafiaRoles =>
+      '🔪 مافيا: واحد لكل 4 لاعبين تقريباً. عارفين بعض، وليهم شات سري بالليل.\n💉 دكتور: كل ليلة يحمي حد (ممكن نفسه)، بس مش نفس الشخص ليلتين ورا بعض.\n🔍 محقق: كل ليلة يعرف عن حد هو مافيا ولا لأ.\n👤 مواطن: ملوش قدرة؛ سلاحه عقله وصوته.';
+
+  @override
+  String get helpMafiaTips =>
+      'المواطنين بيكسبوا لو كل المافيا خرجوا. المافيا بيكسبوا لو بقى عددهم قد الباقيين.\nاللي مات بيتفرج ومبيتكلمش.\nلو قاعدين مع بعض اتكلموا بصوتكم؛ التطبيق بيمسك الوقت والتصويت بس.';
+
+  @override
+  String get rpsRock => 'حجر';
+
+  @override
+  String get rpsPaper => 'ورقة';
+
+  @override
+  String get rpsScissors => 'مقص';
+
+  @override
+  String get rpsPick => 'اختار';
+
+  @override
+  String rpsPicked(String name) {
+    return 'اخترت ✓ مستني $name';
+  }
+
+  @override
+  String rpsTheyPicked(String name) {
+    return '$name اختار';
+  }
+
+  @override
+  String rpsFirstTo(String n) {
+    return 'أول واحد يوصل $n';
+  }
+
+  @override
+  String get rpsTie => 'نفس الاختيار، تاني!';
+
+  @override
+  String get bsPlace => 'رصّ سفنك';
+
+  @override
+  String get bsShuffle => 'رصّة تانية';
+
+  @override
+  String get bsReady => 'جاهز';
+
+  @override
+  String bsWaitingThem(String name) {
+    return 'مستني $name يرصّ سفنه';
+  }
+
+  @override
+  String get bsYourSea => 'بحرك';
+
+  @override
+  String bsTheirSea(String name) {
+    return 'بحر $name';
+  }
+
+  @override
+  String get bsTapToFire => 'دوس على خانة في بحره عشان تضرب';
+
+  @override
+  String get bsHit => 'إصابة! اضرب تاني';
+
+  @override
+  String get bsMiss => 'مياه';
+
+  @override
+  String get bsSunk => 'غرّقت سفينة!';
+
+  @override
+  String bsLeft(String n) {
+    return 'فاضل $n';
+  }
+
+  @override
+  String get dotsBoxes => 'مربعات';
+
+  @override
+  String get memPairs => 'أزواج';
+
+  @override
+  String get spyYouAreSpy => 'إنت الجاسوس';
+
+  @override
+  String spyCategory(String cat) {
+    return 'الفئة: $cat';
+  }
+
+  @override
+  String get spyWordIs => 'الكلمة';
+
+  @override
+  String get spyTapToShow => 'دوس عشان تشوف (خبّي الشاشة عن اللي جنبك)';
+
+  @override
+  String get spyHide => 'خبّي';
+
+  @override
+  String spyClueTurn(String name) {
+    return 'دور $name يقول تلميح';
+  }
+
+  @override
+  String get spyYourClue =>
+      'دورك: قول تلميح صغير عن الكلمة (بصوتك أو اكتبه تحت)';
+
+  @override
+  String get spyDone => 'خلصت تلميحي';
+
+  @override
+  String get spyPass => 'عدّي دوره';
+
+  @override
+  String get spyToVote => 'يلا نصوّت';
+
+  @override
+  String spyClues(String n, String m) {
+    return 'تلميح $n من $m';
+  }
+
+  @override
+  String get spyVoteTitle => 'مين الجاسوس؟';
+
+  @override
+  String spyVoted(String n, String m) {
+    return 'صوّت $n من $m';
+  }
+
+  @override
+  String get spyYourVote => 'صوتك راح ✓';
+
+  @override
+  String spyGuessing(String name) {
+    return '$name اتمسك… وبيخمّن الكلمة';
+  }
+
+  @override
+  String get spyGuessNow => 'اتمسكت! عندك فرصة أخيرة: خمّن الكلمة';
+
+  @override
+  String spyWas(String name) {
+    return 'الجاسوس كان $name';
+  }
+
+  @override
+  String spyWordWas(String w) {
+    return 'الكلمة كانت: $w';
+  }
+
+  @override
+  String spyGuessed(String w) {
+    return 'خمّن \"$w\"';
+  }
+
+  @override
+  String get spyNotCaught => 'محدش مسك الجاسوس';
+
+  @override
+  String spyWrongCaught(String name) {
+    return 'اتمسك $name… بس مكانش الجاسوس';
+  }
+
+  @override
+  String get quizCategory => 'الفئة';
+
+  @override
+  String get quizMixed => 'منوّعة';
+
+  @override
+  String get quizCount => 'عدد الأسئلة';
+
+  @override
+  String quizQuestionOf(String i, String n) {
+    return 'سؤال $i من $n';
+  }
+
+  @override
+  String quizAnswered(String n, String m) {
+    return 'جاوب $n من $m';
+  }
+
+  @override
+  String quizRight(String n) {
+    return 'صح! +$n';
+  }
+
+  @override
+  String get quizWrong => 'غلط';
+
+  @override
+  String get quizTooLate => 'الوقت خلص';
+
+  @override
+  String get quizRanking => 'الترتيب';
+
+  @override
+  String quizPoints(String n) {
+    return '$n نقطة';
+  }
+
+  @override
+  String get mafiaRoleMafia => 'مافيا';
+
+  @override
+  String get mafiaRoleDoctor => 'دكتور';
+
+  @override
+  String get mafiaRoleDetective => 'محقق';
+
+  @override
+  String get mafiaRoleCitizen => 'مواطن';
+
+  @override
+  String get mafiaYourRole => 'شخصيتك السرية';
+
+  @override
+  String mafiaTeam(String names) {
+    return 'فريقك: $names';
+  }
+
+  @override
+  String mafiaNight(String n) {
+    return 'الليل $n 🌙';
+  }
+
+  @override
+  String get mafiaMorning => 'الصبح ☀️';
+
+  @override
+  String get mafiaTalk => 'النقاش';
+
+  @override
+  String get mafiaVote => 'التصويت';
+
+  @override
+  String get mafiaNightWait => 'الليل… غمّض واستنى الصبح';
+
+  @override
+  String get mafiaPickKill => 'اختار الضحية';
+
+  @override
+  String get mafiaPickSave => 'اختار حد تحميه الليلة';
+
+  @override
+  String get mafiaPickCheck => 'اختار حد تسأل عنه';
+
+  @override
+  String mafiaPicked(String name) {
+    return 'اخترت $name ✓';
+  }
+
+  @override
+  String mafiaKilled(String name) {
+    return '$name اتقتل الليلة اللي فاتت';
+  }
+
+  @override
+  String get mafiaRescued => 'المافيا حاولوا… بس الدكتور أنقذ الضحية!';
+
+  @override
+  String get mafiaQuietNight => 'ليلة هادية، محدش مات';
+
+  @override
+  String mafiaOut(String name, String role) {
+    return '$name خرج… وكان $role';
+  }
+
+  @override
+  String get mafiaNoOut => 'الأصوات اتعادلت، محدش خرج';
+
+  @override
+  String get mafiaVoteNone => 'محدش';
+
+  @override
+  String get mafiaTownWins => 'المواطنين كسبوا!';
+
+  @override
+  String get mafiaMafiaWins => 'المافيا كسبت!';
+
+  @override
+  String get mafiaYouDied => 'إنت مت… بتتفرج دلوقتي';
+
+  @override
+  String mafiaIsMafia(String name) {
+    return '$name مافيا!';
+  }
+
+  @override
+  String mafiaNotMafia(String name) {
+    return '$name مش مافيا';
+  }
+
+  @override
+  String get mafiaSecretChat => 'شات المافيا السري';
+
+  @override
+  String get mafiaSkip => 'اختصر الوقت';
+
+  @override
+  String mafiaAlive(String n) {
+    return 'عايشين $n';
+  }
+
+  @override
+  String mafiaVotedCount(String n, String m) {
+    return 'صوّت $n من $m';
+  }
+
+  @override
+  String get mafiaNoSameTwice => 'مينفعش تحمي نفس الشخص ليلتين ورا بعض';
+
+  @override
+  String get spyYourCard => 'كلمتك';
 }

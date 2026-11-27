@@ -954,5 +954,557 @@
   },
   "aroundYouNow": "حواليك دلوقتي",
   "helpMark": "؟",
-  "howToPlay": "إزاي بتتلعب؟"
+  "howToPlay": "إزاي بتتلعب؟",
+  "games": "الألعاب",
+  "playWith": "العب مع {name}",
+  "@playWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "playWithGroup": "العب مع الجروب",
+  "gamesTabDirect": "اتنين",
+  "gamesTabGroup": "جروب",
+  "playersRange": "{range} لاعبين",
+  "@playersRange": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "gameInviteFrom": "{name} عازمك على {game}",
+  "@gameInviteFrom": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "gameInviteMine": "إنت فتحت {game}",
+  "@gameInviteMine": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "gamePlay": "العب",
+  "gameJoin": "انضم",
+  "gameJoined": "إنت جوه",
+  "gameNotNow": "مش دلوقتي",
+  "gameStart": "ابدأ",
+  "gameOpen": "افتح اللعبة",
+  "gameWatch": "اتفرج",
+  "gameWaitingHost": "مستنيين {name} يبدأ",
+  "@gameWaitingHost": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameWaitingPeer": "مستنيين {name} يوافق",
+  "@gameWaitingPeer": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameSeats": "{n} من {max}",
+  "@gameSeats": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "gameNeedMore": "محتاجين {n} كمان عشان تبدأ",
+  "@gameNeedMore": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "gameDoneCard": "اللعبة خلصت",
+  "gameClosedCard": "اللعبة اتقفلت",
+  "gameEnded": "اللعبة خلصت",
+  "gameHostLeft": "صاحب الغرفة خرج، فاللعبة اتقفلت",
+  "gameCanceled": "اللعبة اتلغت",
+  "gameRunningBanner": "في لعبة شغالة: {game}",
+  "@gameRunningBanner": {
+    "placeholders": {
+      "game": {
+        "type": "String"
+      }
+    }
+  },
+  "gameBackToGame": "ارجع لها",
+  "gameBackToChat": "ارجع للشات",
+  "gameRematch": "ماتش تاني",
+  "gameRematchAsked": "{name} عايز ماتش تاني",
+  "@gameRematchAsked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameRematchWaiting": "مستني التاني يوافق…",
+  "gameYouWon": "إنت كسبت!",
+  "gameYouLost": "المرة دي لأ… ماتش تاني؟",
+  "gameWinner": "{name} كسب!",
+  "@gameWinner": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameDraw": "تعادل",
+  "gameYourTurn": "دورك",
+  "gameTheirTurn": "دور {name}",
+  "@gameTheirTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameQuitQ": "تخرج من اللعبة؟",
+  "gameQuitBody": "اللعبة هتكمل للباقيين من غيرك.",
+  "gameQuitBody2": "لو خرجت التاني هيكسب.",
+  "gameEndQ": "تقفل اللعبة للكل؟",
+  "gameEndBody": "إنت صاحب الغرفة: لو خرجت اللعبة هتتقفل عند كل اللاعبين.",
+  "gameLeave": "اخرج",
+  "gameNobody": "مفيش حد متصل دلوقتي تلعب معاه",
+  "gameNeedConnection": "استنى الاتصال يجهز الأول",
+  "gameOldVersion": "مفيش رد… يمكن {name} عنده نسخة قديمة من وصل",
+  "@gameOldVersion": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameSpectating": "إنت بتتفرج",
+  "gameScore": "النتيجة",
+  "gamePlayers": "اللاعبين",
+  "gameRound": "الماتش {n}",
+  "@gameRound": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "gameChatHint": "اكتب للاعبين…",
+  "gameChatMuted": "مينفعش تتكلم دلوقتي",
+  "gameCheated": "{name} غش! (غيّر اختياره أو كدب في رد)",
+  "@gameCheated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameHost": "صاحب الغرفة",
+  "gameSkip": "عدّي",
+  "gameTimeLeft": "فاضل {s} ث",
+  "@gameTimeLeft": {
+    "placeholders": {
+      "s": {
+        "type": "String"
+      }
+    }
+  },
+  "gameWins": "مرات الكسب",
+  "gameVsRecord": "بينكم: {a} – {b}",
+  "@gameVsRecord": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "gameMore": "ألعاب",
+  "gameXo": "إكس أو",
+  "gameConnect4": "أربعة في صف",
+  "gameBattleship": "حرب السفن",
+  "gameRps": "حجر ورقة مقص",
+  "gameDots": "مربعات ونقط",
+  "gameMemory": "الذاكرة",
+  "gameSpy": "مين الجاسوس؟",
+  "gameQuiz": "المسابقة",
+  "gameMafia": "المافيا",
+  "tagXo": "3 في صف تكسب",
+  "tagConnect4": "القطعة بتنزل، و4 في صف تكسب",
+  "tagBattleship": "خبّي سفنك واضرب سفنه",
+  "tagRps": "مين هيغلب مين؟",
+  "tagDots": "اقفل المربع وخده",
+  "tagMemory": "افتكر مكان الصور",
+  "tagSpy": "الكل عارف الكلمة… إلا واحد",
+  "tagQuiz": "مين أسرع وأشطر؟",
+  "tagMafia": "اكشفوا القتلة قبل ما يخلّصوا عليكم",
+  "helpGoal": "الهدف",
+  "helpHow": "إزاي بتتلعب",
+  "helpRoles": "الأدوار",
+  "helpTips": "نصايح",
+  "helpFaq": "أسئلة",
+  "helpWhereDirect": "في الخاص",
+  "helpWhereGroup": "في الجروبات",
+  "helpMinutes": "{range} دقيقة",
+  "@helpMinutes": {
+    "placeholders": {
+      "range": {
+        "type": "String"
+      }
+    }
+  },
+  "helpFaqLeaveQ": "لو حد فصل أو خرج؟",
+  "helpFaqLeaveA": "لو لاعب خرج، اللعبة بتكمل للباقيين ودوره بيتنط. لو صاحب الغرفة (اللي فتح اللعبة) خرج أو بعد أكتر من 25 ثانية، اللعبة بتتقفل عند الكل.",
+  "helpFaqHostQ": "مين \"صاحب الغرفة\"؟",
+  "helpFaqHostA": "اللي فتح اللعبة. موبايله هو الحكم: بيشغّل القواعد، وبيوزّع الأدوار السرية، وبيعدّ الأصوات. بيلعب عادي زي أي حد، والتطبيق مبيوريهوش أسرار حد.",
+  "helpFaqCheatQ": "حد يقدر يغش؟",
+  "helpFaqCheatA": "في حرب السفن وحجر ورقة مقص اختيارك بيتقفل ببصمة قبل ما التاني يشوفه، والتطبيق بيكشف أي حد غيّر اختياره أو كدب. في باقي الألعاب موبايل صاحب الغرفة هو الحكم.",
+  "helpXoGoal": "أول واحد يعمل 3 علامات في صف (أفقي أو رأسي أو مايل) يكسب.",
+  "helpXoHow": "اللي بيبدأ بياخد ✕ والتاني ○.\nكل واحد بدوره يدوس على خانة فاضية.\nلو اللوح اتملى ومحدش عمل 3 في صف يبقى تعادل.\nفي الماتش اللي بعده اللي بيبدأ بيتبدّل.",
+  "helpXoTips": "النص أقوى خانة في الأول.\nلو التاني عنده 2 في صف، اقفل عليه فوراً.",
+  "helpConnect4Goal": "أول واحد يعمل 4 قطع من لونه في صف يكسب.",
+  "helpConnect4How": "اللوح 7 أعمدة و6 صفوف.\nدوس على أي عمود، والقطعة بتنزل لأوطى خانة فاضية فيه.\nالـ 4 ممكن يكونوا أفقي أو رأسي أو مايلين.\nلو اللوح اتملى من غير 4 في صف يبقى تعادل.",
+  "helpConnect4Tips": "العمود اللي في النص بيفتح لك فرص أكتر.\nبص على الخطوط المايلة؛ ناس كتير بتنساها.",
+  "helpBattleshipGoal": "غرّق كل سفن التاني قبل ما يغرّق سفنك.",
+  "helpBattleshipHow": "كل واحد عنده بحر 8×8 فيه 4 سفن: طولها 4 و3 و3 و2.\nدوس \"رصّة تانية\" لحد ما الرصّة تعجبك، وبعدين \"جاهز\".\nبالدور دوس على خانة في بحر التاني عشان تضرب.\nالرد: مياه ○ أو إصابة ✕ أو غرّقت سفينة.\nلو أصبت بتضرب تاني، ولو جت مياه الدور بيروح.",
+  "helpBattleshipTips": "لما تصيب، جرّب الخانات اللي جنبها.\nالسفن مبتلمسش بعض، فحوالين السفينة الغرقانة كله مياه.\nسفنك مبتخرجش من موبايلك؛ في الآخر التطبيق بيتأكد إن محدش كدب.",
+  "helpRpsGoal": "أول واحد يكسب رميتين يكسب الماتش.",
+  "helpRpsHow": "اختار حجر ✊ أو ورقة ✋ أو مقص ✌️.\nالحجر بيكسّر المقص، والمقص بيقص الورقة، والورقة بتلف الحجر.\nالاختيارين بيظهروا مع بعض بعد ما الاتنين يختاروا.\nلو اخترتوا نفس الحاجة الرمية بتتعاد.",
+  "helpRpsTips": "محدش يقدر يشوف اختيارك قبل ما يختار؛ التطبيق بيقفله ببصمة.",
+  "helpDotsGoal": "خد أكتر عدد مربعات.",
+  "helpDotsHow": "بالدور، كل واحد يرسم خط بين نقطتين جنب بعض.\nاللي يرسم الضلع الرابع لمربع ياخده (بيتلوّن بلونه).\nلو قفلت مربع بتلعب تاني على طول.\nلما كل المربعات تتقفل، اللي معاه أكتر واحد يكسب.",
+  "helpDotsTips": "متدّيش للتاني ضلع تالت في مربع؛ هياخده.\nفي الآخر حاول تسيب للتاني سلسلة قصيرة وتاخد إنت الطويلة.",
+  "helpMemoryGoal": "لِم أكتر عدد من الكروت المتشابهة.",
+  "helpMemoryHow": "الكروت مقلوبة، وكل صورة ليها كارتين.\nفي دورك اقلب كارتين.\nلو شبه بعض بتاخدهم وتلعب تاني.\nلو مش شبه بعض بيتقلبوا تاني بعد لحظة والدور بيروح للي بعدك.\nلما الكروت تخلص، اللي معاه أكتر يكسب.",
+  "helpMemoryTips": "ركّز في الكروت اللي غيرك بيقلبها؛ دي معلومة ببلاش.",
+  "helpSpyGoal": "لو إنت مش الجاسوس: اكتشفوه. لو إنت الجاسوس: متتكشفش، أو اعرف الكلمة.",
+  "helpSpyHow": "التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.",
+  "helpSpyRoles": "🕵️ الجاسوس: مش عارف الكلمة، بيحاول يتصرف كأنه عارف.\n👤 الباقيين: عارفين الكلمة، بيحاولوا يكشفوه من غير ما يفضحوا الكلمة.",
+  "helpSpyTips": "التلميح لو واضح أوي الجاسوس هيعرف الكلمة، ولو غامض أوي هيشكّوا فيك.\nالجاسوس: اسمع تلميحات اللي قبلك كويس.",
+  "helpQuizGoal": "جاوب صح وبسرعة واجمع أكتر نقط.",
+  "helpQuizHow": "صاحب الغرفة بيختار الفئة وعدد الأسئلة.\nكل سؤال ليه 4 اختيارات و15 ثانية.\nالإجابة الصح بتاخد 500 نقطة، وكمان لحد 500 على السرعة.\nبعد كل سؤال الإجابة الصح والترتيب بيظهروا.",
+  "helpQuizTips": "الوقت بيتحسب على موبايلك من لحظة ما السؤال يظهر عندك، فبطء الشبكة مش هيظلمك.",
+  "helpMafiaGoal": "المواطنين: اكشفوا المافيا وطلّعوهم. المافيا: خلّصوا على الباقيين من غير ما تتكشفوا.",
+  "helpMafiaHow": "التطبيق بيوزّع الأدوار سرّي؛ كل واحد بيشوف دوره بس.\nالليل 🌙: المافيا يختاروا ضحية، والدكتور يحمي حد، والمحقق يسأل عن حد.\nالصبح ☀️: التطبيق يعلن مين اتقتل (أو إن الدكتور أنقذه).\nالنقاش: 3 دقايق تتكلموا وتتهموا بعض (صاحب الغرفة يقدر يختصر الوقت).\nالتصويت: اللي ياخد أكتر أصوات يخرج ودوره يتكشف. لو الأصوات اتعادلت محدش بيخرج.\nوبعدين ليل تاني… لحد ما فريق يكسب.",
+  "helpMafiaRoles": "🔪 مافيا: واحد لكل 4 لاعبين تقريباً. عارفين بعض، وليهم شات سري بالليل.\n💉 دكتور: كل ليلة يحمي حد (ممكن نفسه)، بس مش نفس الشخص ليلتين ورا بعض.\n🔍 محقق: كل ليلة يعرف عن حد هو مافيا ولا لأ.\n👤 مواطن: ملوش قدرة؛ سلاحه عقله وصوته.",
+  "helpMafiaTips": "المواطنين بيكسبوا لو كل المافيا خرجوا. المافيا بيكسبوا لو بقى عددهم قد الباقيين.\nاللي مات بيتفرج ومبيتكلمش.\nلو قاعدين مع بعض اتكلموا بصوتكم؛ التطبيق بيمسك الوقت والتصويت بس.",
+  "rpsRock": "حجر",
+  "rpsPaper": "ورقة",
+  "rpsScissors": "مقص",
+  "rpsPick": "اختار",
+  "rpsPicked": "اخترت ✓ مستني {name}",
+  "@rpsPicked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rpsTheyPicked": "{name} اختار",
+  "@rpsTheyPicked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "rpsFirstTo": "أول واحد يوصل {n}",
+  "@rpsFirstTo": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "rpsTie": "نفس الاختيار، تاني!",
+  "bsPlace": "رصّ سفنك",
+  "bsShuffle": "رصّة تانية",
+  "bsReady": "جاهز",
+  "bsWaitingThem": "مستني {name} يرصّ سفنه",
+  "@bsWaitingThem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bsYourSea": "بحرك",
+  "bsTheirSea": "بحر {name}",
+  "@bsTheirSea": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "bsTapToFire": "دوس على خانة في بحره عشان تضرب",
+  "bsHit": "إصابة! اضرب تاني",
+  "bsMiss": "مياه",
+  "bsSunk": "غرّقت سفينة!",
+  "bsLeft": "فاضل {n}",
+  "@bsLeft": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "dotsBoxes": "مربعات",
+  "memPairs": "أزواج",
+  "spyYouAreSpy": "إنت الجاسوس",
+  "spyCategory": "الفئة: {cat}",
+  "@spyCategory": {
+    "placeholders": {
+      "cat": {
+        "type": "String"
+      }
+    }
+  },
+  "spyWordIs": "الكلمة",
+  "spyTapToShow": "دوس عشان تشوف (خبّي الشاشة عن اللي جنبك)",
+  "spyHide": "خبّي",
+  "spyClueTurn": "دور {name} يقول تلميح",
+  "@spyClueTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spyYourClue": "دورك: قول تلميح صغير عن الكلمة (بصوتك أو اكتبه تحت)",
+  "spyDone": "خلصت تلميحي",
+  "spyPass": "عدّي دوره",
+  "spyToVote": "يلا نصوّت",
+  "spyClues": "تلميح {n} من {m}",
+  "@spyClues": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "spyVoteTitle": "مين الجاسوس؟",
+  "spyVoted": "صوّت {n} من {m}",
+  "@spyVoted": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "spyYourVote": "صوتك راح ✓",
+  "spyGuessing": "{name} اتمسك… وبيخمّن الكلمة",
+  "@spyGuessing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spyGuessNow": "اتمسكت! عندك فرصة أخيرة: خمّن الكلمة",
+  "spyWas": "الجاسوس كان {name}",
+  "@spyWas": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "spyWordWas": "الكلمة كانت: {w}",
+  "@spyWordWas": {
+    "placeholders": {
+      "w": {
+        "type": "String"
+      }
+    }
+  },
+  "spyGuessed": "خمّن \"{w}\"",
+  "@spyGuessed": {
+    "placeholders": {
+      "w": {
+        "type": "String"
+      }
+    }
+  },
+  "spyNotCaught": "محدش مسك الجاسوس",
+  "spyWrongCaught": "اتمسك {name}… بس مكانش الجاسوس",
+  "@spyWrongCaught": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "quizCategory": "الفئة",
+  "quizMixed": "منوّعة",
+  "quizCount": "عدد الأسئلة",
+  "quizQuestionOf": "سؤال {i} من {n}",
+  "@quizQuestionOf": {
+    "placeholders": {
+      "i": {
+        "type": "String"
+      },
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "quizAnswered": "جاوب {n} من {m}",
+  "@quizAnswered": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "quizRight": "صح! +{n}",
+  "@quizRight": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "quizWrong": "غلط",
+  "quizTooLate": "الوقت خلص",
+  "quizRanking": "الترتيب",
+  "quizPoints": "{n} نقطة",
+  "@quizPoints": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaRoleMafia": "مافيا",
+  "mafiaRoleDoctor": "دكتور",
+  "mafiaRoleDetective": "محقق",
+  "mafiaRoleCitizen": "مواطن",
+  "mafiaYourRole": "شخصيتك السرية",
+  "mafiaTeam": "فريقك: {names}",
+  "@mafiaTeam": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaNight": "الليل {n} 🌙",
+  "@mafiaNight": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaMorning": "الصبح ☀️",
+  "mafiaTalk": "النقاش",
+  "mafiaVote": "التصويت",
+  "mafiaNightWait": "الليل… غمّض واستنى الصبح",
+  "mafiaPickKill": "اختار الضحية",
+  "mafiaPickSave": "اختار حد تحميه الليلة",
+  "mafiaPickCheck": "اختار حد تسأل عنه",
+  "mafiaPicked": "اخترت {name} ✓",
+  "@mafiaPicked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaKilled": "{name} اتقتل الليلة اللي فاتت",
+  "@mafiaKilled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaRescued": "المافيا حاولوا… بس الدكتور أنقذ الضحية!",
+  "mafiaQuietNight": "ليلة هادية، محدش مات",
+  "mafiaOut": "{name} خرج… وكان {role}",
+  "@mafiaOut": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaNoOut": "الأصوات اتعادلت، محدش خرج",
+  "mafiaVoteNone": "محدش",
+  "mafiaTownWins": "المواطنين كسبوا!",
+  "mafiaMafiaWins": "المافيا كسبت!",
+  "mafiaYouDied": "إنت مت… بتتفرج دلوقتي",
+  "mafiaIsMafia": "{name} مافيا!",
+  "@mafiaIsMafia": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaNotMafia": "{name} مش مافيا",
+  "@mafiaNotMafia": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaSecretChat": "شات المافيا السري",
+  "mafiaSkip": "اختصر الوقت",
+  "mafiaAlive": "عايشين {n}",
+  "@mafiaAlive": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaVotedCount": "صوّت {n} من {m}",
+  "@mafiaVotedCount": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "m": {
+        "type": "String"
+      }
+    }
+  },
+  "mafiaNoSameTwice": "مينفعش تحمي نفس الشخص ليلتين ورا بعض",
+  "spyYourCard": "كلمتك"
 }

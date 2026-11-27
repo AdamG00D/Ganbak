@@ -3301,6 +3301,1224 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إزاي بتتلعب؟'**
   String get howToPlay;
+
+  /// No description provided for @games.
+  ///
+  /// In ar, this message translates to:
+  /// **'الألعاب'**
+  String get games;
+
+  /// No description provided for @playWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب مع {name}'**
+  String playWith(String name);
+
+  /// No description provided for @playWithGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب مع الجروب'**
+  String get playWithGroup;
+
+  /// No description provided for @gamesTabDirect.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتنين'**
+  String get gamesTabDirect;
+
+  /// No description provided for @gamesTabGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'جروب'**
+  String get gamesTabGroup;
+
+  /// No description provided for @playersRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'{range} لاعبين'**
+  String playersRange(String range);
+
+  /// No description provided for @gameInviteFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} عازمك على {game}'**
+  String gameInviteFrom(String name, String game);
+
+  /// No description provided for @gameInviteMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت فتحت {game}'**
+  String gameInviteMine(String game);
+
+  /// No description provided for @gamePlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'العب'**
+  String get gamePlay;
+
+  /// No description provided for @gameJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضم'**
+  String get gameJoin;
+
+  /// No description provided for @gameJoined.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت جوه'**
+  String get gameJoined;
+
+  /// No description provided for @gameNotNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش دلوقتي'**
+  String get gameNotNow;
+
+  /// No description provided for @gameStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ'**
+  String get gameStart;
+
+  /// No description provided for @gameOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح اللعبة'**
+  String get gameOpen;
+
+  /// No description provided for @gameWatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتفرج'**
+  String get gameWatch;
+
+  /// No description provided for @gameWaitingHost.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستنيين {name} يبدأ'**
+  String gameWaitingHost(String name);
+
+  /// No description provided for @gameWaitingPeer.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستنيين {name} يوافق'**
+  String gameWaitingPeer(String name);
+
+  /// No description provided for @gameSeats.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} من {max}'**
+  String gameSeats(String n, String max);
+
+  /// No description provided for @gameNeedMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'محتاجين {n} كمان عشان تبدأ'**
+  String gameNeedMore(String n);
+
+  /// No description provided for @gameDoneCard.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللعبة خلصت'**
+  String get gameDoneCard;
+
+  /// No description provided for @gameClosedCard.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللعبة اتقفلت'**
+  String get gameClosedCard;
+
+  /// No description provided for @gameEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللعبة خلصت'**
+  String get gameEnded;
+
+  /// No description provided for @gameHostLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحب الغرفة خرج، فاللعبة اتقفلت'**
+  String get gameHostLeft;
+
+  /// No description provided for @gameCanceled.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللعبة اتلغت'**
+  String get gameCanceled;
+
+  /// No description provided for @gameRunningBanner.
+  ///
+  /// In ar, this message translates to:
+  /// **'في لعبة شغالة: {game}'**
+  String gameRunningBanner(String game);
+
+  /// No description provided for @gameBackToGame.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارجع لها'**
+  String get gameBackToGame;
+
+  /// No description provided for @gameBackToChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارجع للشات'**
+  String get gameBackToChat;
+
+  /// No description provided for @gameRematch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماتش تاني'**
+  String get gameRematch;
+
+  /// No description provided for @gameRematchAsked.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} عايز ماتش تاني'**
+  String gameRematchAsked(String name);
+
+  /// No description provided for @gameRematchWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستني التاني يوافق…'**
+  String get gameRematchWaiting;
+
+  /// No description provided for @gameYouWon.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت كسبت!'**
+  String get gameYouWon;
+
+  /// No description provided for @gameYouLost.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرة دي لأ… ماتش تاني؟'**
+  String get gameYouLost;
+
+  /// No description provided for @gameWinner.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} كسب!'**
+  String gameWinner(String name);
+
+  /// No description provided for @gameDraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعادل'**
+  String get gameDraw;
+
+  /// No description provided for @gameYourTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك'**
+  String get gameYourTurn;
+
+  /// No description provided for @gameTheirTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور {name}'**
+  String gameTheirTurn(String name);
+
+  /// No description provided for @gameQuitQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخرج من اللعبة؟'**
+  String get gameQuitQ;
+
+  /// No description provided for @gameQuitBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللعبة هتكمل للباقيين من غيرك.'**
+  String get gameQuitBody;
+
+  /// No description provided for @gameQuitBody2.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو خرجت التاني هيكسب.'**
+  String get gameQuitBody2;
+
+  /// No description provided for @gameEndQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقفل اللعبة للكل؟'**
+  String get gameEndQ;
+
+  /// No description provided for @gameEndBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت صاحب الغرفة: لو خرجت اللعبة هتتقفل عند كل اللاعبين.'**
+  String get gameEndBody;
+
+  /// No description provided for @gameLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخرج'**
+  String get gameLeave;
+
+  /// No description provided for @gameNobody.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش حد متصل دلوقتي تلعب معاه'**
+  String get gameNobody;
+
+  /// No description provided for @gameNeedConnection.
+  ///
+  /// In ar, this message translates to:
+  /// **'استنى الاتصال يجهز الأول'**
+  String get gameNeedConnection;
+
+  /// No description provided for @gameOldVersion.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش رد… يمكن {name} عنده نسخة قديمة من وصل'**
+  String gameOldVersion(String name);
+
+  /// No description provided for @gameSpectating.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت بتتفرج'**
+  String get gameSpectating;
+
+  /// No description provided for @gameScore.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتيجة'**
+  String get gameScore;
+
+  /// No description provided for @gamePlayers.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللاعبين'**
+  String get gamePlayers;
+
+  /// No description provided for @gameRound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماتش {n}'**
+  String gameRound(String n);
+
+  /// No description provided for @gameChatHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب للاعبين…'**
+  String get gameChatHint;
+
+  /// No description provided for @gameChatMuted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مينفعش تتكلم دلوقتي'**
+  String get gameChatMuted;
+
+  /// No description provided for @gameCheated.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} غش! (غيّر اختياره أو كدب في رد)'**
+  String gameCheated(String name);
+
+  /// No description provided for @gameHost.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحب الغرفة'**
+  String get gameHost;
+
+  /// No description provided for @gameSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّي'**
+  String get gameSkip;
+
+  /// No description provided for @gameTimeLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضل {s} ث'**
+  String gameTimeLeft(String s);
+
+  /// No description provided for @gameWins.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرات الكسب'**
+  String get gameWins;
+
+  /// No description provided for @gameVsRecord.
+  ///
+  /// In ar, this message translates to:
+  /// **'بينكم: {a} – {b}'**
+  String gameVsRecord(String a, String b);
+
+  /// No description provided for @gameMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألعاب'**
+  String get gameMore;
+
+  /// No description provided for @gameXo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكس أو'**
+  String get gameXo;
+
+  /// No description provided for @gameConnect4.
+  ///
+  /// In ar, this message translates to:
+  /// **'أربعة في صف'**
+  String get gameConnect4;
+
+  /// No description provided for @gameBattleship.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرب السفن'**
+  String get gameBattleship;
+
+  /// No description provided for @gameRps.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجر ورقة مقص'**
+  String get gameRps;
+
+  /// No description provided for @gameDots.
+  ///
+  /// In ar, this message translates to:
+  /// **'مربعات ونقط'**
+  String get gameDots;
+
+  /// No description provided for @gameMemory.
+  ///
+  /// In ar, this message translates to:
+  /// **'الذاكرة'**
+  String get gameMemory;
+
+  /// No description provided for @gameSpy.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين الجاسوس؟'**
+  String get gameSpy;
+
+  /// No description provided for @gameQuiz.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسابقة'**
+  String get gameQuiz;
+
+  /// No description provided for @gameMafia.
+  ///
+  /// In ar, this message translates to:
+  /// **'المافيا'**
+  String get gameMafia;
+
+  /// No description provided for @tagXo.
+  ///
+  /// In ar, this message translates to:
+  /// **'3 في صف تكسب'**
+  String get tagXo;
+
+  /// No description provided for @tagConnect4.
+  ///
+  /// In ar, this message translates to:
+  /// **'القطعة بتنزل، و4 في صف تكسب'**
+  String get tagConnect4;
+
+  /// No description provided for @tagBattleship.
+  ///
+  /// In ar, this message translates to:
+  /// **'خبّي سفنك واضرب سفنه'**
+  String get tagBattleship;
+
+  /// No description provided for @tagRps.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين هيغلب مين؟'**
+  String get tagRps;
+
+  /// No description provided for @tagDots.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقفل المربع وخده'**
+  String get tagDots;
+
+  /// No description provided for @tagMemory.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتكر مكان الصور'**
+  String get tagMemory;
+
+  /// No description provided for @tagSpy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل عارف الكلمة… إلا واحد'**
+  String get tagSpy;
+
+  /// No description provided for @tagQuiz.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين أسرع وأشطر؟'**
+  String get tagQuiz;
+
+  /// No description provided for @tagMafia.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكشفوا القتلة قبل ما يخلّصوا عليكم'**
+  String get tagMafia;
+
+  /// No description provided for @helpGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهدف'**
+  String get helpGoal;
+
+  /// No description provided for @helpHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزاي بتتلعب'**
+  String get helpHow;
+
+  /// No description provided for @helpRoles.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأدوار'**
+  String get helpRoles;
+
+  /// No description provided for @helpTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصايح'**
+  String get helpTips;
+
+  /// No description provided for @helpFaq.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسئلة'**
+  String get helpFaq;
+
+  /// No description provided for @helpWhereDirect.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الخاص'**
+  String get helpWhereDirect;
+
+  /// No description provided for @helpWhereGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الجروبات'**
+  String get helpWhereGroup;
+
+  /// No description provided for @helpMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{range} دقيقة'**
+  String helpMinutes(String range);
+
+  /// No description provided for @helpFaqLeaveQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو حد فصل أو خرج؟'**
+  String get helpFaqLeaveQ;
+
+  /// No description provided for @helpFaqLeaveA.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو لاعب خرج، اللعبة بتكمل للباقيين ودوره بيتنط. لو صاحب الغرفة (اللي فتح اللعبة) خرج أو بعد أكتر من 25 ثانية، اللعبة بتتقفل عند الكل.'**
+  String get helpFaqLeaveA;
+
+  /// No description provided for @helpFaqHostQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين \"صاحب الغرفة\"؟'**
+  String get helpFaqHostQ;
+
+  /// No description provided for @helpFaqHostA.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي فتح اللعبة. موبايله هو الحكم: بيشغّل القواعد، وبيوزّع الأدوار السرية، وبيعدّ الأصوات. بيلعب عادي زي أي حد، والتطبيق مبيوريهوش أسرار حد.'**
+  String get helpFaqHostA;
+
+  /// No description provided for @helpFaqCheatQ.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد يقدر يغش؟'**
+  String get helpFaqCheatQ;
+
+  /// No description provided for @helpFaqCheatA.
+  ///
+  /// In ar, this message translates to:
+  /// **'في حرب السفن وحجر ورقة مقص اختيارك بيتقفل ببصمة قبل ما التاني يشوفه، والتطبيق بيكشف أي حد غيّر اختياره أو كدب. في باقي الألعاب موبايل صاحب الغرفة هو الحكم.'**
+  String get helpFaqCheatA;
+
+  /// No description provided for @helpXoGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول واحد يعمل 3 علامات في صف (أفقي أو رأسي أو مايل) يكسب.'**
+  String get helpXoGoal;
+
+  /// No description provided for @helpXoHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي بيبدأ بياخد ✕ والتاني ○.\nكل واحد بدوره يدوس على خانة فاضية.\nلو اللوح اتملى ومحدش عمل 3 في صف يبقى تعادل.\nفي الماتش اللي بعده اللي بيبدأ بيتبدّل.'**
+  String get helpXoHow;
+
+  /// No description provided for @helpXoTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'النص أقوى خانة في الأول.\nلو التاني عنده 2 في صف، اقفل عليه فوراً.'**
+  String get helpXoTips;
+
+  /// No description provided for @helpConnect4Goal.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول واحد يعمل 4 قطع من لونه في صف يكسب.'**
+  String get helpConnect4Goal;
+
+  /// No description provided for @helpConnect4How.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللوح 7 أعمدة و6 صفوف.\nدوس على أي عمود، والقطعة بتنزل لأوطى خانة فاضية فيه.\nالـ 4 ممكن يكونوا أفقي أو رأسي أو مايلين.\nلو اللوح اتملى من غير 4 في صف يبقى تعادل.'**
+  String get helpConnect4How;
+
+  /// No description provided for @helpConnect4Tips.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمود اللي في النص بيفتح لك فرص أكتر.\nبص على الخطوط المايلة؛ ناس كتير بتنساها.'**
+  String get helpConnect4Tips;
+
+  /// No description provided for @helpBattleshipGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرّق كل سفن التاني قبل ما يغرّق سفنك.'**
+  String get helpBattleshipGoal;
+
+  /// No description provided for @helpBattleshipHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل واحد عنده بحر 8×8 فيه 4 سفن: طولها 4 و3 و3 و2.\nدوس \"رصّة تانية\" لحد ما الرصّة تعجبك، وبعدين \"جاهز\".\nبالدور دوس على خانة في بحر التاني عشان تضرب.\nالرد: مياه ○ أو إصابة ✕ أو غرّقت سفينة.\nلو أصبت بتضرب تاني، ولو جت مياه الدور بيروح.'**
+  String get helpBattleshipHow;
+
+  /// No description provided for @helpBattleshipTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما تصيب، جرّب الخانات اللي جنبها.\nالسفن مبتلمسش بعض، فحوالين السفينة الغرقانة كله مياه.\nسفنك مبتخرجش من موبايلك؛ في الآخر التطبيق بيتأكد إن محدش كدب.'**
+  String get helpBattleshipTips;
+
+  /// No description provided for @helpRpsGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول واحد يكسب رميتين يكسب الماتش.'**
+  String get helpRpsGoal;
+
+  /// No description provided for @helpRpsHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار حجر ✊ أو ورقة ✋ أو مقص ✌️.\nالحجر بيكسّر المقص، والمقص بيقص الورقة، والورقة بتلف الحجر.\nالاختيارين بيظهروا مع بعض بعد ما الاتنين يختاروا.\nلو اخترتوا نفس الحاجة الرمية بتتعاد.'**
+  String get helpRpsHow;
+
+  /// No description provided for @helpRpsTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'محدش يقدر يشوف اختيارك قبل ما يختار؛ التطبيق بيقفله ببصمة.'**
+  String get helpRpsTips;
+
+  /// No description provided for @helpDotsGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'خد أكتر عدد مربعات.'**
+  String get helpDotsGoal;
+
+  /// No description provided for @helpDotsHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالدور، كل واحد يرسم خط بين نقطتين جنب بعض.\nاللي يرسم الضلع الرابع لمربع ياخده (بيتلوّن بلونه).\nلو قفلت مربع بتلعب تاني على طول.\nلما كل المربعات تتقفل، اللي معاه أكتر واحد يكسب.'**
+  String get helpDotsHow;
+
+  /// No description provided for @helpDotsTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'متدّيش للتاني ضلع تالت في مربع؛ هياخده.\nفي الآخر حاول تسيب للتاني سلسلة قصيرة وتاخد إنت الطويلة.'**
+  String get helpDotsTips;
+
+  /// No description provided for @helpMemoryGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'لِم أكتر عدد من الكروت المتشابهة.'**
+  String get helpMemoryGoal;
+
+  /// No description provided for @helpMemoryHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكروت مقلوبة، وكل صورة ليها كارتين.\nفي دورك اقلب كارتين.\nلو شبه بعض بتاخدهم وتلعب تاني.\nلو مش شبه بعض بيتقلبوا تاني بعد لحظة والدور بيروح للي بعدك.\nلما الكروت تخلص، اللي معاه أكتر يكسب.'**
+  String get helpMemoryHow;
+
+  /// No description provided for @helpMemoryTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'ركّز في الكروت اللي غيرك بيقلبها؛ دي معلومة ببلاش.'**
+  String get helpMemoryTips;
+
+  /// No description provided for @helpSpyGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو إنت مش الجاسوس: اكتشفوه. لو إنت الجاسوس: متتكشفش، أو اعرف الكلمة.'**
+  String get helpSpyGoal;
+
+  /// No description provided for @helpSpyHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف \"إنت الجاسوس\" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس \"خلصت\".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.'**
+  String get helpSpyHow;
+
+  /// No description provided for @helpSpyRoles.
+  ///
+  /// In ar, this message translates to:
+  /// **'🕵️ الجاسوس: مش عارف الكلمة، بيحاول يتصرف كأنه عارف.\n👤 الباقيين: عارفين الكلمة، بيحاولوا يكشفوه من غير ما يفضحوا الكلمة.'**
+  String get helpSpyRoles;
+
+  /// No description provided for @helpSpyTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'التلميح لو واضح أوي الجاسوس هيعرف الكلمة، ولو غامض أوي هيشكّوا فيك.\nالجاسوس: اسمع تلميحات اللي قبلك كويس.'**
+  String get helpSpyTips;
+
+  /// No description provided for @helpQuizGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاوب صح وبسرعة واجمع أكتر نقط.'**
+  String get helpQuizGoal;
+
+  /// No description provided for @helpQuizHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحب الغرفة بيختار الفئة وعدد الأسئلة.\nكل سؤال ليه 4 اختيارات و15 ثانية.\nالإجابة الصح بتاخد 500 نقطة، وكمان لحد 500 على السرعة.\nبعد كل سؤال الإجابة الصح والترتيب بيظهروا.'**
+  String get helpQuizHow;
+
+  /// No description provided for @helpQuizTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت بيتحسب على موبايلك من لحظة ما السؤال يظهر عندك، فبطء الشبكة مش هيظلمك.'**
+  String get helpQuizTips;
+
+  /// No description provided for @helpMafiaGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواطنين: اكشفوا المافيا وطلّعوهم. المافيا: خلّصوا على الباقيين من غير ما تتكشفوا.'**
+  String get helpMafiaGoal;
+
+  /// No description provided for @helpMafiaHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'التطبيق بيوزّع الأدوار سرّي؛ كل واحد بيشوف دوره بس.\nالليل 🌙: المافيا يختاروا ضحية، والدكتور يحمي حد، والمحقق يسأل عن حد.\nالصبح ☀️: التطبيق يعلن مين اتقتل (أو إن الدكتور أنقذه).\nالنقاش: 3 دقايق تتكلموا وتتهموا بعض (صاحب الغرفة يقدر يختصر الوقت).\nالتصويت: اللي ياخد أكتر أصوات يخرج ودوره يتكشف. لو الأصوات اتعادلت محدش بيخرج.\nوبعدين ليل تاني… لحد ما فريق يكسب.'**
+  String get helpMafiaHow;
+
+  /// No description provided for @helpMafiaRoles.
+  ///
+  /// In ar, this message translates to:
+  /// **'🔪 مافيا: واحد لكل 4 لاعبين تقريباً. عارفين بعض، وليهم شات سري بالليل.\n💉 دكتور: كل ليلة يحمي حد (ممكن نفسه)، بس مش نفس الشخص ليلتين ورا بعض.\n🔍 محقق: كل ليلة يعرف عن حد هو مافيا ولا لأ.\n👤 مواطن: ملوش قدرة؛ سلاحه عقله وصوته.'**
+  String get helpMafiaRoles;
+
+  /// No description provided for @helpMafiaTips.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواطنين بيكسبوا لو كل المافيا خرجوا. المافيا بيكسبوا لو بقى عددهم قد الباقيين.\nاللي مات بيتفرج ومبيتكلمش.\nلو قاعدين مع بعض اتكلموا بصوتكم؛ التطبيق بيمسك الوقت والتصويت بس.'**
+  String get helpMafiaTips;
+
+  /// No description provided for @rpsRock.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجر'**
+  String get rpsRock;
+
+  /// No description provided for @rpsPaper.
+  ///
+  /// In ar, this message translates to:
+  /// **'ورقة'**
+  String get rpsPaper;
+
+  /// No description provided for @rpsScissors.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقص'**
+  String get rpsScissors;
+
+  /// No description provided for @rpsPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار'**
+  String get rpsPick;
+
+  /// No description provided for @rpsPicked.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخترت ✓ مستني {name}'**
+  String rpsPicked(String name);
+
+  /// No description provided for @rpsTheyPicked.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} اختار'**
+  String rpsTheyPicked(String name);
+
+  /// No description provided for @rpsFirstTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'أول واحد يوصل {n}'**
+  String rpsFirstTo(String n);
+
+  /// No description provided for @rpsTie.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفس الاختيار، تاني!'**
+  String get rpsTie;
+
+  /// No description provided for @bsPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصّ سفنك'**
+  String get bsPlace;
+
+  /// No description provided for @bsShuffle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصّة تانية'**
+  String get bsShuffle;
+
+  /// No description provided for @bsReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز'**
+  String get bsReady;
+
+  /// No description provided for @bsWaitingThem.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستني {name} يرصّ سفنه'**
+  String bsWaitingThem(String name);
+
+  /// No description provided for @bsYourSea.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحرك'**
+  String get bsYourSea;
+
+  /// No description provided for @bsTheirSea.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحر {name}'**
+  String bsTheirSea(String name);
+
+  /// No description provided for @bsTapToFire.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس على خانة في بحره عشان تضرب'**
+  String get bsTapToFire;
+
+  /// No description provided for @bsHit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصابة! اضرب تاني'**
+  String get bsHit;
+
+  /// No description provided for @bsMiss.
+  ///
+  /// In ar, this message translates to:
+  /// **'مياه'**
+  String get bsMiss;
+
+  /// No description provided for @bsSunk.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرّقت سفينة!'**
+  String get bsSunk;
+
+  /// No description provided for @bsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاضل {n}'**
+  String bsLeft(String n);
+
+  /// No description provided for @dotsBoxes.
+  ///
+  /// In ar, this message translates to:
+  /// **'مربعات'**
+  String get dotsBoxes;
+
+  /// No description provided for @memPairs.
+  ///
+  /// In ar, this message translates to:
+  /// **'أزواج'**
+  String get memPairs;
+
+  /// No description provided for @spyYouAreSpy.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت الجاسوس'**
+  String get spyYouAreSpy;
+
+  /// No description provided for @spyCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفئة: {cat}'**
+  String spyCategory(String cat);
+
+  /// No description provided for @spyWordIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكلمة'**
+  String get spyWordIs;
+
+  /// No description provided for @spyTapToShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'دوس عشان تشوف (خبّي الشاشة عن اللي جنبك)'**
+  String get spyTapToShow;
+
+  /// No description provided for @spyHide.
+  ///
+  /// In ar, this message translates to:
+  /// **'خبّي'**
+  String get spyHide;
+
+  /// No description provided for @spyClueTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور {name} يقول تلميح'**
+  String spyClueTurn(String name);
+
+  /// No description provided for @spyYourClue.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك: قول تلميح صغير عن الكلمة (بصوتك أو اكتبه تحت)'**
+  String get spyYourClue;
+
+  /// No description provided for @spyDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلصت تلميحي'**
+  String get spyDone;
+
+  /// No description provided for @spyPass.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّي دوره'**
+  String get spyPass;
+
+  /// No description provided for @spyToVote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلا نصوّت'**
+  String get spyToVote;
+
+  /// No description provided for @spyClues.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلميح {n} من {m}'**
+  String spyClues(String n, String m);
+
+  /// No description provided for @spyVoteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين الجاسوس؟'**
+  String get spyVoteTitle;
+
+  /// No description provided for @spyVoted.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّت {n} من {m}'**
+  String spyVoted(String n, String m);
+
+  /// No description provided for @spyYourVote.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوتك راح ✓'**
+  String get spyYourVote;
+
+  /// No description provided for @spyGuessing.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} اتمسك… وبيخمّن الكلمة'**
+  String spyGuessing(String name);
+
+  /// No description provided for @spyGuessNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتمسكت! عندك فرصة أخيرة: خمّن الكلمة'**
+  String get spyGuessNow;
+
+  /// No description provided for @spyWas.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجاسوس كان {name}'**
+  String spyWas(String name);
+
+  /// No description provided for @spyWordWas.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكلمة كانت: {w}'**
+  String spyWordWas(String w);
+
+  /// No description provided for @spyGuessed.
+  ///
+  /// In ar, this message translates to:
+  /// **'خمّن \"{w}\"'**
+  String spyGuessed(String w);
+
+  /// No description provided for @spyNotCaught.
+  ///
+  /// In ar, this message translates to:
+  /// **'محدش مسك الجاسوس'**
+  String get spyNotCaught;
+
+  /// No description provided for @spyWrongCaught.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتمسك {name}… بس مكانش الجاسوس'**
+  String spyWrongCaught(String name);
+
+  /// No description provided for @quizCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفئة'**
+  String get quizCategory;
+
+  /// No description provided for @quizMixed.
+  ///
+  /// In ar, this message translates to:
+  /// **'منوّعة'**
+  String get quizMixed;
+
+  /// No description provided for @quizCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأسئلة'**
+  String get quizCount;
+
+  /// No description provided for @quizQuestionOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'سؤال {i} من {n}'**
+  String quizQuestionOf(String i, String n);
+
+  /// No description provided for @quizAnswered.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاوب {n} من {m}'**
+  String quizAnswered(String n, String m);
+
+  /// No description provided for @quizRight.
+  ///
+  /// In ar, this message translates to:
+  /// **'صح! +{n}'**
+  String quizRight(String n);
+
+  /// No description provided for @quizWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'غلط'**
+  String get quizWrong;
+
+  /// No description provided for @quizTooLate.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت خلص'**
+  String get quizTooLate;
+
+  /// No description provided for @quizRanking.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترتيب'**
+  String get quizRanking;
+
+  /// No description provided for @quizPoints.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} نقطة'**
+  String quizPoints(String n);
+
+  /// No description provided for @mafiaRoleMafia.
+  ///
+  /// In ar, this message translates to:
+  /// **'مافيا'**
+  String get mafiaRoleMafia;
+
+  /// No description provided for @mafiaRoleDoctor.
+  ///
+  /// In ar, this message translates to:
+  /// **'دكتور'**
+  String get mafiaRoleDoctor;
+
+  /// No description provided for @mafiaRoleDetective.
+  ///
+  /// In ar, this message translates to:
+  /// **'محقق'**
+  String get mafiaRoleDetective;
+
+  /// No description provided for @mafiaRoleCitizen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواطن'**
+  String get mafiaRoleCitizen;
+
+  /// No description provided for @mafiaYourRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'شخصيتك السرية'**
+  String get mafiaYourRole;
+
+  /// No description provided for @mafiaTeam.
+  ///
+  /// In ar, this message translates to:
+  /// **'فريقك: {names}'**
+  String mafiaTeam(String names);
+
+  /// No description provided for @mafiaNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الليل {n} 🌙'**
+  String mafiaNight(String n);
+
+  /// No description provided for @mafiaMorning.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصبح ☀️'**
+  String get mafiaMorning;
+
+  /// No description provided for @mafiaTalk.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقاش'**
+  String get mafiaTalk;
+
+  /// No description provided for @mafiaVote.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصويت'**
+  String get mafiaVote;
+
+  /// No description provided for @mafiaNightWait.
+  ///
+  /// In ar, this message translates to:
+  /// **'الليل… غمّض واستنى الصبح'**
+  String get mafiaNightWait;
+
+  /// No description provided for @mafiaPickKill.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الضحية'**
+  String get mafiaPickKill;
+
+  /// No description provided for @mafiaPickSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار حد تحميه الليلة'**
+  String get mafiaPickSave;
+
+  /// No description provided for @mafiaPickCheck.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار حد تسأل عنه'**
+  String get mafiaPickCheck;
+
+  /// No description provided for @mafiaPicked.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخترت {name} ✓'**
+  String mafiaPicked(String name);
+
+  /// No description provided for @mafiaKilled.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} اتقتل الليلة اللي فاتت'**
+  String mafiaKilled(String name);
+
+  /// No description provided for @mafiaRescued.
+  ///
+  /// In ar, this message translates to:
+  /// **'المافيا حاولوا… بس الدكتور أنقذ الضحية!'**
+  String get mafiaRescued;
+
+  /// No description provided for @mafiaQuietNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلة هادية، محدش مات'**
+  String get mafiaQuietNight;
+
+  /// No description provided for @mafiaOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} خرج… وكان {role}'**
+  String mafiaOut(String name, String role);
+
+  /// No description provided for @mafiaNoOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصوات اتعادلت، محدش خرج'**
+  String get mafiaNoOut;
+
+  /// No description provided for @mafiaVoteNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'محدش'**
+  String get mafiaVoteNone;
+
+  /// No description provided for @mafiaTownWins.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواطنين كسبوا!'**
+  String get mafiaTownWins;
+
+  /// No description provided for @mafiaMafiaWins.
+  ///
+  /// In ar, this message translates to:
+  /// **'المافيا كسبت!'**
+  String get mafiaMafiaWins;
+
+  /// No description provided for @mafiaYouDied.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت مت… بتتفرج دلوقتي'**
+  String get mafiaYouDied;
+
+  /// No description provided for @mafiaIsMafia.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} مافيا!'**
+  String mafiaIsMafia(String name);
+
+  /// No description provided for @mafiaNotMafia.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} مش مافيا'**
+  String mafiaNotMafia(String name);
+
+  /// No description provided for @mafiaSecretChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'شات المافيا السري'**
+  String get mafiaSecretChat;
+
+  /// No description provided for @mafiaSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختصر الوقت'**
+  String get mafiaSkip;
+
+  /// No description provided for @mafiaAlive.
+  ///
+  /// In ar, this message translates to:
+  /// **'عايشين {n}'**
+  String mafiaAlive(String n);
+
+  /// No description provided for @mafiaVotedCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّت {n} من {m}'**
+  String mafiaVotedCount(String n, String m);
+
+  /// No description provided for @mafiaNoSameTwice.
+  ///
+  /// In ar, this message translates to:
+  /// **'مينفعش تحمي نفس الشخص ليلتين ورا بعض'**
+  String get mafiaNoSameTwice;
+
+  /// No description provided for @spyYourCard.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتك'**
+  String get spyYourCard;
 }
 
 class _AppLocalizationsDelegate

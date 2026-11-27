@@ -170,8 +170,13 @@ class ChatMessage {
     this.senderId,
     this.forwarded = false,
     Map<String, String>? mentions,
+    this.game,
   })  : time = time ?? DateTime.now(),
         mentions = mentions ?? const {};
+
+  /// كارت لعبة (عزومة / نتيجة) بدل رسالة عادية — شوف GameCenter.
+  /// {g: رقم الغرفة, k: نوع اللعبة, h: صاحب الغرفة, st: lobby|play|done, p: عدد اللاعبين, w: الكسب, nm: الأسماء}
+  final Map<String, dynamic>? game;
 
   /// الرسالة محوّلة من محادثة تانية.
   final bool forwarded;
@@ -229,6 +234,7 @@ class ChatMessage {
         'si': ?senderId,
         'rp': ?reply?.toJson(),
         'm': ?media?.toJson(),
+        'gm': ?game,
       };
 
   static ChatMessage? fromJson(Object? raw) {
@@ -256,6 +262,7 @@ class ChatMessage {
         senderId: raw['si'] as String?,
         forwarded: raw['fw'] == true,
         mentions: cleanMentions(raw['mn']),
+        game: raw['gm'] is Map ? Map<String, dynamic>.from(raw['gm'] as Map) : null,
       )
         ..edited = raw['e'] == true
         ..mentionsMe = raw['mm'] == true
@@ -408,6 +415,9 @@ class ChatSession extends ChangeNotifier {
 
   /// إشارات المكالمات (offer/answer/ice...) من الطرف التاني.
   void Function(Map<String, dynamic> signal)? onCallSignal;
+
+  /// رسايل الألعاب من الطرف التاني (شوف GameCenter).
+  void Function(Map<String, dynamic> message)? onGamePacket;
 
   final List<ChatMessage> messages = [];
   SessionState state = SessionState.idle;
@@ -1270,6 +1280,13 @@ class ChatSession extends ChangeNotifier {
     await channel.sendPacket('call', signal);
   }
 
+  /// رسالة لعبة للطرف التاني (مشفرة زي أي حاجة في القناة).
+  Future<void> sendGame(Map<String, dynamic> message) async {
+    final channel = _channel;
+    if (channel == null || !canSend) throw StateError('not connected');
+    await channel.sendPacket('game', message);
+  }
+
   void addSystem(String text) {
     messages.add(ChatMessage(id: _newId(), text: text, kind: MessageKind.system));
     notifyListeners();
@@ -1363,6 +1380,8 @@ class ChatSession extends ChangeNotifier {
         _onFileAck(p);
       case 'call':
         onCallSignal?.call(Map<String, dynamic>.from(p.data)..remove('k')..remove('seq'));
+      case 'game':
+        onGamePacket?.call(Map<String, dynamic>.from(p.data)..remove('k')..remove('seq'));
       case 'ack':
         final m = _find(p.id, MessageKind.mine);
         if (m == null) return;

@@ -33,6 +33,7 @@ class _GroupIncoming {
 ///   fs / fc / fe  ملف (بداية / جزء / نهاية بالهاش)       fx  إلغاء ملف
 ///   join / leave  حد دخل / خرج
 ///   typ  بيكتب دلوقتي          rd  قريت الرسايل دي         rx  تفاعل بإيموجي
+///   gm   رسالة لعبة {d: الرسالة} (شوف GameCenter) — الحاجات السرية مش هنا: بتتقفل لكل لاعب لوحده
 ///
 /// المعرّف `s` لازم يساوي مصدر الإطار في الشبكة، واللي اتشال من الجروب رسايله بتترمي.
 /// أوامر الإدارة (إزالة عضو، مديرين، حذف رسالة حد تاني) مش هنا: بتتبعت موثّقة لكل عضو
@@ -91,6 +92,16 @@ class GroupSession extends ChatSession {
 
   /// يبث حزمة مشفرة لأعضاء الجروب.
   final Future<void> Function(String body) transmit;
+
+  /// رسالة لعبة عامة من عضو.
+  void Function(String sender, Map<String, dynamic> message)? onGroupGamePacket;
+
+  /// رسالة لعبة لكل الأعضاء (مشفرة بمفتاح الجروب).
+  @override
+  Future<void> sendGame(Map<String, dynamic> message) {
+    if (!canSend) return Future.error(StateError('offline'));
+    return _emit({'k': 'gm', 'd': message});
+  }
 
   /// فيه حد واصلين له دلوقتي؟
   final bool Function() online;
@@ -523,6 +534,9 @@ class GroupSession extends ChatSession {
         } else {
           _remove(m);
         }
+      case 'gm':
+        final d = p['d'];
+        if (d is Map<String, dynamic>) onGroupGamePacket?.call(sender, d);
       case 'join':
         addSystem(tr.memberJoined(name));
       case 'leave':

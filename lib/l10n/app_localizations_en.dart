@@ -1842,4 +1842,738 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get howToPlay => 'How to play';
+
+  @override
+  String get games => 'Games';
+
+  @override
+  String playWith(String name) {
+    return 'Play with $name';
+  }
+
+  @override
+  String get playWithGroup => 'Play with the group';
+
+  @override
+  String get gamesTabDirect => 'Two players';
+
+  @override
+  String get gamesTabGroup => 'Group';
+
+  @override
+  String playersRange(String range) {
+    return '$range players';
+  }
+
+  @override
+  String gameInviteFrom(String name, String game) {
+    return '$name invited you to $game';
+  }
+
+  @override
+  String gameInviteMine(String game) {
+    return 'You opened $game';
+  }
+
+  @override
+  String get gamePlay => 'Play';
+
+  @override
+  String get gameJoin => 'Join';
+
+  @override
+  String get gameJoined => 'You\'re in';
+
+  @override
+  String get gameNotNow => 'Not now';
+
+  @override
+  String get gameStart => 'Start';
+
+  @override
+  String get gameOpen => 'Open game';
+
+  @override
+  String get gameWatch => 'Watch';
+
+  @override
+  String gameWaitingHost(String name) {
+    return 'Waiting for $name to start';
+  }
+
+  @override
+  String gameWaitingPeer(String name) {
+    return 'Waiting for $name to accept';
+  }
+
+  @override
+  String gameSeats(String n, String max) {
+    return '$n of $max';
+  }
+
+  @override
+  String gameNeedMore(String n) {
+    return '$n more needed to start';
+  }
+
+  @override
+  String get gameDoneCard => 'Game over';
+
+  @override
+  String get gameClosedCard => 'Game closed';
+
+  @override
+  String get gameEnded => 'The game is over';
+
+  @override
+  String get gameHostLeft => 'The host left, so the game closed';
+
+  @override
+  String get gameCanceled => 'The game was cancelled';
+
+  @override
+  String gameRunningBanner(String game) {
+    return 'Game in progress: $game';
+  }
+
+  @override
+  String get gameBackToGame => 'Back to it';
+
+  @override
+  String get gameBackToChat => 'Back to chat';
+
+  @override
+  String get gameRematch => 'Rematch';
+
+  @override
+  String gameRematchAsked(String name) {
+    return '$name wants a rematch';
+  }
+
+  @override
+  String get gameRematchWaiting => 'Waiting for the other player…';
+
+  @override
+  String get gameYouWon => 'You won!';
+
+  @override
+  String get gameYouLost => 'Not this time… rematch?';
+
+  @override
+  String gameWinner(String name) {
+    return '$name won!';
+  }
+
+  @override
+  String get gameDraw => 'It\'s a draw';
+
+  @override
+  String get gameYourTurn => 'Your turn';
+
+  @override
+  String gameTheirTurn(String name) {
+    return 'Turn: $name';
+  }
+
+  @override
+  String get gameQuitQ => 'Leave the game?';
+
+  @override
+  String get gameQuitBody => 'The game goes on for the others without you.';
+
+  @override
+  String get gameQuitBody2 => 'If you leave, the other player wins.';
+
+  @override
+  String get gameEndQ => 'Close the game for everyone?';
+
+  @override
+  String get gameEndBody =>
+      'You\'re the host: if you leave, the game closes for every player.';
+
+  @override
+  String get gameLeave => 'Leave';
+
+  @override
+  String get gameNobody => 'Nobody is connected to play with right now';
+
+  @override
+  String get gameNeedConnection => 'Wait for the connection first';
+
+  @override
+  String gameOldVersion(String name) {
+    return 'No answer… $name may have an older version of Wasl';
+  }
+
+  @override
+  String get gameSpectating => 'You\'re watching';
+
+  @override
+  String get gameScore => 'Score';
+
+  @override
+  String get gamePlayers => 'Players';
+
+  @override
+  String gameRound(String n) {
+    return 'Match $n';
+  }
+
+  @override
+  String get gameChatHint => 'Message the players…';
+
+  @override
+  String get gameChatMuted => 'You can\'t talk right now';
+
+  @override
+  String gameCheated(String name) {
+    return '$name cheated! (changed a choice or lied in an answer)';
+  }
+
+  @override
+  String get gameHost => 'Host';
+
+  @override
+  String get gameSkip => 'Skip';
+
+  @override
+  String gameTimeLeft(String s) {
+    return '${s}s left';
+  }
+
+  @override
+  String get gameWins => 'Wins';
+
+  @override
+  String gameVsRecord(String a, String b) {
+    return 'Between you: $a – $b';
+  }
+
+  @override
+  String get gameMore => 'Games';
+
+  @override
+  String get gameXo => 'Tic-tac-toe';
+
+  @override
+  String get gameConnect4 => 'Four in a row';
+
+  @override
+  String get gameBattleship => 'Battleships';
+
+  @override
+  String get gameRps => 'Rock paper scissors';
+
+  @override
+  String get gameDots => 'Dots and boxes';
+
+  @override
+  String get gameMemory => 'Memory';
+
+  @override
+  String get gameSpy => 'Who\'s the spy?';
+
+  @override
+  String get gameQuiz => 'Quiz';
+
+  @override
+  String get gameMafia => 'Mafia';
+
+  @override
+  String get tagXo => 'Three in a row wins';
+
+  @override
+  String get tagConnect4 => 'Drop pieces, four in a row wins';
+
+  @override
+  String get tagBattleship => 'Hide your fleet, sink theirs';
+
+  @override
+  String get tagRps => 'Who beats whom?';
+
+  @override
+  String get tagDots => 'Close a box, keep it';
+
+  @override
+  String get tagMemory => 'Remember where the pictures are';
+
+  @override
+  String get tagSpy => 'Everyone knows the word… except one';
+
+  @override
+  String get tagQuiz => 'Fastest right answer wins';
+
+  @override
+  String get tagMafia => 'Unmask the killers before they get you';
+
+  @override
+  String get helpGoal => 'Goal';
+
+  @override
+  String get helpHow => 'How to play';
+
+  @override
+  String get helpRoles => 'Roles';
+
+  @override
+  String get helpTips => 'Tips';
+
+  @override
+  String get helpFaq => 'Questions';
+
+  @override
+  String get helpWhereDirect => 'In private chats';
+
+  @override
+  String get helpWhereGroup => 'In groups';
+
+  @override
+  String helpMinutes(String range) {
+    return '$range min';
+  }
+
+  @override
+  String get helpFaqLeaveQ => 'What if someone disconnects or leaves?';
+
+  @override
+  String get helpFaqLeaveA =>
+      'If a player leaves, the game goes on and their turn is skipped. If the host (whoever opened the game) leaves or is out of reach for more than 25 seconds, the game closes for everyone.';
+
+  @override
+  String get helpFaqHostQ => 'Who is the \"host\"?';
+
+  @override
+  String get helpFaqHostA =>
+      'Whoever opened the game. Their phone is the referee: it runs the rules, deals secret roles and counts votes. The host plays like everyone else and never sees anyone else\'s secrets.';
+
+  @override
+  String get helpFaqCheatQ => 'Can anyone cheat?';
+
+  @override
+  String get helpFaqCheatA =>
+      'In Battleships and Rock paper scissors your choice is locked with a fingerprint before the other player sees it, and the app catches anyone who changes it or lies. In the other games the host\'s phone is the referee.';
+
+  @override
+  String get helpXoGoal =>
+      'Be the first to get three of your marks in a row — across, down or diagonally.';
+
+  @override
+  String get helpXoHow =>
+      'The first player is ✕, the other ○.\nTake turns tapping an empty square.\nIf the board fills up with no three in a row, it\'s a draw.\nThe starting player switches every match.';
+
+  @override
+  String get helpXoTips =>
+      'The centre is the strongest first move.\nIf the other player has two in a row, block them right away.';
+
+  @override
+  String get helpConnect4Goal =>
+      'Be the first to line up four pieces of your colour.';
+
+  @override
+  String get helpConnect4How =>
+      'The board has 7 columns and 6 rows.\nTap a column and your piece drops to the lowest empty spot.\nThe four can be across, down or diagonal.\nIf the board fills up with no four in a row, it\'s a draw.';
+
+  @override
+  String get helpConnect4Tips =>
+      'The middle column gives you the most chances.\nWatch the diagonals; people often miss them.';
+
+  @override
+  String get helpBattleshipGoal =>
+      'Sink all of the other player\'s ships before they sink yours.';
+
+  @override
+  String get helpBattleshipHow =>
+      'Each player has an 8×8 sea with 4 ships: lengths 4, 3, 3 and 2.\nTap \"New layout\" until you like it, then \"Ready\".\nTake turns tapping a square in the other sea to fire.\nThe answer is miss ○, hit ✕ or sunk.\nA hit gives you another shot; a miss passes the turn.';
+
+  @override
+  String get helpBattleshipTips =>
+      'After a hit, try the squares next to it.\nShips never touch, so everything around a sunk ship is water.\nYour fleet never leaves your phone; at the end the app checks that nobody lied.';
+
+  @override
+  String get helpRpsGoal => 'First to win two throws wins the match.';
+
+  @override
+  String get helpRpsHow =>
+      'Pick rock ✊, paper ✋ or scissors ✌️.\nRock breaks scissors, scissors cut paper, paper wraps rock.\nBoth picks are shown together once you have both chosen.\nSame pick? The throw is replayed.';
+
+  @override
+  String get helpRpsTips =>
+      'Nobody can see your pick before choosing; the app locks it with a fingerprint.';
+
+  @override
+  String get helpDotsGoal => 'Claim the most boxes.';
+
+  @override
+  String get helpDotsHow =>
+      'Take turns drawing a line between two neighbouring dots.\nWhoever draws the fourth side of a box claims it.\nClose a box and you play again.\nWhen every box is closed, the one with the most wins.';
+
+  @override
+  String get helpDotsTips =>
+      'Avoid drawing the third side of a box; the next player takes it.\nNear the end, give away short chains and keep the long ones.';
+
+  @override
+  String get helpMemoryGoal => 'Collect the most matching pairs.';
+
+  @override
+  String get helpMemoryHow =>
+      'All cards are face down; every picture appears twice.\nOn your turn flip two cards.\nIf they match you keep them and go again.\nIf not, they flip back after a moment and the next player goes.\nWhen the cards run out, whoever has the most pairs wins.';
+
+  @override
+  String get helpMemoryTips =>
+      'Watch what the others flip; that\'s free information.';
+
+  @override
+  String get helpSpyGoal =>
+      'Not the spy? Find them. The spy? Stay hidden, or work out the word.';
+
+  @override
+  String get helpSpyHow =>
+      'The app picks a category (food, places…) and a word.\nEveryone sees the word on their phone, except one player who sees \"You\'re the spy\" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps \"Done\".\nAfter the hints, everyone votes for the spy.\nIf the spy is caught, they get one last chance to guess the word out of 8.';
+
+  @override
+  String get helpSpyRoles =>
+      '🕵️ The spy: doesn\'t know the word and tries to act like they do.\n👤 Everyone else: knows the word and tries to unmask the spy without giving the word away.';
+
+  @override
+  String get helpSpyTips =>
+      'Hints that are too obvious give the word to the spy; too vague and people suspect you.\nSpy: listen closely to the hints before yours.';
+
+  @override
+  String get helpQuizGoal => 'Answer right and fast to score the most points.';
+
+  @override
+  String get helpQuizHow =>
+      'The host picks a category and the number of questions.\nEach question has 4 options and 15 seconds.\nA right answer earns 500 points, plus up to 500 for speed.\nAfter each question the right answer and the ranking are shown.';
+
+  @override
+  String get helpQuizTips =>
+      'Time is measured on your own phone from the moment the question appears, so a slow network won\'t cost you points.';
+
+  @override
+  String get helpMafiaGoal =>
+      'Town: find and vote out the mafia. Mafia: get rid of the town without being caught.';
+
+  @override
+  String get helpMafiaHow =>
+      'The app deals roles in secret; everyone sees only their own.\nNight 🌙: the mafia pick a victim, the doctor protects someone, the detective checks someone.\nMorning ☀️: the app announces who was killed (or that the doctor saved them).\nDiscussion: 3 minutes to talk and accuse (the host can cut it short).\nVote: whoever gets the most votes is out and their role is revealed. A tie means nobody leaves.\nThen night again… until one side wins.';
+
+  @override
+  String get helpMafiaRoles =>
+      '🔪 Mafia: about one per four players. They know each other and have a secret chat at night.\n💉 Doctor: protects someone each night (even themselves), but not the same person two nights running.\n🔍 Detective: learns each night whether someone is mafia.\n👤 Citizen: no power; their weapons are their wits and their vote.';
+
+  @override
+  String get helpMafiaTips =>
+      'The town wins when every mafia member is out. The mafia win when they equal the rest.\nDead players watch and stay quiet.\nSitting together? Talk out loud; the app just keeps time and counts votes.';
+
+  @override
+  String get rpsRock => 'Rock';
+
+  @override
+  String get rpsPaper => 'Paper';
+
+  @override
+  String get rpsScissors => 'Scissors';
+
+  @override
+  String get rpsPick => 'Pick one';
+
+  @override
+  String rpsPicked(String name) {
+    return 'Picked ✓ waiting for $name';
+  }
+
+  @override
+  String rpsTheyPicked(String name) {
+    return '$name has picked';
+  }
+
+  @override
+  String rpsFirstTo(String n) {
+    return 'First to $n';
+  }
+
+  @override
+  String get rpsTie => 'Same pick, again!';
+
+  @override
+  String get bsPlace => 'Place your fleet';
+
+  @override
+  String get bsShuffle => 'New layout';
+
+  @override
+  String get bsReady => 'Ready';
+
+  @override
+  String bsWaitingThem(String name) {
+    return 'Waiting for $name to place their fleet';
+  }
+
+  @override
+  String get bsYourSea => 'Your sea';
+
+  @override
+  String bsTheirSea(String name) {
+    return 'Firing at $name';
+  }
+
+  @override
+  String get bsTapToFire => 'Tap a square in their sea to fire';
+
+  @override
+  String get bsHit => 'Hit! Fire again';
+
+  @override
+  String get bsMiss => 'Miss';
+
+  @override
+  String get bsSunk => 'Ship sunk!';
+
+  @override
+  String bsLeft(String n) {
+    return '$n left';
+  }
+
+  @override
+  String get dotsBoxes => 'boxes';
+
+  @override
+  String get memPairs => 'pairs';
+
+  @override
+  String get spyYouAreSpy => 'You\'re the spy';
+
+  @override
+  String spyCategory(String cat) {
+    return 'Category: $cat';
+  }
+
+  @override
+  String get spyWordIs => 'The word';
+
+  @override
+  String get spyTapToShow =>
+      'Tap to reveal (hide the screen from your neighbours)';
+
+  @override
+  String get spyHide => 'Hide';
+
+  @override
+  String spyClueTurn(String name) {
+    return 'Hint from: $name';
+  }
+
+  @override
+  String get spyYourClue =>
+      'Your turn: give a small hint about the word (out loud or type it below)';
+
+  @override
+  String get spyDone => 'I\'m done';
+
+  @override
+  String get spyPass => 'Skip their turn';
+
+  @override
+  String get spyToVote => 'Go to the vote';
+
+  @override
+  String spyClues(String n, String m) {
+    return 'Hint $n of $m';
+  }
+
+  @override
+  String get spyVoteTitle => 'Who\'s the spy?';
+
+  @override
+  String spyVoted(String n, String m) {
+    return '$n of $m voted';
+  }
+
+  @override
+  String get spyYourVote => 'Vote sent ✓';
+
+  @override
+  String spyGuessing(String name) {
+    return '$name was caught… and is guessing the word';
+  }
+
+  @override
+  String get spyGuessNow => 'Caught! One last chance: guess the word';
+
+  @override
+  String spyWas(String name) {
+    return 'The spy was $name';
+  }
+
+  @override
+  String spyWordWas(String w) {
+    return 'The word was: $w';
+  }
+
+  @override
+  String spyGuessed(String w) {
+    return 'Guessed \"$w\"';
+  }
+
+  @override
+  String get spyNotCaught => 'Nobody caught the spy';
+
+  @override
+  String spyWrongCaught(String name) {
+    return '$name was caught… but wasn\'t the spy';
+  }
+
+  @override
+  String get quizCategory => 'Category';
+
+  @override
+  String get quizMixed => 'Mixed';
+
+  @override
+  String get quizCount => 'Questions';
+
+  @override
+  String quizQuestionOf(String i, String n) {
+    return 'Question $i of $n';
+  }
+
+  @override
+  String quizAnswered(String n, String m) {
+    return '$n of $m answered';
+  }
+
+  @override
+  String quizRight(String n) {
+    return 'Right! +$n';
+  }
+
+  @override
+  String get quizWrong => 'Wrong';
+
+  @override
+  String get quizTooLate => 'Time\'s up';
+
+  @override
+  String get quizRanking => 'Ranking';
+
+  @override
+  String quizPoints(String n) {
+    return '$n pts';
+  }
+
+  @override
+  String get mafiaRoleMafia => 'Mafia';
+
+  @override
+  String get mafiaRoleDoctor => 'Doctor';
+
+  @override
+  String get mafiaRoleDetective => 'Detective';
+
+  @override
+  String get mafiaRoleCitizen => 'Citizen';
+
+  @override
+  String get mafiaYourRole => 'Your secret role';
+
+  @override
+  String mafiaTeam(String names) {
+    return 'Your team: $names';
+  }
+
+  @override
+  String mafiaNight(String n) {
+    return 'Night $n 🌙';
+  }
+
+  @override
+  String get mafiaMorning => 'Morning ☀️';
+
+  @override
+  String get mafiaTalk => 'Discussion';
+
+  @override
+  String get mafiaVote => 'Vote';
+
+  @override
+  String get mafiaNightWait => 'Night… close your eyes and wait for morning';
+
+  @override
+  String get mafiaPickKill => 'Choose the victim';
+
+  @override
+  String get mafiaPickSave => 'Choose someone to protect tonight';
+
+  @override
+  String get mafiaPickCheck => 'Choose someone to check';
+
+  @override
+  String mafiaPicked(String name) {
+    return 'You chose $name ✓';
+  }
+
+  @override
+  String mafiaKilled(String name) {
+    return '$name was killed last night';
+  }
+
+  @override
+  String get mafiaRescued =>
+      'The mafia struck… but the doctor saved the victim!';
+
+  @override
+  String get mafiaQuietNight => 'A quiet night, nobody died';
+
+  @override
+  String mafiaOut(String name, String role) {
+    return '$name is out… and was $role';
+  }
+
+  @override
+  String get mafiaNoOut => 'Tied vote, nobody is out';
+
+  @override
+  String get mafiaVoteNone => 'Nobody';
+
+  @override
+  String get mafiaTownWins => 'The town wins!';
+
+  @override
+  String get mafiaMafiaWins => 'The mafia win!';
+
+  @override
+  String get mafiaYouDied => 'You\'re dead… watching now';
+
+  @override
+  String mafiaIsMafia(String name) {
+    return '$name is mafia!';
+  }
+
+  @override
+  String mafiaNotMafia(String name) {
+    return '$name is not mafia';
+  }
+
+  @override
+  String get mafiaSecretChat => 'Mafia secret chat';
+
+  @override
+  String get mafiaSkip => 'Cut it short';
+
+  @override
+  String mafiaAlive(String n) {
+    return '$n alive';
+  }
+
+  @override
+  String mafiaVotedCount(String n, String m) {
+    return '$n of $m voted';
+  }
+
+  @override
+  String get mafiaNoSameTwice =>
+      'You can\'t protect the same person two nights running';
+
+  @override
+  String get spyYourCard => 'Your word';
 }

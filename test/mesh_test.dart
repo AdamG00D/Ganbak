@@ -10,6 +10,10 @@ import 'package:wasl/core/profile/profile.dart';
 import 'package:wasl/core/storage/chat_store.dart';
 import 'package:wasl/core/storage/vault.dart';
 import 'package:wasl/features/chat/core/chat_session.dart';
+import 'package:wasl/features/games/core/game_center.dart';
+import 'package:wasl/features/games/core/game_kind.dart';
+import 'package:wasl/features/games/core/game_room.dart';
+import 'package:wasl/features/games/engines/engines.dart';
 import 'package:wasl/features/groups/group.dart';
 import 'package:wasl/features/groups/group_session.dart';
 import 'package:wasl/mesh/mesh_router.dart';
@@ -35,7 +39,45 @@ class Device {
     router.onGroup = (g, src, body) => groupSessions[g]?.receive(src, body);
     router.onControl = (src, m) {
       if (m['t'] == 'ga') onAdminOp(src, '${m['g']}', m['d']);
+      if (m['t'] == 'gm') _onGamePrivate(src, '${m['g']}', m['d']);
     };
+  }
+
+  // ---- الألعاب (نفس منطق ChatHub) ----
+  final Map<String, GameCenter> games = {};
+
+  GameCenter directGames(String peer) => games.putIfAbsent(peer, () {
+        final s = sessionFor(peer);
+        final g = GameCenter(transport: _DirectT(this, s), session: s, group: false);
+        s.onGamePacket = (m) => g.receive(peer, m, private: false);
+        return g;
+      });
+
+  GameCenter groupGames(String gid) => games.putIfAbsent(gid, () {
+        final s = groupSessions[gid]!;
+        final g = GameCenter(transport: _GroupT(this, gid, s), session: s, group: true);
+        s.onGroupGamePacket = (from, m) => g.receive(from, m, private: false);
+        return g;
+      });
+
+  Future<void> sendGamePrivate(String gid, String to, Map<String, dynamic> m) async {
+    final key = await Box.pairKey(profile.keyPair, router.nodes[to]!.publicKey, 'wasl/game');
+    final sealed = await Box.seal(key, utf8.encode(jsonEncode(m)), utf8.encode('wasl/game|$gid|$id|$to'));
+    await router.sendControl(to, {'t': 'gm', 'g': gid, 'd': base64.encode(sealed)});
+  }
+
+  /// كل الرسايل السرية اللي وصلتلي (عشان نتأكد إن محدش بيشوف سر غيره).
+  final List<Map<String, dynamic>> privateGame = [];
+
+  Future<void> _onGamePrivate(String src, String gid, Object? d) async {
+    final node = router.nodes[src];
+    if (node == null || d is! String) return;
+    final key = await Box.pairKey(profile.keyPair, node.publicKey, 'wasl/game');
+    final clear = await Box.open(key, base64.decode(d), utf8.encode('wasl/game|$gid|$src|$id'));
+    if (clear == null) return;
+    final m = jsonDecode(utf8.decode(clear)) as Map<String, dynamic>;
+    privateGame.add(m);
+    games[gid]?.receive(src, m, private: true);
   }
 
   /// جروبات اتشلت منها.
@@ -148,12 +190,48 @@ class Device {
   }
 
   Future<void> close() async {
+    for (final g in games.values) {
+      g.dispose();
+    }
     for (final s in [...sessions.values, ...groupSessions.values]) {
       s.dispose();
     }
     await router.stop();
     router.dispose();
   }
+}
+
+class _DirectT implements GameTransport {
+  _DirectT(this.d, this.s);
+  final Device d;
+  final ChatSession s;
+  @override
+  String get myId => d.id;
+  @override
+  String get myName => d.profile.name;
+  @override
+  bool get online => s.canSend;
+  @override
+  Future<void> sendAll(Map<String, dynamic> m) => s.sendGame(m);
+  @override
+  Future<void> sendTo(String id, Map<String, dynamic> m) => s.sendGame(m);
+}
+
+class _GroupT implements GameTransport {
+  _GroupT(this.d, this.gid, this.s);
+  final Device d;
+  final String gid;
+  final GroupSession s;
+  @override
+  String get myId => d.id;
+  @override
+  String get myName => d.profile.name;
+  @override
+  bool get online => s.canSend;
+  @override
+  Future<void> sendAll(Map<String, dynamic> m) => s.sendGame(m);
+  @override
+  Future<void> sendTo(String id, Map<String, dynamic> m) => d.sendGamePrivate(gid, id, m);
 }
 
 void main() {
@@ -776,6 +854,65 @@ void main() {
       expect(atOwner.admins, {admin.id});
       expect(atOwner.banned, {me.id}); // الإزالة من صلاحيات المدير، بس صاحب الجروب لأ
       expect(atOwner.rev, 1000); // نسخة صاحب الجروب بقت الأحدث وهترجع للكل
+    });
+  });
+
+  group('الألعاب فوق الشبكة', () {
+    test('إكس أو في الخاص عبر جهاز في النص (القناة المشفرة)', () async {
+      final a = await device('أحمد'), b = await device('بسمة'), c = await device('كريم');
+      net.connect(a.id, b.id);
+      net.connect(b.id, c.id);
+      await waitFor(() => a.router.reachable(c.id) && c.router.reachable(a.id));
+      a.dial(c.id, expected: c.profile.publicKey);
+      await waitFor(() => a.sessionFor(c.id).canSend && (c.sessions[a.id]?.canSend ?? false));
+      final ga = a.directGames(c.id), gc = c.directGames(a.id);
+      final room = ga.invite(GameKind.xo)!;
+      await waitFor(() => gc.rooms.containsKey(room.id), what: 'العزومة');
+      // الكارت نزل في محادثة كريم
+      expect(c.sessions[a.id]!.messages.any((m) => m.game?['k'] == 'xo'), isTrue);
+      final rc = gc.rooms[room.id]!..join();
+      await waitFor(() => rc.phase == RoomPhase.playing && room.phase == RoomPhase.playing);
+      for (final (r, i) in [(room, 0), (rc, 4), (room, 1), (rc, 5), (room, 2)]) {
+        final before = rc.n;
+        r.act({'t': 'put', 'i': i});
+        await waitFor(() => rc.n > before, what: 'حركة $i');
+      }
+      expect(rc.over, isTrue);
+      expect(rc.winners, [a.id]);
+      expect(b.sessions, isEmpty, reason: 'الجهاز اللي في النص بيوصّل بس');
+    });
+
+    test('مين الجاسوس في جروب: الكلمة بتوصل مقفولة لكل واحد، واللي مش عضو مبيعرفش حاجة', () async {
+      final ds = [for (final n in ['أحمد', 'بسمة', 'كريم', 'منى']) await device(n)];
+      final outsider = await device('غريب');
+      for (var i = 0; i + 1 < ds.length; i++) {
+        net.connect(ds[i].id, ds[i + 1].id);
+      }
+      net.connect(ds.last.id, outsider.id);
+      await waitFor(() => ds.every((d) => ds.every((x) => x == d || d.router.reachable(x.id))));
+      final info = await GroupInfo.create(name: 'الشلة', mode: GroupMode.open, owner: ds.first.id);
+      for (final d in ds) {
+        d.joinGroup(await GroupInfo.fromAd(info.ad, info.key));
+      }
+      await waitFor(() => ds.every((d) => ds.every((x) => x == d || (d.router.nodes[x.id]?.groups.isNotEmpty ?? false))));
+      final centers = [for (final d in ds) d.groupGames(info.id)];
+      final room = centers.first.invite(GameKind.spy)!;
+      await waitFor(() => centers.skip(1).every((c) => c.rooms.containsKey(room.id)), what: 'العزومة');
+      for (final c in centers.skip(1)) {
+        c.rooms[room.id]!.join();
+      }
+      await waitFor(() => room.players.length == 4, what: 'اللاعبين');
+      room.start();
+      final engine = room.engine! as SpyEngine;
+      await waitFor(() => centers.every((c) => c.rooms[room.id]!.secret.isNotEmpty), what: 'الأسرار');
+      for (var i = 0; i < ds.length; i++) {
+        final secret = centers[i].rooms[room.id]!.secret;
+        expect(secret['spy'], ds[i].id == engine.spy);
+        if (ds[i].id != engine.spy) expect(secret['word'], engine.word);
+      }
+      // الغريب (بيوصّل الحزم) معرفش حاجة
+      expect(outsider.privateGame, isEmpty);
+      expect(outsider.games, isEmpty);
     });
   });
 

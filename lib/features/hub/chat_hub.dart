@@ -25,6 +25,7 @@ import '../../widgets/avatar_render.dart';
 import '../chat/call/call_controller.dart';
 import '../chat/call/call_screen.dart';
 import '../chat/core/chat_session.dart';
+import '../games/core/game_center.dart';
 import '../groups/group.dart';
 import '../groups/group_session.dart';
 
@@ -52,6 +53,9 @@ abstract class Conversation {
   int? get cartoon => null;
   ChatSession get session;
 
+  /// ألعاب المحادثة دي (الغرف وكروتها).
+  late final GameCenter games;
+
   /// رسايل وصلت والمحادثة مش مفتوحة.
   int unread = 0;
 
@@ -71,10 +75,10 @@ abstract class Conversation {
 
   bool get muted => mutedUntil == -1 || mutedUntil > DateTime.now().millisecondsSinceEpoch;
 
-  /// آخر رسالة حقيقية (مش رسالة نظام).
+  /// آخر رسالة حقيقية (مش رسالة نظام — بس كروت الألعاب بتتحسب).
   ChatMessage? get lastMessage {
     for (final m in session.messages.reversed) {
-      if (m.kind != MessageKind.system) return m;
+      if (m.kind != MessageKind.system || m.game != null) return m;
     }
     return null;
   }
@@ -180,6 +184,9 @@ class DirectChat extends Conversation {
     _redial?.cancel();
     _saveTimer?.cancel();
     call?.dispose();
+    games
+      ..closeAll()
+      ..dispose();
     session.dispose();
   }
 }
@@ -232,6 +239,9 @@ class GroupChat extends Conversation {
 
   void _dispose() {
     _saveTimer?.cancel();
+    games
+      ..closeAll()
+      ..dispose();
     session.dispose();
   }
 }
@@ -397,6 +407,10 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     pendingJoins.clear();
     _requestedAds.clear();
     _syncedAt.clear();
+    // الألعاب اللي أنا صاحبها بتتقفل عند الكل
+    for (final c in [..._directs.values, ..._groups.values]) {
+      c.games.closeAll();
+    }
     // نحفظ آخر حالة وبعدين نبلّغ الناس إننا خارجين
     for (final c in [..._directs.values, ..._groups.values]) {
       c._saveTimer?.cancel();
@@ -553,6 +567,13 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       };
       s.onCallSignal = first;
     }
+    chat.games = GameCenter(
+      transport: _DirectGames(this, chat),
+      session: s,
+      group: false,
+      onInvite: (card) => _onIncoming(chat, card),
+    );
+    s.onGamePacket = (m) => chat.games.receive(peerId, m, private: false);
     _directs[peerId] = chat;
     return chat;
   }
@@ -606,6 +627,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   void _onNodeDown(MeshNode n) {
+    for (final c in [..._directs.values, ..._groups.values]) {
+      c.games.nodeDown(n.id);
+    }
     final chat = _directs[n.id];
     if (chat != null) {
       chat._redial?.cancel();
@@ -715,6 +739,13 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       ..onIncomingMessage = ((m) => _onIncoming(chat, m))
       ..onReaction = ((m, e, who) => _onReaction(chat, m, e, who))
       ..addListener(() => _onSessionChanged(chat));
+    chat.games = GameCenter(
+      transport: _GroupGames(this, chat),
+      session: s,
+      group: true,
+      onInvite: (card) => _onIncoming(chat, card),
+    );
+    s.onGroupGamePacket = (sender, m) => chat.games.receive(sender, m, private: false);
     _groups[info.id] = chat;
     return chat;
   }
@@ -1082,6 +1113,19 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         if (op == null || _groups[gid] != g) return;
         final effect = await g.info.apply(src, op, myId: myId);
         if (effect != null) await _afterEffect(g, src, effect);
+      case 'gm':
+        // رسالة لعبة سرية (دور، صوت، إجابة) مقفولة بمفتاح مشترك بيني وبين اللي بعتها
+        final g = _groups[gid];
+        final node = r.nodes[src];
+        final d = m['d'];
+        if (g == null || node == null || d is! String || d.length > 96 * 1024) return;
+        try {
+          final key = await _gameKey(src, node.publicKey);
+          final clear = await Box.open(key, base64.decode(d), utf8.encode('wasl/game|$gid|$src|$myId'));
+          if (clear == null || _groups[gid] != g) return;
+          final msg = jsonDecode(utf8.decode(clear));
+          if (msg is Map<String, dynamic>) g.games.receive(src, msg, private: true);
+        } catch (_) {}
       case 'gk':
         final ad = _requestedAds[gid];
         final node = r.nodes[src];
@@ -1114,6 +1158,24 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         notifyListeners();
         _joinResults.add((ad, false));
     }
+  }
+
+  // ---------------- الألعاب ----------------
+
+  /// مفاتيح مشتركة للرسايل السرية في ألعاب الجروبات (بتتحسب مرة لكل شخص).
+  final Map<String, Future<Uint8List>> _gameKeys = {};
+
+  Future<Uint8List> _gameKey(String peerId, Uint8List peerKey) =>
+      _gameKeys.putIfAbsent('$peerId|${base64.encode(peerKey)}', () => Box.pairKey(_me.keyPair, peerKey, 'wasl/game'));
+
+  /// رسالة لعبة لعضو واحد في الجروب، مقفولة بمفتاح بيني وبينه (محدش غيره يقراها ولا يزوّرها).
+  Future<void> _sendGamePrivate(GroupChat g, String to, Map<String, dynamic> m) async {
+    final r = router;
+    final node = r?.nodes[to];
+    if (r == null || node == null || to == myId) return;
+    final key = await _gameKey(to, node.publicKey);
+    final sealed = await Box.seal(key, utf8.encode(jsonEncode(m)), utf8.encode('wasl/game|${g.id}|$myId|$to'));
+    await r.sendControl(to, {'t': 'gm', 'g': g.id, 'd': base64.encode(sealed)});
   }
 
   // ---------------- الرسايل والإشعارات ----------------
@@ -1534,4 +1596,48 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     AppSettings.instance.removeListener(_onSettingsChanged);
     super.dispose();
   }
+}
+
+/// الألعاب في الشات الخاص: كل حاجة بتعدّي على القناة المشفرة مع الشخص.
+class _DirectGames implements GameTransport {
+  _DirectGames(this.hub, this.chat);
+  final ChatHub hub;
+  final DirectChat chat;
+
+  @override
+  String get myId => hub.myId;
+
+  @override
+  String get myName => hub._me.name;
+
+  @override
+  bool get online => chat.session.canSend;
+
+  @override
+  Future<void> sendAll(Map<String, dynamic> m) => chat.session.sendGame(m);
+
+  @override
+  Future<void> sendTo(String id, Map<String, dynamic> m) => chat.session.sendGame(m);
+}
+
+/// الألعاب في الجروب: العام بمفتاح الجروب، والسري لكل لاعب بمفتاح مشترك معاه.
+class _GroupGames implements GameTransport {
+  _GroupGames(this.hub, this.group);
+  final ChatHub hub;
+  final GroupChat group;
+
+  @override
+  String get myId => hub.myId;
+
+  @override
+  String get myName => hub._me.name;
+
+  @override
+  bool get online => group.session.canSend;
+
+  @override
+  Future<void> sendAll(Map<String, dynamic> m) => group.session.sendGame(m);
+
+  @override
+  Future<void> sendTo(String id, Map<String, dynamic> m) => hub._sendGamePrivate(group, id, m);
 }

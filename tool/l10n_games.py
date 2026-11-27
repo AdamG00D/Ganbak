@@ -1,0 +1,260 @@
+#!/usr/bin/env python3
+"""نصوص الألعاب (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
+
+    python3 tool/l10n_games.py && flutter gen-l10n
+
+بيستبدل المفاتيح اللي موجودة ويزوّد الجديدة. أي نص فيه {x} بيتعمله placeholder لوحده.
+"""
+import collections
+import json
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+
+S = {
+    # ---------------- عام ----------------
+    'games': ('الألعاب', 'Games'),
+    'playWith': ('العب مع {name}', 'Play with {name}'),
+    'playWithGroup': ('العب مع الجروب', 'Play with the group'),
+    'gamesTabDirect': ('اتنين', 'Two players'),
+    'gamesTabGroup': ('جروب', 'Group'),
+    'playersRange': ('{range} لاعبين', '{range} players'),
+    'gameInviteFrom': ('{name} عازمك على {game}', '{name} invited you to {game}'),
+    'gameInviteMine': ('إنت فتحت {game}', 'You opened {game}'),
+    'gamePlay': ('العب', 'Play'),
+    'gameJoin': ('انضم', 'Join'),
+    'gameJoined': ('إنت جوه', "You're in"),
+    'gameNotNow': ('مش دلوقتي', 'Not now'),
+    'gameStart': ('ابدأ', 'Start'),
+    'gameOpen': ('افتح اللعبة', 'Open game'),
+    'gameWatch': ('اتفرج', 'Watch'),
+    'gameWaitingHost': ('مستنيين {name} يبدأ', 'Waiting for {name} to start'),
+    'gameWaitingPeer': ('مستنيين {name} يوافق', 'Waiting for {name} to accept'),
+    'gameSeats': ('{n} من {max}', '{n} of {max}'),
+    'gameNeedMore': ('محتاجين {n} كمان عشان تبدأ', '{n} more needed to start'),
+    'gameDoneCard': ('اللعبة خلصت', 'Game over'),
+    'gameClosedCard': ('اللعبة اتقفلت', 'Game closed'),
+    'gameEnded': ('اللعبة خلصت', 'The game is over'),
+    'gameHostLeft': ('صاحب الغرفة خرج، فاللعبة اتقفلت', 'The host left, so the game closed'),
+    'gameCanceled': ('اللعبة اتلغت', 'The game was cancelled'),
+    'gameRunningBanner': ('في لعبة شغالة: {game}', 'Game in progress: {game}'),
+    'gameBackToGame': ('ارجع لها', 'Back to it'),
+    'gameBackToChat': ('ارجع للشات', 'Back to chat'),
+    'gameRematch': ('ماتش تاني', 'Rematch'),
+    'gameRematchAsked': ('{name} عايز ماتش تاني', '{name} wants a rematch'),
+    'gameRematchWaiting': ('مستني التاني يوافق…', 'Waiting for the other player…'),
+    'gameYouWon': ('إنت كسبت!', 'You won!'),
+    'gameYouLost': ('المرة دي لأ… ماتش تاني؟', 'Not this time… rematch?'),
+    'gameWinner': ('{name} كسب!', '{name} won!'),
+    'gameDraw': ('تعادل', "It's a draw"),
+    'gameYourTurn': ('دورك', 'Your turn'),
+    'gameTheirTurn': ('دور {name}', 'Turn: {name}'),
+    'gameQuitQ': ('تخرج من اللعبة؟', 'Leave the game?'),
+    'gameQuitBody': ('اللعبة هتكمل للباقيين من غيرك.', 'The game goes on for the others without you.'),
+    'gameQuitBody2': ('لو خرجت التاني هيكسب.', 'If you leave, the other player wins.'),
+    'gameEndQ': ('تقفل اللعبة للكل؟', 'Close the game for everyone?'),
+    'gameEndBody': ('إنت صاحب الغرفة: لو خرجت اللعبة هتتقفل عند كل اللاعبين.', "You're the host: if you leave, the game closes for every player."),
+    'gameLeave': ('اخرج', 'Leave'),
+    'gameNobody': ('مفيش حد متصل دلوقتي تلعب معاه', 'Nobody is connected to play with right now'),
+    'gameNeedConnection': ('استنى الاتصال يجهز الأول', 'Wait for the connection first'),
+    'gameOldVersion': ('مفيش رد… يمكن {name} عنده نسخة قديمة من وصل', 'No answer… {name} may have an older version of Wasl'),
+    'gameSpectating': ('إنت بتتفرج', "You're watching"),
+    'gameScore': ('النتيجة', 'Score'),
+    'gamePlayers': ('اللاعبين', 'Players'),
+    'gameRound': ('الماتش {n}', 'Match {n}'),
+    'gameChatHint': ('اكتب للاعبين…', 'Message the players…'),
+    'gameChatMuted': ('مينفعش تتكلم دلوقتي', "You can't talk right now"),
+    'gameCheated': ('{name} غش! (غيّر اختياره أو كدب في رد)', '{name} cheated! (changed a choice or lied in an answer)'),
+    'gameHost': ('صاحب الغرفة', 'Host'),
+    'gameSkip': ('عدّي', 'Skip'),
+    'gameTimeLeft': ('فاضل {s} ث', '{s}s left'),
+    'gameWins': ('مرات الكسب', 'Wins'),
+    'gameVsRecord': ('بينكم: {a} – {b}', 'Between you: {a} – {b}'),
+    'gameMore': ('ألعاب', 'Games'),
+
+    # ---------------- الأسماء ----------------
+    'gameXo': ('إكس أو', 'Tic-tac-toe'),
+    'gameConnect4': ('أربعة في صف', 'Four in a row'),
+    'gameBattleship': ('حرب السفن', 'Battleships'),
+    'gameRps': ('حجر ورقة مقص', 'Rock paper scissors'),
+    'gameDots': ('مربعات ونقط', 'Dots and boxes'),
+    'gameMemory': ('الذاكرة', 'Memory'),
+    'gameSpy': ('مين الجاسوس؟', "Who's the spy?"),
+    'gameQuiz': ('المسابقة', 'Quiz'),
+    'gameMafia': ('المافيا', 'Mafia'),
+
+    # ---------------- جمل قصيرة (كارت اللعبة) ----------------
+    'tagXo': ('3 في صف تكسب', 'Three in a row wins'),
+    'tagConnect4': ('القطعة بتنزل، و4 في صف تكسب', 'Drop pieces, four in a row wins'),
+    'tagBattleship': ('خبّي سفنك واضرب سفنه', 'Hide your fleet, sink theirs'),
+    'tagRps': ('مين هيغلب مين؟', 'Who beats whom?'),
+    'tagDots': ('اقفل المربع وخده', 'Close a box, keep it'),
+    'tagMemory': ('افتكر مكان الصور', 'Remember where the pictures are'),
+    'tagSpy': ('الكل عارف الكلمة… إلا واحد', 'Everyone knows the word… except one'),
+    'tagQuiz': ('مين أسرع وأشطر؟', 'Fastest right answer wins'),
+    'tagMafia': ('اكشفوا القتلة قبل ما يخلّصوا عليكم', 'Unmask the killers before they get you'),
+
+    # ---------------- صفحة الشرح ----------------
+    'helpGoal': ('الهدف', 'Goal'),
+    'helpHow': ('إزاي بتتلعب', 'How to play'),
+    'helpRoles': ('الأدوار', 'Roles'),
+    'helpTips': ('نصايح', 'Tips'),
+    'helpFaq': ('أسئلة', 'Questions'),
+    'helpWhereDirect': ('في الخاص', 'In private chats'),
+    'helpWhereGroup': ('في الجروبات', 'In groups'),
+    'helpMinutes': ('{range} دقيقة', '{range} min'),
+    'helpFaqLeaveQ': ('لو حد فصل أو خرج؟', 'What if someone disconnects or leaves?'),
+    'helpFaqLeaveA': ('لو لاعب خرج، اللعبة بتكمل للباقيين ودوره بيتنط. لو صاحب الغرفة (اللي فتح اللعبة) خرج أو بعد أكتر من 25 ثانية، اللعبة بتتقفل عند الكل.', 'If a player leaves, the game goes on and their turn is skipped. If the host (whoever opened the game) leaves or is out of reach for more than 25 seconds, the game closes for everyone.'),
+    'helpFaqHostQ': ('مين "صاحب الغرفة"؟', 'Who is the "host"?'),
+    'helpFaqHostA': ('اللي فتح اللعبة. موبايله هو الحكم: بيشغّل القواعد، وبيوزّع الأدوار السرية، وبيعدّ الأصوات. بيلعب عادي زي أي حد، والتطبيق مبيوريهوش أسرار حد.', 'Whoever opened the game. Their phone is the referee: it runs the rules, deals secret roles and counts votes. The host plays like everyone else and never sees anyone else\'s secrets.'),
+    'helpFaqCheatQ': ('حد يقدر يغش؟', 'Can anyone cheat?'),
+    'helpFaqCheatA': ('في حرب السفن وحجر ورقة مقص اختيارك بيتقفل ببصمة قبل ما التاني يشوفه، والتطبيق بيكشف أي حد غيّر اختياره أو كدب. في باقي الألعاب موبايل صاحب الغرفة هو الحكم.', "In Battleships and Rock paper scissors your choice is locked with a fingerprint before the other player sees it, and the app catches anyone who changes it or lies. In the other games the host's phone is the referee."),
+
+    # إكس أو
+    'helpXoGoal': ('أول واحد يعمل 3 علامات في صف (أفقي أو رأسي أو مايل) يكسب.', 'Be the first to get three of your marks in a row — across, down or diagonally.'),
+    'helpXoHow': ('اللي بيبدأ بياخد ✕ والتاني ○.\nكل واحد بدوره يدوس على خانة فاضية.\nلو اللوح اتملى ومحدش عمل 3 في صف يبقى تعادل.\nفي الماتش اللي بعده اللي بيبدأ بيتبدّل.', 'The first player is ✕, the other ○.\nTake turns tapping an empty square.\nIf the board fills up with no three in a row, it\'s a draw.\nThe starting player switches every match.'),
+    'helpXoTips': ('النص أقوى خانة في الأول.\nلو التاني عنده 2 في صف، اقفل عليه فوراً.', 'The centre is the strongest first move.\nIf the other player has two in a row, block them right away.'),
+    # أربعة في صف
+    'helpConnect4Goal': ('أول واحد يعمل 4 قطع من لونه في صف يكسب.', 'Be the first to line up four pieces of your colour.'),
+    'helpConnect4How': ('اللوح 7 أعمدة و6 صفوف.\nدوس على أي عمود، والقطعة بتنزل لأوطى خانة فاضية فيه.\nالـ 4 ممكن يكونوا أفقي أو رأسي أو مايلين.\nلو اللوح اتملى من غير 4 في صف يبقى تعادل.', 'The board has 7 columns and 6 rows.\nTap a column and your piece drops to the lowest empty spot.\nThe four can be across, down or diagonal.\nIf the board fills up with no four in a row, it\'s a draw.'),
+    'helpConnect4Tips': ('العمود اللي في النص بيفتح لك فرص أكتر.\nبص على الخطوط المايلة؛ ناس كتير بتنساها.', 'The middle column gives you the most chances.\nWatch the diagonals; people often miss them.'),
+    # حرب السفن
+    'helpBattleshipGoal': ('غرّق كل سفن التاني قبل ما يغرّق سفنك.', 'Sink all of the other player\'s ships before they sink yours.'),
+    'helpBattleshipHow': ('كل واحد عنده بحر 8×8 فيه 4 سفن: طولها 4 و3 و3 و2.\nدوس "رصّة تانية" لحد ما الرصّة تعجبك، وبعدين "جاهز".\nبالدور دوس على خانة في بحر التاني عشان تضرب.\nالرد: مياه ○ أو إصابة ✕ أو غرّقت سفينة.\nلو أصبت بتضرب تاني، ولو جت مياه الدور بيروح.', 'Each player has an 8×8 sea with 4 ships: lengths 4, 3, 3 and 2.\nTap "New layout" until you like it, then "Ready".\nTake turns tapping a square in the other sea to fire.\nThe answer is miss ○, hit ✕ or sunk.\nA hit gives you another shot; a miss passes the turn.'),
+    'helpBattleshipTips': ('لما تصيب، جرّب الخانات اللي جنبها.\nالسفن مبتلمسش بعض، فحوالين السفينة الغرقانة كله مياه.\nسفنك مبتخرجش من موبايلك؛ في الآخر التطبيق بيتأكد إن محدش كدب.', 'After a hit, try the squares next to it.\nShips never touch, so everything around a sunk ship is water.\nYour fleet never leaves your phone; at the end the app checks that nobody lied.'),
+    # حجر ورقة مقص
+    'helpRpsGoal': ('أول واحد يكسب رميتين يكسب الماتش.', 'First to win two throws wins the match.'),
+    'helpRpsHow': ('اختار حجر ✊ أو ورقة ✋ أو مقص ✌️.\nالحجر بيكسّر المقص، والمقص بيقص الورقة، والورقة بتلف الحجر.\nالاختيارين بيظهروا مع بعض بعد ما الاتنين يختاروا.\nلو اخترتوا نفس الحاجة الرمية بتتعاد.', 'Pick rock ✊, paper ✋ or scissors ✌️.\nRock breaks scissors, scissors cut paper, paper wraps rock.\nBoth picks are shown together once you have both chosen.\nSame pick? The throw is replayed.'),
+    'helpRpsTips': ('محدش يقدر يشوف اختيارك قبل ما يختار؛ التطبيق بيقفله ببصمة.', 'Nobody can see your pick before choosing; the app locks it with a fingerprint.'),
+    # مربعات ونقط
+    'helpDotsGoal': ('خد أكتر عدد مربعات.', 'Claim the most boxes.'),
+    'helpDotsHow': ('بالدور، كل واحد يرسم خط بين نقطتين جنب بعض.\nاللي يرسم الضلع الرابع لمربع ياخده (بيتلوّن بلونه).\nلو قفلت مربع بتلعب تاني على طول.\nلما كل المربعات تتقفل، اللي معاه أكتر واحد يكسب.', 'Take turns drawing a line between two neighbouring dots.\nWhoever draws the fourth side of a box claims it.\nClose a box and you play again.\nWhen every box is closed, the one with the most wins.'),
+    'helpDotsTips': ('متدّيش للتاني ضلع تالت في مربع؛ هياخده.\nفي الآخر حاول تسيب للتاني سلسلة قصيرة وتاخد إنت الطويلة.', 'Avoid drawing the third side of a box; the next player takes it.\nNear the end, give away short chains and keep the long ones.'),
+    # الذاكرة
+    'helpMemoryGoal': ('لِم أكتر عدد من الكروت المتشابهة.', 'Collect the most matching pairs.'),
+    'helpMemoryHow': ('الكروت مقلوبة، وكل صورة ليها كارتين.\nفي دورك اقلب كارتين.\nلو شبه بعض بتاخدهم وتلعب تاني.\nلو مش شبه بعض بيتقلبوا تاني بعد لحظة والدور بيروح للي بعدك.\nلما الكروت تخلص، اللي معاه أكتر يكسب.', 'All cards are face down; every picture appears twice.\nOn your turn flip two cards.\nIf they match you keep them and go again.\nIf not, they flip back after a moment and the next player goes.\nWhen the cards run out, whoever has the most pairs wins.'),
+    'helpMemoryTips': ('ركّز في الكروت اللي غيرك بيقلبها؛ دي معلومة ببلاش.', 'Watch what the others flip; that\'s free information.'),
+    # الجاسوس
+    'helpSpyGoal': ('لو إنت مش الجاسوس: اكتشفوه. لو إنت الجاسوس: متتكشفش، أو اعرف الكلمة.', 'Not the spy? Find them. The spy? Stay hidden, or work out the word.'),
+    'helpSpyHow': ('التطبيق بيختار فئة (أكلات، أماكن…) وكلمة.\nكل واحد بيشوف الكلمة على موبايله، إلا واحد بيشوف "إنت الجاسوس" والفئة بس.\nبالدور كل واحد يقول تلميح صغير عن الكلمة (بصوته أو يكتبه) ويدوس "خلصت".\nبعد التلميحات الكل يصوّت على مين الجاسوس.\nلو الجاسوس اتمسك، ياخد فرصة أخيرة يخمّن الكلمة من 8 اختيارات.', 'The app picks a category (food, places…) and a word.\nEveryone sees the word on their phone, except one player who sees "You\'re the spy" and the category only.\nIn turn, everyone gives a small hint about the word (out loud or typed) and taps "Done".\nAfter the hints, everyone votes for the spy.\nIf the spy is caught, they get one last chance to guess the word out of 8.'),
+    'helpSpyRoles': ('🕵️ الجاسوس: مش عارف الكلمة، بيحاول يتصرف كأنه عارف.\n👤 الباقيين: عارفين الكلمة، بيحاولوا يكشفوه من غير ما يفضحوا الكلمة.', '🕵️ The spy: doesn\'t know the word and tries to act like they do.\n👤 Everyone else: knows the word and tries to unmask the spy without giving the word away.'),
+    'helpSpyTips': ('التلميح لو واضح أوي الجاسوس هيعرف الكلمة، ولو غامض أوي هيشكّوا فيك.\nالجاسوس: اسمع تلميحات اللي قبلك كويس.', 'Hints that are too obvious give the word to the spy; too vague and people suspect you.\nSpy: listen closely to the hints before yours.'),
+    # المسابقة
+    'helpQuizGoal': ('جاوب صح وبسرعة واجمع أكتر نقط.', 'Answer right and fast to score the most points.'),
+    'helpQuizHow': ('صاحب الغرفة بيختار الفئة وعدد الأسئلة.\nكل سؤال ليه 4 اختيارات و15 ثانية.\nالإجابة الصح بتاخد 500 نقطة، وكمان لحد 500 على السرعة.\nبعد كل سؤال الإجابة الصح والترتيب بيظهروا.', 'The host picks a category and the number of questions.\nEach question has 4 options and 15 seconds.\nA right answer earns 500 points, plus up to 500 for speed.\nAfter each question the right answer and the ranking are shown.'),
+    'helpQuizTips': ('الوقت بيتحسب على موبايلك من لحظة ما السؤال يظهر عندك، فبطء الشبكة مش هيظلمك.', 'Time is measured on your own phone from the moment the question appears, so a slow network won\'t cost you points.'),
+    # المافيا
+    'helpMafiaGoal': ('المواطنين: اكشفوا المافيا وطلّعوهم. المافيا: خلّصوا على الباقيين من غير ما تتكشفوا.', 'Town: find and vote out the mafia. Mafia: get rid of the town without being caught.'),
+    'helpMafiaHow': ('التطبيق بيوزّع الأدوار سرّي؛ كل واحد بيشوف دوره بس.\nالليل 🌙: المافيا يختاروا ضحية، والدكتور يحمي حد، والمحقق يسأل عن حد.\nالصبح ☀️: التطبيق يعلن مين اتقتل (أو إن الدكتور أنقذه).\nالنقاش: 3 دقايق تتكلموا وتتهموا بعض (صاحب الغرفة يقدر يختصر الوقت).\nالتصويت: اللي ياخد أكتر أصوات يخرج ودوره يتكشف. لو الأصوات اتعادلت محدش بيخرج.\nوبعدين ليل تاني… لحد ما فريق يكسب.', 'The app deals roles in secret; everyone sees only their own.\nNight 🌙: the mafia pick a victim, the doctor protects someone, the detective checks someone.\nMorning ☀️: the app announces who was killed (or that the doctor saved them).\nDiscussion: 3 minutes to talk and accuse (the host can cut it short).\nVote: whoever gets the most votes is out and their role is revealed. A tie means nobody leaves.\nThen night again… until one side wins.'),
+    'helpMafiaRoles': ('🔪 مافيا: واحد لكل 4 لاعبين تقريباً. عارفين بعض، وليهم شات سري بالليل.\n💉 دكتور: كل ليلة يحمي حد (ممكن نفسه)، بس مش نفس الشخص ليلتين ورا بعض.\n🔍 محقق: كل ليلة يعرف عن حد هو مافيا ولا لأ.\n👤 مواطن: ملوش قدرة؛ سلاحه عقله وصوته.', '🔪 Mafia: about one per four players. They know each other and have a secret chat at night.\n💉 Doctor: protects someone each night (even themselves), but not the same person two nights running.\n🔍 Detective: learns each night whether someone is mafia.\n👤 Citizen: no power; their weapons are their wits and their vote.'),
+    'helpMafiaTips': ('المواطنين بيكسبوا لو كل المافيا خرجوا. المافيا بيكسبوا لو بقى عددهم قد الباقيين.\nاللي مات بيتفرج ومبيتكلمش.\nلو قاعدين مع بعض اتكلموا بصوتكم؛ التطبيق بيمسك الوقت والتصويت بس.', 'The town wins when every mafia member is out. The mafia win when they equal the rest.\nDead players watch and stay quiet.\nSitting together? Talk out loud; the app just keeps time and counts votes.'),
+
+    # ---------------- داخل الألعاب ----------------
+    'rpsRock': ('حجر', 'Rock'),
+    'rpsPaper': ('ورقة', 'Paper'),
+    'rpsScissors': ('مقص', 'Scissors'),
+    'rpsPick': ('اختار', 'Pick one'),
+    'rpsPicked': ('اخترت ✓ مستني {name}', 'Picked ✓ waiting for {name}'),
+    'rpsTheyPicked': ('{name} اختار', '{name} has picked'),
+    'rpsFirstTo': ('أول واحد يوصل {n}', 'First to {n}'),
+    'rpsTie': ('نفس الاختيار، تاني!', 'Same pick, again!'),
+    'bsPlace': ('رصّ سفنك', 'Place your fleet'),
+    'bsShuffle': ('رصّة تانية', 'New layout'),
+    'bsReady': ('جاهز', 'Ready'),
+    'bsWaitingThem': ('مستني {name} يرصّ سفنه', 'Waiting for {name} to place their fleet'),
+    'bsYourSea': ('بحرك', 'Your sea'),
+    'bsTheirSea': ('بحر {name}', 'Firing at {name}'),
+    'bsTapToFire': ('دوس على خانة في بحره عشان تضرب', 'Tap a square in their sea to fire'),
+    'bsHit': ('إصابة! اضرب تاني', 'Hit! Fire again'),
+    'bsMiss': ('مياه', 'Miss'),
+    'bsSunk': ('غرّقت سفينة!', 'Ship sunk!'),
+    'bsLeft': ('فاضل {n}', '{n} left'),
+    'dotsBoxes': ('مربعات', 'boxes'),
+    'memPairs': ('أزواج', 'pairs'),
+    'spyYouAreSpy': ('إنت الجاسوس', "You're the spy"),
+    'spyCategory': ('الفئة: {cat}', 'Category: {cat}'),
+    'spyWordIs': ('الكلمة', 'The word'),
+    'spyTapToShow': ('دوس عشان تشوف (خبّي الشاشة عن اللي جنبك)', "Tap to reveal (hide the screen from your neighbours)"),
+    'spyHide': ('خبّي', 'Hide'),
+    'spyClueTurn': ('دور {name} يقول تلميح', 'Hint from: {name}'),
+    'spyYourClue': ('دورك: قول تلميح صغير عن الكلمة (بصوتك أو اكتبه تحت)', 'Your turn: give a small hint about the word (out loud or type it below)'),
+    'spyDone': ('خلصت تلميحي', "I'm done"),
+    'spyPass': ('عدّي دوره', 'Skip their turn'),
+    'spyToVote': ('يلا نصوّت', 'Go to the vote'),
+    'spyClues': ('تلميح {n} من {m}', 'Hint {n} of {m}'),
+    'spyVoteTitle': ('مين الجاسوس؟', "Who's the spy?"),
+    'spyVoted': ('صوّت {n} من {m}', '{n} of {m} voted'),
+    'spyYourVote': ('صوتك راح ✓', 'Vote sent ✓'),
+    'spyGuessing': ('{name} اتمسك… وبيخمّن الكلمة', '{name} was caught… and is guessing the word'),
+    'spyGuessNow': ('اتمسكت! عندك فرصة أخيرة: خمّن الكلمة', 'Caught! One last chance: guess the word'),
+    'spyWas': ('الجاسوس كان {name}', 'The spy was {name}'),
+    'spyWordWas': ('الكلمة كانت: {w}', 'The word was: {w}'),
+    'spyGuessed': ('خمّن "{w}"', 'Guessed "{w}"'),
+    'spyNotCaught': ('محدش مسك الجاسوس', 'Nobody caught the spy'),
+    'spyWrongCaught': ('اتمسك {name}… بس مكانش الجاسوس', '{name} was caught… but wasn\'t the spy'),
+    'quizCategory': ('الفئة', 'Category'),
+    'quizMixed': ('منوّعة', 'Mixed'),
+    'quizCount': ('عدد الأسئلة', 'Questions'),
+    'quizQuestionOf': ('سؤال {i} من {n}', 'Question {i} of {n}'),
+    'quizAnswered': ('جاوب {n} من {m}', '{n} of {m} answered'),
+    'quizRight': ('صح! +{n}', 'Right! +{n}'),
+    'quizWrong': ('غلط', 'Wrong'),
+    'quizTooLate': ('الوقت خلص', "Time's up"),
+    'quizRanking': ('الترتيب', 'Ranking'),
+    'quizPoints': ('{n} نقطة', '{n} pts'),
+    'mafiaRoleMafia': ('مافيا', 'Mafia'),
+    'mafiaRoleDoctor': ('دكتور', 'Doctor'),
+    'mafiaRoleDetective': ('محقق', 'Detective'),
+    'mafiaRoleCitizen': ('مواطن', 'Citizen'),
+    'mafiaYourRole': ('شخصيتك السرية', 'Your secret role'),
+    'spyYourCard': ('كلمتك', 'Your word'),
+    'mafiaTeam': ('فريقك: {names}', 'Your team: {names}'),
+    'mafiaNight': ('الليل {n} 🌙', 'Night {n} 🌙'),
+    'mafiaMorning': ('الصبح ☀️', 'Morning ☀️'),
+    'mafiaTalk': ('النقاش', 'Discussion'),
+    'mafiaVote': ('التصويت', 'Vote'),
+    'mafiaNightWait': ('الليل… غمّض واستنى الصبح', 'Night… close your eyes and wait for morning'),
+    'mafiaPickKill': ('اختار الضحية', 'Choose the victim'),
+    'mafiaPickSave': ('اختار حد تحميه الليلة', 'Choose someone to protect tonight'),
+    'mafiaPickCheck': ('اختار حد تسأل عنه', 'Choose someone to check'),
+    'mafiaPicked': ('اخترت {name} ✓', 'You chose {name} ✓'),
+    'mafiaKilled': ('{name} اتقتل الليلة اللي فاتت', '{name} was killed last night'),
+    'mafiaRescued': ('المافيا حاولوا… بس الدكتور أنقذ الضحية!', 'The mafia struck… but the doctor saved the victim!'),
+    'mafiaQuietNight': ('ليلة هادية، محدش مات', 'A quiet night, nobody died'),
+    'mafiaOut': ('{name} خرج… وكان {role}', '{name} is out… and was {role}'),
+    'mafiaNoOut': ('الأصوات اتعادلت، محدش خرج', 'Tied vote, nobody is out'),
+    'mafiaVoteNone': ('محدش', 'Nobody'),
+    'mafiaTownWins': ('المواطنين كسبوا!', 'The town wins!'),
+    'mafiaMafiaWins': ('المافيا كسبت!', 'The mafia win!'),
+    'mafiaYouDied': ('إنت مت… بتتفرج دلوقتي', "You're dead… watching now"),
+    'mafiaIsMafia': ('{name} مافيا!', '{name} is mafia!'),
+    'mafiaNotMafia': ('{name} مش مافيا', '{name} is not mafia'),
+    'mafiaSecretChat': ('شات المافيا السري', 'Mafia secret chat'),
+    'mafiaSkip': ('اختصر الوقت', 'Cut it short'),
+    'mafiaAlive': ('عايشين {n}', '{n} alive'),
+    'mafiaVotedCount': ('صوّت {n} من {m}', '{n} of {m} voted'),
+    'mafiaNoSameTwice': ('مينفعش تحمي نفس الشخص ليلتين ورا بعض', "You can't protect the same person two nights running"),
+}
+
+
+def main() -> None:
+    for lang, idx in (('ar', 0), ('en', 1)):
+        path = ROOT / f'lib/l10n/app_{lang}.arb'
+        data = json.loads(path.read_text(), object_pairs_hook=collections.OrderedDict)
+        for key, pair in S.items():
+            text = pair[idx]
+            data[key] = text
+            names = re.findall(r'\{(\w+)\}', text)
+            if lang == 'ar':
+                meta = f'@{key}'
+                if names:
+                    data[meta] = {'placeholders': {n: {'type': 'String'} for n in dict.fromkeys(names)}}
+                else:
+                    data.pop(meta, None)
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+    print(f'✅ {len(S)} نص')
+
+
+if __name__ == '__main__':
+    main()
