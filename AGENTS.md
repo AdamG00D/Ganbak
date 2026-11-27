@@ -38,6 +38,7 @@ flutter test tool/shots/shots_test.dart && python3 tool/shots/sheet.py
                          # screenshots of real screens → build/shots (ar/en × light/dark + 1.3× text) — look at them
 python3 tool/l10n_games.py && flutter gen-l10n   # game + guide strings (both ARB files)
 python3 tool/generate_icon.py   # regenerate launcher icon (needs Pillow)
+python3 tool/site.py            # rebuild the website in site/ (GitHub Pages, published by .github/workflows/pages.yml)
 ./scripts/build_release.sh      # signed + obfuscated → Releases/<ver>v/ (uses JDK 21 from ~/Downloads/Files/toolchains)
                                 # ONLY after the owner explicitly says to build
 ```

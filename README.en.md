@@ -13,6 +13,8 @@
 
 # Wasl — وَصْل
 
+🌐 **Website:** [adamg00d.github.io/Wasl](https://adamg00d.github.io/Wasl/en/)
+
 **Wasl** ("connection" in Arabic) is a chat app for Android that works **with no internet and no server**. Phones
 nearby talk directly over **Bluetooth** or the same **Wi-Fi / hotspot**, and relay messages for each other as a
 **mesh**, so a message can reach someone well beyond your own phone's range. Private chats are end-to-end encrypted
