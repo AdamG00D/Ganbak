@@ -3031,8 +3031,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inviteToGroup => 'Invite someone';
 
   @override
-  String get inviteToGroupSub =>
-      'Pick someone nearby to invite — they join with one tap, no password';
+  String get inviteToGroupSub => 'Pick someone nearby to invite with one tap';
 
   @override
   String get inviteNoOne => 'Nobody nearby who isn’t in the group';
@@ -3055,4 +3054,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inviteNo => 'No thanks';
+
+  @override
+  String invitedBy(String name) {
+    return 'Invited by $name';
+  }
+
+  @override
+  String get inviteRequestSent =>
+      'Request sent to the group owner — you’re in once they accept';
 }

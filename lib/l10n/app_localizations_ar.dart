@@ -2997,8 +2997,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inviteToGroup => 'ادعي حد';
 
   @override
-  String get inviteToGroupSub =>
-      'اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد';
+  String get inviteToGroupSub => 'اختار حد قريب تبعتله دعوة يدخل بيها بضغطة';
 
   @override
   String get inviteNoOne => 'مفيش حد قريب مش في الجروب';
@@ -3021,4 +3020,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get inviteNo => 'لأ شكراً';
+
+  @override
+  String invitedBy(String name) {
+    return 'بدعوة من $name';
+  }
+
+  @override
+  String get inviteRequestSent => 'اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق';
 }

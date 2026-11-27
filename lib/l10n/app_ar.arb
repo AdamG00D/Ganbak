@@ -1726,7 +1726,7 @@
   "mailFromAnyoneOn": "أي حد يقدر يسيبلك رسالة تستناك",
   "mailFromAnyoneOff": "بس من الناس اللي اتكلمت معاهم قبل كده",
   "inviteToGroup": "ادعي حد",
-  "inviteToGroupSub": "اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد",
+  "inviteToGroupSub": "اختار حد قريب تبعتله دعوة يدخل بيها بضغطة",
   "inviteNoOne": "مفيش حد قريب مش في الجروب",
   "inviteSent": "اتبعتت الدعوة لـ {name}",
   "@inviteSent": {
@@ -1749,5 +1749,14 @@
     }
   },
   "inviteJoin": "ادخل",
-  "inviteNo": "لأ شكراً"
+  "inviteNo": "لأ شكراً",
+  "invitedBy": "بدعوة من {name}",
+  "@invitedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inviteRequestSent": "اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق"
 }

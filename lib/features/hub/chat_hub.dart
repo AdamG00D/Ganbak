@@ -211,14 +211,19 @@ class DirectChat extends Conversation {
 class GroupInvite {
   GroupInvite(this.ad, this.key, this.fromId, this.fromName);
   final GroupAd ad;
-  final Uint8List key;
+
+  /// مفتاح الجروب — null في جروب بطلب انضمام لو اللي دعاني مش صاحبه (الدخول محتاج موافقة صاحبه).
+  final Uint8List? key;
   final String fromId;
   final String fromName;
 }
 
 class JoinRequest {
-  JoinRequest(this.groupId, this.nodeId, this.name, this.color, this.avatar, this.cartoon);
+  JoinRequest(this.groupId, this.nodeId, this.name, this.color, this.avatar, this.cartoon, {this.invitedBy});
   final String groupId;
+
+  /// اسم العضو اللي دعاه (لو جه بدعوة).
+  final String? invitedBy;
   final String nodeId;
   final String name;
   final int color;
@@ -940,7 +945,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /// يبعت طلب انضمام لصاحب الجروب. يرجّع رسالة خطأ أو null.
-  Future<String?> requestJoin(GroupAd ad) async {
+  Future<String?> requestJoin(GroupAd ad, {String? invitedBy}) async {
     final r = router;
     if (r == null) return tr.networkNotRunning;
     if (!r.reachable(ad.owner)) return tr.ownerOffline;
@@ -948,7 +953,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     _requestedAds[ad.id] = ad;
     notifyListeners();
     try {
-      await r.sendControl(ad.owner, {'t': 'gj', 'g': ad.id});
+      await r.sendControl(ad.owner, {'t': 'gj', 'g': ad.id, 'by': ?invitedBy});
       return null;
     } catch (_) {
       pendingJoins.remove(ad.id);
@@ -957,8 +962,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
-  /// أقدر أدعي حد للجروب ده؟ (العام وبكلمة سر: أي عضو • بطلب انضمام: صاحبه بس)
-  bool canInvite(GroupChat g) => g.info.mode != GroupMode.ask || g.iAmOwner;
+  /// أقدر أدعي حد للجروب ده؟ أي عضو — وفي جروب بطلب انضمام الدخول بيحتاج موافقة صاحبه (إلا لو هو اللي دعا).
+  bool canInvite(GroupChat g) => true;
 
   /// يبعت دعوة لـ [peer] يدخل [g] — مقفولة بمفتاح مشترك بيننا، وفيها مفتاح الجروب (يدخل من غير باسورد).
   /// في جروب بطلب انضمام الدعوة من صاحبه = موافقة مقدّماً. يرجّع رسالة خطأ أو null.
@@ -968,7 +973,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     if (r == null || node == null || !r.reachable(peer)) return tr.ownerOffline;
     if (!canInvite(g) || g.info.banned.contains(peer)) return tr.sendRequestFailed;
     try {
-      if (g.info.mode == GroupMode.ask && !g.info.members.contains(peer)) {
+      final preApproved = g.info.mode == GroupMode.ask && g.iAmOwner;
+      if (preApproved && !g.info.members.contains(peer)) {
         g.info
           ..members.add(peer)
           ..bump();
@@ -978,7 +984,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       final pair = await Box.pairKey(_me.keyPair, node.publicKey, 'wasl/group-invite');
       final body = jsonEncode({
         'ad': g.info.ad.toWire(),
-        'k': g.info.mode == GroupMode.open ? null : base64.encode(g.info.key),
+        'k': g.info.mode == GroupMode.password || preApproved ? base64.encode(g.info.key) : null,
         'n': _me.name,
       });
       final sealed = await Box.seal(pair, utf8.encode(body), utf8.encode('wasl/group-invite|${g.id}|$myId|$peer'));
@@ -1007,7 +1013,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       for (final n in router?.nodes.values ?? const <MeshNode>[]) {
         if (n.groups.any((a) => a.id == gid && a.owner != ad.owner)) return;
       }
-      final Uint8List key;
+      final Uint8List? key;
       switch (ad.mode) {
         case GroupMode.open:
           key = await GroupInfo.openKey(gid);
@@ -1016,10 +1022,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
           if (k == null || !await GroupInfo.matches(ad, k)) return;
           key = Uint8List.fromList(k);
         case GroupMode.ask:
-          // المفتاح بنثق فيه بس لو جاي من صاحب الجروب نفسه
-          final k = Sign.key(m['k']);
-          if (k == null || ad.owner != src) return;
-          key = Uint8List.fromList(k);
+          // من صاحب الجروب: فيها المفتاح (موافقة مقدّماً) • من عضو: من غير مفتاح، والقبول = طلب انضمام لصاحبه
+          final k = ad.owner == src ? Sign.key(m['k']) : null;
+          key = k == null ? null : Uint8List.fromList(k);
       }
       if (_groups.containsKey(gid) || invites.any((i) => i.ad.id == gid)) return;
       invites.add(GroupInvite(ad, key, src, node.name));
@@ -1028,13 +1033,23 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     } catch (_) {}
   }
 
-  /// أرد على دعوة: أدخل أو لأ.
+  /// أرد على دعوة: أدخل أو لأ. في جروب بطلب انضمام من غير موافقة مقدّماً بيتبعت طلب لصاحبه
+  /// (يرجّع null، و[requestError] فيه الخطأ لو حصل).
   Future<GroupChat?> answerInvite(GroupInvite inv, bool accept) async {
     invites.remove(inv);
     notifyListeners();
+    requestError = null;
     if (!accept || _groups.containsKey(inv.ad.id)) return _groups[inv.ad.id];
-    return _enter(await GroupInfo.fromAd(inv.ad, inv.key), announce: true);
+    final key = inv.key;
+    if (key == null) {
+      requestError = await requestJoin(inv.ad, invitedBy: inv.fromId);
+      return null;
+    }
+    return _enter(await GroupInfo.fromAd(inv.ad, key), announce: true);
   }
+
+  /// خطأ آخر طلب انضمام اتبعت من دعوة (للواجهة).
+  String? requestError;
 
   void cancelJoinRequest(String groupId) {
     pendingJoins.remove(groupId);
@@ -1322,7 +1337,12 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         if (g == null || !g.iAmOwner || node == null) return;
         if (g.info.mode != GroupMode.ask) return;
         if (g.requests.any((q) => q.nodeId == src)) return;
-        g.requests.add(JoinRequest(gid, src, node.name, node.color, node.avatar, node.cartoon));
+        // جه بدعوة من عضو؟ بنبيّن اسمه لو فعلاً عضو في الجروب
+        final by = m['by'];
+        final inviter = by is String && MeshRouter.isId(by) && membersOf(gid).any((n) => n.id == by)
+            ? (_directs[by]?.title ?? r.nodes[by]?.name)
+            : null;
+        g.requests.add(JoinRequest(gid, src, node.name, node.color, node.avatar, node.cartoon, invitedBy: inviter));
         notifyListeners();
         if (!_foreground) SystemBridge.notify('request');
       case 'ga':

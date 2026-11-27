@@ -835,7 +835,13 @@ class _InviteCard extends StatelessWidget {
                   height: 42,
                   onPressed: () async {
                     final g = await hub.answerInvite(invite, true);
-                    if (g != null && context.mounted) ChatPage.open(context, g);
+                    if (!context.mounted) return;
+                    if (g != null) {
+                      ChatPage.open(context, g);
+                    } else {
+                      final err = hub.requestError;
+                      showToast(context, err ?? l.inviteRequestSent, error: err != null);
+                    }
                   },
                 ),
               ),

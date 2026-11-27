@@ -371,13 +371,15 @@ S = {
     'mailFromAnyoneOff': ('بس من الناس اللي اتكلمت معاهم قبل كده', 'Only from people you’ve talked to before'),
     # ---------------- دعوة للجروب ----------------
     'inviteToGroup': ('ادعي حد', 'Invite someone'),
-    'inviteToGroupSub': ('اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد', 'Pick someone nearby to invite — they join with one tap, no password'),
+    'inviteToGroupSub': ('اختار حد قريب تبعتله دعوة يدخل بيها بضغطة', 'Pick someone nearby to invite with one tap'),
     'inviteNoOne': ('مفيش حد قريب مش في الجروب', 'Nobody nearby who isn’t in the group'),
     'inviteSent': ('اتبعتت الدعوة لـ {name}', 'Invite sent to {name}'),
     'invitesTitle': ('دعوات ليك', 'Invites for you'),
     'inviteFrom': ('{name} بيدعوك تدخل "{group}"', '{name} invites you to "{group}"'),
     'inviteJoin': ('ادخل', 'Join'),
     'inviteNo': ('لأ شكراً', 'No thanks'),
+    'invitedBy': ('بدعوة من {name}', 'Invited by {name}'),
+    'inviteRequestSent': ('اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق', 'Request sent to the group owner — you’re in once they accept'),
 }
 
 

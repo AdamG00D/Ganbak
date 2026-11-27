@@ -104,12 +104,12 @@ Control messages (`U`, JSON with `t`):
 | `t` | purpose | authenticated by |
 |---|---|---|
 | `av?` / `av` | ask for / send an avatar JPEG by hash | content hash |
-| `gj` | join request to a group owner | — (owner decides) |
+| `gj` | join request to a group owner (`by?`: the member who invited, shown if they're in the group) | — (owner decides) |
 | `gk` | group key grant | AES-GCM with `pairKey(owner, member, "wasl/group-grant")`, aad `wasl/grant\|gid\|member` |
 | `gr` | join request rejected | same pair key, aad `wasl/reject\|gid\|member` |
 | `ga` | group admin command (§6) | pair key, see below |
 | `gm` | game message to one player (§8) | pair key `"wasl/game"`, aad `wasl/game\|gid\|from\|to` |
-| `gi` | group invite: `{g, d}` with `d` = AES-GCM(pair key `"wasl/group-invite"`, `{ad, k?, n}`, aad `wasl/group-invite\|gid\|from\|to`) — open groups: no key; password: the group key (checked against `c`); ask: the key, trusted only from the owner, who adds the invitee to `members` first. Max 3 pending per sender, 20 in all; dropped if a nearby ad shows the same group with another owner | pair key |
+| `gi` | group invite: `{g, d}` with `d` = AES-GCM(pair key `"wasl/group-invite"`, `{ad, k?, n}`, aad `wasl/group-invite\|gid\|from\|to`) — open groups: no key; password: the group key (checked against `c`); ask: from the owner the key (pre-approved; the owner adds the invitee to `members` first), from any other member no key — accepting sends `gj {g, by: inviter}` to the owner, who decides. Max 3 pending per sender, 20 in all; dropped if a nearby ad shows the same group with another owner | pair key |
 | `mb` | sealed offline message, to its recipient or to a carrier (§9) | sealed to the recipient (see §9) |
 | `mbd` | "delivered": drop your copy / sealed receipt for the sender / receipt received (§9) | receipt: pair key `"wasl/mailbox-receipt"` |
 

@@ -587,6 +587,11 @@ class GroupInfoScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(r.name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15.5)),
+                              if (r.invitedBy != null)
+                                Text(
+                                  context.l10n.invitedBy(r.invitedBy!),
+                                  style: TextStyle(color: p.textMuted, fontSize: 12.5),
+                                ),
                               if (info.banned.contains(r.nodeId))
                                 Text(context.l10n.removedBefore, style: TextStyle(color: p.warning, fontSize: 12)),
                             ],

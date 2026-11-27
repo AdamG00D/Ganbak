@@ -5273,7 +5273,7 @@ abstract class AppLocalizations {
   /// No description provided for @inviteToGroupSub.
   ///
   /// In ar, this message translates to:
-  /// **'اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد'**
+  /// **'اختار حد قريب تبعتله دعوة يدخل بيها بضغطة'**
   String get inviteToGroupSub;
 
   /// No description provided for @inviteNoOne.
@@ -5311,6 +5311,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لأ شكراً'**
   String get inviteNo;
+
+  /// No description provided for @invitedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدعوة من {name}'**
+  String invitedBy(String name);
+
+  /// No description provided for @inviteRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق'**
+  String get inviteRequestSent;
 }
 
 class _AppLocalizationsDelegate

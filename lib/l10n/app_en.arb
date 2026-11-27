@@ -862,11 +862,13 @@
   "mailFromAnyoneOn": "Anyone can leave you a message that waits",
   "mailFromAnyoneOff": "Only from people you’ve talked to before",
   "inviteToGroup": "Invite someone",
-  "inviteToGroupSub": "Pick someone nearby to invite — they join with one tap, no password",
+  "inviteToGroupSub": "Pick someone nearby to invite with one tap",
   "inviteNoOne": "Nobody nearby who isn’t in the group",
   "inviteSent": "Invite sent to {name}",
   "invitesTitle": "Invites for you",
   "inviteFrom": "{name} invites you to \"{group}\"",
   "inviteJoin": "Join",
-  "inviteNo": "No thanks"
+  "inviteNo": "No thanks",
+  "invitedBy": "Invited by {name}",
+  "inviteRequestSent": "Request sent to the group owner — you’re in once they accept"
 }
