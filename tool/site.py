@@ -252,6 +252,8 @@ def main() -> None:
             f'<xhtml:link rel="alternate" hreflang="en" href="{BASE}en/"/></url>\n' for p in ('', 'en/'))
         + '</urlset>\n')
     (SITE / '.nojekyll').write_text('')
+    # تأكيد ملكية الموقع لـ Google Search Console (الملف اللي جوجل اداه لصاحب المشروع)
+    (SITE / 'google6da38e735cb6412d.html').write_text('google-site-verification: google6da38e735cb6412d.html')
     print('site/ built')
 
 
