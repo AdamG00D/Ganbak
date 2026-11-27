@@ -22,6 +22,8 @@ helpers come from there.
 - **Don't build the APK after each step — and never build without the owner's explicit OK.** Finish every change, run
   `flutter analyze` + `flutter test` + the screenshot tool, then ask before building.
 - **One commit per step**, and update `PROGRESS.md` in the same commit.
+- **Security review after every new feature** (owner's standing rule): hostile input, replay, spoofed sources,
+  unbounded lists / memory, what nearby devices learn, logging. Fix, add tests, note accepted limits in SECURITY (en/ar).
 - **Check the design visually** after every UI change (screenshot tool above): RTL and LTR, light and dark, large text.
 - **Never add AI attribution** (`Co-Authored-By`, "Generated with…") to commits or anything else.
 - When a request is ambiguous, ask instead of guessing.

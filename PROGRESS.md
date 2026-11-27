@@ -214,4 +214,7 @@ a phone's large-font setting): any text that spills out of its box fails the run
   update; `flutter clean` fixed it. **After a dependency update, run `flutter clean` before building.**
   Not published yet (neither v1.3 nor v1.4). Left for the owner: publish, social preview, F-Droid choice, signing
   design, external audit, real-phone test.
+- 2026-11-27 — owner: a security review is now required after every new feature (added to AGENTS.md). Owner set the
+  GitHub social preview. Postponed: real-phone test, publishing, external audit. Owner to decide: F-Droid route
+  (docs/FDROID.md) and signing design (docs/SIGNING.md).
 
