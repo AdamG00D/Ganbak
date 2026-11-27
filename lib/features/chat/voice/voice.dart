@@ -40,11 +40,10 @@ class VoiceRecorder {
   static Future<bool> ensurePermission() async {
     final st = await Permission.microphone.status;
     if (st.isGranted) return true;
-    if (st.isPermanentlyDenied) {
-      await openAppSettings();
-      return false;
-    }
-    return (await Permission.microphone.request()).isGranted;
+    // "مرفوض نهائياً" بيبان من نتيجة الطلب بس (الطلب بيرجع على طول من غير نافذة)
+    final r = await Permission.microphone.request();
+    if (r.isPermanentlyDenied) await openAppSettings();
+    return r.isGranted;
   }
 
   static Future<bool> start() async {

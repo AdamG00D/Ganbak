@@ -55,6 +55,25 @@ card, a section with a drawing in the guide.
   phone on "Both", hotspot closing when Wasl closes, Samsung / Xiaomi quirks (STA drop while hosting).
 - Not done (ideas): automatic hosting when many people are on Bluetooth only; QR code for phones without Wasl.
 
+## Next release: 1.4 — owner said "do all your suggestions", phone tests postponed (2026-11-27)
+
+| # | Step | State |
+|---|------|-------|
+| 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — **gradle/compile not verified until the next build** |
+| 2 | SOS: emergency status in presence, banner + notification for everyone nearby | todo |
+| 3 | Offline messages: sealed to the recipient's static key, carried by relays, delivered when they show up | todo |
+| 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | todo |
+| 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | todo |
+| 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | todo |
+
+Notes:
+- `emoji_picker_flutter` and `flutter_webrtc` still apply the old Kotlin Gradle plugin (warning at build); they are at
+  their latest versions — wait for upstream.
+- **Android 17 adds a runtime `ACCESS_LOCAL_NETWORK` permission.** Today targetSdk is 36 so it isn't enforced; when
+  targetSdk goes to 37, declare it and request it before starting Wi-Fi (LanLink / Wasl network).
+- Signed names / group messages (SECURITY limitations 1–2) need an identity-binding design first — see
+  `docs/SIGNING.md` (step 5); not implemented without the owner's OK.
+
 ## Decisions taken with the owner
 
 **Games (1.3)** — entry point is a 🎮 button in the chat input bar; it opens a sheet with the games that fit the chat

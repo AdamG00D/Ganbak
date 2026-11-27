@@ -884,7 +884,7 @@ class _MediaViewerState extends State<MediaViewer> {
 
   Future<void> _save() async {
     try {
-      if (!await Gal.hasAccess() && !await Gal.requestAccess()) {
+      if (!await Gal.hasPermission() && !await Gal.requestPermission()) {
         if (mounted) {
           showToast(context, context.l10n.photosPermission, error: true);
         }

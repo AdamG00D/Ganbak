@@ -147,17 +147,23 @@ class NearbyRequirements {
       await openAppSettings();
       return;
     }
+    // من permission_handler 13: "مرفوض نهائياً" بيبان من نتيجة الطلب بس (مش من الحالة) — ساعتها نفتح الإعدادات
+    Future<void> ask(List<Permission> ps) async {
+      final r = await ps.request();
+      if (r.values.any((s) => s.isPermanentlyDenied || s.isRestricted)) await openAppSettings();
+    }
+
     switch (r.id) {
       case 'nearby':
-        await [
+        await ask([
           Permission.bluetoothScan,
           Permission.bluetoothAdvertise,
           Permission.bluetoothConnect,
-        ].request();
+        ]);
       case 'wifi':
-        await Permission.nearbyWifiDevices.request();
+        await ask([Permission.nearbyWifiDevices]);
       case 'location':
-        await Permission.locationWhenInUse.request();
+        await ask([Permission.locationWhenInUse]);
       case 'bluetooth':
         await SystemBridge.requestBluetoothOn();
       case 'locationService':
