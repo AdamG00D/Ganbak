@@ -24,6 +24,14 @@ class Sample {
         ..cartoon = cartoon
         ..hops = hops;
 
+  /// رسالة مستنية صاحبها (لصورة "مش موجود").
+  static ChatMessage awayMessage() => ChatMessage(
+    id: 'mb-0011223344556677',
+    text: 'أنا مستنيك عند البوابة',
+    kind: MessageKind.mine,
+    status: MessageStatus.queued,
+  );
+
   /// الهب لازم يكون شغال (hub.start).
   static Future<void> fill(ChatHub hub) async {
     final r = hub.router!;

@@ -117,6 +117,16 @@ void main() {
       await world(tester);
       await Shots.shoot(tester, 'chat-group', () => ChatPage(conversation: Sample.shilla));
     });
+
+    // الرسالة تستنى صاحبها: كريم مش موجود، والكلام بس متاح
+    testWidgets('chat away', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      final away = Sample.awayMessage();
+      Sample.karimChat.session.messages.add(away);
+      await Shots.shoot(tester, 'chat-away', () => ChatPage(conversation: Sample.karimChat));
+      Sample.karimChat.session.messages.remove(away);
+    });
   });
 
   group('games', () {
@@ -226,6 +236,10 @@ void main() {
       await Shots.shoot(tester, 'home-chats', () => const HomeScreen(kind: TransportKind.wifi), themes: light);
       await Shots.shoot(tester, 'guide', () => const GuideScreen(), themes: light);
       await Shots.shoot(tester, 'chat-group', () => ChatPage(conversation: Sample.shilla), themes: light);
+      final away = Sample.awayMessage();
+      Sample.karimChat.session.messages.add(away);
+      await Shots.shoot(tester, 'chat-away', () => ChatPage(conversation: Sample.karimChat), themes: light);
+      Sample.karimChat.session.messages.remove(away);
       for (final k in [GameKind.mafia, GameKind.battleship]) {
         await Shots.shoot(tester, 'game-help-${k.id}', () => GameHelpPage(kind: k), themes: light);
       }

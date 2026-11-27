@@ -5009,7 +5009,7 @@ abstract class AppLocalizations {
   /// No description provided for @mailHint.
   ///
   /// In ar, this message translates to:
-  /// **'اكتب… هتوصل لما يظهر'**
+  /// **'سيب رسالة…'**
   String get mailHint;
 
   /// No description provided for @mailArrived.

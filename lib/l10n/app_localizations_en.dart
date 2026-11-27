@@ -2869,7 +2869,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mailHint => 'Type… it arrives when they show up';
+  String get mailHint => 'Leave a message…';
 
   @override
   String get mailArrived => 'Arrived while away';

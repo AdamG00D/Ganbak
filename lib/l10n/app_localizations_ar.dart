@@ -2837,7 +2837,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get mailHint => 'اكتب… هتوصل لما يظهر';
+  String get mailHint => 'سيب رسالة…';
 
   @override
   String get mailArrived => 'وصلت وهو مش موجود';

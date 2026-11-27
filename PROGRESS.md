@@ -61,38 +61,25 @@ card, a section with a drawing in the guide.
 |---|------|-------|
 | 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — **gradle/compile not verified until the next build** |
 | 2 | SOS: emergency status in presence (`sos {t}`), banner + generic notification for everyone in the mesh, card in Nearby, guide entry | done (`lib/features/sos/`) |
-| 3 | Offline messages ("the message waits for its owner") | **in progress** — see below |
+| 3 | Offline messages ("the message waits for its owner") | done — see below |
 | 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | todo |
 | 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | todo |
 | 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | todo |
 
-### Step 3 — offline messages: state and what's left
+### Step 3 — offline messages (done)
 
-Done (`lib/features/mailbox/mailbox.dart` + `test/mailbox_test.dart`, 5 tests green):
-- `MailCrypto.seal/open`: one-way Noise-"X"-like box to the recipient's static X25519 key: per-message ephemeral e,
-  key = HKDF(X25519(e,R) ‖ X25519(S,R), "wasl/mailbox/v1", salt e‖S‖R), AES-GCM, aad `wasl/mailbox/v1|from|to|id`.
-  The S×R part authenticates the sender; `from` must hash from the carried sender key. Text only, ≤ 4000 chars.
-- `MailCrypto.receipt/openReceipt`: delivery receipt sealed with `Box.pairKey(R, S, 'wasl/mailbox-receipt')`.
-- `Envelope` (wire `{m, f, to, sk, e, c}`, bounded), `CarryBox` (≤ 300 items, ≤ 30 per sender, ≤ 2 MiB, 48 h,
-  ≤ 3 delivery tries, retry every 5 min).
-
-Left to do (in this order):
-1. Hub wiring: control messages `{t: "mb", env…}` (to a carrier or to the recipient) and `{t: "mbd", m, d: sealed
-   receipt}` (recipient → sender; a carrier that delivered just drops its copy). Old versions ignore both.
-   - Sender outbox per peer: when the peer is not reachable, `DirectChat.sendOffline(text)` adds a `ChatMessage`
-     with a new `MessageStatus.queued` (append at the END of the enum — statuses are stored by index), seals, keeps
-     it, and hands one copy to every direct neighbour (now and to new neighbours later, once each).
-   - On `_onNodeUp` / router change: anything in the outbox or the carry box for a node that is now reachable is
-     sent to it with `sendControl`; the receipt turns the bubble to delivered (✓✓) and clears the outbox entry.
-   - Recipient: dedupe by id (keep seen ids 3 days), open, add to the DirectChat (create it if needed, with the
-     sender's key from the envelope), notify like a normal message, send the receipt to the sender if reachable
-     (and keep it to send when they show up).
-   - Persistence: sender outbox only for saved chats (vault file), carry box in memory only (privacy by default).
-2. UI: in ChatPage the input stays enabled for an offline direct chat with a known key; notice text "messages wait
-   and reach {name} as soon as they show up, even through other phones"; queued bubble = clock icon.
-3. Tests over MemoryNet: A sends while B is away, C carries, A leaves, B meets C → B gets it, A gets the receipt later.
-4. Docs: PROTOCOL (new control messages + crypto), SECURITY (who sees what: carriers see from/to ids and size; no
-   forward secrecy against the recipient's static key), guide entry, strings.
+- `lib/features/mailbox/mailbox.dart`: `MailCrypto` (one-way sealed box to the recipient's static key + sealed
+  receipts), `Envelope`, `CarryBox` (limits), `MailService` (outbox, hand-over to direct neighbours, carrying,
+  delivery, receipts). Wire format and limits: `docs/PROTOCOL.md` §9; what carriers see: SECURITY (en/ar).
+- Hub: `ChatHub.mail` is created with the router; control `mb` / `mbd` go to `MailService.receive`; a 15 s tick and
+  every router change call `flush()`. `canQueueFor(chat)` = known key, not reachable, not blocked.
+- Chat: `ChatSession.queueing` → `send()` goes to `sendOffline`; new `MessageStatus.queued` (last in the enum,
+  hourglass icon). ChatPage keeps the input on in text-only mode (`ChatInputBar.textOnly`: no attach / camera / mic /
+  games), notice `mailNotice`, hint `mailHint`. The receipt turns the bubble to delivered.
+- Saved chats: the waiting envelopes go to `outbox.bin` in the vault and come back on start (a queued bubble whose
+  envelope is gone becomes failed). The carry box is memory only.
+- Tests: `test/mailbox_test.dart` (crypto, limits) + `test/mailbox_net_test.dart` (A → C carries → B, receipt back to
+  A). Screenshot `chat-away` (normal + big). Guide entry under connection.
 
 Notes:
 - `emoji_picker_flutter` and `flutter_webrtc` still apply the old Kotlin Gradle plugin (warning at build); they are at
@@ -179,3 +166,7 @@ a phone's large-font setting): any text that spills out of its box fails the run
   people. Tests: games_test (+5), games_ui_test (every game with real and junk state). Docs updated.
 - 2026-11-27 — owner: ship everything as one release, 1.3 (games + identity + guide + Wasl network). Version stays
   1.3.0+4; release notes already cover all of it. Next: owner's OK to build, then the real-phone test.
+- 2026-11-27 — 1.4 step 1 (dependencies) and step 2 (SOS) done and pushed.
+- 2026-11-27 — 1.4 step 3 (offline messages) done: mailbox service, text-only input while the person is away,
+  outbox kept for saved chats, mesh test, PROTOCOL §9, SECURITY, guide. Next: step 4 (Wasl network suggestion + QR).
+

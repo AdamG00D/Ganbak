@@ -85,6 +85,8 @@ Control messages (`U`, JSON with `t`):
 | `gr` | join request rejected | same pair key, aad `wasl/reject\|gid\|member` |
 | `ga` | group admin command (§6) | pair key, see below |
 | `gm` | game message to one player (§8) | pair key `"wasl/game"`, aad `wasl/game\|gid\|from\|to` |
+| `mb` | sealed offline message, to its recipient or to a carrier (§9) | sealed to the recipient (see §9) |
+| `mbd` | "delivered": drop your copy / sealed receipt for the sender / receipt received (§9) | receipt: pair key `"wasl/mailbox-receipt"` |
 
 `pairKey(a, b, info)` = `HKDF(X25519(static a, static b), info)`. Because a node id is the hash of its static key,
 a box that opens with the pair key of id *x* was made by the holder of *x*'s private key.
@@ -225,4 +227,28 @@ Rules:
   + value + "|" + salt))` and revealed later; the engine checks them and flags the cheater.
 - Additive only: old versions ignore `game` / `gm` packets and unknown `kind`s. Changing the meaning of an existing
   field needs a new game id.
+
+## 9. Offline messages (mailbox)
+
+Text for a person who isn't reachable waits on the sender's phone and is handed, sealed, to direct neighbours who
+carry it until they meet the recipient. Only people whose identity key we already know (an earlier chat, or a
+saved chat) can be written to this way. Code: `lib/features/mailbox/mailbox.dart`.
+
+**Envelope** (`U {t: mb, …}`): `m` id (16 hex), `f` sender id, `to` recipient id, `sk` sender static key (base64),
+`e` ephemeral X25519 key (base64), `c` box (base64, ≤ 12 KB).
+
+- Sealing (one-way, like Noise X): `key = HKDF-SHA256(X25519(e, R) ‖ X25519(S, R), salt = e ‖ S ‖ R,
+  info = "wasl/mailbox/v1")`, then AES-256-GCM with aad `wasl/mailbox/v1|f|to|m`. The clear text is JSON
+  `{t: text (≤ 4000), ts: ms, n: sender name}`.
+- The recipient drops an envelope whose `sk` doesn't hash to `f`, or that doesn't open. Opening proves the holder of
+  `S` wrote it for `R`; carriers only see `f`, `to`, `m` and the size.
+- **Carrying**: an envelope for someone else is kept only if it came from a direct neighbour (hops = 1). Limits per
+  phone: 300 envelopes, 30 per sender, 2 MiB, 48 h; each one is delivered at most 3 times, 5 min apart. The sender
+  hands each envelope to at most 8 neighbours, once each, and re-sends to the recipient every 20 s while reachable.
+- **Receipts** (`U {t: mbd, m, d?, ok?}`): the recipient answers a carrier with `{m}` (drop your copy — honoured only
+  from the envelope's recipient) and the sender with `{m, d}`, where `d = base64(AES-GCM(pairKey(R, S,
+  "wasl/mailbox-receipt"), m, aad "wasl/mailbox-receipt|R|S|m"))`; the recipient repeats it until the sender answers
+  `{m, ok: true}`. Only a receipt that opens marks the message delivered.
+- The carry box lives in memory only. The sender's waiting envelopes are written to disk only for saved chats.
+- Additive: older versions ignore `mb` / `mbd`.
 

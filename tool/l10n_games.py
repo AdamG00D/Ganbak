@@ -322,7 +322,7 @@ S = {
     # ---------------- الرسايل اللي بتستنى صاحبها ----------------
     'statusQueued': ('مستنية صاحبها — هتوصله أول ما يظهر', 'Waiting — it reaches them as soon as they show up'),
     'mailNotice': ('{name} مش موجود دلوقتي. رسايلك (الكلام بس) هتستنى وتوصله أول ما يظهر، حتى عن طريق موبايلات تانية بتشيلها مقفولة.', "{name} isn't around. Your text messages wait and reach them as soon as they show up, even through other phones that carry them sealed."),
-    'mailHint': ('اكتب… هتوصل لما يظهر', 'Type… it arrives when they show up'),
+    'mailHint': ('سيب رسالة…', 'Leave a message…'),
     'mailArrived': ('وصلت وهو مش موجود', 'Arrived while away'),
     'guideMailTitle': ('الرسالة تستنى صاحبها', 'Messages wait for their owner'),
     'guideMailBody': ('لو اللي بتكلمه مش موجود، اكتب عادي: الرسالة بتتقفل ليه هو بس، وموبايلك والموبايلات اللي جنبك بيشيلوها لحد 48 ساعة ويسلّموها أول ما يظهر. اللي بيشيلها مبيقدرش يقراها. بتشتغل للكلام بس (مش الصور ولا الفويس)، ومع الناس اللي اتكلمت معاهم قبل كده.', "If the person you're writing to isn't around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can't read it. Text only (not photos or voice), with people you've talked to before."),
