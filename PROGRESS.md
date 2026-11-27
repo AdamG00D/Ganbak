@@ -139,7 +139,7 @@ khayamiya pattern (profile + verification only; a tiny mark next to a name only 
 warning when a known person's name appears with another key, local nicknames, the existing "verified" badge.
 Order: identity/signing first (1.5), then the Bluetooth library.
 
-**Bluetooth library (2026-11-27)** — our own open-source replacement for Google Nearby: BLE discovery, L2CAP CoC
+**Bluetooth library (2026-11-27)** — full plan saved in **`docs/JISR_PLAN.md`** (approved, postponed to a later session). — our own open-source replacement for Google Nearby: BLE discovery, L2CAP CoC
 (Android 10+) / GATT fallback (7–9), upgrade to Wi-Fi (LAN, Wasl network, Wi-Fi Direct, Wi-Fi Aware), link encryption.
 Kotlin library + Flutter plugin, own repo, Apache-2.0, name **Jisr** (free on pub.dev / GitHub), described as "an
 open-source alternative to Google Nearby Connections" so people find it. Owner's test phones: Samsung (several) + one
@@ -288,4 +288,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — **1.6 built and published** (owner's OK): https://github.com/AdamG00D/Wasl/releases/tag/v1.6 — tag at
   ffaeba8, 6 APKs (incl. stable `Wasl-android*.apk` for the site button) + SHA256SUMS, certificate fa4ecf16…c341,
   versionCode 7. The website's download button now serves 1.6. Next: plan for the Jisr Bluetooth library (plan first).
+- 2026-11-27 — Jisr plan approved and **postponed** (not in this session): everything is in `docs/JISR_PLAN.md`.
+  Next now: an Arabic promo/demo video made entirely by Claude (owner: no voice, no phone recordings needed).
 
