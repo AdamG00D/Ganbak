@@ -6,18 +6,21 @@ import 'package:flutter/foundation.dart';
 
 import '../../widgets/cartoon_avatar.dart';
 import '../crypto/kdf.dart';
+import '../crypto/sign.dart';
 import '../storage/vault.dart';
 
-/// بروفايل المستخدم + هويته الثابتة (مفتاح X25519).
+/// بروفايل المستخدم + هويته الثابتة: مفتاح X25519 (للتشفير) ومفتاح Ed25519 (للتوقيع)، الاتنين من نفس البذرة.
 ///
-/// المعرّف (id) = أول 8 بايت من SHA-256 للمفتاح العام، فمحدش يقدر ينتحل
-/// معرّف حد تاني من غير مفتاحه الخاص.
+/// المعرّف (id، الإصدار 2) = أول 8 بايت من SHA-256("wasl/id/v2" ‖ مفتاح التشفير ‖ مفتاح التوقيع)، فمحدش
+/// يقدر ينتحل معرّف حد تاني، ولا يحط مفتاح توقيع تاني عليه.
 class Profile {
   Profile({
     required this.name,
     required this.color,
     required this.keyPair,
     required this.publicKey,
+    required this.signKeyPair,
+    required this.signKey,
     required this.id,
     required this.seed,
     this.avatarHash,
@@ -35,11 +38,17 @@ class Profile {
 
   final SimpleKeyPair keyPair;
   final Uint8List publicKey;
+
+  /// مفتاح التوقيع (Ed25519) — العام بيتبعت مع "أنا موجود".
+  final SimpleKeyPair signKeyPair;
+  final Uint8List signKey;
   final String id;
   final Uint8List seed;
 
-  static Future<String> idOf(List<int> publicKey) async =>
-      Kdf.hex((await Kdf.sha256(publicKey)).sublist(0, 8));
+  static Future<String> idOf(List<int> publicKey, List<int> signKey) async =>
+      Kdf.hex((await Kdf.sha256([...utf8.encode('wasl/id/v2'), ...publicKey, ...signKey])).sublist(0, 8));
+
+  Future<String> sign(List<int> data) => Sign.sign(signKeyPair, data);
 
   static String cleanName(String raw) {
     final n = raw.replaceAll(RegExp(r'[\u0000-\u001f|]'), '').trim();
@@ -55,12 +64,16 @@ class Profile {
   }) async {
     final kp = await X25519().newKeyPairFromSeed(seed);
     final pub = Uint8List.fromList((await kp.extractPublicKey()).bytes);
+    final skp = await Sign.keyPairFromSeed(await Kdf.hkdf(seed, 'wasl/sign/v1'));
+    final spub = Uint8List.fromList((await skp.extractPublicKey()).bytes);
     return Profile(
       name: name,
       color: color,
       keyPair: kp,
       publicKey: pub,
-      id: await idOf(pub),
+      signKeyPair: skp,
+      signKey: spub,
+      id: await idOf(pub, spub),
       seed: seed,
       avatarHash: avatarHash,
       cartoon: cartoon,

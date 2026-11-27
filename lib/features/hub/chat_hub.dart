@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/crypto/box.dart';
+import '../../core/crypto/sign.dart';
 import '../../core/crypto/kdf.dart';
 import '../../core/nav.dart';
 import '../../core/platform/system_bridge.dart';
@@ -108,6 +109,9 @@ class DirectChat extends Conversation {
 
   /// مفتاح هوية الشخص (null = لسه معرفناهوش، هنتأكد منه وقت الاتصال).
   Uint8List? publicKey;
+
+  /// مفتاح توقيعه (من "أنا موجود" — المعرّف = هاش المفتاحين).
+  Uint8List? signKey;
 
   String _title;
   int _color;
@@ -329,7 +333,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     };
     link = l;
     l.addListener(notifyListeners);
-    final r = MeshRouter(link: l, describe: _describe);
+    final r = MeshRouter(link: l, describe: _describe, sign: _me.sign);
     router = r;
     r
       ..onData = _onData
@@ -351,6 +355,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         sc.color,
         sc.avatar,
         sc.cartoon,
+        signKey: sc.signKey == null ? null : Uint8List.fromList(Sign.key(sc.signKey) ?? const []),
       )
         ..saveOverride = sc.saveOverride
         ..unread = sc.unread
@@ -468,6 +473,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         'n': _me.name,
         'c': _me.color,
         'k': base64.encode(_me.publicKey),
+        's': base64.encode(_me.signKey),
         'a': ?_me.avatarHash,
         'e': ?_me.cartoon,
         'g': [for (final g in _groups.values.take(16)) g.info.ad.toWire()],
@@ -544,7 +550,15 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
 
   // ---------------- المحادثات الخاصة ----------------
 
-  DirectChat _newDirect(String peerId, Uint8List? pub, String name, int color, String? avatar, int? cartoon) {
+  DirectChat _newDirect(
+    String peerId,
+    Uint8List? pub,
+    String name,
+    int color,
+    String? avatar,
+    int? cartoon, {
+    Uint8List? signKey,
+  }) {
     final l = link!;
     final chat = DirectChat(
       this,
@@ -554,7 +568,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       color: color,
       avatar: avatar,
       cartoon: cartoon,
-    );
+    )..signKey = signKey ?? router?.nodes[peerId]?.signKey;
     final s = ChatSession(
       myName: _me.name,
       allowVideo: l.supportsVideo,
@@ -576,8 +590,11 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     s
       ..verifyPeer = (key) async {
         final bytes = base64.decode(key);
-        if (await Profile.idOf(bytes) != peerId) return false;
+        // مفتاح التوقيع من "أنا موجود" (أو المحفوظ) — المعرّف لازم يطلع هاش المفتاحين
+        final sk = router?.nodes[peerId]?.signKey ?? chat.signKey;
+        if (sk == null || await Profile.idOf(bytes, sk) != peerId) return false;
         chat.publicKey ??= bytes;
+        chat.signKey ??= sk;
         return true;
       }
       ..onChannelClosed = chat._onClosed
@@ -718,7 +735,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         .._color = n.color
         .._avatar = n.avatar
         .._cartoon = n.cartoon
-        ..publicKey ??= n.publicKey;
+        ..publicKey ??= n.publicKey
+        ..signKey ??= n.signKey;
       chat.session.peerName = n.name;
       if (changed) _schedulePersist(chat);
     }
@@ -759,6 +777,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       pacing: l.floodPacing,
       allowVideo: l.supportsVideo,
       maxFileBytes: l.groupFileLimit,
+      sign: _me.sign,
+      myBoxKey: base64.encode(_me.publicKey),
+      mySignKey: base64.encode(_me.signKey),
       isBanned: info.banned.contains,
       audience: () => [
         for (final n in membersOf(info.id))
@@ -1270,6 +1291,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       router: r,
       me: _me.keyPair,
       myKey: _me.publicKey,
+      mySignKey: _me.signKey,
       myId: myId,
       myName: _me.name,
       keyOf: (id) => _directs[id]?.publicKey ?? r.nodes[id]?.publicKey,
@@ -1352,7 +1374,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     _mailTimer = Timer(const Duration(milliseconds: 600), () => mail?.flush());
   }
 
-  void _onMailArrived(String from, Uint8List senderKey, MailMessage m) {
+  void _onMailArrived(String from, Uint8List senderKey, Uint8List signKey, MailMessage m) {
     var chat = _directs[from];
     if (chat == null) {
       final node = router?.nodes[from];
@@ -1363,9 +1385,11 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         node?.color ?? 0,
         node?.avatar,
         node?.cartoon,
+        signKey: signKey,
       );
     }
     chat.publicKey ??= senderKey;
+    chat.signKey ??= signKey;
     final msg = ChatMessage(id: 'mb-${m.id}', text: m.text, kind: MessageKind.theirs, time: m.sentAt);
     chat.session.messages.add(msg);
     chat.lastActivity = DateTime.now();
@@ -1618,6 +1642,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       avatar: c.avatar,
       cartoon: c.cartoon,
       publicKey: c is DirectChat && c.publicKey != null ? base64.encode(c.publicKey!) : null,
+      signKey: c is DirectChat && c.signKey != null ? base64.encode(c.signKey!) : null,
       saveOverride: c.saveOverride,
       unread: c.unread,
       verifiedKey: c.session.verifiedPeerKey,

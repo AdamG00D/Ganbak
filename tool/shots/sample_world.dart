@@ -41,9 +41,11 @@ class WorldPeer {
         'n': p.name,
         'c': p.color,
         'k': base64.encode(p.publicKey),
+        's': base64.encode(p.signKey),
         'e': ?p.cartoon,
         'g': [for (final g in w.groups.values) g.ad.toWire()],
       },
+      sign: p.sign,
     );
     w.router
       ..onData = w._onData
@@ -90,6 +92,9 @@ class WorldPeer {
       allowVideo: true,
       maxFileBytes: 8 * 1024 * 1024,
       mediaRoot: root,
+      sign: profile.sign,
+      myBoxKey: base64.encode(profile.publicKey),
+      mySignKey: base64.encode(profile.signKey),
     );
     groupSessions[info.id] = s;
     router.announce();

@@ -41,8 +41,10 @@ void main() {
             'n': p.name,
             'c': p.color,
             'k': base64.encode(p.publicKey),
+            's': base64.encode(p.signKey),
             if (host) 'w': ?offer?.toWire(),
           },
+          sign: p.sign,
         );
         routers.add(r);
         await r.start();
@@ -119,7 +121,14 @@ void main() {
           link: net.add(p.id),
           presenceEvery: const Duration(milliseconds: 100),
           nodeTtl: const Duration(seconds: 5),
-          describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey), if (caller) 'sos': ?sos?.toWire()},
+          describe: () => {
+            'n': p.name,
+            'c': p.color,
+            'k': base64.encode(p.publicKey),
+            's': base64.encode(p.signKey),
+            if (caller) 'sos': ?sos?.toWire(),
+          },
+          sign: p.sign,
         );
         routers.add(r);
         await r.start();

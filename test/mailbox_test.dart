@@ -18,6 +18,7 @@ void main() {
   Future<Envelope> sealAtoB(String text) => MailCrypto.seal(
         me: a.keyPair,
         myKey: a.publicKey,
+        mySignKey: a.signKey,
         myId: a.id,
         myName: a.name,
         to: b.id,
@@ -41,17 +42,17 @@ void main() {
   test('محدش يقدر يبعت باسم حد تاني أو يغيّر الرسالة', () async {
     // كريم بيقفل رسالة لبسمة ويدّعي إنها من أحمد
     final fake = await MailCrypto.seal(
-      me: c.keyPair, myKey: c.publicKey, myId: c.id, myName: 'أحمد', to: b.id, recipientKey: b.publicKey, text: 'هات فلوس');
+      me: c.keyPair, myKey: c.publicKey, mySignKey: c.signKey, myId: c.id, myName: 'أحمد', to: b.id, recipientKey: b.publicKey, text: 'هات فلوس');
     final forged = Envelope(
-        id: fake.id, from: a.id, to: b.id, senderKey: fake.senderKey, ephemeral: fake.ephemeral, box: fake.box);
+        id: fake.id, from: a.id, to: b.id, senderKey: fake.senderKey, signKey: fake.signKey, ephemeral: fake.ephemeral, box: fake.box);
     expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: forged), isNull);
     // ولو حط مفتاح أحمد: الصندوق ميتفكش (الجزء الثابت محتاج مفتاح أحمد الخاص)
     final forged2 = Envelope(
-        id: fake.id, from: a.id, to: b.id, senderKey: base64.encode(a.publicKey), ephemeral: fake.ephemeral, box: fake.box);
+        id: fake.id, from: a.id, to: b.id, senderKey: base64.encode(a.publicKey), signKey: base64.encode(a.signKey), ephemeral: fake.ephemeral, box: fake.box);
     expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: forged2), isNull);
     // تغيير الرقم أو الصندوق
     final env = await sealAtoB('أهلاً');
-    final renamed = Envelope(id: 'ffffffffffffffff', from: env.from, to: env.to, senderKey: env.senderKey, ephemeral: env.ephemeral, box: env.box);
+    final renamed = Envelope(id: 'ffffffffffffffff', from: env.from, to: env.to, senderKey: env.senderKey, signKey: env.signKey, ephemeral: env.ephemeral, box: env.box);
     expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: renamed), isNull);
   });
 
@@ -59,6 +60,7 @@ void main() {
     final old = await MailCrypto.seal(
       me: a.keyPair,
       myKey: a.publicKey,
+        mySignKey: a.signKey,
       myId: a.id,
       myName: a.name,
       to: b.id,
@@ -70,6 +72,7 @@ void main() {
     final fresh = await MailCrypto.seal(
       me: a.keyPair,
       myKey: a.publicKey,
+        mySignKey: a.signKey,
       myId: a.id,
       myName: a.name,
       to: b.id,

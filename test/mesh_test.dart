@@ -32,8 +32,10 @@ class Device {
         'n': profile.name,
         'c': profile.color,
         'k': base64.encode(profile.publicKey),
+        's': base64.encode(profile.signKey),
         'g': [for (final g in groups.values) g.ad.toWire()],
       },
+      sign: profile.sign,
     );
     router.onData = _onData;
     router.onGroup = (g, src, body) => groupSessions[g]?.receive(src, body);
@@ -178,6 +180,9 @@ class Device {
       allowVideo: true,
       maxFileBytes: 8 * 1024 * 1024,
       mediaRoot: root,
+      sign: profile.sign,
+      myBoxKey: base64.encode(profile.publicKey),
+      mySignKey: base64.encode(profile.signKey),
       isBanned: info.banned.contains,
       audience: () => [
         for (final n in router.nodes.values)
@@ -305,7 +310,8 @@ void main() {
       final r = MeshRouter(
         link: fake,
         presenceEvery: const Duration(milliseconds: 100),
-        describe: () => {'n': 'مزيف', 'c': 0, 'k': base64.encode(Kdf.randomBytes(32))},
+        describe: () => {'n': 'مزيف', 'c': 0, 'k': base64.encode(Kdf.randomBytes(32)), 's': base64.encode(Kdf.randomBytes(32))},
+        sign: (d) async => base64.encode(Kdf.randomBytes(64)),
       );
       await r.start();
       net.connect(a.id, fake.myId);
@@ -985,7 +991,8 @@ void main() {
       final p2 = await Profile.fromSeed(seed, name: 'b', color: 1);
       expect(p1.id, p2.id);
       expect(p1.id.length, 16);
-      expect(p1.id, await Profile.idOf(p1.publicKey));
+      expect(p1.id, await Profile.idOf(p1.publicKey, p1.signKey));
+      expect(p1.signKey, p2.signKey);
     });
   });
 }

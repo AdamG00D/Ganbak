@@ -23,7 +23,8 @@ void main() {
       link: link,
       presenceEvery: const Duration(milliseconds: 150),
       nodeTtl: const Duration(milliseconds: 900),
-      describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey)},
+      describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey), 's': base64.encode(p.signKey)},
+      sign: p.sign,
     );
     routers.add(r);
     await r.start();

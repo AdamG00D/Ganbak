@@ -7,6 +7,8 @@ import 'package:cryptography/dart.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/crypto/box.dart';
+import '../../core/crypto/sign.dart';
+import '../../core/profile/profile.dart';
 import '../../core/crypto/kdf.dart';
 import '../../l10n/l10n.dart';
 import '../chat/core/chat_session.dart';
@@ -51,6 +53,9 @@ class GroupSession extends ChatSession {
     required super.allowVideo,
     required super.maxFileBytes,
     super.mediaRoot,
+    required this.sign,
+    required this.myBoxKey,
+    required this.mySignKey,
     this.isBanned,
     this.audience,
   })  : _key = groupKey,
@@ -106,6 +111,18 @@ class GroupSession extends ChatSession {
   /// فيه حد واصلين له دلوقتي؟
   final bool Function() online;
 
+  /// توقيع رسايلي (Ed25519) ومفتاحيني (base64) — كل حزمة بتشيل مفتاحين المرسل وتوقيعه، فمحدش في الجروب
+  /// يقدر يبعت باسم حد تاني حتى لو معاه مفتاح الجروب.
+  final Future<String> Function(List<int> data) sign;
+  final String myBoxKey;
+  final String mySignKey;
+
+  /// المفاتيح اللي اتأكدنا إنها بتاعة المعرّف ده (عشان منحسبش الهاش كل مرة).
+  final Map<String, String> _knownKeys = {};
+
+  /// حزم مش بتتوقّع: أجزاء الملفات (الملف كله بيتأكد منه في الآخر ببصمة موقّعة) و"بيكتب".
+  static const unsigned = {'fc', 'typ'};
+
   final int chunkSize;
   final Duration pacing;
   final List<int> _aad;
@@ -135,8 +152,27 @@ class GroupSession extends ChatSession {
   Future<void> _emit(Map<String, dynamic> packet) async {
     packet['s'] = myId;
     packet['n'] = myName;
-    final box = await Box.seal(_key, utf8.encode(jsonEncode(packet)), _aad);
+    packet['xk'] = myBoxKey;
+    packet['ek'] = mySignKey;
+    final inner = jsonEncode(packet);
+    final sg = unsigned.contains(packet['k']) ? null : await sign(utf8.encode('wasl/group/v2|$groupId|$inner'));
+    final box = await Box.seal(_key, utf8.encode(jsonEncode({'p': inner, 'sg': ?sg})), _aad);
     await transmit(base64.encode(box));
+  }
+
+  /// الحزمة دي فعلاً من [sender]؟ المفتاحين بيتهاشوا لمعرّفه والتوقيع صح.
+  Future<bool> _authentic(String sender, Map<String, dynamic> p, String inner, Object? sg) async {
+    final xk = p['xk'], ek = p['ek'];
+    if (xk is! String || ek is! String) return false;
+    final keys = '$xk|$ek';
+    if (_knownKeys[sender] != keys) {
+      final x = Sign.key(xk), e = Sign.key(ek);
+      if (x == null || e == null || await Profile.idOf(x, e) != sender) return false;
+      if (_knownKeys.length > 500) _knownKeys.remove(_knownKeys.keys.first);
+      _knownKeys[sender] = keys;
+    }
+    if (unsigned.contains(p['k'])) return true;
+    return Sign.verify(Sign.key(ek)!, utf8.encode('wasl/group/v2|$groupId|$inner'), sg);
   }
 
   // ---------------- الإرسال ----------------
@@ -447,15 +483,21 @@ class GroupSession extends ChatSession {
     }
     if (clear == null || _closed) return;
     final Map<String, dynamic> p;
+    final String inner;
+    final Object? sg;
     try {
-      p = jsonDecode(utf8.decode(clear)) as Map<String, dynamic>;
+      final outer = jsonDecode(utf8.decode(clear)) as Map<String, dynamic>;
+      inner = outer['p'] as String;
+      sg = outer['sg'];
+      p = jsonDecode(inner) as Map<String, dynamic>;
     } catch (_) {
       return;
     }
     final sender = '${p['s'] ?? ''}';
     if (sender.isEmpty || sender.length > 32 || sender == myId) return;
-    // محدش يبعت باسم حد تاني، واللي اتشال من الجروب مبنسمعلوش
+    // محدش يبعت باسم حد تاني (المصدر + المفاتيح + التوقيع)، واللي اتشال من الجروب مبنسمعلوش
     if (sender != src || (isBanned?.call(sender) ?? false)) return;
+    if (!await _authentic(sender, p, inner, sg) || _closed) return;
     onMemberSeen?.call(sender);
     var name = '${p['n'] ?? ''}'.replaceAll(RegExp(r'[\u0000-\u001f]'), '').trim();
     if (name.isEmpty) name = tr.unknownName;

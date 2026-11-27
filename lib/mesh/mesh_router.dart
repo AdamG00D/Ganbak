@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../core/crypto/kdf.dart';
+import '../core/crypto/sign.dart';
 import '../core/profile/profile.dart';
 import '../l10n/l10n.dart';
 import '../widgets/cartoon_avatar.dart';
@@ -147,10 +148,13 @@ class GroupAd {
 
 /// جهاز في الشبكة (جار مباشر أو واصلين له عن طريق أجهزة تانية).
 class MeshNode {
-  MeshNode(this.id, this.publicKey);
+  MeshNode(this.id, this.publicKey, [Uint8List? signKey]) : signKey = signKey ?? Uint8List(32);
 
   final String id;
   final Uint8List publicKey;
+
+  /// مفتاح توقيعه (Ed25519) — بنتأكد بيه من رسايله في الجروبات.
+  final Uint8List signKey;
   String name = '';
   int color = 0;
   String? avatar;
@@ -198,6 +202,7 @@ class MeshRouter extends ChangeNotifier {
   MeshRouter({
     required this.link,
     required this.describe,
+    required this.sign,
     this.presenceEvery = const Duration(seconds: 3),
     this.nodeTtl = const Duration(seconds: 11),
   }) : myId = link.myId {
@@ -223,6 +228,10 @@ class MeshRouter extends ChangeNotifier {
   /// بيانات "أنا موجود": {n: الاسم, c: اللون, k: المفتاح العام, a: هاش الصورة, e: أفاتار كرتوني, g: الجروبات}.
   final Map<String, dynamic> Function() describe;
 
+  /// توقيع "أنا موجود" بمفتاحي (Ed25519، base64). الإعلان بيتبعت كده:
+  /// `{d: "<json الإعلان + t>", sg: توقيع("wasl/presence/v2|" + d)}`.
+  final Future<String> Function(List<int> data) sign;
+
   final Duration presenceEvery;
   final Duration nodeTtl;
 
@@ -244,6 +253,19 @@ class MeshRouter extends ChangeNotifier {
   final Map<String, DateTime> _lastRx = {};
   final LinkedHashSet<String> _seen = LinkedHashSet<String>();
   final Map<String, String> _verifiedKeys = {};
+
+  /// آخر إعلان اتأكدنا من توقيعه لكل جهاز (عشان منتأكدش من نفس الإعلان كل 3 ثواني) ووقته.
+  final Map<String, String> _verifiedPresence = {};
+  final Map<String, Map<String, dynamic>> _presenceData = {};
+  final Map<String, int> _presenceTime = {};
+
+  /// إعلاني المتوقّع (بيتجدد لما حاجة تتغير، أو كل [resignEvery]).
+  String? _signedFor;
+  String? _signedBody;
+  DateTime _signedAt = DateTime.fromMillisecondsSinceEpoch(0);
+  int _lastT = 0;
+  Future<void>? _signing;
+  static const resignEvery = Duration(minutes: 5);
   final String _epoch = Kdf.hex(Kdf.randomBytes(3));
   int _counter = 0;
   int _fragCounter = 0;
@@ -379,9 +401,24 @@ class MeshRouter extends ChangeNotifier {
   }
 
   void _sendPresence() {
-    if (!_running || _nodeToLink.isEmpty) return;
-    final body = jsonEncode({...describe(), 'nb': _nodeToLink.keys.toList()});
-    _broadcast(_frame('P', '*', body), null);
+    if (!_running || _nodeToLink.isEmpty || _signing != null) return;
+    final payload = {...describe(), 'nb': _nodeToLink.keys.toList()..sort()};
+    final content = jsonEncode(payload);
+    final now = DateTime.now();
+    if (content == _signedFor && now.difference(_signedAt) < resignEvery && _signedBody != null) {
+      _broadcast(_frame('P', '*', _signedBody!), null);
+      return;
+    }
+    // الوقت بيزيد دايماً (حتى لو ساعة الموبايل رجعت لورا) عشان الإعلان الأقدم يترفض
+    final t = now.millisecondsSinceEpoch > _lastT ? now.millisecondsSinceEpoch : _lastT + 1;
+    final d = jsonEncode({...payload, 't': t});
+    _signing = sign(utf8.encode('wasl/presence/v2|$d')).then((sg) {
+      _lastT = t;
+      _signedFor = content;
+      _signedAt = now;
+      _signedBody = jsonEncode({'d': d, 'sg': sg});
+      if (_running && _nodeToLink.isNotEmpty) _broadcast(_frame('P', '*', _signedBody!), null);
+    }).catchError((Object _) {}).whenComplete(() => _signing = null);
   }
 
   // ---------------- الوصلات ----------------
@@ -557,30 +594,62 @@ class MeshRouter extends ChangeNotifier {
 
   // ---------------- مين موجود ----------------
 
-  Future<void> _onPresence(String src, String body, {required int hops, String? raw}) async {
-    if (body.length > 6000) return;
-    final Map<String, dynamic> m;
+  /// إعلان "أنا موجود" بعد ما نتأكد منه: المعرّف = هاش المفتاحين، والتوقيع صح، ومش أقدم من آخر إعلان شفناه.
+  Future<Map<String, dynamic>?> _verifyPresence(String src, String body) async {
+    if (body.length > 6000) return null;
+    final Object? outer;
     try {
-      m = jsonDecode(body) as Map<String, dynamic>;
+      outer = jsonDecode(body);
     } catch (_) {
-      return;
+      return null;
     }
-    final k = m['k'];
-    if (k is! String || k.length > 64) return;
-    // المعرّف لازم يكون هاش المفتاح العام (محدش ينتحل معرّف غيره)
-    if (_verifiedKeys[src] != k) {
-      final Uint8List pub;
-      try {
-        pub = base64.decode(k);
-      } catch (_) {
-        return;
-      }
-      if (pub.length != 32 || await Profile.idOf(pub) != src) return;
-      _verifiedKeys[src] = k;
+    if (outer is! Map) return null;
+    final d = outer['d'];
+    if (d is! String) return null;
+    if (_verifiedPresence[src] == d) return _presenceData[src];
+    final Object? inner;
+    try {
+      inner = jsonDecode(d);
+    } catch (_) {
+      return null;
     }
-    if (!_running) return;
+    if (inner is! Map<String, dynamic>) return null;
+    final k = Sign.key(inner['k']), sk = Sign.key(inner['s']);
+    final t = inner['t'];
+    if (k == null || sk == null || t is! int) return null;
+    final keys = '${inner['k']}|${inner['s']}';
+    if (_verifiedKeys[src] != keys) {
+      if (await Profile.idOf(k, sk) != src) return null;
+      _verifiedKeys[src] = keys;
+    }
+    if (t < (_presenceTime[src] ?? 0)) return null;
+    if (!await Sign.verify(sk, utf8.encode('wasl/presence/v2|$d'), outer['sg'])) return null;
+    if (t < (_presenceTime[src] ?? 0)) return null;
+    _presenceTime[src] = t;
+    _verifiedPresence[src] = d;
+    _presenceData[src] = inner;
+    if (_presenceTime.length > 2000) {
+      final old = _presenceTime.keys.first;
+      _presenceTime.remove(old);
+      _verifiedPresence.remove(old);
+      _presenceData.remove(old);
+      _verifiedKeys.remove(old);
+    }
+    return inner;
+  }
+
+  /// الاستغاثة بتتقبل بس لو الإعلان جديد (محدش يعيد استغاثة قديمة بعد ما صاحبها وقفها).
+  static const sosFreshness = Duration(minutes: 30);
+
+  Future<void> _onPresence(String src, String body, {required int hops, String? raw}) async {
+    final m = await _verifyPresence(src, body);
+    if (m == null || !_running) return;
     final isNew = !nodes.containsKey(src);
-    final node = nodes[src] ??= MeshNode(src, base64.decode(k));
+    final node = nodes[src] ??= MeshNode(
+      src,
+      Uint8List.fromList(Sign.key(m['k'])!),
+      Uint8List.fromList(Sign.key(m['s'])!),
+    );
     final name = Profile.cleanName('${m['n'] ?? ''}');
     final color = (m['c'] as num?)?.toInt() ?? 0;
     final avatar = m['a'] is String && RegExp(r'^[0-9a-f]{12}$').hasMatch(m['a'] as String) ? m['a'] as String : null;
@@ -592,7 +661,8 @@ class MeshRouter extends ChangeNotifier {
     final direct = isDirect(src);
     final newHops = direct ? 1 : hops.clamp(2, maxHops);
     final wifi = WifiOffer.fromWire(m['w']);
-    final sos = SosSignal.fromWire(m['sos']);
+    final signedAt = DateTime.fromMillisecondsSinceEpoch(m['t'] as int);
+    final sos = DateTime.now().difference(signedAt) > sosFreshness ? null : SosSignal.fromWire(m['sos']);
     final changed = isNew ||
         node.wifi != wifi ||
         node.sos != sos ||

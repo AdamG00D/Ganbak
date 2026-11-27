@@ -6,6 +6,7 @@ import 'package:cryptography/cryptography.dart';
 
 import '../../core/crypto/box.dart';
 import '../../core/crypto/kdf.dart';
+import '../../core/crypto/sign.dart';
 import '../../core/profile/profile.dart';
 import '../../mesh/mesh_router.dart';
 
@@ -24,6 +25,7 @@ class Envelope {
     required this.from,
     required this.to,
     required this.senderKey,
+    required this.signKey,
     required this.ephemeral,
     required this.box,
   });
@@ -35,24 +37,35 @@ class Envelope {
 
   /// مفتاح هوية المرسل الثابت (base64) — المستلم بيتأكد إنه بيتهاش لـ [from].
   final String senderKey;
+
+  /// مفتاح توقيع المرسل (base64) — المعرّف = هاش المفتاحين، فمحدش يقدر يبدّله.
+  final String signKey;
   final String ephemeral;
   final String box;
 
   static const maxBox = 12 * 1024;
 
-  Map<String, dynamic> toWire() => {'m': id, 'f': from, 'to': to, 'sk': senderKey, 'e': ephemeral, 'c': box};
+  Map<String, dynamic> toWire() =>
+      {'m': id, 'f': from, 'to': to, 'sk': senderKey, 'ek': signKey, 'e': ephemeral, 'c': box};
 
   static Envelope? fromWire(Object? raw) {
     if (raw is! Map) return null;
-    final m = raw['m'], f = raw['f'], to = raw['to'], sk = raw['sk'], e = raw['e'], c = raw['c'];
+    final m = raw['m'], f = raw['f'], to = raw['to'], sk = raw['sk'], ek = raw['ek'], e = raw['e'], c = raw['c'];
     if (m is! String || !RegExp(r'^[0-9a-f]{16}$').hasMatch(m)) return null;
     if (f is! String || to is! String || !MeshRouter.isId(f) || !MeshRouter.isId(to) || f == to) return null;
     if (sk is! String || sk.length > 64 || e is! String || e.length > 64) return null;
+    if (ek is! String || ek.length > 64) return null;
     if (c is! String || c.isEmpty || c.length > maxBox) return null;
-    return Envelope(id: m, from: f, to: to, senderKey: sk, ephemeral: e, box: c);
+    return Envelope(id: m, from: f, to: to, senderKey: sk, signKey: ek, ephemeral: e, box: c);
   }
 
-  int get size => box.length + 160;
+  int get size => box.length + 210;
+
+  /// مفتاح المرسل بيتهاش لمعرّفه؟ (المفتاحين مع بعض)
+  Future<bool> senderMatches() async {
+    final x = Sign.key(senderKey), s = Sign.key(signKey);
+    return x != null && s != null && await Profile.idOf(x, s) == from;
+  }
 }
 
 /// محتوى الرسالة بعد ما تتفك.
@@ -84,6 +97,7 @@ class MailCrypto {
   static Future<Envelope> seal({
     required SimpleKeyPair me,
     required List<int> myKey,
+    required List<int> mySignKey,
     required String myId,
     required String myName,
     required String to,
@@ -113,6 +127,7 @@ class MailCrypto {
       from: myId,
       to: to,
       senderKey: base64.encode(myKey),
+      signKey: base64.encode(mySignKey),
       ephemeral: base64.encode(ephPub),
       box: base64.encode(box),
     );
@@ -131,7 +146,7 @@ class MailCrypto {
       final ephPub = base64.decode(env.ephemeral);
       if (senderKey.length != 32 || ephPub.length != 32) return null;
       // المعرّف لازم يكون هاش المفتاح (محدش ينتحل معرّف غيره)
-      if (await Profile.idOf(senderKey) != env.from) return null;
+      if (!await env.senderMatches()) return null;
       final x = X25519();
       final dh1 = await (await x.sharedSecretKey(
         keyPair: me,
@@ -249,6 +264,7 @@ class MailService {
     required this.router,
     required this.me,
     required this.myKey,
+    required this.mySignKey,
     required this.myId,
     required this.myName,
     required this.keyOf,
@@ -260,6 +276,7 @@ class MailService {
   final MeshRouter router;
   final SimpleKeyPair me;
   final List<int> myKey;
+  final List<int> mySignKey;
   final String myId;
   String myName;
 
@@ -267,7 +284,7 @@ class MailService {
   final List<int>? Function(String id) keyOf;
 
   /// رسالة وصلتني واتفتحت: (المرسل، مفتاحه، الرسالة).
-  final void Function(String from, Uint8List senderKey, MailMessage mail) onMail;
+  final void Function(String from, Uint8List senderKey, Uint8List signKey, MailMessage mail) onMail;
 
   /// رسالتي وصلت لصاحبها (رقمها).
   final void Function(String peer, String id) onDelivered;
@@ -290,7 +307,15 @@ class MailService {
   /// يقفل رسالة لـ [to] ويحطها في الانتظار. يرجّع رقمها.
   Future<String> send(String to, List<int> key, String text) async {
     final env = await MailCrypto.seal(
-      me: me, myKey: myKey, myId: myId, myName: myName, to: to, recipientKey: key, text: text);
+      me: me,
+      myKey: myKey,
+      mySignKey: mySignKey,
+      myId: myId,
+      myName: myName,
+      to: to,
+      recipientKey: key,
+      text: text,
+    );
     final list = outbox.putIfAbsent(to, () => []);
     if (list.length >= maxPerPeer) list.removeAt(0);
     list.add(env);
@@ -363,11 +388,7 @@ class MailService {
     if (env.to != myId) {
       // بنشيل بس من اللي جنبنا مباشرة (محدش يملا موبايلات بعيدة)، ولو مفتاح المرسل بيتهاش لمعرّفه
       if (router.nodes[src]?.hops != 1) return;
-      try {
-        if (await Profile.idOf(base64.decode(env.senderKey)) != env.from) return;
-      } catch (_) {
-        return;
-      }
+      if (!await env.senderMatches()) return;
       if (carry.add(env)) flush();
       return;
     }
@@ -380,7 +401,7 @@ class MailService {
     _seen[env.id] = DateTime.now();
     if (_seen.length > maxSeen) _seen.remove(_seen.keys.first);
     final senderKey = Uint8List.fromList(base64.decode(env.senderKey));
-    onMail(env.from, senderKey, mail);
+    onMail(env.from, senderKey, Uint8List.fromList(Sign.key(env.signKey)!), mail);
     if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
     final sealed = await MailCrypto.receipt(me, myId, senderKey, env.from, env.id);
     _pendingReceipts[env.id] = (env.from, sealed);

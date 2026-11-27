@@ -14,6 +14,7 @@ class StoredChat {
     this.avatar,
     this.cartoon,
     this.publicKey,
+    this.signKey,
     this.saveOverride,
     this.unread = 0,
     this.verifiedKey,
@@ -30,6 +31,9 @@ class StoredChat {
   /// مفتاح هوية الشخص (Base64) — للمحادثات الخاصة.
   String? publicKey;
 
+  /// مفتاح توقيع الشخص (base64) — الهوية = المفتاحين مع بعض.
+  String? signKey;
+
   /// اختيار المستخدم للمحادثة دي بالذات (null = زي الإعداد العام).
   bool? saveOverride;
   int unread;
@@ -44,6 +48,7 @@ class StoredChat {
         'avatar': ?avatar,
         'cartoon': ?cartoon,
         'pk': ?publicKey,
+        'sk': ?signKey,
         'save': ?saveOverride,
         'unread': unread,
         'vk': ?verifiedKey,
@@ -61,6 +66,7 @@ class StoredChat {
         avatar: raw['avatar'] as String?,
         cartoon: (raw['cartoon'] as num?)?.toInt(),
         publicKey: raw['pk'] as String?,
+        signKey: raw['sk'] is String ? raw['sk'] as String : null,
         saveOverride: raw['save'] as bool?,
         unread: (raw['unread'] as num?)?.toInt() ?? 0,
         verifiedKey: raw['vk'] as String?,

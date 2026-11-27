@@ -30,16 +30,18 @@ void main() {
         link: net.add(p.id),
         presenceEvery: const Duration(milliseconds: 100),
         nodeTtl: const Duration(seconds: 1),
-        describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey)},
+        describe: () => {'n': p.name, 'c': p.color, 'k': base64.encode(p.publicKey), 's': base64.encode(p.signKey)},
+        sign: p.sign,
       );
       final m = MailService(
         router: r,
         me: p.keyPair,
         myKey: p.publicKey,
+        mySignKey: p.signKey,
         myId: p.id,
         myName: p.name,
         keyOf: (id) => keys[id],
-        onMail: (from, _, mail) => got.putIfAbsent(p.id, () => []).add((from, mail)),
+        onMail: (from, _, _, mail) => got.putIfAbsent(p.id, () => []).add((from, mail)),
         onDelivered: (_, id) => delivered.add(id),
       );
       r
