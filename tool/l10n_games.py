@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""نصوص الألعاب ودليل وصل وشبكة وصل والاستغاثة (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
+"""نصوص الألعاب ودليل وصل وشبكة وصل والاستغاثة والرسايل اللي بتستنى (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
 
     python3 tool/l10n_games.py && flutter gen-l10n
 
@@ -319,6 +319,13 @@ S = {
     'sosUnverified': ('الأسماء في وصل مش موثّقة؛ اتأكد قبل ما تتحرك.', "Names in Wasl aren't verified; check before you act."),
     'guideSosTitle': ('الاستغاثة', 'SOS'),
     'guideSosBody': ('من صفحة "القريبين" دوس "استغاثة" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.', 'Under "Nearby" tap "SOS" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.'),
+    # ---------------- الرسايل اللي بتستنى صاحبها ----------------
+    'statusQueued': ('مستنية صاحبها — هتوصله أول ما يظهر', 'Waiting — it reaches them as soon as they show up'),
+    'mailNotice': ('{name} مش موجود دلوقتي. رسايلك (الكلام بس) هتستنى وتوصله أول ما يظهر، حتى عن طريق موبايلات تانية بتشيلها مقفولة.', "{name} isn't around. Your text messages wait and reach them as soon as they show up, even through other phones that carry them sealed."),
+    'mailHint': ('اكتب… هتوصل لما يظهر', 'Type… it arrives when they show up'),
+    'mailArrived': ('وصلت وهو مش موجود', 'Arrived while away'),
+    'guideMailTitle': ('الرسالة تستنى صاحبها', 'Messages wait for their owner'),
+    'guideMailBody': ('لو اللي بتكلمه مش موجود، اكتب عادي: الرسالة بتتقفل ليه هو بس، وموبايلك والموبايلات اللي جنبك بيشيلوها لحد 48 ساعة ويسلّموها أول ما يظهر. اللي بيشيلها مبيقدرش يقراها. بتشتغل للكلام بس (مش الصور ولا الفويس)، ومع الناس اللي اتكلمت معاهم قبل كده.', "If the person you're writing to isn't around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can't read it. Text only (not photos or voice), with people you've talked to before."),
 }
 
 

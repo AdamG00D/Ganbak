@@ -4993,6 +4993,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'من صفحة \"القريبين\" دوس \"استغاثة\" واكتب مكانك أو اللي محتاجه. كل اللي فاتحين وصل في الشبكة (لحد 6 موبايلات بعيد) بيوصلهم تنبيه لحد ما توقفها. الاسم مش موثّق، فاللي بيشوفها يتأكد قبل ما يتحرك.'**
   String get guideSosBody;
+
+  /// No description provided for @statusQueued.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستنية صاحبها — هتوصله أول ما يظهر'**
+  String get statusQueued;
+
+  /// No description provided for @mailNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} مش موجود دلوقتي. رسايلك (الكلام بس) هتستنى وتوصله أول ما يظهر، حتى عن طريق موبايلات تانية بتشيلها مقفولة.'**
+  String mailNotice(String name);
+
+  /// No description provided for @mailHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب… هتوصل لما يظهر'**
+  String get mailHint;
+
+  /// No description provided for @mailArrived.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت وهو مش موجود'**
+  String get mailArrived;
+
+  /// No description provided for @guideMailTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسالة تستنى صاحبها'**
+  String get guideMailTitle;
+
+  /// No description provided for @guideMailBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو اللي بتكلمه مش موجود، اكتب عادي: الرسالة بتتقفل ليه هو بس، وموبايلك والموبايلات اللي جنبك بيشيلوها لحد 48 ساعة ويسلّموها أول ما يظهر. اللي بيشيلها مبيقدرش يقراها. بتشتغل للكلام بس (مش الصور ولا الفويس)، ومع الناس اللي اتكلمت معاهم قبل كده.'**
+  String get guideMailBody;
 }
 
 class _AppLocalizationsDelegate

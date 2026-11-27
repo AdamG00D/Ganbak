@@ -306,7 +306,9 @@ class _Bubble extends StatelessWidget {
         statusColor = readTickColor(p);
       case MessageStatus.failed:
         statusIcon = Icons.error_outline_rounded;
-        statusColor = mine ? fg : p.danger;
+        statusColor = mine ? fg : p.danger;      case MessageStatus.queued:
+        // مستنية صاحبها
+        statusIcon = Icons.hourglass_top_rounded;
     }
 
     final hasAvatar = look != null;

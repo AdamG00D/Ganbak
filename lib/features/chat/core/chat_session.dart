@@ -17,7 +17,9 @@ import 'secure_channel.dart';
 enum MessageKind { mine, theirs, system }
 
 /// sending ← sent ← delivered (✓✓) ← read (✓✓ ملونين).
-enum MessageStatus { sending, sent, delivered, read, failed }
+/// queued = الشخص مش موجود، والرسالة مستنياه (بتتشال وتوصله أول ما يظهر).
+/// (الترتيب ده بيتحفظ كرقم — أي حالة جديدة تتزوّد في الآخر بس.)
+enum MessageStatus { sending, sent, delivered, read, failed, queued }
 
 enum MediaKind { image, video, file, voice }
 
@@ -597,9 +599,21 @@ class ChatSession extends ChangeNotifier {
     return null;
   }
 
+  /// الشخص مش موجود: الرسالة تتقفل وتستنى صاحبها (الـ hub بيحددها للشات الخاص).
+  Future<void> Function(String text)? sendOffline;
+
+  /// ينفع نبعت رسالة تستنى دلوقتي؟
+  bool Function()? canQueue;
+
+  bool get queueing => !canSend && (canQueue?.call() ?? false);
+
   Future<void> send(String raw, {ReplyInfo? reply, Map<String, String>? mentions, bool forwarded = false}) async {
     final text = raw.trim();
     final channel = _channel;
+    if (text.isNotEmpty && (channel == null || !canSend) && queueing) {
+      await sendOffline?.call(text);
+      return;
+    }
     if (text.isEmpty || channel == null || !canSend) return;
     final clipped = text.length > SecureChannel.maxTextLength
         ? text.substring(0, SecureChannel.maxTextLength)

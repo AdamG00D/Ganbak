@@ -2858,4 +2858,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guideSosBody =>
       'Under \"Nearby\" tap \"SOS\" and write where you are or what you need. Everyone running Wasl in the mesh (up to 6 phones away) gets an alert until you stop it. Names are not verified, so whoever sees it should check before acting.';
+
+  @override
+  String get statusQueued =>
+      'Waiting — it reaches them as soon as they show up';
+
+  @override
+  String mailNotice(String name) {
+    return '$name isn\'t around. Your text messages wait and reach them as soon as they show up, even through other phones that carry them sealed.';
+  }
+
+  @override
+  String get mailHint => 'Type… it arrives when they show up';
+
+  @override
+  String get mailArrived => 'Arrived while away';
+
+  @override
+  String get guideMailTitle => 'Messages wait for their owner';
+
+  @override
+  String get guideMailBody =>
+      'If the person you\'re writing to isn\'t around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can\'t read it. Text only (not photos or voice), with people you\'ve talked to before.';
 }

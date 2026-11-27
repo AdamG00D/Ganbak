@@ -301,6 +301,7 @@ class _ChatPageState extends State<ChatPage> {
       MessageStatus.delivered => group != null ? l.statusDeliveredGroup : l.statusDelivered,
       MessageStatus.read => group != null ? l.statusReadGroup : l.statusRead,
       MessageStatus.failed => l.statusFailed,
+      MessageStatus.queued => l.statusQueued,
     };
     await showModalBottomSheet<void>(
       context: context,

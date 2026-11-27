@@ -28,6 +28,7 @@ import '../chat/core/chat_session.dart';
 import '../games/core/game_center.dart';
 import '../groups/group.dart';
 import '../groups/group_session.dart';
+import '../mailbox/mailbox.dart';
 import '../net/wasl_network.dart';
 
 enum TransportKind {
@@ -337,6 +338,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       ..onNodeUp = _onNodeUp
       ..onNodeDown = _onNodeDown
       ..addListener(_onRouterChanged);
+    _startMail(r);
 
     // المحادثات المحفوظة والجروبات اللي أنا فيها
     for (final sc in _store.index.values.toList()) {
@@ -419,6 +421,13 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     mySos = null;
     _sosAlerted.clear();
     sosDismissed.clear();
+    _mailTimer?.cancel();
+    _mailTimer = null;
+    _mailTick?.cancel();
+    _mailTick = null;
+    mail?.clear();
+    mail = null;
+    _queuedBubbles.clear();
     pendingJoins.clear();
     _requestedAds.clear();
     _syncedAt.clear();
@@ -591,6 +600,10 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       onInvite: (card) => _onIncoming(chat, card),
     );
     s.onGamePacket = (m) => chat.games.receive(peerId, m, private: false);
+    // الشخص مش موجود: الرسالة تستنى صاحبها
+    s
+      ..canQueue = (() => canQueueFor(chat))
+      ..sendOffline = ((text) => _sendOffline(chat, text));
     _directs[peerId] = chat;
     return chat;
   }
@@ -723,6 +736,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       _syncNode(n);
     }
     _checkSos();
+    _mailSoon();
     _syncGroups();
     notifyListeners();
   }
@@ -1131,6 +1145,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         if (op == null || _groups[gid] != g) return;
         final effect = await g.info.apply(src, op, myId: myId);
         if (effect != null) await _afterEffect(g, src, effect);
+      case 'mb' || 'mbd':
+        await mail?.receive(src, m);
       case 'gm':
         // رسالة لعبة سرية (دور، صوت، إجابة) مقفولة بمفتاح مشترك بيني وبين اللي بعتها
         final g = _groups[gid];
@@ -1233,6 +1249,80 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       fresh = true;
     }
     if (fresh) SystemBridge.notify('sos');
+  }
+
+  // ---------------- الرسالة تستنى صاحبها ----------------
+
+  /// "الرسالة تستنى صاحبها" (شوف MailService). بتتعمل مع الشبكة وبتتقفل معاها.
+  MailService? mail;
+  Timer? _mailTimer;
+  Timer? _mailTick;
+
+  /// فقاعات رسايلي المستنية: رقم الرسالة ← الفقاعة.
+  final Map<String, ChatMessage> _queuedBubbles = {};
+
+  /// ينفع أبعت لـ [c] رسالة تستنى؟ (مش موجود، ومعايا مفتاحه، ومش محظور)
+  bool canQueueFor(DirectChat c) => c.publicKey != null && !c.online && !c.blocked && mail != null;
+
+  void _startMail(MeshRouter r) {
+    mail = MailService(
+      router: r,
+      me: _me.keyPair,
+      myKey: _me.publicKey,
+      myId: myId,
+      myName: _me.name,
+      keyOf: (id) => _directs[id]?.publicKey ?? r.nodes[id]?.publicKey,
+      onMail: _onMailArrived,
+      onDelivered: (peer, id) {
+        final msg = _queuedBubbles.remove(id);
+        if (msg == null) return;
+        msg.status = MessageStatus.delivered;
+        _directs[peer]?.session.notifyListeners();
+      },
+      isBlocked: _store.blocked.contains,
+    );
+    _mailTick = Timer.periodic(const Duration(seconds: 15), (_) => mail?.flush());
+  }
+
+  Future<void> _sendOffline(DirectChat c, String text) async {
+    final key = c.publicKey;
+    final m = mail;
+    if (key == null || m == null || !canQueueFor(c)) return;
+    final msg = ChatMessage(id: 'mb-pending', text: text.trim(), kind: MessageKind.mine, status: MessageStatus.queued);
+    final id = await m.send(c.peerId, key, text);
+    final bubble = ChatMessage(id: 'mb-$id', text: msg.text, kind: MessageKind.mine, status: MessageStatus.queued);
+    _queuedBubbles[id] = bubble;
+    c.session.messages.add(bubble);
+    c.active = true;
+    c.lastActivity = DateTime.now();
+    c.session.notifyListeners();
+  }
+
+  /// بنحاول نسلّم بعد لحظة (التغييرات في الشبكة بتيجي ورا بعض).
+  void _mailSoon() {
+    if (_mailTimer?.isActive ?? false) return;
+    _mailTimer = Timer(const Duration(milliseconds: 600), () => mail?.flush());
+  }
+
+  void _onMailArrived(String from, Uint8List senderKey, MailMessage m) {
+    var chat = _directs[from];
+    if (chat == null) {
+      final node = router?.nodes[from];
+      chat = _newDirect(
+        from,
+        senderKey,
+        node?.name ?? (m.name.isEmpty ? tr.personNearby : m.name),
+        node?.color ?? 0,
+        node?.avatar,
+        node?.cartoon,
+      );
+    }
+    chat.publicKey ??= senderKey;
+    final msg = ChatMessage(id: 'mb-${m.id}', text: m.text, kind: MessageKind.theirs, time: m.sentAt);
+    chat.session.messages.add(msg);
+    chat.lastActivity = DateTime.now();
+    chat.session.notifyListeners();
+    _onIncoming(chat, msg);
   }
 
   // ---------------- الألعاب ----------------

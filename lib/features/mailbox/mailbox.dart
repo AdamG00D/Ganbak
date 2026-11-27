@@ -231,3 +231,178 @@ class CarryBox {
     ];
   }
 }
+
+/// خدمة "الرسالة تستنى صاحبها" على موبايل واحد: رسايلي المستنية، واللي شايله لغيري، والإيصالات.
+///
+/// رسايل تحكم (U) — النسخ القديمة بتتجاهلها:
+///   {t: mb, m, f, to, sk, e, c}   رسالة مقفولة: لصاحبها، أو لجار مباشر يشيلها
+///   {t: mbd, m, d?}               من المستلم: d = إيصال مقفول للمرسل • من غير d = "ارمي نسختك"
+///   {t: mbd, m, ok: true}         من المرسل: الإيصال وصل (بطّل تبعته)
+class MailService {
+  MailService({
+    required this.router,
+    required this.me,
+    required this.myKey,
+    required this.myId,
+    required this.myName,
+    required this.keyOf,
+    required this.onMail,
+    required this.onDelivered,
+    this.isBlocked,
+  });
+
+  final MeshRouter router;
+  final SimpleKeyPair me;
+  final List<int> myKey;
+  final String myId;
+  String myName;
+
+  /// مفتاح هوية شخص (لو نعرفه) — عشان نتأكد من إيصالاته.
+  final List<int>? Function(String id) keyOf;
+
+  /// رسالة وصلتني واتفتحت: (المرسل، مفتاحه، الرسالة).
+  final void Function(String from, Uint8List senderKey, MailMessage mail) onMail;
+
+  /// رسالتي وصلت لصاحبها (رقمها).
+  final void Function(String peer, String id) onDelivered;
+  final bool Function(String id)? isBlocked;
+
+  final CarryBox carry = CarryBox();
+
+  /// رسايلي المستنية: المعرّف ← رسايله.
+  final Map<String, List<Envelope>> outbox = {};
+  final Map<String, Set<String>> _handedTo = {};
+  final Map<String, (String, String)> _pendingReceipts = {};
+  final Map<String, DateTime> _seen = {};
+  final Map<String, DateTime> _tried = {};
+
+  static const maxPerPeer = 50;
+  static Duration resendEvery = const Duration(seconds: 20);
+
+  /// يقفل رسالة لـ [to] ويحطها في الانتظار. يرجّع رقمها.
+  Future<String> send(String to, List<int> key, String text) async {
+    final env = await MailCrypto.seal(
+      me: me, myKey: myKey, myId: myId, myName: myName, to: to, recipientKey: key, text: text);
+    final list = outbox.putIfAbsent(to, () => []);
+    if (list.length >= maxPerPeer) list.removeAt(0);
+    list.add(env);
+    flush();
+    return env.id;
+  }
+
+  bool _due(String key, Duration every) {
+    final now = DateTime.now();
+    final last = _tried[key];
+    if (last != null && now.difference(last) < every) return false;
+    _tried[key] = now;
+    return true;
+  }
+
+  void _send(String to, Map<String, dynamic> m) => router.sendControl(to, m).catchError((Object _) {});
+
+  /// يسلّم اللي يقدر يتسلّم دلوقتي، ويدّي نسخ لجيرانه المباشرين يشيلوها.
+  void flush() {
+    carry.prune();
+    final neighbours = [for (final n in router.nodes.values) if (n.hops == 1) n.id];
+    for (final e in outbox.entries) {
+      final peer = e.key;
+      for (final env in e.value) {
+        if (router.reachable(peer)) {
+          if (_due('to|${env.id}', resendEvery)) _send(peer, {'t': 'mb', ...env.toWire()});
+          continue;
+        }
+        final handed = _handedTo.putIfAbsent(env.id, () => {});
+        for (final nb in neighbours) {
+          if (nb == peer || handed.contains(nb) || handed.length >= 8) continue;
+          handed.add(nb);
+          _send(nb, {'t': 'mb', ...env.toWire()});
+        }
+      }
+    }
+    for (final c in carry.items.values.toList()) {
+      final to = c.env.to;
+      if (!router.reachable(to)) continue;
+      for (final d in carry.dueFor(to)) {
+        d
+          ..lastTry = DateTime.now()
+          ..deliveries += 1;
+        _send(to, {'t': 'mb', ...d.env.toWire()});
+      }
+    }
+    for (final e in _pendingReceipts.entries.toList()) {
+      final (sender, sealed) = e.value;
+      if (router.reachable(sender) && _due('rc|${e.key}', resendEvery)) {
+        _send(sender, {'t': 'mbd', 'm': e.key, 'd': sealed});
+      }
+    }
+    final now = DateTime.now();
+    _seen.removeWhere((_, t) => now.difference(t) > const Duration(days: 3));
+  }
+
+  /// رسالة تحكم من نوع mb / mbd.
+  Future<void> receive(String src, Map<String, dynamic> m) async {
+    switch (m['t']) {
+      case 'mb':
+        await _onEnvelope(src, m);
+      case 'mbd':
+        await _onReceipt(src, m);
+    }
+  }
+
+  Future<void> _onEnvelope(String src, Map<String, dynamic> m) async {
+    final env = Envelope.fromWire(m);
+    if (env == null || (isBlocked?.call(env.from) ?? false)) return;
+    if (env.to != myId) {
+      // بنشيل بس من اللي جنبنا مباشرة (محدش يملا موبايلات بعيدة)
+      if (router.nodes[src]?.hops != 1) return;
+      if (carry.add(env)) flush();
+      return;
+    }
+    if (_seen.containsKey(env.id)) {
+      if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
+      return;
+    }
+    final mail = await MailCrypto.open(me: me, myKey: myKey, myId: myId, env: env);
+    if (mail == null) return;
+    _seen[env.id] = DateTime.now();
+    final senderKey = Uint8List.fromList(base64.decode(env.senderKey));
+    onMail(env.from, senderKey, mail);
+    if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
+    final sealed = await MailCrypto.receipt(me, myId, senderKey, env.from, env.id);
+    _pendingReceipts[env.id] = (env.from, sealed);
+    flush();
+  }
+
+  Future<void> _onReceipt(String src, Map<String, dynamic> m) async {
+    final mid = m['m'];
+    if (mid is! String || !RegExp(r'^[0-9a-f]{16}$').hasMatch(mid)) return;
+    if (m['ok'] == true) {
+      final p = _pendingReceipts[mid];
+      if (p != null && p.$1 == src) _pendingReceipts.remove(mid);
+      return;
+    }
+    final carried = carry.items[mid];
+    if (carried != null && carried.env.to == src) carry.remove(mid);
+    final d = m['d'];
+    final list = outbox[src];
+    final key = keyOf(src);
+    if (d is! String || d.length > 256 || list == null || key == null) return;
+    final ok = await MailCrypto.openReceipt(me, myId, key, src, mid, d);
+    if (ok == null) return;
+    final i = list.indexWhere((x) => x.id == mid);
+    if (i < 0) return;
+    list.removeAt(i);
+    if (list.isEmpty) outbox.remove(src);
+    _handedTo.remove(mid);
+    onDelivered(src, mid);
+    _send(src, {'t': 'mbd', 'm': mid, 'ok': true});
+  }
+
+  void clear() {
+    carry.items.clear();
+    outbox.clear();
+    _handedTo.clear();
+    _pendingReceipts.clear();
+    _tried.clear();
+  }
+}
