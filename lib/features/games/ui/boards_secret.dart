@@ -88,20 +88,23 @@ class RpsBoard extends StatelessWidget {
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        for (final c in const ['r', 'p', 's'])
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 6),
-                            child: _Choice(
-                              emoji: emoji[c]!,
-                              label: label(c, l),
-                              selected: iPicked && (room.local['pick'] as Map?)?['c'] == c,
-                              onTap: iPicked ? null : () => _pick(c),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (final c in const ['r', 'p', 's'])
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6),
+                              child: _Choice(
+                                emoji: emoji[c]!,
+                                label: label(c, l),
+                                selected: iPicked && (room.local['pick'] as Map?)?['c'] == c,
+                                onTap: iPicked ? null : () => _pick(c),
+                              ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ],

@@ -76,7 +76,8 @@ the default becomes "wasl". Preview the owner approved: https://claude.ai/artifa
 `flutter test tool/shots/shots_test.dart` renders real screens with the real font into `build/shots/`
 (`<name>.<ar|en>.<light|dark>.png`). Use `--name <part>` to render a subset, then `python3 tool/shots/sheet.py`
 puts the four variants of each screen side by side in `build/shots/sheets/`. Sample people/chats: `tool/shots/sample.dart`. Look at the PNGs after every UI change:
-RTL and LTR, light and dark, long names, small phones. It is not part of `flutter test` (it lives under `tool/`).
+RTL and LTR, light and dark, long names, small phones. It is not part of `flutter test` (it lives under `tool/`). The `big` group renders key screens with text at 1.3× (like
+a phone's large-font setting): any text that spills out of its box fails the run — keep it green.
 
 ## Log
 

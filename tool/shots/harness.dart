@@ -57,6 +57,9 @@ class Shots {
     return ByteData.view(b.buffer);
   }
 
+  /// حجم الخط (زي إعداد "حجم الخط" في الموبايل) — 1.3 بيكشف الكلام اللي بيخرج برا مكانه.
+  static double textScale = 1;
+
   static Widget app(Widget home, {Brightness brightness = Brightness.light, Locale locale = const Locale('ar')}) {
     L10n.use(locale);
     return MaterialApp(
@@ -71,7 +74,13 @@ class Shots {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      builder: (context, child) => RepaintBoundary(key: _boundary, child: child),
+      builder: (context, child) => RepaintBoundary(
+        key: _boundary,
+        child: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(textScale)),
+          child: child!,
+        ),
+      ),
       home: home,
     );
   }
@@ -122,7 +131,7 @@ class Shots {
         await tester.pump(settle);
         if (then != null) await then(tester);
         await tester.pump(const Duration(milliseconds: 50));
-        await save(tester, '$name.${l.languageCode}.${b.name}');
+        await save(tester, '$name${textScale == 1 ? '' : '.big'}.${l.languageCode}.${b.name}');
       }
     }
     L10n.use(const Locale('ar'));

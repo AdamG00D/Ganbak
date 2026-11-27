@@ -198,4 +198,70 @@ void main() {
       await Shots.shoot(tester, 'chat-game-cards', () => ChatPage(conversation: c));
     });
   });
+
+  // خط كبير (1.3×) عربي وإنجليزي فاتح: أي كلام بيخرج برا مكانه بيوقّع الاختبار
+  group('big', () {
+    final hub = ChatHub.instance;
+    setUp(() => Shots.textScale = 1.3);
+    tearDown(() => Shots.textScale = 1);
+
+    Future<void> world(WidgetTester tester) async {
+      if (hub.running) return;
+      await tester.runAsync(() async {
+        await hub.start(TransportKind.wifi);
+        await Sample.fill(hub);
+      });
+    }
+
+    const light = [Brightness.light];
+    testWidgets('big screens', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      await Shots.shoot(tester, 'transport', () => const TransportScreen(), themes: light);
+      await Shots.shoot(tester, 'home-chats', () => const HomeScreen(kind: TransportKind.wifi), themes: light);
+      await Shots.shoot(tester, 'guide', () => const GuideScreen(), themes: light);
+      await Shots.shoot(tester, 'chat-group', () => ChatPage(conversation: Sample.shilla), themes: light);
+      for (final k in [GameKind.mafia, GameKind.battleship]) {
+        await Shots.shoot(tester, 'game-help-${k.id}', () => GameHelpPage(kind: k), themes: light);
+      }
+    });
+
+    for (final (name, make) in <(String, Future<GameRoom> Function(String))>[
+      ('game-xo', GameSamples.xo),
+      ('game-dots', GameSamples.dots),
+      ('game-rps', GameSamples.rps),
+      ('game-bs', GameSamples.battleship),
+      ('game-lobby', GameSamples.lobby),
+      ('game-spy', GameSamples.spy),
+      ('game-quiz-answer', (me) => GameSamples.quiz(me, answer: true)),
+      ('game-mafia-day', (me) => GameSamples.mafia(me, day: true)),
+    ]) {
+      testWidgets('big $name', (tester) async {
+        Shots.phone(tester);
+        await world(tester);
+        late GameRoom r;
+        await tester.runAsync(() async {
+          r = await make(hub.myId);
+          await Future<void>.delayed(const Duration(milliseconds: 50));
+        });
+        await Shots.shoot(tester, name, () => GameScreen(room: r), themes: light);
+      });
+    }
+
+    testWidgets('big picker', (tester) async {
+      Shots.phone(tester);
+      await Shots.shoot(
+        tester,
+        'games-picker',
+        () => Builder(builder: (context) => Scaffold(body: Center(child: Text(context.l10n.games)))),
+        themes: light,
+        then: (t) async {
+          final ctx = t.element(find.byType(Scaffold));
+          pickGame(ctx, group: false, title: ctx.l10n.playWith('كريم'));
+          await t.pump();
+          await t.pump(const Duration(milliseconds: 600));
+        },
+      );
+    });
+  });
 }

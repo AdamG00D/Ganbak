@@ -26,8 +26,10 @@ class GameScreen extends StatefulWidget {
   final String? title;
 
   static Future<void> open(BuildContext context, Conversation c, GameRoom room) => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => GameScreen(room: room, title: c.title)),
-      );
+    MaterialPageRoute<void>(
+      builder: (_) => GameScreen(room: room, title: c.title),
+    ),
+  );
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -99,7 +101,9 @@ class _GameScreenState extends State<GameScreen> {
                 if (room.phase == RoomPhase.playing && room.joined && !room.over) ReactionBar(room: room),
               ],
             ),
-            Positioned.fill(child: IgnorePointer(child: FloatingReactions(room: room))),
+            Positioned.fill(
+              child: IgnorePointer(child: FloatingReactions(room: room)),
+            ),
           ],
         ),
       ),
@@ -140,7 +144,9 @@ class _TopBar extends StatelessWidget {
     final p = context.palette;
     final l = context.l10n;
     final color = GameLook.color(room.kind);
-    final sub = room.phase == RoomPhase.playing && room.round > 0 ? l.gameRound('${room.round + 1}') : GameLook.tag(room.kind, l);
+    final sub = room.phase == RoomPhase.playing && room.round > 0
+        ? l.gameRound('${room.round + 1}')
+        : GameLook.tag(room.kind, l);
     return Padding(
       padding: EdgeInsetsDirectional.only(top: MediaQuery.paddingOf(context).top + 4, start: 4, end: 10, bottom: 4),
       child: Row(
@@ -218,9 +224,16 @@ class GameLobby extends StatelessWidget {
                   children: [
                     Text(
                       direct
-                          ? (room.isHost ? l.gameWaitingPeer(_other(room, l)) : l.gameInviteFrom(room.nameOf(room.host), GameLook.name(k, l)))
+                          ? (room.isHost
+                                ? l.gameWaitingPeer(_other(room, l))
+                                : l.gameInviteFrom(room.nameOf(room.host), GameLook.name(k, l)))
                           : l.gameSeats('${room.players.length}', '${k.maxPlayers}'),
-                      style: TextStyle(color: Palette.onColor(color), fontSize: 17, fontWeight: FontWeight.w700, height: 1.4),
+                      style: TextStyle(
+                        color: Palette.onColor(color),
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        height: 1.4,
+                      ),
                     ),
                     if (!direct)
                       Text(
@@ -253,7 +266,10 @@ class GameLobby extends StatelessWidget {
                         ? Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                             decoration: BoxDecoration(color: p.accentSoft, borderRadius: BorderRadius.circular(12)),
-                            child: Text(l.gameHost, style: TextStyle(color: p.accentInk, fontSize: 12, fontWeight: FontWeight.w700)),
+                            child: Text(
+                              l.gameHost,
+                              style: TextStyle(color: p.accentInk, fontSize: 12, fontWeight: FontWeight.w700),
+                            ),
                           )
                         : null,
                   ),
@@ -317,7 +333,11 @@ class _QuizOptionsState extends State<QuizOptions> {
           spacing: 8,
           runSpacing: 8,
           children: [
-            ChoiceChip(label: Text(l.quizMixed), selected: cat == null, onSelected: (_) => setState(() => o.remove('cat'))),
+            ChoiceChip(
+              label: Text(l.quizMixed),
+              selected: cat == null,
+              onSelected: (_) => setState(() => o.remove('cat')),
+            ),
             for (final c in QuizBank.categories)
               ChoiceChip(label: Text(label(c)), selected: cat == c, onSelected: (_) => setState(() => o['cat'] = c)),
           ],
@@ -352,7 +372,11 @@ class _Closed extends StatelessWidget {
       message: room.wins.isEmpty ? null : _winsLine(room),
       action: SizedBox(
         width: 220,
-        child: PrimaryButton(label: l.gameBackToChat, icon: Icons.chat_rounded, onPressed: () => Navigator.maybePop(context)),
+        child: PrimaryButton(
+          label: l.gameBackToChat,
+          icon: Icons.chat_rounded,
+          onPressed: () => Navigator.maybePop(context),
+        ),
       ),
     );
   }
@@ -377,10 +401,10 @@ class ResultBar extends StatelessWidget {
     final text = w.isEmpty
         ? l.gameDraw
         : w.contains(me)
-            ? l.gameYouWon
-            : room.joined && w.length == 1
-                ? (room.players.length <= 2 ? l.gameYouLost : l.gameWinner(room.nameOf(w.single)))
-                : l.gameWinner(w.map(room.nameOf).join('، '));
+        ? l.gameYouWon
+        : room.joined && w.length == 1
+        ? (room.players.length <= 2 ? l.gameYouLost : l.gameWinner(room.nameOf(w.single)))
+        : l.gameWinner(w.map(room.nameOf).join('، '));
     final again = (room.view['again'] as List?)?.cast<String>() ?? const [];
     final iAsked = again.contains(me);
     final canAgain = room.joined && (room.autoStart || room.isHost);
@@ -395,7 +419,11 @@ class ResultBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+          ),
           if (room.wins.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 2),
@@ -455,29 +483,36 @@ class ReactionBar extends StatelessWidget {
     final p = context.palette;
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 4, 16, 8 + MediaQuery.paddingOf(context).bottom),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          for (final e in ChatReactions.all)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Material(
-                color: p.surface,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14), side: BorderSide(color: p.border)),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(14),
-                  onTap: () {
-                    HapticFeedback.selectionClick();
-                    room.react(e);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-                    child: Text(e, style: const TextStyle(fontSize: 20)),
+      // بيصغر لو الخط كبير أو الشاشة ضيقة (مبيخرجش برا)
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (final e in ChatReactions.all)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Material(
+                  color: p.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    side: BorderSide(color: p.border),
+                  ),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      room.react(e);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+                      child: Text(e, style: const TextStyle(fontSize: 20)),
+                    ),
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -520,7 +555,10 @@ class FloatingReactions extends StatelessWidget {
                   children: [
                     Text(r.emoji, style: const TextStyle(fontSize: 26)),
                     const SizedBox(width: 4),
-                    Text(room.nameOf(r.who), style: TextStyle(fontSize: 11.5, color: p.textMuted, fontWeight: FontWeight.w600)),
+                    Text(
+                      room.nameOf(r.who),
+                      style: TextStyle(fontSize: 11.5, color: p.textMuted, fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
               ),
@@ -582,8 +620,8 @@ class DuelHeader extends StatelessWidget {
     final turnText = turn == null
         ? null
         : turn == me
-            ? l.gameYourTurn
-            : l.gameTheirTurn(room.nameOf(turn as String));
+        ? l.gameYourTurn
+        : l.gameTheirTurn(room.nameOf(turn as String));
     return Column(
       children: [
         Container(
@@ -602,7 +640,11 @@ class DuelHeader extends StatelessWidget {
                 child: Text(
                   '${s[mine] ?? 0}  –  ${s[other] ?? 0}',
                   textDirection: TextDirection.ltr,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()]),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFeatures: [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
               side(other, true),
@@ -618,11 +660,7 @@ class DuelHeader extends StatelessWidget {
             ),
             child: Text(
               turnText,
-              style: TextStyle(
-                color: turn == me ? p.ink : p.textMuted,
-                fontWeight: FontWeight.w700,
-                fontSize: 13,
-              ),
+              style: TextStyle(color: turn == me ? p.ink : p.textMuted, fontWeight: FontWeight.w700, fontSize: 13),
             ),
           ),
       ],
@@ -630,11 +668,11 @@ class DuelHeader extends StatelessWidget {
   }
 
   Widget _name(String id, bool active, Palette p) => Text(
-        room.nameOf(id),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontWeight: active ? FontWeight.w700 : FontWeight.w500, fontSize: 13.5),
-      );
+    room.nameOf(id),
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+    style: TextStyle(fontWeight: active ? FontWeight.w700 : FontWeight.w500, fontSize: 13.5),
+  );
 }
 
 /// نقط أكتر من لاعبين (المربعات والذاكرة في الجروب).
@@ -679,10 +717,17 @@ class ScoreStrip extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(room.nameOf(id), style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, height: 1.2)),
+                        Text(
+                          room.nameOf(id),
+                          style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, height: 1.2),
+                        ),
                         Row(
                           children: [
-                            Container(width: 10, height: 10, decoration: BoxDecoration(color: colors[i % colors.length], shape: BoxShape.circle)),
+                            Container(
+                              width: 10,
+                              height: 10,
+                              decoration: BoxDecoration(color: colors[i % colors.length], shape: BoxShape.circle),
+                            ),
                             const SizedBox(width: 5),
                             Text(
                               '${i < scores.length ? scores[i] : 0}',
@@ -709,7 +754,11 @@ class ScoreStrip extends StatelessWidget {
               ),
               child: Text(
                 turn == room.myId ? l.gameYourTurn : l.gameTheirTurn(room.nameOf(turn as String)),
-                style: TextStyle(color: turn == room.myId ? p.ink : p.textMuted, fontWeight: FontWeight.w700, fontSize: 13),
+                style: TextStyle(
+                  color: turn == room.myId ? p.ink : p.textMuted,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                ),
               ),
             ),
           ),
@@ -768,7 +817,10 @@ class _GameChatPanelState extends State<GameChatPanel> {
           if (widget.secret)
             Padding(
               padding: const EdgeInsets.only(top: 8),
-              child: Text(l.mafiaSecretChat, style: TextStyle(color: p.saffron, fontWeight: FontWeight.w700, fontSize: 12.5)),
+              child: Text(
+                l.mafiaSecretChat,
+                style: TextStyle(color: p.saffron, fontWeight: FontWeight.w700, fontSize: 12.5),
+              ),
             ),
           Expanded(
             child: ListView.builder(
@@ -841,7 +893,8 @@ class CountdownChip extends StatefulWidget {
 }
 
 class _CountdownChipState extends State<CountdownChip> with SingleTickerProviderStateMixin {
-  late final AnimationController _tick = AnimationController(vsync: this, duration: const Duration(seconds: 1))..repeat();
+  late final AnimationController _tick = AnimationController(vsync: this, duration: const Duration(seconds: 1))
+    ..repeat();
 
   @override
   void dispose() {
@@ -861,10 +914,7 @@ class _CountdownChipState extends State<CountdownChip> with SingleTickerProvider
         final urgent = s <= 10;
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: urgent ? p.tentRed : p.surfaceAlt,
-            borderRadius: BorderRadius.circular(12),
-          ),
+          decoration: BoxDecoration(color: urgent ? p.tentRed : p.surfaceAlt, borderRadius: BorderRadius.circular(12)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

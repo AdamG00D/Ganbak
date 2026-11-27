@@ -298,8 +298,9 @@ class _TurnRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    // ارتفاع الصف بيكبر مع حجم الخط (الاسم تحت الأفاتار)
     return SizedBox(
-      height: 68,
+      height: 54 + MediaQuery.textScalerOf(context).scale(11) * 1.5,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: order.length,

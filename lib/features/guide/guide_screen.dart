@@ -300,7 +300,9 @@ class _Way extends StatelessWidget {
                             child: Icon(icon, color: p.ink, size: 21),
                           ),
                           const SizedBox(width: 10),
-                          Text(title, style: TextStyle(color: fg, fontSize: 20, fontWeight: FontWeight.w700)),
+                          Expanded(
+                            child: Text(title, style: TextStyle(color: fg, fontSize: 20, fontWeight: FontWeight.w700)),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -403,13 +405,14 @@ class _GameChip extends StatelessWidget {
       radius: 16,
       onTap: () => GameHelpPage.open(context, kind),
       padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: SizedBox(
-        height: 58,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 58),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(GameLook.icon(kind), color: fg, size: 22),
-            const Spacer(),
+            const SizedBox(height: 8),
             Text(
               GameLook.name(kind, l),
               maxLines: 2,
