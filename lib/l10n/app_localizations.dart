@@ -5167,6 +5167,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.'**
   String get guideShareBody;
+
+  /// No description provided for @aboutPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنه'**
+  String get aboutPerson;
+
+  /// No description provided for @fingerprintTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بصمة {name}'**
+  String fingerprintTitle(String name);
+
+  /// No description provided for @fingerprintBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقشة دي جاية من مفتاحه ومحدش غيره ليه زيها. لو ظهر اتنين بنفس الاسم، النقشة بتفرّق بينهم.'**
+  String get fingerprintBody;
+
+  /// No description provided for @nickname.
+  ///
+  /// In ar, this message translates to:
+  /// **'سمّيه عندك باسم تاني'**
+  String get nickname;
+
+  /// No description provided for @nicknameTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم عندك'**
+  String get nicknameTitle;
+
+  /// No description provided for @nicknameNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش'**
+  String get nicknameNone;
+
+  /// No description provided for @nicknameSet.
+  ///
+  /// In ar, this message translates to:
+  /// **'هيظهر عندك باسم \"{name}\"'**
+  String nicknameSet(String name);
+
+  /// No description provided for @theirName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسمه عنده: {name}'**
+  String theirName(String name);
+
+  /// No description provided for @notHim.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش هو؟'**
+  String get notHim;
+
+  /// No description provided for @notHimSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد — مش {name} اللي كلمته قبل كده'**
+  String notHimSub(String name);
+
+  /// No description provided for @impostorWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتبه: ده مش {name} اللي كلمته قبل كده. لو غيّر موبايله أو مسح التطبيق، اتأكدوا من رمز الأمان.'**
+  String impostorWarning(String name);
+
+  /// No description provided for @guideIdentityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين ده فعلاً؟'**
+  String get guideIdentityTitle;
+
+  /// No description provided for @guideIdentityBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.'**
+  String get guideIdentityBody;
 }
 
 class _AppLocalizationsDelegate

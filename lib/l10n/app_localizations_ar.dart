@@ -2932,4 +2932,55 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get guideShareBody =>
       'من الإعدادات ← \"شارك وصل\": دوس \"افتح شبكة وصل\" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.';
+
+  @override
+  String get aboutPerson => 'عنه';
+
+  @override
+  String fingerprintTitle(String name) {
+    return 'بصمة $name';
+  }
+
+  @override
+  String get fingerprintBody =>
+      'النقشة دي جاية من مفتاحه ومحدش غيره ليه زيها. لو ظهر اتنين بنفس الاسم، النقشة بتفرّق بينهم.';
+
+  @override
+  String get nickname => 'سمّيه عندك باسم تاني';
+
+  @override
+  String get nicknameTitle => 'الاسم عندك';
+
+  @override
+  String get nicknameNone => 'مفيش';
+
+  @override
+  String nicknameSet(String name) {
+    return 'هيظهر عندك باسم \"$name\"';
+  }
+
+  @override
+  String theirName(String name) {
+    return 'اسمه عنده: $name';
+  }
+
+  @override
+  String get notHim => 'مش هو؟';
+
+  @override
+  String notHimSub(String name) {
+    return 'جديد — مش $name اللي كلمته قبل كده';
+  }
+
+  @override
+  String impostorWarning(String name) {
+    return 'انتبه: ده مش $name اللي كلمته قبل كده. لو غيّر موبايله أو مسح التطبيق، اتأكدوا من رمز الأمان.';
+  }
+
+  @override
+  String get guideIdentityTitle => 'مين ده فعلاً؟';
+
+  @override
+  String get guideIdentityBody =>
+      'الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه \"بصمة\" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك \"مش هو؟\". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.';
 }

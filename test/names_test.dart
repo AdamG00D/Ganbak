@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wasl/core/profile/names.dart';
+import 'package:wasl/core/theme/app_theme.dart';
+import 'package:wasl/widgets/fingerprint.dart';
+
+/// مقارنة الأسامي للتحذير، ورسم البصمة.
+void main() {
+  test('نفس الاسم حتى لو اتكتب بشكل تاني', () {
+    expect(NameMatch.same('آدم', 'ادم'), isTrue);
+    expect(NameMatch.same('أحمد', 'احمد'), isTrue);
+    expect(NameMatch.same('مُنى', 'منى'), isTrue, reason: 'تشكيل');
+    expect(NameMatch.same('سلمى', 'سلمي'), isTrue);
+    expect(NameMatch.same('فاطمة', 'فاطمه'), isTrue);
+    expect(NameMatch.same('كـريم', 'كريم'), isTrue, reason: 'تطويل');
+    expect(NameMatch.same('Adam', 'adam '), isTrue);
+    expect(NameMatch.same('Аdam', 'Adam'), isTrue, reason: 'A روسي');
+    expect(NameMatch.same('Ad​am', 'Adam'), isTrue, reason: 'حرف مخفي');
+    expect(NameMatch.same('‮مدآ', 'مدآ'), isTrue, reason: 'علامة اتجاه');
+    expect(NameMatch.same('آدم', 'أحمد'), isFalse);
+    expect(NameMatch.same('', ''), isFalse, reason: 'الفاضي مش اسم');
+  });
+
+  testWidgets('البصمة بتترسم ومبتوقعش مع معرّف بايظ', (tester) async {
+    for (final id in ['0123456789abcdef', 'zz', '']) {
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.build(AccentTheme.all.first, Brightness.light),
+        home: Scaffold(body: Center(child: Fingerprint(id: id))),
+      ));
+      expect(tester.takeException(), isNull);
+    }
+  });
+}

@@ -194,6 +194,7 @@ class _GuideScreenState extends State<GuideScreen> {
                   _Item(icon: Icons.cloud_off_rounded, title: l.howNoInternetTitle, body: l.howNoInternetBody),
                   _Item(icon: Icons.lock_rounded, title: l.howEncryptionTitle, body: l.howEncryptionBody),
                   _Item(icon: Icons.verified_user_outlined, title: l.howSafetyTitle, body: l.howSafetyBody),
+                  _Item(icon: Icons.badge_outlined, title: l.guideIdentityTitle, body: l.guideIdentityBody),
                   _Item(icon: Icons.notifications_none_rounded, title: l.howNotifTitle, body: l.howNotifBody),
                   _Item(icon: Icons.bookmark_outline_rounded, title: l.howSaveTitle, body: l.howSaveBody),
                   _Item(icon: Icons.campaign_rounded, title: l.guideSosTitle, body: l.guideSosBody),

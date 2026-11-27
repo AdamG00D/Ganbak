@@ -80,19 +80,26 @@ class StoredChat {
 
 /// اختيارات المستخدم لمحادثة: تثبيت فوق وكتم الإشعارات.
 class ChatPrefs {
-  ChatPrefs({this.pinned = false, this.mutedUntil = 0});
+  ChatPrefs({this.pinned = false, this.mutedUntil = 0, this.nickname});
 
   bool pinned;
+
+  /// اسم سمّيت بيه الشخص عندي (null = اسمه هو).
+  String? nickname;
 
   /// 0 = مش مكتومة • -1 = مكتومة دايماً • غير كده = لحد الوقت ده (ملي ثانية).
   int mutedUntil;
 
-  bool get isDefault => !pinned && mutedUntil == 0;
+  bool get isDefault => !pinned && mutedUntil == 0 && nickname == null;
 
-  Map<String, dynamic> toJson() => {if (pinned) 'pin': true, if (mutedUntil != 0) 'mute': mutedUntil};
+  Map<String, dynamic> toJson() =>
+      {if (pinned) 'pin': true, if (mutedUntil != 0) 'mute': mutedUntil, 'nick': ?nickname};
 
-  static ChatPrefs fromJson(Map<dynamic, dynamic> raw) =>
-      ChatPrefs(pinned: raw['pin'] == true, mutedUntil: (raw['mute'] as num?)?.toInt() ?? 0);
+  static ChatPrefs fromJson(Map<dynamic, dynamic> raw) => ChatPrefs(
+        pinned: raw['pin'] == true,
+        mutedUntil: (raw['mute'] as num?)?.toInt() ?? 0,
+        nickname: raw['nick'] is String && (raw['nick'] as String).length <= 24 ? raw['nick'] as String : null,
+      );
 }
 
 /// المحادثات المحفوظة على الجهاز (مشفّرة) + الجروبات اللي أنا فيها + المحظورين.

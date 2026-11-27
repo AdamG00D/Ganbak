@@ -12,6 +12,7 @@ import '../../core/crypto/sign.dart';
 import '../../core/crypto/kdf.dart';
 import '../../core/nav.dart';
 import '../../core/platform/system_bridge.dart';
+import '../../core/profile/names.dart';
 import '../../core/profile/profile.dart';
 import '../../core/settings/app_settings.dart';
 import '../../core/storage/chat_store.dart';
@@ -153,8 +154,14 @@ class DirectChat extends Conversation {
   @override
   bool get isGroup => false;
 
+  /// الاسم اللي سمّيته بيه عندي (لو فيه) — بيظهر بدل اسمه.
+  String? nickname;
+
   @override
-  String get title => _title;
+  String get title => nickname ?? _title;
+
+  /// اسمه هو (اللي جاي من "أنا موجود").
+  String get ownName => _title;
 
   @override
   int get color => _color;
@@ -694,6 +701,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     c
       ..pinned = p.pinned
       ..mutedUntil = p.mutedUntil;
+    if (c is DirectChat) c.nickname = p.nickname;
   }
 
   void _forgetPrefs(String id) {
@@ -701,6 +709,37 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   ChatPrefs _prefsOf(Conversation c) => _store.prefs.putIfAbsent(c.id, ChatPrefs.new);
+
+  /// اسم من عندي للشخص (null أو فاضي = أشيله). بيتحفظ مع إعدادات المحادثة.
+  Future<void> setNickname(DirectChat c, String? nickname) async {
+    final n = nickname == null ? '' : Profile.cleanName(nickname);
+    c.nickname = n.isEmpty ? null : n;
+    _prefsOf(c).nickname = c.nickname;
+    c.session.notifyListeners();
+    notifyListeners();
+    await _store.savePrefs();
+  }
+
+  /// شخص "أعرفه": محفوظ، أو موثّق، أو اتكلمنا (رسالة مش من النظام)، أو سمّيته باسم.
+  bool isKnown(DirectChat c) =>
+      c.saved ||
+      c.nickname != null ||
+      c.session.verifiedPeerKey != null ||
+      c.session.messages.any((m) => m.kind != MessageKind.system);
+
+  /// [id] ظاهر باسم واحد أعرفه، بس هو مش هو؟ يرجّع اسم اللي أعرفه (للتحذير) أو null.
+  String? impostorOf(String id, String name) {
+    final mine = _directs[id];
+    if (mine != null && isKnown(mine)) return null;
+    for (final c in _directs.values) {
+      if (c.peerId == id || !isKnown(c)) continue;
+      if (NameMatch.same(name, c.ownName) || (c.nickname != null && NameMatch.same(name, c.nickname!))) return c.title;
+    }
+    return null;
+  }
+
+  /// فيه حد تاني ظاهر دلوقتي بنفس اسم [n]؟ (عشان نبيّن البصمة جنب الاسم)
+  bool nameShared(MeshNode n) => people.any((o) => o.id != n.id && NameMatch.same(o.name, n.name));
 
   /// تثبيت المحادثة فوق في القايمة.
   Future<void> setPinned(Conversation c, bool pinned) async {

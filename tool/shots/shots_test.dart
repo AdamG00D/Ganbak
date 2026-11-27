@@ -9,6 +9,7 @@ import 'package:wasl/core/storage/chat_store.dart';
 import 'package:wasl/core/storage/vault.dart';
 import 'package:flutter/material.dart';
 import 'package:wasl/features/chat/chat_page.dart';
+import 'package:wasl/features/chat/person_sheet.dart';
 import 'package:wasl/features/chat/core/chat_session.dart';
 import 'package:wasl/l10n/l10n.dart';
 import 'package:wasl/features/home/home_screen.dart';
@@ -118,6 +119,40 @@ void main() {
       Shots.phone(tester);
       await world(tester);
       await Shots.shoot(tester, 'chat-group', () => ChatPage(conversation: Sample.shilla));
+    });
+
+    // الهوية: اتنين بنفس الاسم، وحد باسم كريم بس مش هو، وصفحة "عنه"
+    testWidgets('identity', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      final r = hub.router!;
+      const mona2 = 'b0b1b2b3b4b5b6b7', fakeKarim = 'c0c1c2c3c4c5c6c7';
+      r.nodes[mona2] = MeshNode(mona2, Uint8List(32))
+        ..name = 'مُنى'
+        ..color = 3
+        ..cartoon = 20
+        ..hops = 1;
+      r.nodes[fakeKarim] = MeshNode(fakeKarim, Uint8List(32))
+        ..name = 'كريم'
+        ..color = 6
+        ..cartoon = 9
+        ..hops = 2;
+      await Shots.shoot(tester, 'identity-nearby', () => const HomeScreen(kind: TransportKind.wifi), then: (t) async {
+        await t.tap(find.byType(NavigationDestination).at(2));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 500));
+        await t.drag(find.byType(Scrollable).last, const Offset(0, -600));
+        await t.pump(const Duration(milliseconds: 400));
+      });
+      final fake = hub.openDirect(fakeKarim)!;
+      await Shots.shoot(tester, 'identity-warning', () => ChatPage(conversation: fake));
+      await Shots.shoot(tester, 'identity-person', () => ChatPage(conversation: Sample.karimChat), then: (t) async {
+        showPersonSheet(t.element(find.byType(ChatPage)), Sample.karimChat);
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 600));
+      });
+      r.nodes.remove(mona2);
+      r.nodes.remove(fakeKarim);
     });
 
     // الرسالة تستنى صاحبها: كريم مش موجود، والكلام بس متاح

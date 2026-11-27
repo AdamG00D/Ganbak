@@ -844,5 +844,18 @@
   "shareFailed": "Couldn't prepare the app file. Close this screen and open it again.",
   "shareWhileOpen": "The page works only while this screen is open.",
   "guideShareTitle": "Share Wasl with someone who doesn’t have it",
-  "guideShareBody": "Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed."
+  "guideShareBody": "Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.",
+  "aboutPerson": "About",
+  "fingerprintTitle": "{name}’s fingerprint",
+  "fingerprintBody": "This pattern comes from their key and nobody else has it. If two people show up with the same name, it tells them apart.",
+  "nickname": "Give them a name of your own",
+  "nicknameTitle": "Your name for them",
+  "nicknameNone": "None",
+  "nicknameSet": "Shown to you as \"{name}\"",
+  "theirName": "Their own name: {name}",
+  "notHim": "Not them?",
+  "notHimSub": "New — not the {name} you talked to before",
+  "impostorWarning": "Careful: this isn’t the {name} you talked to before. If they changed phones or reinstalled, check the safety code together.",
+  "guideIdentityTitle": "Who is this really?",
+  "guideIdentityBody": "Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face."
 }

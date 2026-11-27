@@ -2966,4 +2966,55 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guideShareBody =>
       'Settings → \"Share Wasl\": tap \"Start a Wasl network\", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.';
+
+  @override
+  String get aboutPerson => 'About';
+
+  @override
+  String fingerprintTitle(String name) {
+    return '$name’s fingerprint';
+  }
+
+  @override
+  String get fingerprintBody =>
+      'This pattern comes from their key and nobody else has it. If two people show up with the same name, it tells them apart.';
+
+  @override
+  String get nickname => 'Give them a name of your own';
+
+  @override
+  String get nicknameTitle => 'Your name for them';
+
+  @override
+  String get nicknameNone => 'None';
+
+  @override
+  String nicknameSet(String name) {
+    return 'Shown to you as \"$name\"';
+  }
+
+  @override
+  String theirName(String name) {
+    return 'Their own name: $name';
+  }
+
+  @override
+  String get notHim => 'Not them?';
+
+  @override
+  String notHimSub(String name) {
+    return 'New — not the $name you talked to before';
+  }
+
+  @override
+  String impostorWarning(String name) {
+    return 'Careful: this isn’t the $name you talked to before. If they changed phones or reinstalled, check the safety code together.';
+  }
+
+  @override
+  String get guideIdentityTitle => 'Who is this really?';
+
+  @override
+  String get guideIdentityBody =>
+      'Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.';
 }

@@ -12,6 +12,7 @@ import '../../mesh/mesh_link.dart';
 import '../../mesh/mesh_router.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/focus_guard.dart';
+import '../../widgets/fingerprint.dart';
 import '../../widgets/identity.dart';
 import '../../widgets/ui.dart';
 import '../chat/chat_page.dart';
@@ -1018,6 +1019,10 @@ class _PersonRow extends StatelessWidget {
     final p = context.palette;
     final n = node;
     final relays = n.hops - 1;
+    final hub = ChatHub.instance;
+    final title = hub.directFor(n.id)?.title ?? n.name;
+    final shared = hub.nameShared(n);
+    final impostor = hub.impostorOf(n.id, n.name);
     return InkWell(
       onTap: () {
         final chat = ChatHub.instance.openDirect(n.id);
@@ -1033,13 +1038,46 @@ class _PersonRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    n.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15.5),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15.5),
+                        ),
+                      ),
+                      // اتنين بنفس الاسم: نقشة صغيرة من البصمة تفرّق بينهم
+                      if (shared) ...[
+                        const SizedBox(width: 6),
+                        Fingerprint(id: n.id, size: 18, framed: false),
+                      ],
+                      if (impostor != null) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: p.warning.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            context.l10n.notHim,
+                            style: TextStyle(color: p.warning, fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 2),
+                  if (impostor != null)
+                    Text(
+                      context.l10n.notHimSub(impostor),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: p.warning, fontSize: 12.5),
+                    )
+                  else
                   Row(
                     children: [
                       Icon(relays == 0 ? Icons.near_me_rounded : Icons.hub_outlined, size: 12.5, color: p.textMuted),

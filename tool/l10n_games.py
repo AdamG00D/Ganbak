@@ -351,6 +351,20 @@ S = {
     'shareWhileOpen': ('الصفحة شغالة بس طول ما الشاشة دي مفتوحة.', 'The page works only while this screen is open.'),
     'guideShareTitle': ('شارك وصل مع حد مفيهوش', 'Share Wasl with someone who doesn’t have it'),
     'guideShareBody': ('من الإعدادات ← "شارك وصل": دوس "افتح شبكة وصل" وصاحبك يصوّر الكود الأول عشان يدخل شبكتك، وبعدين يصوّر التاني فتفتحله صفحة يحمّل منها التطبيق من موبايلك على طول — من غير إنترنت.', 'Settings → "Share Wasl": tap "Start a Wasl network", your friend scans the first code to join your network, then the second one opens a page where they download the app straight from your phone — no internet needed.'),
+    # ---------------- الهوية: البصمة والاسم والتحذير ----------------
+    'aboutPerson': ('عنه', 'About'),
+    'fingerprintTitle': ('بصمة {name}', '{name}’s fingerprint'),
+    'fingerprintBody': ('النقشة دي جاية من مفتاحه ومحدش غيره ليه زيها. لو ظهر اتنين بنفس الاسم، النقشة بتفرّق بينهم.', 'This pattern comes from their key and nobody else has it. If two people show up with the same name, it tells them apart.'),
+    'nickname': ('سمّيه عندك باسم تاني', 'Give them a name of your own'),
+    'nicknameTitle': ('الاسم عندك', 'Your name for them'),
+    'nicknameNone': ('مفيش', 'None'),
+    'nicknameSet': ('هيظهر عندك باسم "{name}"', 'Shown to you as "{name}"'),
+    'theirName': ('اسمه عنده: {name}', 'Their own name: {name}'),
+    'notHim': ('مش هو؟', 'Not them?'),
+    'notHimSub': ('جديد — مش {name} اللي كلمته قبل كده', 'New — not the {name} you talked to before'),
+    'impostorWarning': ('انتبه: ده مش {name} اللي كلمته قبل كده. لو غيّر موبايله أو مسح التطبيق، اتأكدوا من رمز الأمان.', 'Careful: this isn’t the {name} you talked to before. If they changed phones or reinstalled, check the safety code together.'),
+    'guideIdentityTitle': ('مين ده فعلاً؟', 'Who is this really?'),
+    'guideIdentityBody': ('الأسامي في وصل حرة وممكن تتكرر، بس كل واحد ليه "بصمة" من مفتاحه (من قايمة الشات ← عنه). لو ظهر اتنين بنفس الاسم بتظهر نقشة صغيرة جنب كل واحد، ولو حد ظهر باسم واحد كلمته قبل كده بس مش هو، وصل بيقولك "مش هو؟". وتقدر تسمّي أي حد عندك باسم من عندك. الحماية المضمونة: رمز الأمان وجهاً لوجه.', 'Names in Wasl are free and can repeat, but everyone has a "fingerprint" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says "Not them?". You can also give anyone a name of your own. The sure way: the safety code, face to face.'),
 }
 
 

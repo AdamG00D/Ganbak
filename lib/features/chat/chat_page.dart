@@ -20,6 +20,7 @@ import '../hub/chat_hub.dart';
 import 'call/call_controller.dart';
 import 'core/chat_link.dart';
 import 'core/chat_session.dart';
+import 'person_sheet.dart';
 import 'widgets/chat_input.dart';
 import 'widgets/chat_widgets.dart';
 
@@ -438,6 +439,10 @@ class _ChatPageState extends State<ChatPage> {
         await _hub.setPinned(c, !c.pinned);
       case 'code':
         if (_s.safetyCode != null) await _showSafetyCode();
+      case 'about':
+        if (c is DirectChat) {
+          await showPersonSheet(context, c, onVerify: _s.safetyCode == null ? null : _showSafetyCode);
+        }
       case 'info':
         if (c is GroupChat) await GroupInfoScreen.open(context, c);
       case 'clear':
@@ -717,6 +722,8 @@ class _ChatPageState extends State<ChatPage> {
             }();
 
             final canSend = alive && s.canSend;
+            // باسم واحد أعرفه بس مش هو
+            final impostor = alive && direct != null ? _hub.impostorOf(direct.peerId, direct.ownName) : null;
             // مش موجود بس نعرف مفتاحه: الكلام يستنى صاحبه
             final queue = alive && !canSend && direct != null && _hub.canQueueFor(direct);
             return Column(
@@ -799,6 +806,11 @@ class _ChatPageState extends State<ChatPage> {
                                 value: 'info',
                                 child: _MenuRow(icon: Icons.groups_2_outlined, text: l.membersAndInfo),
                               ),
+                            if (direct != null)
+                              PopupMenuItem(
+                                value: 'about',
+                                child: _MenuRow(icon: Icons.badge_outlined, text: l.aboutPerson),
+                              ),
                             if (direct != null && s.safetyCode != null)
                               PopupMenuItem(
                                 value: 'code',
@@ -834,6 +846,8 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                     ],
                   ),
+                if (impostor != null)
+                  _Notice(icon: Icons.warning_amber_rounded, color: p.warning, text: l.impostorWarning(impostor)),
                 if (alive && direct != null && !direct.online && !_hub.isBlocked(direct.peerId))
                   _Notice(
                     icon: queue ? Icons.hourglass_top_rounded : Icons.cloud_off_rounded,
