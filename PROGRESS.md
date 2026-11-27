@@ -119,6 +119,14 @@ Notes:
 
 ## Decisions taken with the owner
 
+**Privacy (2026-11-27, for 1.6)** — owner: "who talks to whom" must not be visible. Agreed: private routing tags for
+direct chats / control messages (per-pair, rotating every 10 min, from a pair key), fixed-size padding, private
+groups' membership hidden (members announce a secret tag; only owner/admins advertise the group), offline messages
+with no sender/recipient in clear (carriers see a random envelope; recipient trial-opens), offline messages accepted
+from known people only by default (+ a setting), **group invites** (a member can invite someone into a group).
+Games: owner wants **everyone to play** (no narrator) — plan for cryptographic dealing sent to the owner, waiting.
+Order: privacy (1.6) first, then the Jisr library.
+
 **Releases (2026-11-27)** — publish **one GitHub release only: the latest version**, with notes covering everything
 since the last published release (1.2). 1.3 and 1.4 are built locally but are not to be published on their own.
 
