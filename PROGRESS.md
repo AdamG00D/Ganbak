@@ -64,7 +64,7 @@ card, a section with a drawing in the guide.
 | 3 | Offline messages ("the message waits for its owner") | done — see below |
 | 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | done — see below |
 | 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | done — social preview = `docs/images/banner.en.png` (already 1280×640, the owner uploads it in GitHub settings); `fastlane/metadata/android/{en-US,ar}` + `docs/FDROID.md` (**blocker: play-services-nearby is proprietary** — options there); `docs/AUDIT.md`; `docs/SIGNING.md` (proposal, waits for the owner) |
-| 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | todo |
+| 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | done — version 1.4.0+5, `release_notes/1.4v.*`, fastlane changelog 5, READMEs; **waiting for the owner's OK to build** |
 
 ### Step 3 — offline messages (done)
 
@@ -200,4 +200,7 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — 1.4 step 5 done (docs only). Owner asked for a new feature: "share Wasl" in Settings (two QR codes:
   the hotspot + a download page served from the phone). Plan agreed (network opens only on tap).
 - 2026-11-27 — "Share Wasl" done (see its section). Next: step 6 (docs, version 1.4, release notes), then ask to build.
+- 2026-11-27 — 1.4 step 6 done: version 1.4.0+5, release notes (ar/en), fastlane changelogs/5, READMEs. All checks
+  green. Waiting for: the owner's OK to build 1.4 (first build with compileSdk 37 — watch Gradle), the real-phone
+  test (1.3 + 1.4 features, especially Wasl network / Share Wasl addresses on different phones), publishing v1.3.
 

@@ -1,0 +1,4 @@
+• Messages wait for their owner: text for someone who isn't around is carried, sealed, by phones nearby.
+• SOS: ask everyone in the mesh for help.
+• Share Wasl: give the app to a phone without it, with two QR codes and no internet.
+• Wasl network: Wi-Fi QR code, and a suggestion when many people are on Bluetooth only.

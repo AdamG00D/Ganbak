@@ -2,7 +2,7 @@ name: wasl
 description: "Wasl — وَصْل: شات مشفّر من غير إنترنت (بلوتوث / واي فاي) مع جروبات وشبكة Mesh."
 publish_to: 'none'
 
-version: 1.3.0+4
+version: 1.4.0+5
 
 environment:
   sdk: ">=3.9.0 <4.0.0"

@@ -61,6 +61,11 @@ the phone's language, and you can switch it in Settings.
 - **Wasl network** — no router? Your phone makes its own Wi-Fi network and people next to you join with one tap, no
   password typing. Networks link up over Bluetooth, so the network grows with no router at all.
 - **Mesh** — messages hop through other phones (up to 6 hops); relays can't read private chats.
+- **Messages wait for their owner** — text for someone who isn't around is sealed for them and carried by phones
+  nearby until they show up (up to 48 hours); carriers can't read it.
+- **SOS** — ask everyone running Wasl in the mesh for help with one tap.
+- **Share Wasl** — give the app to a phone that doesn't have it, with no internet: two QR codes (join my network,
+  then download from my phone).
 - **Private chats** — end-to-end encrypted automatically, with an optional safety code to verify each other.
 - **Groups** — open, password-protected or join-by-request, with an owner and admins who can remove members and
   delete messages.
