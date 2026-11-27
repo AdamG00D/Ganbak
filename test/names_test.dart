@@ -15,8 +15,8 @@ void main() {
     expect(NameMatch.same('كـريم', 'كريم'), isTrue, reason: 'تطويل');
     expect(NameMatch.same('Adam', 'adam '), isTrue);
     expect(NameMatch.same('Аdam', 'Adam'), isTrue, reason: 'A روسي');
-    expect(NameMatch.same('Ad​am', 'Adam'), isTrue, reason: 'حرف مخفي');
-    expect(NameMatch.same('‮مدآ', 'مدآ'), isTrue, reason: 'علامة اتجاه');
+    expect(NameMatch.same('Ad\u200Bam', 'Adam'), isTrue, reason: 'حرف مخفي');
+    expect(NameMatch.same('\u202Eمدآ', 'مدآ'), isTrue, reason: 'علامة اتجاه');
     expect(NameMatch.same('آدم', 'أحمد'), isFalse);
     expect(NameMatch.same('', ''), isFalse, reason: 'الفاضي مش اسم');
   });
