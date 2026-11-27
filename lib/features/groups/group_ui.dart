@@ -14,12 +14,14 @@ String groupModeLabel(GroupMode m) => switch (m) {
       GroupMode.open => tr.modeOpen,
       GroupMode.password => tr.modePassword,
       GroupMode.ask => tr.modeAsk,
+      GroupMode.secret => tr.modeSecret,
     };
 
 IconData groupModeIcon(GroupMode m) => switch (m) {
       GroupMode.open => Icons.public_rounded,
       GroupMode.password => Icons.key_rounded,
       GroupMode.ask => Icons.how_to_reg_rounded,
+      GroupMode.secret => Icons.visibility_off_rounded,
     };
 
 /// نافذة إنشاء جروب جديد. بترجّع الجروب لو اتعمل.
@@ -85,6 +87,7 @@ class _CreateGroupSheetState extends State<_CreateGroupSheet> {
       GroupMode.open: l.modeOpenExplain,
       GroupMode.password: l.modePasswordExplain,
       GroupMode.ask: l.modeAskExplain,
+      GroupMode.secret: l.modeSecretExplain,
     };
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
@@ -186,6 +189,9 @@ Future<void> joinGroupFlow(BuildContext context, GroupAd ad) async {
         builder: (_) => _PasswordSheet(ad: ad),
       );
       if (g != null && context.mounted) await ChatPage.open(context, g);
+    case GroupMode.secret:
+      // السري مبيظهرش أصلاً — الدخول بدعوة بس
+      showToast(context, context.l10n.inviteOnly);
     case GroupMode.ask:
       if (hub.pendingJoins.contains(ad.id)) {
         final cancel = await confirmDialog(
@@ -431,7 +437,7 @@ Future<void> showMemberSheet(BuildContext context, GroupChat g, String id, {Stri
         icon: Icons.person_remove_outlined,
         title: context.l10n.kickTitle(name),
         message: switch (info.mode) {
-          GroupMode.ask => context.l10n.kickAsk,
+          GroupMode.ask || GroupMode.secret => context.l10n.kickAsk,
           GroupMode.password => context.l10n.kickPassword,
           GroupMode.open => context.l10n.kickOpen,
         },

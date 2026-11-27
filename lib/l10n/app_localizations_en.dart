@@ -3063,4 +3063,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get inviteRequestSent =>
       'Request sent to the group owner — you’re in once they accept';
+
+  @override
+  String get modeSecret => 'Secret';
+
+  @override
+  String get modeSecretExplain =>
+      'Nobody sees it under \"Groups around you\" and members stay hidden. People join only by an invite from you or an admin.';
+
+  @override
+  String get groupCreatedSecret =>
+      'You created a secret group. Nobody can see it — invite people from Group info → Invite someone.';
+
+  @override
+  String get inviteOnly => 'This group is invite-only';
 }

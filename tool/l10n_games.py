@@ -380,6 +380,11 @@ S = {
     'inviteNo': ('لأ شكراً', 'No thanks'),
     'invitedBy': ('بدعوة من {name}', 'Invited by {name}'),
     'inviteRequestSent': ('اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق', 'Request sent to the group owner — you’re in once they accept'),
+    # ---------------- الجروب السري ----------------
+    'modeSecret': ('سري', 'Secret'),
+    'modeSecretExplain': ('محدش يشوفه خالص في "الجروبات حواليك"، والأعضاء مخفيين. الدخول بدعوة منك أو من مدير بس.', 'Nobody sees it under "Groups around you" and members stay hidden. People join only by an invite from you or an admin.'),
+    'groupCreatedSecret': ('عملت جروب سري. محدش هيشوفه — ادعي الناس من بيانات الجروب ← ادعي حد.', 'You created a secret group. Nobody can see it — invite people from Group info → Invite someone.'),
+    'inviteOnly': ('الجروب ده بالدعوة بس', 'This group is invite-only'),
 }
 
 

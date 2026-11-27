@@ -5323,6 +5323,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق'**
   String get inviteRequestSent;
+
+  /// No description provided for @modeSecret.
+  ///
+  /// In ar, this message translates to:
+  /// **'سري'**
+  String get modeSecret;
+
+  /// No description provided for @modeSecretExplain.
+  ///
+  /// In ar, this message translates to:
+  /// **'محدش يشوفه خالص في \"الجروبات حواليك\"، والأعضاء مخفيين. الدخول بدعوة منك أو من مدير بس.'**
+  String get modeSecretExplain;
+
+  /// No description provided for @groupCreatedSecret.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملت جروب سري. محدش هيشوفه — ادعي الناس من بيانات الجروب ← ادعي حد.'**
+  String get groupCreatedSecret;
+
+  /// No description provided for @inviteOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجروب ده بالدعوة بس'**
+  String get inviteOnly;
 }
 
 class _AppLocalizationsDelegate

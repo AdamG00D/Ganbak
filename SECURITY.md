@@ -87,6 +87,13 @@ Joining one is always your choice (a tap, then Android's own prompt showing the 
 advertise a network of its own; joining it only moves Wasl's local traffic there — private chats stay end-to-end
 encrypted — and the offer is shown only for phones directly next to you.
 
+## Secret groups
+
+A **secret** group (1.6) is never advertised: nobody nearby sees its name, and its members — owner and admins
+included — announce it only as secret tags that change every 10 minutes. The only way in is an invite from the owner
+or an admin, which carries the group key sealed for the invitee. Like any group, a member with a modified app could
+still leak the key; removing someone changes the key.
+
 ## Messages that wait (offline messages)
 
 Text you write to someone who isn't around is sealed for that person alone and carried by phones near you for up to

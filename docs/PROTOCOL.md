@@ -93,7 +93,8 @@ like ids, so any relay forwards them; routes are learned for tags like for ids. 
 without `pr` (1.5) still get plain ids. Encrypted direct-chat payloads and group packets carry a `pd` filler so the
 sealed size is 256, 1024 or a multiple of 4096 bytes.
 
-**Hidden group membership (1.6)** — in password / join-request groups, a member who isn't owner or admin doesn't put
+**Hidden group membership (1.6)** — in secret groups every member, and in password / join-request groups a member
+who isn't owner or admin, doesn't put
 the group ad in `g`; it puts `gt: [{t, h}]` with `t = HMAC-SHA256(group key, "wasl/group-tag/v1|" + member id + "|" +
 e)[0..8]` (different per member, rotating every 10 minutes) and `h` = the admin-state digest XOR
 `HMAC-SHA256(group key, "wasl/group-digest/v1|" + t)`. Members recognise each other; outsiders see random tags. Owner and
@@ -153,6 +154,7 @@ Body of a `G` frame = `base64(AES-256-GCM(groupKey, json))`, aad `wasl/group/v1|
 | open (`o`) | `SHA-256("wasl-open-group\|" + id)` — public by design |
 | password (`p`) | `Argon2id(password, salt = SHA-256("wasl-group-salt\|" + id)[0..16])` |
 | join request (`a`) | random 32 bytes, handed over with `gk` |
+| secret (`s`, 1.6) | random 32 bytes, handed over only inside an invite (`gi`) from the owner or an admin. Never advertised: every member, owner and admins included, announces it only as a hidden `gt` tag. Rotates on kick like `a`. |
 
 `check` = `HKDF(key, "wasl/group/check", 8 bytes)` hex; used to validate a password or a granted key.
 

@@ -172,6 +172,21 @@ void main() {
       await Shots.shoot(tester, 'invite-button', () => GroupInfoScreen(group: Sample.shilla));
     });
 
+    testWidgets('create group', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      Future<void> open(WidgetTester t) async {
+        showCreateGroupSheet(t.element(find.byType(Scaffold).first));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 600));
+      }
+      await Shots.shoot(tester, 'group-create', () => const Scaffold(body: SizedBox.expand()), then: open);
+      Shots.textScale = 1.3;
+      await Shots.shoot(tester, 'group-create.big', () => const Scaffold(body: SizedBox.expand()),
+          then: open, themes: const [Brightness.light]);
+      Shots.textScale = 1;
+    });
+
     // الرسالة تستنى صاحبها: كريم مش موجود، والكلام بس متاح
     testWidgets('chat away', (tester) async {
       Shots.phone(tester);

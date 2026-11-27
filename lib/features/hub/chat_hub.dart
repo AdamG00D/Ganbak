@@ -580,7 +580,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /// عضويتي في الجروب ده مخفية؟ (جروب خاص وأنا مش صاحبه ولا مدير)
-  bool _hiddenIn(GroupChat g) => g.info.mode != GroupMode.open && !g.iAmAdmin;
+  bool _hiddenIn(GroupChat g) =>
+      g.info.mode == GroupMode.secret || (g.info.mode != GroupMode.open && !g.iAmAdmin);
 
   Map<String, dynamic> _hiddenAd(GroupChat g) {
     final key = g.info.key;
@@ -922,6 +923,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       GroupMode.open => tr.groupCreatedOpen,
       GroupMode.password => tr.groupCreatedPassword,
       GroupMode.ask => tr.groupCreatedAsk,
+      GroupMode.secret => tr.groupCreatedSecret,
     });
     return chat;
   }
@@ -940,6 +942,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         if (!await GroupInfo.matches(ad, key)) return (null, tr.wrongPassword);
       case GroupMode.ask:
         return (null, tr.groupNeedsApproval);
+      case GroupMode.secret:
+        return (null, tr.inviteOnly);
     }
     return (await _enter(await GroupInfo.fromAd(ad, key), announce: true), null);
   }
@@ -963,7 +967,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /// أقدر أدعي حد للجروب ده؟ أي عضو — وفي جروب بطلب انضمام الدخول بيحتاج موافقة صاحبه (إلا لو هو اللي دعا).
-  bool canInvite(GroupChat g) => true;
+  bool canInvite(GroupChat g) => g.info.mode != GroupMode.secret || g.iAmAdmin;
 
   /// يبعت دعوة لـ [peer] يدخل [g] — مقفولة بمفتاح مشترك بيننا، وفيها مفتاح الجروب (يدخل من غير باسورد).
   /// في جروب بطلب انضمام الدعوة من صاحبه = موافقة مقدّماً. يرجّع رسالة خطأ أو null.
@@ -973,13 +977,17 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     if (r == null || node == null || !r.reachable(peer)) return tr.ownerOffline;
     if (!canInvite(g) || g.info.banned.contains(peer)) return tr.sendRequestFailed;
     try {
-      final preApproved = g.info.mode == GroupMode.ask && g.iAmOwner;
+      // الدعوة = موافقة: من صاحب جروب بطلب انضمام، أو من صاحب/مدير جروب سري
+      final preApproved = (g.info.mode == GroupMode.ask && g.iAmOwner) || (g.info.mode == GroupMode.secret && g.iAmAdmin);
       if (preApproved && !g.info.members.contains(peer)) {
         g.info
           ..members.add(peer)
           ..bump();
         await _saveGroup(g);
-        await _broadcastOp(g, g.info.stateOp(withKey: false));
+        await _broadcastOp(
+          g,
+          g.iAmOwner ? g.info.stateOp(withKey: false) : {'op': 'add', 'id': peer, 'rev': g.info.rev},
+        );
       }
       final pair = await Box.pairKey(_me.keyPair, node.publicKey, 'wasl/group-invite');
       final body = jsonEncode({
@@ -1025,6 +1033,11 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
           // من صاحب الجروب: فيها المفتاح (موافقة مقدّماً) • من عضو: من غير مفتاح، والقبول = طلب انضمام لصاحبه
           final k = ad.owner == src ? Sign.key(m['k']) : null;
           key = k == null ? null : Uint8List.fromList(k);
+        case GroupMode.secret:
+          // الدعوة لازم يبقى فيها المفتاح، ومطابق لبصمة الجروب اللي في الدعوة
+          final k = Sign.key(m['k']);
+          if (k == null || !await GroupInfo.matches(ad, k)) return;
+          key = Uint8List.fromList(k);
       }
       if (_groups.containsKey(gid) || invites.any((i) => i.ad.id == gid)) return;
       invites.add(GroupInvite(ad, key, src, node.name));
@@ -1136,7 +1149,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       ..members.remove(id)
       ..bump();
     await _broadcastOp(g, {'op': 'kick', 'id': id, 'rev': info.rev}, also: [id]);
-    if (info.mode == GroupMode.ask) {
+    if (info.mode.rotates) {
       await info.rotateKey();
       g.session.updateKey(info.key);
       final key = base64.encode(info.key);
@@ -1212,7 +1225,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   /// عشان المفتاح الجديد يتسلّم لهم بعد إزالة حد.
   void _onMemberSeen(GroupChat g, String id) {
     final info = g.info;
-    if (!g.iAmOwner || info.mode != GroupMode.ask || info.members.length >= GroupInfo.maxMembers) return;
+    if (!g.iAmOwner || !info.mode.rotates || info.members.length >= GroupInfo.maxMembers) return;
     if (info.banned.contains(id) || !info.members.add(id)) return;
     info.bump();
     _saveGroup(g);
@@ -1264,7 +1277,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         return;
       case GroupEffectKind.kicked:
         g.session.addSystem(tr.byKicked(by, who));
-      case GroupEffectKind.unbanned:
+      case GroupEffectKind.unbanned || GroupEffectKind.added:
         break;
       case GroupEffectKind.promoted:
         g.session.addSystem(e.target == myId ? tr.youBecameAdmin : tr.becameAdmin(who));

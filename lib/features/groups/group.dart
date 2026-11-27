@@ -168,11 +168,11 @@ class GroupInfo {
         'banned': banned.toList(),
         'members': members.toList(),
         'kr': keyRev,
-        if (withKey && mode == GroupMode.ask) 'key': base64.encode(key),
+        if (withKey && mode.rotates) 'key': base64.encode(key),
       };
 
   Future<bool> _takeKey(Object? raw, int rev) async {
-    if (mode != GroupMode.ask || raw is! String || rev <= keyRev) return false;
+    if (!mode.rotates || raw is! String || rev <= keyRev) return false;
     final Uint8List k;
     try {
       k = base64.decode(raw);
@@ -203,6 +203,11 @@ class GroupInfo {
         admins.remove(target);
         members.remove(target);
         effect = GroupEffect(target == myId ? GroupEffectKind.removedMe : GroupEffectKind.kicked, target: target);
+      case 'add':
+        // مدير دعا حد لجروب سري / بطلب انضمام (الدعوة من مدير = موافقة)
+        if (!MeshRouter.isId(target) || banned.contains(target) || members.length >= maxMembers) return null;
+        if (!members.add(target)) return null;
+        effect = GroupEffect(GroupEffectKind.added, target: target);
       case 'unban':
         if (!MeshRouter.isId(target) || !banned.remove(target)) return null;
         effect = GroupEffect(GroupEffectKind.unbanned, target: target);
@@ -230,6 +235,11 @@ class GroupInfo {
           // أنا صاحب الجروب: من المدير باخد اللي شالهم بس، ونسختي هي اللي بتمشي بعدها
           final before = banned.length;
           banned.addAll(newBans.where((b) => !admins.contains(b)).take(maxBanned - banned.length));
+          // والأعضاء اللي المديرين ضافوهم بدعوة
+          for (final m in _ids(op['members'], maxMembers)) {
+            if (members.length >= maxMembers) break;
+            if (!banned.contains(m)) members.add(m);
+          }
           members.removeAll(banned);
           if (opRev >= rev || banned.length != before) rev = (opRev > rev ? opRev : rev) + 1;
         } else {
@@ -289,7 +299,7 @@ class GroupInfo {
     final key = switch (mode) {
       GroupMode.open => await openKey(id),
       GroupMode.password => await passwordKey(id, password ?? ''),
-      GroupMode.ask => Kdf.randomBytes(32),
+      GroupMode.ask || GroupMode.secret => Kdf.randomBytes(32),
     };
     return GroupInfo(
       id: id,
@@ -298,7 +308,7 @@ class GroupInfo {
       owner: owner,
       key: key,
       check: await checkOf(key),
-      members: mode == GroupMode.ask ? {owner} : null,
+      members: mode.rotates ? {owner} : null,
     );
   }
 
@@ -325,6 +335,9 @@ enum GroupEffectKind {
   /// أنا اللي اتشلت من الجروب.
   removedMe,
   kicked,
+
+  /// مدير ضاف حد بدعوة.
+  added,
   unbanned,
   promoted,
   demoted,

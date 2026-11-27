@@ -21,10 +21,16 @@ enum GroupMode {
   password('p'),
 
   /// خاص بطلب انضمام (صاحب الجروب بيوافق).
-  ask('a');
+  ask('a'),
+
+  /// سري: محدش يشوفه خالص، والدخول بدعوة من صاحبه أو مدير بس (1.6).
+  secret('s');
 
   const GroupMode(this.wire);
   final String wire;
+
+  /// مفتاحه عشوائي وبيتغير لما حد يتشال (بطلب انضمام / سري).
+  bool get rotates => this == ask || this == secret;
 
   static GroupMode? fromWire(Object? w) {
     for (final m in values) {

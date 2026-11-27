@@ -3028,4 +3028,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get inviteRequestSent => 'اتبعت طلب لصاحب الجروب — هتدخل أول ما يوافق';
+
+  @override
+  String get modeSecret => 'سري';
+
+  @override
+  String get modeSecretExplain =>
+      'محدش يشوفه خالص في \"الجروبات حواليك\"، والأعضاء مخفيين. الدخول بدعوة منك أو من مدير بس.';
+
+  @override
+  String get groupCreatedSecret =>
+      'عملت جروب سري. محدش هيشوفه — ادعي الناس من بيانات الجروب ← ادعي حد.';
+
+  @override
+  String get inviteOnly => 'الجروب ده بالدعوة بس';
 }

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wasl/core/crypto/box.dart';
 import 'package:wasl/core/crypto/kdf.dart';
 import 'package:wasl/core/profile/profile.dart';
+import 'package:wasl/features/groups/group.dart';
 import 'package:wasl/features/groups/group_tags.dart';
 import 'package:wasl/mesh/mesh_router.dart';
 import 'package:wasl/mesh/route_tags.dart';
@@ -96,5 +97,26 @@ void main() {
     final hidden = GroupTags.hideDigest(key, t1, '1a2b3c4d');
     expect(hidden, isNot('1a2b3c4d'));
     expect(GroupTags.showDigest(key, t1, hidden), '1a2b3c4d');
+  });
+
+  test('الجروب السري: مفتاحه عشوائي، والمدير يضيف بدعوة، وصاحب الجروب بيحتفظ بالإضافة', () async {
+    const owner = 'aaaaaaaaaaaaaaa1', admin = 'aaaaaaaaaaaaaaa2', guest = 'aaaaaaaaaaaaaaa3', member = 'aaaaaaaaaaaaaaa4';
+    final info = await GroupInfo.create(name: 'السر', mode: GroupMode.secret, owner: owner);
+    expect(info.mode.rotates, isTrue);
+    expect(info.key, isNot(await GroupInfo.openKey(info.id)));
+    info.admins.add(admin);
+    // عند عضو عادي: المدير ضاف حد
+    final effect = await info.apply(admin, {'op': 'add', 'id': guest, 'n': 1, 'rev': info.rev + 1}, myId: member);
+    expect(effect?.kind, GroupEffectKind.added);
+    expect(info.members, contains(guest));
+    // عضو عادي ميقدرش يضيف
+    final copy = await GroupInfo.create(name: 'السر', mode: GroupMode.secret, owner: owner);
+    expect(await copy.apply(member, {'op': 'add', 'id': guest, 'n': 1}, myId: owner), isNull);
+    // صاحب الجروب بياخد الإضافة من حالة المدير
+    final mine = await GroupInfo.create(name: 'السر', mode: GroupMode.secret, owner: owner);
+    mine.admins.add(admin);
+    final state = info.stateOp(withKey: false)..['n'] = 5;
+    await mine.apply(admin, state, myId: owner);
+    expect(mine.members, contains(guest));
   });
 }

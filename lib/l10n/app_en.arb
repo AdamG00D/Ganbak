@@ -870,5 +870,9 @@
   "inviteJoin": "Join",
   "inviteNo": "No thanks",
   "invitedBy": "Invited by {name}",
-  "inviteRequestSent": "Request sent to the group owner — you’re in once they accept"
+  "inviteRequestSent": "Request sent to the group owner — you’re in once they accept",
+  "modeSecret": "Secret",
+  "modeSecretExplain": "Nobody sees it under \"Groups around you\" and members stay hidden. People join only by an invite from you or an admin.",
+  "groupCreatedSecret": "You created a secret group. Nobody can see it — invite people from Group info → Invite someone.",
+  "inviteOnly": "This group is invite-only"
 }
