@@ -117,6 +117,22 @@ Notes:
 
 ## Decisions taken with the owner
 
+**Releases (2026-11-27)** — publish **one GitHub release only: the latest version**, with notes covering everything
+since the last published release (1.2). 1.3 and 1.4 are built locally but are not to be published on their own.
+
+**Identity (2026-11-27)** — no usernames (nothing can reserve a name without a server). Display names are free and may
+repeat; identity = key. Agreed: signed names / group messages with a **new id format** (v2 = hash of X25519 + Ed25519
+keys; breaks compatibility with older versions — fine while users are few), a key "fingerprint" drawn as a small
+khayamiya pattern (profile + verification only; a tiny mark next to a name only when two visible people share it), a
+warning when a known person's name appears with another key, local nicknames, the existing "verified" badge.
+Order: identity/signing first (1.5), then the Bluetooth library.
+
+**Bluetooth library (2026-11-27)** — our own open-source replacement for Google Nearby: BLE discovery, L2CAP CoC
+(Android 10+) / GATT fallback (7–9), upgrade to Wi-Fi (LAN, Wasl network, Wi-Fi Direct, Wi-Fi Aware), link encryption.
+Kotlin library + Flutter plugin, own repo, Apache-2.0, name **Jisr** (free on pub.dev / GitHub), described as "an
+open-source alternative to Google Nearby Connections" so people find it. Owner's test phones: Samsung (several) + one
+old Realme.
+
 **Games (1.3)** — entry point is a 🎮 button in the chat input bar; it opens a sheet with the games that fit the chat
 (direct = 2 players, group = group games). An invite card lands in the chat; in groups whoever wants to play taps
 "join" and the creator taps "start". Result card + rematch at the end. Every game screen and every game tile has a
