@@ -59,12 +59,12 @@ card, a section with a drawing in the guide.
 
 | # | Step | State |
 |---|------|-------|
-| 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — **gradle/compile not verified until the next build** |
+| 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — verified by the 1.4 build |
 | 2 | SOS: emergency status in presence (`sos {t}`), banner + generic notification for everyone in the mesh, card in Nearby, guide entry | done (`lib/features/sos/`) |
 | 3 | Offline messages ("the message waits for its owner") | done — see below |
 | 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | done — see below |
 | 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | done — social preview = `docs/images/banner.en.png` (already 1280×640, the owner uploads it in GitHub settings); `fastlane/metadata/android/{en-US,ar}` + `docs/FDROID.md` (**blocker: play-services-nearby is proprietary** — options there); `docs/AUDIT.md`; `docs/SIGNING.md` (proposal, waits for the owner) |
-| 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | done — version 1.4.0+5, `release_notes/1.4v.*`, fastlane changelog 5, READMEs; **waiting for the owner's OK to build** |
+| 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | done — **1.4 built** (`Releases/1.4v`, versionCode 5, same certificate as 1.2/1.3) |
 
 ### Step 3 — offline messages (done)
 
@@ -208,4 +208,10 @@ a phone's large-font setting): any text that spills out of its box fails the run
   seen window), carriers check `sk` hashes to `f`, seen ids / pending receipts capped; SECURITY notes that the
   "drop your copy" note isn't authenticated (delay only). Fixed a flaky quiz test that was a real overflow: a long
   category name in the quiz header on a 360-px phone.
+- 2026-11-27 — 1.4 built with the owner's OK from 280836a: 4 APKs + SHA256SUMS in `Releases/1.4v`, certificate
+  SHA-256 fa4ecf16…c341 (same as 1.3), versionCode 5, compileSdk 37 / targetSdk 36. The first try failed in
+  `android_file_picker` 2.2.1 ("Unresolved reference LostDataStore") — a stale Gradle cache after the dependency
+  update; `flutter clean` fixed it. **After a dependency update, run `flutter clean` before building.**
+  Not published yet (neither v1.3 nor v1.4). Left for the owner: publish, social preview, F-Droid choice, signing
+  design, external audit, real-phone test.
 
