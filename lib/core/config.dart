@@ -3,7 +3,7 @@ class AppConfig {
 
   static const String appName = 'Wasl';
   static const String appNameAr = 'وَصْل';
-  static const String appVersion = '1.4';
+  static const String appVersion = '1.5';
 
   /// صفحة الكود (مفتوح المصدر، GPL-3.0).
   static const String repoUrl = 'https://github.com/AdamG00D/Wasl';

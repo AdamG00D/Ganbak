@@ -1,0 +1,4 @@
+• Signed identity: names and group messages can't be faked; fingerprints, "Not them?" warnings, nicknames.
+• Messages wait for their owner, SOS, Share Wasl (two QR codes, no internet).
+• Wasl network, games in chats, new look and guide.
+• 1.5 can't talk to older versions — everyone should update.

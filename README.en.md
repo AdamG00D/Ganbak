@@ -68,6 +68,8 @@ the phone's language, and you can switch it in Settings.
 - **Share Wasl** — give the app to a phone that doesn't have it, with no internet: two QR codes (join my network,
   then download from my phone).
 - **Private chats** — end-to-end encrypted automatically, with an optional safety code to verify each other.
+- **Nobody can speak for you** — names and group messages are signed; everyone has a key fingerprint, and Wasl warns
+  you ("Not them?") when someone shows up with the name of a person you know but another key.
 - **Groups** — open, password-protected or join-by-request, with an owner and admins who can remove members and
   delete messages.
 - **Everything you'd expect from a chat app** — photos, files, voice notes, replies, edits, delete for everyone,

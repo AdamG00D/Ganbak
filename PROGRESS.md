@@ -242,4 +242,9 @@ a phone's large-font setting): any text that spills out of its box fails the run
   of a genuine old group message noted in SECURITY. **No migration**: 1.5 can't talk to older versions; old saved chats
   stay readable but won't reconnect; old groups must be created again (say so in the release notes).
   Repo description/topics updated (owner OK). Next: website (GitHub Pages), version 1.5 + one release note since 1.2.
+- 2026-11-27 — website live: https://adamg00d.github.io/Wasl/ (ar) + /en/, built by `tool/site.py` into `site/`,
+  published by `.github/workflows/pages.yml` (Pages enabled via API, build type "workflow"); SEO: title/description,
+  hreflang, Open Graph, JSON-LD SoftwareApplication + FAQPage, sitemap, robots. Repo homepage → the site. Owner still
+  has to add it to Google Search Console. Version 1.5.0+6, release notes 1.5v (ar/en) cover everything since 1.2
+  (one release only, owner's rule), fastlane changelogs/6. All checks green. Not built yet — waiting for the owner.
 
