@@ -55,6 +55,31 @@ void main() {
     expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: renamed), isNull);
   });
 
+  test('رسالة قديمة (أقدم من 3 أيام) متتقبلش — محدش يعيدها بعد ما ننساها', () async {
+    final old = await MailCrypto.seal(
+      me: a.keyPair,
+      myKey: a.publicKey,
+      myId: a.id,
+      myName: a.name,
+      to: b.id,
+      recipientKey: b.publicKey,
+      text: 'قديمة',
+      at: DateTime.now().subtract(const Duration(days: 4)),
+    );
+    expect(await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: old), isNull);
+    final fresh = await MailCrypto.seal(
+      me: a.keyPair,
+      myKey: a.publicKey,
+      myId: a.id,
+      myName: a.name,
+      to: b.id,
+      recipientKey: b.publicKey,
+      text: 'جديدة',
+      at: DateTime.now().subtract(const Duration(days: 2)),
+    );
+    expect((await MailCrypto.open(me: b.keyPair, myKey: b.publicKey, myId: b.id, env: fresh))?.text, 'جديدة');
+  });
+
   test('الإيصال: بسمة بس تقدر تأكد الوصول لأحمد', () async {
     final env = await sealAtoB('أهلاً');
     final r = await MailCrypto.receipt(b.keyPair, b.id, a.publicKey, a.id, env.id);

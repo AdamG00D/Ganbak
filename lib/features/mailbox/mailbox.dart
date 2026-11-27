@@ -70,6 +70,9 @@ class MailCrypto {
   MailCrypto._();
 
   static const _info = 'wasl/mailbox/v1';
+
+  /// أقدم رسالة بنقبلها (نفس مدة تذكّر الرسايل اللي وصلت، عشان محدش يعيد رسالة قديمة).
+  static const maxAge = Duration(days: 3);
   static const maxText = 4000;
 
   static List<int> _aad(String from, String to, String id) => utf8.encode('$_info|$from|$to|$id');
@@ -147,7 +150,10 @@ class MailCrypto {
       if (m is! Map) return null;
       final t = m['t'], ts = m['ts'], n = m['n'];
       if (t is! String || t.trim().isEmpty || t.length > maxText) return null;
-      final sent = ts is num ? DateTime.fromMillisecondsSinceEpoch(ts.toInt()) : DateTime.now();
+      // من غير وقت، أو أقدم من اللي بنفتكره (3 أيام): ممكن تكون رسالة قديمة بتتعاد — بنرميها
+      if (ts is! num) return null;
+      final sent = DateTime.fromMillisecondsSinceEpoch(ts.toInt());
+      if (DateTime.now().difference(sent) > maxAge) return null;
       final name = n is String ? Profile.cleanName(n) : '';
       return MailMessage(id: env.id, text: t, sentAt: sent.isAfter(DateTime.now()) ? DateTime.now() : sent, name: name);
     } catch (_) {
@@ -277,6 +283,8 @@ class MailService {
   final Map<String, DateTime> _tried = {};
 
   static const maxPerPeer = 50;
+  static const maxSeen = 5000;
+  static const maxPendingReceipts = 500;
   static Duration resendEvery = const Duration(seconds: 20);
 
   /// يقفل رسالة لـ [to] ويحطها في الانتظار. يرجّع رقمها.
@@ -353,8 +361,13 @@ class MailService {
     final env = Envelope.fromWire(m);
     if (env == null || (isBlocked?.call(env.from) ?? false)) return;
     if (env.to != myId) {
-      // بنشيل بس من اللي جنبنا مباشرة (محدش يملا موبايلات بعيدة)
+      // بنشيل بس من اللي جنبنا مباشرة (محدش يملا موبايلات بعيدة)، ولو مفتاح المرسل بيتهاش لمعرّفه
       if (router.nodes[src]?.hops != 1) return;
+      try {
+        if (await Profile.idOf(base64.decode(env.senderKey)) != env.from) return;
+      } catch (_) {
+        return;
+      }
       if (carry.add(env)) flush();
       return;
     }
@@ -365,11 +378,13 @@ class MailService {
     final mail = await MailCrypto.open(me: me, myKey: myKey, myId: myId, env: env);
     if (mail == null) return;
     _seen[env.id] = DateTime.now();
+    if (_seen.length > maxSeen) _seen.remove(_seen.keys.first);
     final senderKey = Uint8List.fromList(base64.decode(env.senderKey));
     onMail(env.from, senderKey, mail);
     if (src != env.from) _send(src, {'t': 'mbd', 'm': env.id});
     final sealed = await MailCrypto.receipt(me, myId, senderKey, env.from, env.id);
     _pendingReceipts[env.id] = (env.from, sealed);
+    if (_pendingReceipts.length > maxPendingReceipts) _pendingReceipts.remove(_pendingReceipts.keys.first);
     flush();
   }
 

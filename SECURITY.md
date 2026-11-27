@@ -88,7 +88,9 @@ Text you write to someone who isn't around is sealed for that person alone (thei
 phones near you for up to 48 hours. Carriers can't read it or change it unnoticed, but they do see **who wrote to
 whom, when and roughly how long** — the same metadata the mesh already shows for live chats. Delivery isn't
 guaranteed: carriers may drop messages, run out of room or never meet the recipient. "Delivered" appears only when a
-receipt sealed by the recipient comes back. Only text, and only to people whose key your phone already knows.
+receipt sealed by the recipient comes back. Only text, and only to people whose key your phone already knows. A nearby device can make carriers drop their
+copies early (the "delivered, drop it" note isn't authenticated) — that only delays or loses a message, it can't
+read or change it.
 
 ## Sharing the app ("Share Wasl")
 

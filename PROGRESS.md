@@ -203,4 +203,9 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — 1.4 step 6 done: version 1.4.0+5, release notes (ar/en), fastlane changelogs/5, READMEs. All checks
   green. Waiting for: the owner's OK to build 1.4 (first build with compileSdk 37 — watch Gradle), the real-phone
   test (1.3 + 1.4 features, especially Wasl network / Share Wasl addresses on different phones), publishing v1.3.
+- 2026-11-27 — owner: remove the release badge under the README banner (done), check security, then build 1.4.
+  Security pass on 1.4: offline messages now reject envelopes with no time or older than 3 days (replay after the
+  seen window), carriers check `sk` hashes to `f`, seen ids / pending receipts capped; SECURITY notes that the
+  "drop your copy" note isn't authenticated (delay only). Fixed a flaky quiz test that was a real overflow: a long
+  category name in the quiz header on a 360-px phone.
 

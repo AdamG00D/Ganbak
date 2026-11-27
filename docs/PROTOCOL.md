@@ -240,9 +240,11 @@ saved chat) can be written to this way. Code: `lib/features/mailbox/mailbox.dart
 - Sealing (one-way, like Noise X): `key = HKDF-SHA256(X25519(e, R) ‖ X25519(S, R), salt = e ‖ S ‖ R,
   info = "wasl/mailbox/v1")`, then AES-256-GCM with aad `wasl/mailbox/v1|f|to|m`. The clear text is JSON
   `{t: text (≤ 4000), ts: ms, n: sender name}`.
-- The recipient drops an envelope whose `sk` doesn't hash to `f`, or that doesn't open. Opening proves the holder of
+- The recipient drops an envelope whose `sk` doesn't hash to `f`, that doesn't open, or whose `ts` is missing or more
+  than 3 days old (the seen-ids window, so an old envelope can't be replayed later). Opening proves the holder of
   `S` wrote it for `R`; carriers only see `f`, `to`, `m` and the size.
-- **Carrying**: an envelope for someone else is kept only if it came from a direct neighbour (hops = 1). Limits per
+- **Carrying**: an envelope for someone else is kept only if it came from a direct neighbour (hops = 1) and `sk`
+  hashes to `f`. Limits per
   phone: 300 envelopes, 30 per sender, 2 MiB, 48 h; each one is delivered at most 3 times, 5 min apart. The sender
   hands each envelope to at most 8 neighbours, once each, and re-sends to the recipient every 20 s while reachable.
 - **Receipts** (`U {t: mbd, m, d?, ok?}`): the recipient answers a carrier with `{m}` (drop your copy — honoured only

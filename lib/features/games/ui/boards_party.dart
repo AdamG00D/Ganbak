@@ -383,13 +383,22 @@ class QuizBoard extends StatelessWidget {
       children: [
         Row(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: p.accentSoft, borderRadius: BorderRadius.circular(12)),
-              child: Text(_pick(context, v['cat']), style: TextStyle(color: p.accentInk, fontWeight: FontWeight.w700, fontSize: 12.5)),
+            // اسم الفئة ممكن يبقى طويل (أو جاي من صاحب الغرفة): بيتقص بدل ما يخرج برا الشاشة
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(color: p.accentSoft, borderRadius: BorderRadius.circular(12)),
+                child: Text(
+                  _pick(context, v['cat']),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: p.accentInk, fontWeight: FontWeight.w700, fontSize: 12.5),
+                ),
+              ),
             ),
             const SizedBox(width: 8),
             Text(l.quizQuestionOf('${index + 1}', '${v['count']}'), style: TextStyle(color: p.textMuted, fontSize: 12.5)),
+            const SizedBox(width: 8),
             const Spacer(),
             if (phase == 'q') CountdownChip(room: room),
           ],
