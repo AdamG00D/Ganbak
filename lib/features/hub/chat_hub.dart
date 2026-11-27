@@ -315,11 +315,12 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
   // ---------------- التشغيل ----------------
 
   /// يبدأ الشبكة على البلوتوث أو الواي فاي.
-  Future<void> start(TransportKind k) async {
+  /// [testLink]: للاختبارات وصور الشاشات بس (شبكة وهمية في الذاكرة) — التطبيق مبيبعتهاش أبداً.
+  Future<void> start(TransportKind k, {@visibleForTesting MeshLink? testLink}) async {
     await stop();
     await _store.load();
     kind = k;
-    final MeshLink l = switch (k) {
+    final MeshLink l = testLink ?? switch (k) {
       TransportKind.wifi => LanLink(myId),
       TransportKind.bluetooth => NearbyLink(myId),
       TransportKind.both => DualLink(myId),

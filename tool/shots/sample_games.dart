@@ -60,11 +60,14 @@ Future<void> _settle() => Future<void>.delayed(const Duration(milliseconds: 20))
 class GameSamples {
   GameSamples._();
 
+  /// اللاعبين التانيين بالترتيب (كريم، سلمى، منى، عمر، نور) — صور الـ README بتحط ناسها الحقيقيين.
+  static List<String> people = [Sample.karim, Sample.salma, Sample.mona, Sample.omar, Sample.nour];
+
   /// لعبة لاتنين: أنا وكريم. [hostMe] = أنا اللي فتحتها.
   static Future<(GameRoom mine, GameRoom theirs)> duel(String me, GameKind kind, {bool hostMe = true}) async {
     final net = GameNet();
     final a = net.add(me, 'آدم', group: false);
-    final b = net.add(Sample.karim, 'كريم', group: false);
+    final b = net.add(people[0], 'كريم', group: false);
     final host = hostMe ? a : b;
     final guest = hostMe ? b : a;
     final room = host.center.invite(kind)!;
@@ -183,7 +186,7 @@ class GameSamples {
   /// لعبة جروب: أنا + سلمى + كريم + منى (+ عمر ونور للمافيا).
   static Future<(GameRoom mine, GameNet net, String roomId)> party(String me, GameKind kind, {int players = 4}) async {
     final net = GameNet();
-    final ids = [me, Sample.karim, Sample.salma, Sample.mona, Sample.omar, Sample.nour].take(players).toList();
+    final ids = [me, ...people].take(players).toList();
     final names = ['آدم', 'كريم', 'سلمى', 'منى', 'عمر', 'نور'];
     for (var i = 0; i < ids.length; i++) {
       net.add(ids[i], names[i]);
@@ -212,7 +215,7 @@ class GameSamples {
       }
     } else {
       room.say('بتتاكل في الشارع');
-      net.peers[Sample.karim]!.center.rooms[id]!.say('ريحتها حلوة');
+      net.peers[people[0]]!.center.rooms[id]!.say('ريحتها حلوة');
       await _settle();
       room.act({'t': 'done'});
       await _settle();
@@ -226,7 +229,7 @@ class GameSamples {
     await _settle();
     if (answer) {
       final engine = room.engine! as QuizEngine;
-      for (final (pid, ok, ms) in [(me, true, 3000), (Sample.karim, false, 2000), (Sample.salma, true, 6000), (Sample.mona, true, 9000)]) {
+      for (final (pid, ok, ms) in [(me, true, 3000), (people[0], false, 2000), (people[1], true, 6000), (people[2], true, 9000)]) {
         final r = net.peers[pid]!.center.rooms[id]!;
         final i = ok ? engine.correct[0] : (engine.correct[0] + 1) % 4;
         r.local['ans0@0'] = i;
@@ -260,7 +263,7 @@ class GameSamples {
     }
     room.act({'t': 'skip'});
     await _settle();
-    net.peers[Sample.salma]!.center.rooms[id]!.say('أنا شاكة في كريم');
+    net.peers[people[1]]!.center.rooms[id]!.say('أنا شاكة في كريم');
     await _settle();
     return room;
   }

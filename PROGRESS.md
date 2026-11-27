@@ -25,11 +25,14 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 ### Still open for 1.3
 
 - **Build:** not done — ask the owner first (`./scripts/build_release.sh`).
-- **Real-phone test by the owner** (I can't run Bluetooth / Wi-Fi here): a direct game over Bluetooth and over Wi-Fi,
+- **Real-phone test by the owner — postponed by the owner (2026-11-27), do it before releasing** (I can't run
+  Bluetooth / Wi-Fi here): a direct game over Bluetooth and over Wi-Fi,
   a group game with 3+ phones (spy or mafia), leaving mid-game, the app in background during a game, and Arabic on one
   phone / English on the other.
-- **README images are out of date** (`docs/images/screenshots/*`, banners): the purple look. Retake them from a phone
-  (or render with `tool/shots/` + sample data) and regenerate the banners in the new colours.
+- README images: **done** — `flutter test tool/shots/readme_test.dart && python3 tool/shots/readme.py` renders the
+  README screenshots (Arabic in `docs/images/screenshots/`, English in `screenshots/en/`) and both banners from the
+  real screens, on an in-memory network of real peers (`tool/shots/sample_world.dart`, via `ChatHub.start(testLink:)`).
+  The GitHub social preview (`../wasl_social_preview*.png`, outside the repo, uploaded by hand) is still the old look.
 - Dice / coin in chat was dropped from this release (not asked for again).
 
 ## Next release: 1.4 — "Wasl network" (شبكة وصل)
@@ -103,3 +106,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — large-text pass (1.3×) added to the screenshot tool; fixed every overflow it found.
 - 2026-11-27 — step 7 done: docs/GAMES.md, PROTOCOL §8, SECURITY (en/ar) games section, READMEs, CONTRIBUTING,
   AGENTS.md, version 1.3.0+4, release notes. Waiting for the owner: real-phone test + OK to build.
+- 2026-11-27 — owner: postpone the phone test, don't build, tidy the repo, then start 1.4. Repo: new README
+  screenshots (ar + en) and banners in the new look, games/guide rows in the READMEs, CI runs the large-text check,
+  PR/bug templates mention screenshots and games. Next: 1.4 (Wasl network).

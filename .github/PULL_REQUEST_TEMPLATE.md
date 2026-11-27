@@ -6,6 +6,7 @@
 - [ ] `flutter analyze` — No issues found
 - [ ] `flutter test` — all passing / كله نجح
 - [ ] On real phones (Bluetooth / Wi-Fi / both) / على موبايلات حقيقية
+- [ ] UI change: `flutter test tool/shots/shots_test.dart` reviewed (ar/en, light/dark, big text) / راجعت صور الشاشات
 
 ## Notes / ملاحظات
 

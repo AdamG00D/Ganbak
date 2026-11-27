@@ -26,3 +26,4 @@ labels: bug
 - Phone model and Android version (both phones if it's between two) / الموبايل وإصدار أندرويد (للطرفين):
 - Connection / الاتصال: Bluetooth / Wi-Fi / hotspot / both
 - Private chat or group (which type)? / شات خاص ولا جروب (ونوعه)؟
+- In a game? Which one, and how many players? / في لعبة؟ أنهي واحدة وكام لاعب؟

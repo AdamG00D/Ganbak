@@ -27,10 +27,16 @@ the phone's language, and you can switch it in Settings.
 
 <table>
   <tr>
-    <td align="center"><img src="docs/images/screenshots/chats.png" width="200" alt="Chats"><br><sub>Chats &amp; groups</sub></td>
-    <td align="center"><img src="docs/images/screenshots/group-chat.png" width="200" alt="Group chat"><br><sub>Group: reactions, replies, mentions</sub></td>
-    <td align="center"><img src="docs/images/screenshots/direct-chat-dark.png" width="200" alt="Private chat"><br><sub>Private chat (dark theme)</sub></td>
-    <td align="center"><img src="docs/images/screenshots/nearby.png" width="200" alt="Nearby"><br><sub>Nearby people &amp; groups</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/chats.png" width="200" alt="Chats"><br><sub>Chats &amp; groups</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/group-chat.png" width="200" alt="Group chat"><br><sub>Group: reactions, replies, mentions</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/direct-chat-dark.png" width="200" alt="Private chat"><br><sub>Private chat (dark theme)</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/nearby.png" width="200" alt="Nearby"><br><sub>Nearby people &amp; groups</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/images/screenshots/en/games.png" width="200" alt="Games"><br><sub>Games inside chats 🎮</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/game-connect4.png" width="200" alt="Four in a row"><br><sub>Four in a row with a friend</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/game-mafia.png" width="200" alt="Mafia"><br><sub>Mafia with a group</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/guide.png" width="200" alt="Wasl guide"><br><sub>Wasl guide: connecting, drawn</sub></td>
   </tr>
 </table>
 
@@ -39,10 +45,10 @@ the phone's language, and you can switch it in Settings.
 <br>
 <table>
   <tr>
-    <td align="center"><img src="docs/images/screenshots/transport.png" width="200" alt="Choose Bluetooth, Wi-Fi or both"><br><sub>Bluetooth, Wi-Fi or both</sub></td>
-    <td align="center"><img src="docs/images/screenshots/group-info.png" width="200" alt="Group info"><br><sub>Group owner &amp; admins</sub></td>
-    <td align="center"><img src="docs/images/screenshots/member-sheet-dark.png" width="200" alt="Member actions"><br><sub>Tap a member</sub></td>
-    <td align="center"><img src="docs/images/screenshots/profile.png" width="200" alt="Profile"><br><sub>Profile &amp; cartoon avatars</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/transport.png" width="200" alt="Choose Bluetooth, Wi-Fi or both"><br><sub>Bluetooth, Wi-Fi or both</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/group-info.png" width="200" alt="Group info"><br><sub>Group owner &amp; admins</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/member-sheet-dark.png" width="200" alt="Member actions"><br><sub>Tap a member</sub></td>
+    <td align="center"><img src="docs/images/screenshots/en/profile.png" width="200" alt="Profile"><br><sub>Profile &amp; cartoon avatars</sub></td>
   </tr>
 </table>
 </details>

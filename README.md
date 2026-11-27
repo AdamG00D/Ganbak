@@ -30,6 +30,12 @@
     <td align="center"><img src="docs/images/screenshots/direct-chat-dark.png" width="200" alt="شات خاص"><br><sub>شات خاص (الوضع الغامق)</sub></td>
     <td align="center"><img src="docs/images/screenshots/nearby.png" width="200" alt="القريبين"><br><sub>الناس والجروبات القريبة</sub></td>
   </tr>
+  <tr>
+    <td align="center"><img src="docs/images/screenshots/games.png" width="200" alt="الألعاب"><br><sub>ألعاب جوه الشات 🎮</sub></td>
+    <td align="center"><img src="docs/images/screenshots/game-connect4.png" width="200" alt="أربعة في صف"><br><sub>أربعة في صف مع صاحبك</sub></td>
+    <td align="center"><img src="docs/images/screenshots/game-mafia.png" width="200" alt="المافيا"><br><sub>المافيا مع الجروب</sub></td>
+    <td align="center"><img src="docs/images/screenshots/guide.png" width="200" alt="دليل وصل"><br><sub>دليل وصل: الاتصال بالرسم</sub></td>
+  </tr>
 </table>
 
 <details>

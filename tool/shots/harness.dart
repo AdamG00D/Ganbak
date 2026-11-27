@@ -19,7 +19,7 @@ import 'package:wasl/l10n/l10n.dart';
 class Shots {
   Shots._();
 
-  static final out = Directory('build/shots');
+  static Directory out = Directory('build/shots');
   static bool _fonts = false;
 
   /// خط Plex + أيقونات Material + إيموجي (من النظام لو موجود).

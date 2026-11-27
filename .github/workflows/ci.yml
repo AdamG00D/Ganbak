@@ -22,3 +22,5 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
+      # فحص التصميم: الشاشات بخط كبير (1.3×) — أي كلام بيخرج برا مكانه بيوقّع الـ CI
+      - run: flutter test tool/shots/shots_test.dart --name big
