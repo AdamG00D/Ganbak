@@ -258,6 +258,7 @@ class MeshRouter extends ChangeNotifier {
   final Map<String, String> _verifiedPresence = {};
   final Map<String, Map<String, dynamic>> _presenceData = {};
   final Map<String, int> _presenceTime = {};
+  final Map<String, DateTime> _verifyAt = {};
 
   /// إعلاني المتوقّع (بيتجدد لما حاجة تتغير، أو كل [resignEvery]).
   String? _signedFor;
@@ -623,17 +624,24 @@ class MeshRouter extends ChangeNotifier {
       _verifiedKeys[src] = keys;
     }
     if (t < (_presenceTime[src] ?? 0)) return null;
+    // التأكد من التوقيع بياخد وقت: مرة كل نص ثانية بالكتير لكل جهاز (محدش يغرّقنا بإعلانات مزيفة)
+    final now = DateTime.now();
+    final last = _verifyAt[src];
+    if (last != null && now.difference(last) < const Duration(milliseconds: 500)) return null;
+    _verifyAt[src] = now;
     if (!await Sign.verify(sk, utf8.encode('wasl/presence/v2|$d'), outer['sg'])) return null;
     if (t < (_presenceTime[src] ?? 0)) return null;
     _presenceTime[src] = t;
     _verifiedPresence[src] = d;
     _presenceData[src] = inner;
+    if (_verifyAt.length > 2000) _verifyAt.remove(_verifyAt.keys.first);
     if (_presenceTime.length > 2000) {
       final old = _presenceTime.keys.first;
       _presenceTime.remove(old);
       _verifiedPresence.remove(old);
       _presenceData.remove(old);
       _verifiedKeys.remove(old);
+      _verifyAt.remove(old);
     }
     return inner;
   }

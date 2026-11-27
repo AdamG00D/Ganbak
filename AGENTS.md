@@ -61,7 +61,8 @@ lib/
   core/
     config.dart             ports, service id, version, repo URL
     nav.dart                rootNavigatorKey
-    crypto/                 kdf.dart (Argon2id/HKDF/SHA-256), box.dart (AES-GCM box, native for big payloads, pairKey)
+    crypto/                 kdf.dart (Argon2id/HKDF/SHA-256), box.dart (AES-GCM box, native for big payloads, pairKey),
+                            sign.dart (Ed25519)
     profile/profile.dart    Profile (name, color, avatar hash, static X25519 identity; id = sha256(pub)[0..8]),
                             ProfileStore, Avatars (small JPEGs stored by hash)
     settings/app_settings.dart   theme, accent, language, saveChats (default false), PIN lock
@@ -154,8 +155,11 @@ android/app/src/main/kotlin/com/adam/wasl/
   Unicast follows the neighbour the destination's last packet came through, else floods.
 - **Fragments**: a frame longer than `link.frameLimit(linkId)` goes out as `F|fid|i|n|part` (≤ 64 parts, in order,
   never routed) and is reassembled by the neighbour (≤ 256 KiB). Duplicate links to one node: higher `link.rank` wins.
-- **Identity**: node id = first 8 bytes of SHA-256(static X25519 public key), hex. Presence with a key that doesn't
-  hash to the id is dropped.
+- **Identity (v2, 1.5)**: X25519 + Ed25519 keys from one seed; node id = first 8 bytes of
+  SHA-256("wasl/id/v2" ‖ X25519 ‖ Ed25519), hex. Presence is signed (`{d, sg}`, `t` never goes back) and dropped if the
+  keys don't hash to the id or the signature fails. Group packets carry `xk`/`ek` + an Ed25519 signature (`fc`/`typ`
+  excepted). Names may repeat — compare ids; the UI shows a fingerprint (`widgets/fingerprint.dart`), a "Not them?"
+  warning (`ChatHub.impostorOf`, `core/profile/names.dart`) and nicknames (`ChatPrefs.nickname`).
 - **Private chat** (`secure_channel.dart`, protocol v1): hello carries an ephemeral key + the static identity key;
   keys = HKDF(ee ‖ ss). Both sides confirm with HMAC. AES-256-GCM with sequence numbers, heartbeat 5 s / lost after
   15 s. **Changing the wire format requires bumping `protocolVersion`.**

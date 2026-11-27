@@ -233,4 +233,13 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — owner: a security review is now required after every new feature (added to AGENTS.md). Owner set the
   GitHub social preview. Postponed: real-phone test, publishing, external audit. Owner to decide: F-Droid route
   (docs/FDROID.md) and signing design (docs/SIGNING.md).
+- 2026-11-27 — 1.5 identity done (parts 1–2 + docs): Ed25519 signing key from the seed, id v2 =
+  SHA-256("wasl/id/v2"‖X25519‖Ed25519)[0..8], signed presence `{d, sg}` with monotonic `t` (re-signed on change / 5 min,
+  verified once per `d`, ≤ 1 check per node per 0.5 s, SOS ignored if `t` > 30 min old), signed group packets
+  (`xk`/`ek`/`sg`, not `fc`/`typ`), mail envelopes carry `ek`. UI: fingerprint (`widgets/fingerprint.dart`), mark next
+  to repeated names, "Not them?" + chat warning (`impostorOf`, `NameMatch`), nicknames (person sheet "About").
+  Tests: identity_test, names_test (+ all old ones updated). Security review: presence-flood rate limit added; replay
+  of a genuine old group message noted in SECURITY. **No migration**: 1.5 can't talk to older versions; old saved chats
+  stay readable but won't reconnect; old groups must be created again (say so in the release notes).
+  Repo description/topics updated (owner OK). Next: website (GitHub Pages), version 1.5 + one release note since 1.2.
 

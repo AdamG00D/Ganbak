@@ -25,14 +25,15 @@ we can and, if you like, credit you in the release notes.
 
 These are known and documented so nobody relies on something that isn't there:
 
-1. **Names and avatars are not authenticated.** Presence proves that an id is the hash of the advertised key, but
-   the name, avatar and group list are not signed. A malicious device in the mesh can show a wrong name for someone
-   else's id. Private chats themselves are unaffected (keys are bound to the id) — when it matters,
-   **compare safety codes**.
-2. **Inside a group, members are not authenticated to each other.** Group messages are encrypted with one key shared
-   by all members. The app rejects a message whose claimed sender differs from its mesh source, but a member with a
-   modified client can forge the source too — so a malicious member can post as another member. (Admin commands are
-   not affected; they are authenticated.)
+1. **Names are not unique.** Since 1.5 a name, avatar and everything else someone announces is signed with their key,
+   so nobody can change it on the way. But anyone can *choose* any name — there is no server to reserve names. Wasl
+   compares keys, not names: it shows a small fingerprint next to two people with the same name and warns ("Not
+   them?") when someone shows the name of a person you talked to before with another key. The sure way is still to
+   **compare safety codes** face to face.
+2. **Group members can't post as each other** (since 1.5): every group message is signed by its sender, so having the
+   group key isn't enough to speak for someone else. File chunks and "typing…" aren't signed (the whole file is
+   checked against a signed fingerprint at the end). A member can still re-send an old message that someone really
+   wrote; it shows with its original time.
 3. **Open groups are not secret.** Their key is derived from the group id, so anyone nearby can read them. That is
    what "open" means.
 4. **Removing a member** re-keys **join-request** groups (a real removal). In **password** and **open** groups the

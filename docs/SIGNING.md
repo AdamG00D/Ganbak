@@ -1,6 +1,7 @@
 # Design: signed names and authenticated group messages
 
-**Status: proposal — not implemented. Needs the owner's OK before any code.** It addresses SECURITY.md limitations
+**Status: implemented in 1.5 with option (a), a new id format (owner's choice, 2026-11-27).** The wire format is in
+PROTOCOL.md §1, §3 and §5; this page keeps the reasoning. It addresses SECURITY.md limitations
 1 (names and avatars aren't authenticated) and 2 (group members can post as each other).
 
 ## Problem

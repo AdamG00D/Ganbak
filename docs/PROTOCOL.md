@@ -14,12 +14,18 @@ GroupSession  group-key encrypted broadcast             lib/features/groups/grou
 GroupOps      authenticated group admin commands        lib/features/groups/group.dart
 ```
 
-## 1. Identity
+## 1. Identity (v2, since 1.5)
 
-- Every profile has a static X25519 key pair derived from a random 32-byte seed.
-- **Node id** = hex of the first 8 bytes of `SHA-256(public key)` (16 hex chars).
-- Anything claiming an id must show the public key that hashes to it; the direct-chat handshake proves possession
-  of the private key.
+- Every profile has a random 32-byte seed. From it: a static **X25519** key pair (encryption, pair keys) and an
+  **Ed25519** key pair for signatures, seeded with `HKDF(seed, "wasl/sign/v1")`.
+- **Node id** = hex of the first 8 bytes of `SHA-256("wasl/id/v2" ‖ X25519 public ‖ Ed25519 public)` (16 hex chars).
+  Ids from before 1.5 (hash of the X25519 key alone) are not accepted: 1.5 can't talk to older versions.
+- Anything claiming an id must show both public keys that hash to it. The direct-chat handshake proves possession of
+  the X25519 private key; signatures prove the Ed25519 one.
+- Names are free text and may repeat; the app compares ids. The UI draws a "fingerprint" from the id (a 4×4 mirrored
+  pattern, 8 bytes → colour + filled/outline per cell) and warns when someone shows the name of a known person
+  (`NameMatch`: diacritics, tatweel, invisible / direction marks, alef / yeh / teh-marbuta forms and Latin look-alikes
+  are folded) with another id.
 
 ## 2. Links
 
@@ -66,9 +72,13 @@ Rules:
   neighbours of that sender (they already have it).
 - **Unicast**: send on the direct link, else via the neighbour the destination's last packet arrived through, else
   flood.
-- **Presence** body: `{n: name, c: colour, k: base64 public key, a?: avatar hash, e?: cartoon avatar number,
-  g: [group ads], w?: Wasl network, nb: [neighbour ids]}`. Dropped unless `k` hashes to `src`. Sent every 3 s; a node
-  silent for 11 s is gone.
+- **Presence** body: `{d: "<json>", sg: Ed25519(signing key, "wasl/presence/v2|" + d)}` where `d` is
+  `{n: name, c: colour, k: X25519 key, s: Ed25519 key, a?: avatar hash, e?: cartoon avatar number, g: [group ads],
+  w?: Wasl network, sos?: SOS, nb: [neighbour ids], t: ms}`. Dropped unless `k`+`s` hash to `src`, the signature
+  verifies, and `t` is not older than the last presence accepted from that node (`t` only grows on the sender, even if
+  its clock goes back). The sender re-signs only when the content changes or every 5 minutes; receivers skip the
+  signature check for a `d` they already verified. An `sos` is ignored when `t` is more than 30 minutes old (no
+  replaying an SOS after it stopped). Sent every 3 s; a node silent for 11 s is gone.
 - **Wasl network** (`w`, only while the node hosts one): `{s: SSID (≤ 32), p: passphrase (8–63, empty if open),
   x: security 0 open • 1 WPA2 • 2 WPA3 • 3 WPA3/WPA2}`. The node runs an Android Local-Only Hotspot (no internet);
   direct neighbours (hops = 1) are offered to join it, which moves their link to Wi-Fi (see §2). Invalid values
@@ -131,8 +141,11 @@ Body of a `G` frame = `base64(AES-256-GCM(groupKey, json))`, aad `wasl/group/v1|
 
 `check` = `HKDF(key, "wasl/group/check", 8 bytes)` hex; used to validate a password or a granted key.
 
-Packet: `{k, s: sender id, n: sender name, …}`. **A packet is dropped unless `s` equals the mesh `src`** and the
-sender is not in the group's removed list.
+Inside the box: `{p: "<packet json>", sg: Ed25519(sender, "wasl/group/v2|<group id>|" + p)}`. Packet:
+`{k, s: sender id, n: sender name, xk: sender X25519 key, ek: sender Ed25519 key, …}`. **A packet is dropped unless
+`s` equals the mesh `src`, `xk`+`ek` hash to `s`, and `sg` verifies** — so a member who has the group key still can't
+post as someone else — and the sender is not in the group's removed list. `fc` (file chunks) and `typ` are not signed:
+a file is checked at the end against the SHA-256 in the signed `fe`, and a fake "typing" does no harm.
 
 | `k` | fields |
 |---|---|
@@ -234,17 +247,18 @@ Text for a person who isn't reachable waits on the sender's phone and is handed,
 carry it until they meet the recipient. Only people whose identity key we already know (an earlier chat, or a
 saved chat) can be written to this way. Code: `lib/features/mailbox/mailbox.dart`.
 
-**Envelope** (`U {t: mb, …}`): `m` id (16 hex), `f` sender id, `to` recipient id, `sk` sender static key (base64),
+**Envelope** (`U {t: mb, …}`): `m` id (16 hex), `f` sender id, `to` recipient id, `sk` sender X25519 key, `ek` sender
+Ed25519 key (`sk`+`ek` must hash to `f`),
 `e` ephemeral X25519 key (base64), `c` box (base64, ≤ 12 KB).
 
 - Sealing (one-way, like Noise X): `key = HKDF-SHA256(X25519(e, R) ‖ X25519(S, R), salt = e ‖ S ‖ R,
   info = "wasl/mailbox/v1")`, then AES-256-GCM with aad `wasl/mailbox/v1|f|to|m`. The clear text is JSON
   `{t: text (≤ 4000), ts: ms, n: sender name}`.
-- The recipient drops an envelope whose `sk` doesn't hash to `f`, that doesn't open, or whose `ts` is missing or more
+- The recipient drops an envelope whose keys don't hash to `f`, that doesn't open, or whose `ts` is missing or more
   than 3 days old (the seen-ids window, so an old envelope can't be replayed later). Opening proves the holder of
   `S` wrote it for `R`; carriers only see `f`, `to`, `m` and the size.
-- **Carrying**: an envelope for someone else is kept only if it came from a direct neighbour (hops = 1) and `sk`
-  hashes to `f`. Limits per
+- **Carrying**: an envelope for someone else is kept only if it came from a direct neighbour (hops = 1) and its keys
+  hash to `f`. Limits per
   phone: 300 envelopes, 30 per sender, 2 MiB, 48 h; each one is delivered at most 3 times, 5 min apart. The sender
   hands each envelope to at most 8 neighbours, once each, and re-sends to the recipient every 20 s while reachable.
 - **Receipts** (`U {t: mbd, m, d?, ok?}`): the recipient answers a carrier with `{m}` (drop your copy — honoured only
