@@ -278,4 +278,9 @@ a phone's large-font setting): any text that spills out of its box fails the run
   commitment** (`rc`/`rs`, `mafiaCheck`, banner at the end). "Protests" removed from READMEs and store texts.
   Version 1.6.0+7, release notes 1.6v (since 1.5), fastlane changelogs/7, READMEs, site, guide entry. Security review
   done for each part (see SECURITY en/ar). Waiting for the owner: OK to build + publish 1.6, real-phone test.
+- 2026-11-27 — owner feedback fixed before the 1.6 build: buttons never cut their text (wrap to two lines, then
+  shrink — `_ButtonLabel` in widgets/ui.dart, test/buttons_test.dart); Wasl network: hostStart times out after 25 s,
+  while hosting the app asks the system every 3 s and resets if the hotspot was closed from outside, password can be
+  hidden again, "close the network" button on the Share page. Phone tests postponed by the owner. Search Console:
+  sitemap still "couldn't fetch" (common for new github.io sites) — owner should use URL inspection → request indexing.
 

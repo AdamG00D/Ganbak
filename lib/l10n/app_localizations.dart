@@ -5407,6 +5407,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الشات الخاص بيمشي في الشبكة بأكواد سرية بتتغير كل 10 دقايق بدل الأسامي، وكل الرسايل بأحجام ثابتة، فالموبايلات اللي في النص ميعرفوش مين بيكلم مين ولا قد إيه. وفي الجروبات الخاصة الأعضاء مخفيين، والجروب السري محدش يشوفه خالص وبيدخلوه بدعوة بس (من بيانات الجروب ← ادعي حد).'**
   String get guidePrivacyBody;
+
+  /// No description provided for @netHidePass.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخفي'**
+  String get netHidePass;
 }
 
 class _AppLocalizationsDelegate

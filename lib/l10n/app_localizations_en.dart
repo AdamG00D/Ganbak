@@ -3118,4 +3118,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guidePrivacyBody =>
       'Private chats travel through the mesh with secret tags that change every 10 minutes instead of names, and every message has a fixed size, so phones in between can’t tell who talks to whom or how much. In private groups members stay hidden, and a secret group can’t be seen at all — people join by invite only (Group info → Invite someone).';
+
+  @override
+  String get netHidePass => 'Hide';
 }

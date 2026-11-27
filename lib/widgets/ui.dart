@@ -238,6 +238,7 @@ class PrimaryButton extends StatelessWidget {
           disabledBackgroundColor: bg.withValues(alpha: 0.45),
           disabledForegroundColor: fg.withValues(alpha: 0.8),
           minimumSize: Size(64, height),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height / 2.6)),
         ),
         child: loading
@@ -246,12 +247,42 @@ class PrimaryButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
-                  Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                  Flexible(child: _ButtonLabel(label)),
                 ],
               ),
       ),
     );
   }
+}
+
+/// كلام الزرار: بيبان كامل دايماً — لو طويل بينزل سطرين، ولو لسه طويل بيصغر (عمره ما يتقص بـ "…").
+class _ButtonLabel extends StatelessWidget {
+  const _ButtonLabel(this.label);
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+        builder: (context, c) {
+          final style = DefaultTextStyle.of(context).style;
+          final scale = MediaQuery.textScalerOf(context);
+          final one = TextPainter(
+            text: TextSpan(text: label, style: style),
+            textDirection: Directionality.of(context),
+            textScaler: scale,
+            maxLines: 1,
+          )..layout();
+          // سطر واحد كفاية
+          if (!c.maxWidth.isFinite || one.width <= c.maxWidth) return Text(label, maxLines: 1, softWrap: false);
+          // سطرين، ولو مش كفاية بيصغر لحد ما يدخل
+          return FittedBox(
+            fit: BoxFit.scaleDown,
+            child: SizedBox(
+              width: c.maxWidth,
+              child: Text(label, textAlign: TextAlign.center, style: const TextStyle(height: 1.15)),
+            ),
+          );
+        },
+      );
 }
 
 /// زر ثانوي (هادي).
@@ -284,6 +315,7 @@ class SecondaryButton extends StatelessWidget {
           foregroundColor: fg,
           backgroundColor: color == null ? p.surfaceAlt : fg.withValues(alpha: 0.10),
           minimumSize: Size(64, height),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(height / 2.6)),
           textStyle: const TextStyle(fontFamily: AppTheme.fontFamily, fontWeight: FontWeight.w600, fontSize: 14.5),
         ),
@@ -291,7 +323,7 @@ class SecondaryButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[Icon(icon, size: 19), const SizedBox(width: 8)],
-            Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+            Flexible(child: _ButtonLabel(label)),
           ],
         ),
       ),

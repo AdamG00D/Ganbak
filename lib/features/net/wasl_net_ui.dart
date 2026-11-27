@@ -84,13 +84,11 @@ class _WaslNetCardState extends State<WaslNetCard> {
               label: l.netPassword,
               value: _showPass ? o.pass : '•' * o.pass.length.clamp(8, 12),
               copy: o.pass,
-              trailing: _showPass
-                  ? null
-                  : TextButton(
-                      onPressed: () => setState(() => _showPass = true),
-                      style: TextButton.styleFrom(foregroundColor: p.saffron),
-                      child: Text(l.netShowPass),
-                    ),
+              trailing: TextButton(
+                onPressed: () => setState(() => _showPass = !_showPass),
+                style: TextButton.styleFrom(foregroundColor: p.saffron),
+                child: Text(_showPass ? l.netHidePass : l.netShowPass),
+              ),
             ),
             const SizedBox(height: 12),
             Row(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -66,7 +68,10 @@ class WaslNetwork extends ChangeNotifier {
     state = NetState.starting;
     notifyListeners();
     try {
-      final r = await _native.invokeMapMethod<String, dynamic>('hostStart');
+      // لو النظام مردّش (بيحصل على بعض الموبايلات) منفضلش "بنفتح…" على طول
+      final r = await _native
+          .invokeMapMethod<String, dynamic>('hostStart')
+          .timeout(const Duration(seconds: 25), onTimeout: () => throw TimeoutException('hostStart'));
       final offer = WifiOffer.fromWire({'s': r?['ssid'], 'p': r?['pass'] ?? '', 'x': r?['sec']});
       if (offer == null) {
         await _native.invokeMethod<void>('hostStop');
@@ -77,7 +82,14 @@ class WaslNetwork extends ChangeNotifier {
       state = NetState.hosting;
       notifyListeners();
       onOfferChanged?.call();
+      _watch();
       return null;
+    } on TimeoutException {
+      try {
+        await _native.invokeMethod<void>('hostStop');
+      } catch (_) {}
+      _reset();
+      return tr.netErrFailed;
     } on PlatformException catch (e) {
       _reset();
       return switch (e.code) {
@@ -185,7 +197,29 @@ class WaslNetwork extends ChangeNotifier {
     }
   }
 
+  Timer? _watchTimer;
+
+  /// طول ما شبكتي مفتوحة: بنسأل النظام كل كام ثانية لو لسه شغالة (لو اتقفلت من برا التطبيق منفضلش نقول "شغالة").
+  void _watch() {
+    _watchTimer?.cancel();
+    _watchTimer = Timer.periodic(const Duration(seconds: 3), (_) async {
+      if (state != NetState.hosting) {
+        _watchTimer?.cancel();
+        return;
+      }
+      try {
+        final active = await _native.invokeMethod<bool>('hostActive');
+        if (active == false && state == NetState.hosting) {
+          _reset();
+          onOfferChanged?.call();
+          onNotice?.call(tr.netHostLost);
+        }
+      } catch (_) {}
+    });
+  }
+
   void _reset() {
+    _watchTimer?.cancel();
     state = NetState.idle;
     if (hosted != null) suggestDismissed = true;
     hosted = null;

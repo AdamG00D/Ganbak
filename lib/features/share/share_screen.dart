@@ -168,6 +168,13 @@ class _ShareAppScreenState extends State<ShareAppScreen> {
           _CopyRow(label: l.netPassword, value: offer.pass),
           const SizedBox(height: 10),
           Text(l.shareStep1Scan, style: muted),
+          const SizedBox(height: 10),
+          SecondaryButton(
+            label: l.netStop,
+            icon: Icons.portable_wifi_off_rounded,
+            height: 44,
+            onPressed: net.stopHosting,
+          ),
         ],
       );
     }

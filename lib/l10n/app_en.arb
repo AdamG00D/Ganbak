@@ -884,5 +884,6 @@
   "mafiaRolesChanged": "⚠️ Roles changed mid-game — whoever opened the game cheated",
   "mafiaRolesChecked": "Checked: the roles didn’t change since the start",
   "guidePrivacyTitle": "Who talks to whom? Nobody can tell",
-  "guidePrivacyBody": "Private chats travel through the mesh with secret tags that change every 10 minutes instead of names, and every message has a fixed size, so phones in between can’t tell who talks to whom or how much. In private groups members stay hidden, and a secret group can’t be seen at all — people join by invite only (Group info → Invite someone)."
+  "guidePrivacyBody": "Private chats travel through the mesh with secret tags that change every 10 minutes instead of names, and every message has a fixed size, so phones in between can’t tell who talks to whom or how much. In private groups members stay hidden, and a secret group can’t be seen at all — people join by invite only (Group info → Invite someone).",
+  "netHidePass": "Hide"
 }
