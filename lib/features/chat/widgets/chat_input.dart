@@ -40,7 +40,11 @@ class ChatInputBar extends StatefulWidget {
     this.onCancelReply,
     this.mentionCandidates,
     this.onGames,
+    this.textOnly = false,
   });
+
+  /// الكلام بس (الرسالة اللي بتستنى صاحبها): من غير مرفقات ولا كاميرا ولا فويس ولا ألعاب.
+  final bool textOnly;
 
   /// زرار الألعاب 🎮 (null = مفيش).
   final VoidCallback? onGames;
@@ -185,7 +189,7 @@ class ChatInputBarState extends State<ChatInputBar> {
   // ---------------- التسجيل ----------------
 
   Future<void> _onMicDown(PointerDownEvent e) async {
-    if (!widget.enabled || _rec != _RecState.idle || _starting) return;
+    if (!widget.enabled || widget.textOnly || _rec != _RecState.idle || _starting) return;
     _starting = true;
     _downAt = e.position;
     _drag = Offset.zero;
@@ -452,6 +456,7 @@ class ChatInputBarState extends State<ChatInputBar> {
 
   Widget _fieldRow(Palette p) {
     final enabled = widget.enabled;
+    final media = enabled && !widget.textOnly;
     return Row(
       key: const ValueKey('field'),
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -483,7 +488,11 @@ class ChatInputBarState extends State<ChatInputBar> {
             },
             style: const TextStyle(fontSize: 16, height: 1.35),
             decoration: InputDecoration(
-              hintText: enabled ? context.l10n.messageHint : context.l10n.waitingConnection,
+              hintText: !enabled
+                  ? context.l10n.waitingConnection
+                  : widget.textOnly
+                  ? context.l10n.mailHint
+                  : context.l10n.messageHint,
               hintMaxLines: 1,
               filled: false,
               isDense: true,
@@ -499,15 +508,15 @@ class ChatInputBarState extends State<ChatInputBar> {
           IconButton(
             tooltip: context.l10n.games,
             visualDensity: VisualDensity.compact,
-            onPressed: enabled ? widget.onGames : null,
-            icon: Icon(Icons.sports_esports_rounded, color: enabled ? p.accentInk : p.textMuted),
+            onPressed: media ? widget.onGames : null,
+            icon: Icon(Icons.sports_esports_rounded, color: media ? p.accentInk : p.textMuted),
           ),
         Transform.rotate(
           angle: -0.6,
           child: IconButton(
             tooltip: context.l10n.attachments,
             visualDensity: VisualDensity.compact,
-            onPressed: enabled
+            onPressed: media
                 ? () => showAttachSheet(
                     context,
                     widget.link,
@@ -520,7 +529,7 @@ class ChatInputBarState extends State<ChatInputBar> {
         ),
         if (!_hasText)
           GestureDetector(
-            onLongPress: enabled && widget.link.supportsVideo
+            onLongPress: media && widget.link.supportsVideo
                 ? () => sendFromCamera(
                     context,
                     widget.link,
@@ -534,7 +543,7 @@ class ChatInputBarState extends State<ChatInputBar> {
               tooltip: widget.link.supportsVideo
                   ? context.l10n.photoHoldVideo
                   : context.l10n.photo,
-              onPressed: enabled
+              onPressed: media
                   ? () => sendFromCamera(
                       context,
                       widget.link,
@@ -679,7 +688,7 @@ class ChatInputBarState extends State<ChatInputBar> {
                     0,
                   )
                 : Offset.zero,
-            child: Opacity(opacity: widget.enabled ? 1 : 0.45, child: circle),
+            child: Opacity(opacity: widget.enabled && !widget.textOnly ? 1 : 0.45, child: circle),
           ),
         ),
       ],

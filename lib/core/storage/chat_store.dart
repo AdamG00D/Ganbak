@@ -100,6 +100,7 @@ class ChatStore {
   static const _groupsFile = 'groups.bin';
   static const _blockedFile = 'blocked.bin';
   static const _prefsFile = 'chat_prefs.bin';
+  static const _outboxFile = 'outbox.bin';
 
   final Map<String, StoredChat> index = {};
   final Map<String, GroupInfo> groups = {};
@@ -169,6 +170,26 @@ class ChatStore {
     prefs.removeWhere((_, p) => p.isDefault);
     return _queue(() => _vault.writeJson(_prefsFile, {for (final e in prefs.entries) e.key: e.value.toJson()}));
   }
+
+  /// الرسايل اللي مستنية صاحبها (للمحادثات المحفوظة بس): المعرّف ← الظروف المقفولة.
+  Future<Map<String, List<Map<String, dynamic>>>> loadOutbox() async {
+    final raw = await _vault.readJson(_outboxFile);
+    final out = <String, List<Map<String, dynamic>>>{};
+    if (raw is! Map) return out;
+    for (final e in raw.entries.take(500)) {
+      final id = '${e.key}';
+      if (!_safeId(id) || e.value is! List) continue;
+      out[id] = [
+        for (final x in (e.value as List).take(50))
+          if (x is Map) x.map((k, v) => MapEntry('$k', v)),
+      ];
+    }
+    return out;
+  }
+
+  Future<void> saveOutbox(Map<String, List<Map<String, dynamic>>> outbox) => _queue(
+    () => outbox.isEmpty ? _vault.delete(_outboxFile) : _vault.writeJson(_outboxFile, outbox),
+  );
 
   static bool _safeId(String id) => RegExp(r'^[0-9a-f]{16}$').hasMatch(id);
 

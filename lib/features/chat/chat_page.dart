@@ -717,6 +717,8 @@ class _ChatPageState extends State<ChatPage> {
             }();
 
             final canSend = alive && s.canSend;
+            // مش موجود بس نعرف مفتاحه: الكلام يستنى صاحبه
+            final queue = alive && !canSend && direct != null && _hub.canQueueFor(direct);
             return Column(
               children: [
                 if (_searching)
@@ -834,9 +836,11 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 if (alive && direct != null && !direct.online && !_hub.isBlocked(direct.peerId))
                   _Notice(
-                    icon: Icons.cloud_off_rounded,
+                    icon: queue ? Icons.hourglass_top_rounded : Icons.cloud_off_rounded,
                     color: p.textMuted,
-                    text: wifi
+                    text: queue
+                        ? l.mailNotice(c.title)
+                        : wifi
                         ? l.peerOfflineWifi(c.title)
                         : l.peerOfflineBt(c.title),
                   ),
@@ -893,7 +897,8 @@ class _ChatPageState extends State<ChatPage> {
                 ChatInputBar(
                   key: _inputKey,
                   link: ChatLink(s, supportsVideo: s.allowVideo),
-                  enabled: canSend,
+                  enabled: canSend || queue,
+                  textOnly: queue,
                   mentionCandidates: group == null
                       ? null
                       : () => [

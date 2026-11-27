@@ -371,6 +371,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         await _loadSaved(chat);
       }
     }
+    await _restoreOutbox();
     notifyListeners();
 
     // إذن الإشعارات (أندرويد 13+) — للإشعار الثابت وإشعار الرسايل
@@ -1274,28 +1275,75 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       keyOf: (id) => _directs[id]?.publicKey ?? r.nodes[id]?.publicKey,
       onMail: _onMailArrived,
       onDelivered: (peer, id) {
+        _saveOutbox();
         final msg = _queuedBubbles.remove(id);
         if (msg == null) return;
         msg.status = MessageStatus.delivered;
-        _directs[peer]?.session.notifyListeners();
+        final c = _directs[peer];
+        if (c == null) return;
+        c.session.notifyListeners();
+        _schedulePersist(c);
       },
       isBlocked: _store.blocked.contains,
     );
     _mailTick = Timer.periodic(const Duration(seconds: 15), (_) => mail?.flush());
   }
 
+  /// بنرجّع الرسايل اللي كانت مستنية في المحادثات المحفوظة (بعد ما التطبيق اتقفل).
+  Future<void> _restoreOutbox() async {
+    final m = mail;
+    if (m == null) return;
+    final saved = await _store.loadOutbox();
+    if (mail != m) return;
+    for (final e in saved.entries) {
+      final envs = [
+        for (final raw in e.value)
+          if (Envelope.fromWire(raw) case final env? when env.to == e.key && env.from == myId) env,
+      ];
+      if (envs.isEmpty) continue;
+      m.outbox.putIfAbsent(e.key, () => []).addAll(envs);
+    }
+    // نربط الفقاعات بظروفها؛ فقاعة ملهاش ظرف (اتمسح) بتبقى "متبعتتش"
+    for (final c in _directs.values) {
+      final ids = {for (final env in m.outbox[c.peerId] ?? const <Envelope>[]) env.id};
+      var changed = false;
+      for (final msg in c.session.messages) {
+        if (msg.status != MessageStatus.queued || !msg.id.startsWith('mb-')) continue;
+        final id = msg.id.substring(3);
+        if (ids.contains(id)) {
+          _queuedBubbles[id] = msg;
+        } else {
+          msg.status = MessageStatus.failed;
+          changed = true;
+        }
+      }
+      if (changed) c.session.notifyListeners();
+    }
+    m.flush();
+  }
+
+  /// بنكتب الرسايل المستنية بتاعة المحادثات المحفوظة بس (الباقي بيعيش في الذاكرة).
+  void _saveOutbox() {
+    final m = mail;
+    if (m == null) return;
+    _store.saveOutbox({
+      for (final e in m.outbox.entries)
+        if (_directs[e.key]?.saved ?? false) e.key: [for (final env in e.value) env.toWire()],
+    });
+  }
+
   Future<void> _sendOffline(DirectChat c, String text) async {
     final key = c.publicKey;
     final m = mail;
     if (key == null || m == null || !canQueueFor(c)) return;
-    final msg = ChatMessage(id: 'mb-pending', text: text.trim(), kind: MessageKind.mine, status: MessageStatus.queued);
     final id = await m.send(c.peerId, key, text);
-    final bubble = ChatMessage(id: 'mb-$id', text: msg.text, kind: MessageKind.mine, status: MessageStatus.queued);
+    final bubble = ChatMessage(id: 'mb-$id', text: text.trim(), kind: MessageKind.mine, status: MessageStatus.queued);
     _queuedBubbles[id] = bubble;
     c.session.messages.add(bubble);
     c.active = true;
     c.lastActivity = DateTime.now();
     c.session.notifyListeners();
+    _saveOutbox();
   }
 
   /// بنحاول نسلّم بعد لحظة (التغييرات في الشبكة بتيجي ورا بعض).
