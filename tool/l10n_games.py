@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""نصوص الألعاب ودليل وصل (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
+"""نصوص الألعاب ودليل وصل وشبكة وصل (عربي + إنجليزي) — بيكتبها في lib/l10n/app_ar.arb و app_en.arb.
 
     python3 tool/l10n_games.py && flutter gen-l10n
 
@@ -266,6 +266,41 @@ S = {
     'guideGamesTitle': ('الألعاب', 'Games'),
     'guideGamesBody': ('في أي شات دوس 🎮 واختار لعبة. في الخاص صاحبك بيوافق واللعبة تبدأ، وفي الجروب اللي عايز يلعب يدوس "انضم" واللي فتح اللعبة يدوس "ابدأ". دوس على أي لعبة تحت عشان تعرف بتتلعب إزاي.', "In any chat tap 🎮 and pick a game. In a private chat your friend accepts and it starts; in a group, whoever wants to play taps \"Join\" and whoever opened it taps \"Start\". Tap any game below to see how it's played."),
     'guideSafetyTitle': ('الأمان والخصوصية', 'Safety and privacy'),
+    # ---------------- شبكة وصل ----------------
+    'netTitle': ('شبكة وصل', 'Wasl network'),
+    'netOpen': ('افتح شبكة وصل', 'Start a Wasl network'),
+    'netOpenSub': ('موبايلك يعمل شبكة واي فاي لوحده (من غير إنترنت)، واللي جنبك يدخلوها بضغطة: أسرع بكتير من البلوتوث، وفيها فيديو ومكالمات.', 'Your phone makes its own Wi-Fi network (no internet) and people next to you join with a tap: much faster than Bluetooth, with video and calls.'),
+    'netStarting': ('بنفتح الشبكة…', 'Starting the network…'),
+    'netHosting': ('شبكتك شغالة', 'Your network is on'),
+    'netHostingSub': ('اللي جنبك وفاتحين وصل على "الاتنين مع بعض" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.', 'People next to you running Wasl on "Both" are offered to join. Anyone else can join from Wi-Fi settings with this name and password.'),
+    'netName': ('اسم الشبكة', 'Network name'),
+    'netPassword': ('الباسورد', 'Password'),
+    'netShowPass': ('اعرض', 'Show'),
+    'netCopied': ('اتنسخ', 'Copied'),
+    'netStop': ('اقفل الشبكة', 'Turn it off'),
+    'netOfferTitle': ('{name} فاتح شبكة وصل جنبك', '{name} has a Wasl network next to you'),
+    'netOfferSub': ('ادخلها: أسرع من البلوتوث، وفيها فيديو ومكالمات.', 'Join it: faster than Bluetooth, with video and calls.'),
+    'netJoin': ('ادخلها', 'Join'),
+    'netJoining': ('بنتوصل… وافق على رسالة الموبايل', "Connecting… accept your phone's prompt"),
+    'netJoined': ('إنت على شبكة {name}', "You're on {name}'s network"),
+    'netJoinedSub': ('الرسايل بتمشي على الواي فاي، وموبايلك لسه بيوصّل اللي على البلوتوث.', 'Messages go over Wi-Fi, and your phone still links the people on Bluetooth.'),
+    'netLeave': ('اخرج منها', 'Leave'),
+    'netNotNow': ('مش دلوقتي', 'Not now'),
+    'netNeedBoth': ('عشان تدخلها لازم تكون على "الاتنين مع بعض": ارجع لأول صفحة واختاره.', 'To join it you need "Both": go back to the first screen and pick it.'),
+    'netOldAndroid': ('موبايلك (قبل أندرويد 10) مبيقدرش يدخلها من التطبيق: ادخل من إعدادات الواي فاي على "{ssid}" بالباسورد {pass}', "Your phone (older than Android 10) can't join from the app: in Wi-Fi settings pick \"{ssid}\" with password {pass}"),
+    'netErrIncompatible': ('مقدرناش نفتح الشبكة: اقفل نقطة الاتصال (الهوت سبوت) العادية الأول.', "Couldn't start it: turn off your regular hotspot first."),
+    'netErrDisallowed': ('الموبايل ده مش مسموح فيه بفتح شبكة (من إعدادات الجهاز أو الشركة).', "This phone doesn't allow starting a network (device or company policy)."),
+    'netErrPermission': ('محتاجين إذن "الأجهزة القريبة" (أو الموقع في الموبايلات الأقدم) عشان نفتح الشبكة.', 'We need the "Nearby devices" permission (or location on older phones) to start the network.'),
+    'netErrLocation': ('شغّل الموقع الأول؛ أندرويد محتاجه عشان يفتح الشبكة.', 'Turn on location first; Android needs it to start the network.'),
+    'netErrFailed': ('مقدرناش نفتح الشبكة دلوقتي، جرّب تاني.', "Couldn't start the network right now, try again."),
+    'netErrJoin': ('مقدرناش ندخل الشبكة (اترفضت أو بعيدة).', "Couldn't join the network (declined or out of range)."),
+    'netLost': ('شبكة وصل اللي كنت فيها وقفت', 'The Wasl network you were on stopped'),
+    'netHostLost': ('شبكة وصل بتاعتك اتقفلت', 'Your Wasl network was turned off'),
+    'guideNetTitle': ('شبكة وصل', 'Wasl network'),
+    'guideNetWhat': ('موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم "ادخلها" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.', 'Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a "Join" button and are in with one tap; nobody types a password.'),
+    'guideNetWhen': ('لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.', "When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one."),
+    'guideNetFacts': ('كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على "الاتنين مع بعض" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.', 'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on "Both" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.'),
+    'guideNetHow': ('اختار "الاتنين مع بعض" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي "القريبين" دوس "افتح شبكة وصل".\nاللي جنبك هيطلعلهم "ادخلها": يدوسوها ويوافقوا على رسالة الموبايل.', 'Pick "Both" (so Bluetooth can pass the name and password to people next to you).\nUnder "Nearby" tap "Start a Wasl network".\nPeople next to you see "Join": they tap it and accept their phone\'s prompt.'),
 }
 
 

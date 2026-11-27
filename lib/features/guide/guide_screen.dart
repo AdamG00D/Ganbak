@@ -156,6 +156,16 @@ class _GuideScreenState extends State<GuideScreen> {
                     facts: l.guideBothFacts,
                     how: l.guideBothHow,
                   ),
+                  _Way(
+                    kind: _Diagram.wasl,
+                    color: p.isDark ? const Color(0xFF8A6500) : p.saffron,
+                    icon: Icons.wifi_tethering_rounded,
+                    title: l.guideNetTitle,
+                    what: l.guideNetWhat,
+                    when: l.guideNetWhen,
+                    facts: l.guideNetFacts,
+                    how: l.guideNetHow,
+                  ),
                   _Item(icon: Icons.hub_rounded, title: l.howMeshTitle, body: '${l.howMeshBody}\n${l.guideMeshHops}'),
                   const SizedBox(height: 18),
                   _Heading(key: _keys[GuideSection.groups], icon: Icons.groups_rounded, text: l.guideGroupsTitle),
@@ -296,8 +306,11 @@ class _Way extends StatelessWidget {
                           Container(
                             width: 38,
                             height: 38,
-                            decoration: BoxDecoration(color: p.saffron, borderRadius: BorderRadius.circular(13)),
-                            child: Icon(icon, color: p.ink, size: 21),
+                            decoration: BoxDecoration(
+                              color: kind == _Diagram.wasl ? p.ink : p.saffron,
+                              borderRadius: BorderRadius.circular(13),
+                            ),
+                            child: Icon(icon, color: kind == _Diagram.wasl ? p.saffron : p.ink, size: 21),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
@@ -312,7 +325,14 @@ class _Way extends StatelessWidget {
                         child: SizedBox(
                           height: 120,
                           width: double.infinity,
-                          child: CustomPaint(painter: _DiagramPainter(kind: kind, fg: fg, accent: p.saffron, bridge: p.saffron)),
+                          child: CustomPaint(
+                            painter: _DiagramPainter(
+                              kind: kind,
+                              fg: fg,
+                              accent: kind == _Diagram.wasl ? p.ink : p.saffron,
+                              bridge: kind == _Diagram.wasl ? p.ink : p.saffron,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -428,7 +448,7 @@ class _GameChip extends StatelessWidget {
 
 // ---------------- الرسومات ----------------
 
-enum _Diagram { bluetooth, wifi, both }
+enum _Diagram { bluetooth, wifi, both, wasl }
 
 /// موبايلات صغيرة متوصلة: البلوتوث سلسلة غرز، الواي فاي حوالين هوت سبوت، والاتنين كوبري بين شبكتين.
 class _DiagramPainter extends CustomPainter {
@@ -523,6 +543,20 @@ class _DiagramPainter extends CustomPainter {
         _phone(canvas, l1, s: 1.05, hot: true);
         _phone(canvas, l2, s: 1.05, hot: true);
         _phone(canvas, bridgeAt, s: 1.1);
+      case _Diagram.wasl:
+        // موبايل فاتح الشبكة في النص واللي حواليه داخلين عليها، وواحد لسه جاي بالبلوتوث (غرزة)
+        final host = Offset(w * 0.42, h * 0.55);
+        final joined = [Offset(w * 0.14, h * 0.3), Offset(w * 0.12, h * 0.82), Offset(w * 0.42, h * 0.9), Offset(w * 0.66, h * 0.3)];
+        final coming = Offset(w * 0.88, h * 0.7);
+        for (final pt in joined) {
+          _solid(canvas, host, pt, line);
+        }
+        _stitch(canvas, host, coming, bridge, w: 3);
+        for (final pt in joined) {
+          _phone(canvas, pt, s: 0.9);
+        }
+        _phone(canvas, coming, s: 0.95);
+        _phone(canvas, host, s: 1.2, hot: true);
     }
   }
 

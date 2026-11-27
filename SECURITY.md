@@ -62,6 +62,14 @@ Games have no server, so the phone that opens a game (the **room host**) is the 
 - **Memory:** the card layout comes from the host, so a modified host could know it.
 - Game chat and reactions in groups are encrypted with the group key, like group messages (limitation 2 applies).
 
+## Wasl network (hotspot)
+
+When you start a **Wasl network**, your phone opens an Android Local-Only Hotspot (no internet) and puts its name
+and password in the presence it broadcasts, so phones nearby can join it with one tap. That means **anyone in the
+mesh running Wasl can see that password and join that Wi-Fi network**. It only gives them a local link — the same
+thing Bluetooth already gives them: private chats stay end-to-end encrypted and groups stay as described above. Turn
+the network off when you don't need it; it also closes when Wasl closes.
+
 ## Cryptography
 
 X25519 • HKDF-SHA256 • HMAC-SHA256 • AES-256-GCM • Argon2id (19 MiB, 2 passes) • SHA-256 — from the

@@ -4687,6 +4687,210 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الأمان والخصوصية'**
   String get guideSafetyTitle;
+
+  /// No description provided for @netTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكة وصل'**
+  String get netTitle;
+
+  /// No description provided for @netOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح شبكة وصل'**
+  String get netOpen;
+
+  /// No description provided for @netOpenSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'موبايلك يعمل شبكة واي فاي لوحده (من غير إنترنت)، واللي جنبك يدخلوها بضغطة: أسرع بكتير من البلوتوث، وفيها فيديو ومكالمات.'**
+  String get netOpenSub;
+
+  /// No description provided for @netStarting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنفتح الشبكة…'**
+  String get netStarting;
+
+  /// No description provided for @netHosting.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكتك شغالة'**
+  String get netHosting;
+
+  /// No description provided for @netHostingSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللي جنبك وفاتحين وصل على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.'**
+  String get netHostingSub;
+
+  /// No description provided for @netName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الشبكة'**
+  String get netName;
+
+  /// No description provided for @netPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباسورد'**
+  String get netPassword;
+
+  /// No description provided for @netShowPass.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض'**
+  String get netShowPass;
+
+  /// No description provided for @netCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتنسخ'**
+  String get netCopied;
+
+  /// No description provided for @netStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقفل الشبكة'**
+  String get netStop;
+
+  /// No description provided for @netOfferTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} فاتح شبكة وصل جنبك'**
+  String netOfferTitle(String name);
+
+  /// No description provided for @netOfferSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخلها: أسرع من البلوتوث، وفيها فيديو ومكالمات.'**
+  String get netOfferSub;
+
+  /// No description provided for @netJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخلها'**
+  String get netJoin;
+
+  /// No description provided for @netJoining.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنتوصل… وافق على رسالة الموبايل'**
+  String get netJoining;
+
+  /// No description provided for @netJoined.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنت على شبكة {name}'**
+  String netJoined(String name);
+
+  /// No description provided for @netJoinedSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسايل بتمشي على الواي فاي، وموبايلك لسه بيوصّل اللي على البلوتوث.'**
+  String get netJoinedSub;
+
+  /// No description provided for @netLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخرج منها'**
+  String get netLeave;
+
+  /// No description provided for @netNotNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش دلوقتي'**
+  String get netNotNow;
+
+  /// No description provided for @netNeedBoth.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشان تدخلها لازم تكون على \"الاتنين مع بعض\": ارجع لأول صفحة واختاره.'**
+  String get netNeedBoth;
+
+  /// No description provided for @netOldAndroid.
+  ///
+  /// In ar, this message translates to:
+  /// **'موبايلك (قبل أندرويد 10) مبيقدرش يدخلها من التطبيق: ادخل من إعدادات الواي فاي على \"{ssid}\" بالباسورد {pass}'**
+  String netOldAndroid(String ssid, String pass);
+
+  /// No description provided for @netErrIncompatible.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش نفتح الشبكة: اقفل نقطة الاتصال (الهوت سبوت) العادية الأول.'**
+  String get netErrIncompatible;
+
+  /// No description provided for @netErrDisallowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموبايل ده مش مسموح فيه بفتح شبكة (من إعدادات الجهاز أو الشركة).'**
+  String get netErrDisallowed;
+
+  /// No description provided for @netErrPermission.
+  ///
+  /// In ar, this message translates to:
+  /// **'محتاجين إذن \"الأجهزة القريبة\" (أو الموقع في الموبايلات الأقدم) عشان نفتح الشبكة.'**
+  String get netErrPermission;
+
+  /// No description provided for @netErrLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'شغّل الموقع الأول؛ أندرويد محتاجه عشان يفتح الشبكة.'**
+  String get netErrLocation;
+
+  /// No description provided for @netErrFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش نفتح الشبكة دلوقتي، جرّب تاني.'**
+  String get netErrFailed;
+
+  /// No description provided for @netErrJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدرناش ندخل الشبكة (اترفضت أو بعيدة).'**
+  String get netErrJoin;
+
+  /// No description provided for @netLost.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكة وصل اللي كنت فيها وقفت'**
+  String get netLost;
+
+  /// No description provided for @netHostLost.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكة وصل بتاعتك اتقفلت'**
+  String get netHostLost;
+
+  /// No description provided for @guideNetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكة وصل'**
+  String get guideNetTitle;
+
+  /// No description provided for @guideNetWhat.
+  ///
+  /// In ar, this message translates to:
+  /// **'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.'**
+  String get guideNetWhat;
+
+  /// No description provided for @guideNetWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.'**
+  String get guideNetWhen;
+
+  /// No description provided for @guideNetFacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.'**
+  String get guideNetFacts;
+
+  /// No description provided for @guideNetHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.'**
+  String get guideNetHow;
 }
 
 class _AppLocalizationsDelegate

@@ -28,6 +28,7 @@ import '../chat/core/chat_session.dart';
 import '../games/core/game_center.dart';
 import '../groups/group.dart';
 import '../groups/group_session.dart';
+import '../net/wasl_network.dart';
 
 enum TransportKind {
   bluetooth,
@@ -375,7 +376,15 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       final st = await Permission.notification.status;
       if (!st.isGranted && !st.isPermanentlyDenied) await Permission.notification.request();
     } catch (_) {}
-    SystemBridge.listenNotifications(onOpen: openFromNotification, onReply: _replyFromNotification, onRead: _readFromNotification);
+    SystemBridge.listenNotifications(
+      onOpen: openFromNotification,
+      onReply: _replyFromNotification,
+      onRead: _readFromNotification,
+      onSystem: WaslNetwork.instance.onSystemEvent,
+    );
+    WaslNetwork.instance
+      ..onOfferChanged = (() => router?.announce())
+      ..onNotice = _notices.add;
     await SystemBridge.startChatService();
     await r.start();
     notifyListeners();
@@ -405,6 +414,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     }
     _pendingCallScreen = false;
     _callChat = null;
+    // شبكة وصل اللي فتحناها بتتقفل، واللي دخلناها بنخرج منها
+    await WaslNetwork.instance.shutdown();
     pendingJoins.clear();
     _requestedAds.clear();
     _syncedAt.clear();
@@ -447,6 +458,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         'a': ?_me.avatarHash,
         'e': ?_me.cartoon,
         'g': [for (final g in _groups.values.take(16)) g.info.ad.toWire()],
+        'w': ?WaslNetwork.instance.hosted?.toWire(),
       };
 
   // ---------------- القوايم (للواجهة) ----------------

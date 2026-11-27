@@ -67,8 +67,12 @@ Rules:
 - **Unicast**: send on the direct link, else via the neighbour the destination's last packet arrived through, else
   flood.
 - **Presence** body: `{n: name, c: colour, k: base64 public key, a?: avatar hash, e?: cartoon avatar number,
-  g: [group ads], nb: [neighbour ids]}`. Dropped unless `k` hashes to `src`. Sent every 3 s; a node silent for 11 s
-  is gone.
+  g: [group ads], w?: Wasl network, nb: [neighbour ids]}`. Dropped unless `k` hashes to `src`. Sent every 3 s; a node
+  silent for 11 s is gone.
+- **Wasl network** (`w`, only while the node hosts one): `{s: SSID (≤ 32), p: passphrase (8–63, empty if open),
+  x: security 0 open • 1 WPA2 • 2 WPA3 • 3 WPA3/WPA2}`. The node runs an Android Local-Only Hotspot (no internet);
+  direct neighbours (hops = 1) are offered to join it, which moves their link to Wi-Fi (see §2). Invalid values
+  drop the field, not the presence. Additive: older versions ignore it.
 - **Group ad**: `{i: id, n: name, m: o|p|a, o: owner id, c?: key check, h?: admin-state digest}`.
 
 Control messages (`U`, JSON with `t`):
@@ -80,6 +84,7 @@ Control messages (`U`, JSON with `t`):
 | `gk` | group key grant | AES-GCM with `pairKey(owner, member, "wasl/group-grant")`, aad `wasl/grant\|gid\|member` |
 | `gr` | join request rejected | same pair key, aad `wasl/reject\|gid\|member` |
 | `ga` | group admin command (§6) | pair key, see below |
+| `gm` | game message to one player (§8) | pair key `"wasl/game"`, aad `wasl/game\|gid\|from\|to` |
 
 `pairKey(a, b, info)` = `HKDF(X25519(static a, static b), info)`. Because a node id is the hash of its static key,
 a box that opens with the pair key of id *x* was made by the holder of *x*'s private key.

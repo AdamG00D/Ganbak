@@ -32,6 +32,35 @@ enum GroupMode {
   }
 }
 
+/// "شبكة وصل": الموبايل ده فاتح هوت سبوت من التطبيق، وده اسمه وكلمة سره (بيتبعت مع "أنا موجود").
+/// الشبكة مفيهاش إنترنت — هي بس عشان اللي جنبه يتكلموا بالواي فاي بدل البلوتوث.
+class WifiOffer {
+  const WifiOffer({required this.ssid, required this.pass, this.security = 1});
+
+  final String ssid;
+  final String pass;
+
+  /// 0 مفتوحة • 1 WPA2 • 2 WPA3 • 3 WPA3 مع WPA2.
+  final int security;
+
+  Map<String, dynamic> toWire() => {'s': ssid, 'p': pass, 'x': security};
+
+  static WifiOffer? fromWire(Object? raw) {
+    if (raw is! Map) return null;
+    final s = raw['s'], p = raw['p'], x = raw['x'];
+    if (s is! String || s.isEmpty || s.length > 32 || s.contains(RegExp(r'[\u0000-\u001f]'))) return null;
+    final sec = x is num && x >= 0 && x <= 3 ? x.toInt() : 1;
+    if (p is! String || p.length > 63 || (sec != 0 && p.length < 8)) return null;
+    return WifiOffer(ssid: s, pass: p, security: sec);
+  }
+
+  @override
+  bool operator ==(Object other) => other is WifiOffer && other.ssid == ssid && other.pass == pass;
+
+  @override
+  int get hashCode => Object.hash(ssid, pass);
+}
+
 /// إعلان عن جروب (بيتبعت مع "أنا موجود" من كل عضو فيه).
 class GroupAd {
   const GroupAd({
@@ -91,6 +120,9 @@ class MeshNode {
   /// رقم الأفاتار الكرتوني (لو مختار واحد).
   int? cartoon;
   List<GroupAd> groups = const [];
+
+  /// فاتح "شبكة وصل" (null = لأ).
+  WifiOffer? wifi;
   DateTime lastSeen = DateTime.now();
 
   /// عدد القفزات لحد الجهاز ده (1 = جار مباشر).
@@ -518,7 +550,9 @@ class MeshRouter extends ChangeNotifier {
     ];
     final direct = isDirect(src);
     final newHops = direct ? 1 : hops.clamp(2, maxHops);
+    final wifi = WifiOffer.fromWire(m['w']);
     final changed = isNew ||
+        node.wifi != wifi ||
         node.name != name ||
         node.color != color ||
         node.avatar != avatar ||
@@ -531,6 +565,7 @@ class MeshRouter extends ChangeNotifier {
       ..avatar = avatar
       ..cartoon = cartoon
       ..groups = groups
+      ..wifi = wifi
       ..hops = newHops
       ..lastSeen = DateTime.now()
       .._lastPresence = raw;

@@ -21,6 +21,7 @@ import '../chat/core/nearby_requirements.dart';
 import '../chat/widgets/chat_widgets.dart';
 import '../groups/group_ui.dart';
 import '../hub/chat_hub.dart';
+import '../net/wasl_net_ui.dart';
 import '../settings/settings_screen.dart';
 
 /// الصفحة الرئيسية بعد اختيار بلوتوث/واي فاي: المحادثات • الجروبات • القريبين.
@@ -180,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             body = Column(
               children: [
                 _LinkProblems(link: link),
+                WaslNetOfferBanner(kind: widget.kind),
                 Expanded(
                   // اسحب يمين وشمال عشان تتنقل بين الصفحات
                   child: PageView(
@@ -403,8 +405,14 @@ class _LinkProblems extends StatelessWidget {
               error: ChatError.noNetwork,
               actions: [
                 FilledButton.icon(
-                  onPressed: SystemBridge.openWifiSettings,
+                  onPressed: () => startWaslNetwork(context),
                   style: FilledButton.styleFrom(minimumSize: const Size(0, 42)),
+                  icon: const Icon(Icons.wifi_tethering_rounded, size: 18),
+                  label: Text(context.l10n.netOpen),
+                ),
+                OutlinedButton.icon(
+                  onPressed: SystemBridge.openWifiSettings,
+                  style: OutlinedButton.styleFrom(minimumSize: const Size(0, 42)),
                   icon: const Icon(Icons.wifi_rounded, size: 18),
                   label: Text(context.l10n.openWifi),
                 ),
@@ -892,6 +900,8 @@ class _PeopleTabState extends State<_PeopleTab> {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 28),
       children: [
+        // شبكة وصل: الموبايل يعمل شبكة واي فاي لوحده (في وضع الواي فاي أو الاتنين)
+        if (lan != null) const WaslNetCard(),
         if (people.isEmpty) ...[
           const SizedBox(height: 18),
           Center(child: RadarPulse(icon: widget.isWifi ? Icons.wifi_rounded : Icons.bluetooth_searching_rounded)),
@@ -1030,11 +1040,15 @@ class _PersonRow extends StatelessWidget {
                     children: [
                       Icon(relays == 0 ? Icons.near_me_rounded : Icons.hub_outlined, size: 12.5, color: p.textMuted),
                       const SizedBox(width: 4),
-                      Text(
-                        relays == 0
-                            ? context.l10n.connectedDirectly
-                            : context.l10n.viaRelays(relays),
-                        style: TextStyle(color: p.textMuted, fontSize: 12.5),
+                      Flexible(
+                        child: Text(
+                          relays == 0
+                              ? context.l10n.connectedDirectly
+                              : context.l10n.viaRelays(relays),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: p.textMuted, fontSize: 12.5),
+                        ),
                       ),
                     ],
                   ),

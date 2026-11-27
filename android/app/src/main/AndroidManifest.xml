@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- شبكة وصل: دخول شبكة الهوت سبوت من جوه التطبيق (WifiNetworkSpecifier) -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <!-- الدردشة القريبة (Nearby Connections) -->
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" tools:replace="android:maxSdkVersion" />

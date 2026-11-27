@@ -58,6 +58,7 @@ class MainActivity : FlutterActivity() {
         NativeCrypto.register(messenger)
         VoiceRecorder.register(applicationContext, messenger)
         VideoCompressor.register(applicationContext, messenger)
+        WaslNet.register(applicationContext, messenger)
 
         val channel = MethodChannel(messenger, "wasl/system")
         system = channel

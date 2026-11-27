@@ -2649,4 +2649,124 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guideSafetyTitle => 'الأمان والخصوصية';
+
+  @override
+  String get netTitle => 'شبكة وصل';
+
+  @override
+  String get netOpen => 'افتح شبكة وصل';
+
+  @override
+  String get netOpenSub =>
+      'موبايلك يعمل شبكة واي فاي لوحده (من غير إنترنت)، واللي جنبك يدخلوها بضغطة: أسرع بكتير من البلوتوث، وفيها فيديو ومكالمات.';
+
+  @override
+  String get netStarting => 'بنفتح الشبكة…';
+
+  @override
+  String get netHosting => 'شبكتك شغالة';
+
+  @override
+  String get netHostingSub =>
+      'اللي جنبك وفاتحين وصل على \"الاتنين مع بعض\" هيطلعلهم يدخلوها. أي حد تاني يدخلها من إعدادات الواي فاي بالاسم والباسورد دول.';
+
+  @override
+  String get netName => 'اسم الشبكة';
+
+  @override
+  String get netPassword => 'الباسورد';
+
+  @override
+  String get netShowPass => 'اعرض';
+
+  @override
+  String get netCopied => 'اتنسخ';
+
+  @override
+  String get netStop => 'اقفل الشبكة';
+
+  @override
+  String netOfferTitle(String name) {
+    return '$name فاتح شبكة وصل جنبك';
+  }
+
+  @override
+  String get netOfferSub => 'ادخلها: أسرع من البلوتوث، وفيها فيديو ومكالمات.';
+
+  @override
+  String get netJoin => 'ادخلها';
+
+  @override
+  String get netJoining => 'بنتوصل… وافق على رسالة الموبايل';
+
+  @override
+  String netJoined(String name) {
+    return 'إنت على شبكة $name';
+  }
+
+  @override
+  String get netJoinedSub =>
+      'الرسايل بتمشي على الواي فاي، وموبايلك لسه بيوصّل اللي على البلوتوث.';
+
+  @override
+  String get netLeave => 'اخرج منها';
+
+  @override
+  String get netNotNow => 'مش دلوقتي';
+
+  @override
+  String get netNeedBoth =>
+      'عشان تدخلها لازم تكون على \"الاتنين مع بعض\": ارجع لأول صفحة واختاره.';
+
+  @override
+  String netOldAndroid(String ssid, String pass) {
+    return 'موبايلك (قبل أندرويد 10) مبيقدرش يدخلها من التطبيق: ادخل من إعدادات الواي فاي على \"$ssid\" بالباسورد $pass';
+  }
+
+  @override
+  String get netErrIncompatible =>
+      'مقدرناش نفتح الشبكة: اقفل نقطة الاتصال (الهوت سبوت) العادية الأول.';
+
+  @override
+  String get netErrDisallowed =>
+      'الموبايل ده مش مسموح فيه بفتح شبكة (من إعدادات الجهاز أو الشركة).';
+
+  @override
+  String get netErrPermission =>
+      'محتاجين إذن \"الأجهزة القريبة\" (أو الموقع في الموبايلات الأقدم) عشان نفتح الشبكة.';
+
+  @override
+  String get netErrLocation =>
+      'شغّل الموقع الأول؛ أندرويد محتاجه عشان يفتح الشبكة.';
+
+  @override
+  String get netErrFailed => 'مقدرناش نفتح الشبكة دلوقتي، جرّب تاني.';
+
+  @override
+  String get netErrJoin => 'مقدرناش ندخل الشبكة (اترفضت أو بعيدة).';
+
+  @override
+  String get netLost => 'شبكة وصل اللي كنت فيها وقفت';
+
+  @override
+  String get netHostLost => 'شبكة وصل بتاعتك اتقفلت';
+
+  @override
+  String get guideNetTitle => 'شبكة وصل';
+
+  @override
+  String get guideNetWhat =>
+      'موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم \"ادخلها\" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.';
+
+  @override
+  String get guideNetWhen =>
+      'لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.';
+
+  @override
+  String get guideNetFacts =>
+      'كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على \"الاتنين مع بعض\" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.';
+
+  @override
+  String get guideNetHow =>
+      'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.';
 }

@@ -19,6 +19,9 @@ import 'package:wasl/features/games/ui/game_help.dart';
 import 'package:wasl/features/games/ui/game_picker.dart';
 import 'package:wasl/features/games/ui/game_screen.dart';
 import 'package:wasl/features/guide/guide_screen.dart';
+import 'package:wasl/features/net/wasl_net_ui.dart';
+import 'package:wasl/features/net/wasl_network.dart';
+import 'package:wasl/mesh/mesh_router.dart';
 import 'package:wasl/features/settings/settings_screen.dart';
 
 import 'harness.dart';
@@ -224,6 +227,18 @@ void main() {
       for (final k in [GameKind.mafia, GameKind.battleship]) {
         await Shots.shoot(tester, 'game-help-${k.id}', () => GameHelpPage(kind: k), themes: light);
       }
+      WaslNetwork.instance
+        ..state = NetState.hosting
+        ..hosted = const WifiOffer(ssid: 'AndroidShare_4821', pass: 'k3v9x2m8q1');
+      await Shots.shoot(tester, 'net-hosting', () => const HomeScreen(kind: TransportKind.wifi), themes: light,
+          then: (t) async {
+        await t.tap(find.byType(NavigationDestination).at(2));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 900));
+      });
+      WaslNetwork.instance
+        ..state = NetState.idle
+        ..hosted = null;
     });
 
     for (final (name, make) in <(String, Future<GameRoom> Function(String))>[
@@ -262,6 +277,78 @@ void main() {
           await t.pump(const Duration(milliseconds: 600));
         },
       );
+    });
+  });
+
+  group('net', () {
+    final hub = ChatHub.instance;
+    final net = WaslNetwork.instance;
+    const offer = WifiOffer(ssid: 'AndroidShare_4821', pass: 'k3v9x2m8q1');
+
+    Future<void> world(WidgetTester tester) async {
+      if (hub.running) return;
+      await tester.runAsync(() async {
+        await hub.start(TransportKind.wifi);
+        await Sample.fill(hub);
+      });
+    }
+
+    Future<void> nearby(WidgetTester t) async {
+      await t.tap(find.byType(NavigationDestination).at(2));
+      await t.pump();
+      await t.pump(const Duration(milliseconds: 500));
+      await t.pump(const Duration(milliseconds: 800));
+    }
+
+    tearDown(() {
+      net
+        ..state = NetState.idle
+        ..hosted = null
+        ..joined = null
+        ..joinedFrom = null;
+      hub.router?.nodes[Sample.karim]?.wifi = null;
+    });
+
+    testWidgets('net card idle', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      await Shots.shoot(tester, 'net-idle', () => const HomeScreen(kind: TransportKind.wifi), then: nearby);
+    });
+
+    testWidgets('net card hosting', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      net
+        ..state = NetState.hosting
+        ..hosted = offer;
+      await Shots.shoot(tester, 'net-hosting', () => const HomeScreen(kind: TransportKind.wifi), then: nearby);
+    });
+
+    testWidgets('net card joined', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      net
+        ..state = NetState.joined
+        ..joined = offer
+        ..joinedFrom = 'كريم';
+      await Shots.shoot(tester, 'net-joined', () => const HomeScreen(kind: TransportKind.wifi), then: nearby);
+    });
+
+    testWidgets('net offer', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      hub.router!.nodes[Sample.karim]!.wifi = offer;
+      await Shots.shoot(tester, 'net-offer', () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetOfferBanner(kind: TransportKind.both)]))));
+      await Shots.shoot(tester, 'net-offer-bt', () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetOfferBanner(kind: TransportKind.bluetooth)]))));
+    });
+
+    testWidgets('net guide', (tester) async {
+      Shots.phone(tester);
+      await Shots.shoot(tester, 'guide-net', () => const GuideScreen(), then: (t) async {
+        await t.scrollUntilVisible(find.text(t.element(find.byType(GuideScreen)).l10n.guideNetTitle).first, 400,
+            scrollable: find.byType(Scrollable).first);
+        await t.pump(const Duration(milliseconds: 300));
+      });
     });
   });
 }

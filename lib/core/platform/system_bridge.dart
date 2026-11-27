@@ -130,8 +130,14 @@ class SystemBridge {
     required void Function(String chatId) onOpen,
     required void Function(String chatId, String text) onReply,
     required void Function(String chatId) onRead,
+    void Function(String event)? onSystem,
   }) {
     _channel.setMethodCallHandler((call) async {
+      // أحداث من النظام مش من الإشعارات (شبكة وصل وقعت...)
+      if (call.method == 'netLost' || call.method == 'hostLost') {
+        onSystem?.call(call.method);
+        return;
+      }
       final args = call.arguments;
       final chat = args is Map ? '${args['chat'] ?? ''}' : '';
       if (chat.isEmpty) return;

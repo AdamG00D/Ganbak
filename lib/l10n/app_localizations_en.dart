@@ -2675,4 +2675,127 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideSafetyTitle => 'Safety and privacy';
+
+  @override
+  String get netTitle => 'Wasl network';
+
+  @override
+  String get netOpen => 'Start a Wasl network';
+
+  @override
+  String get netOpenSub =>
+      'Your phone makes its own Wi-Fi network (no internet) and people next to you join with a tap: much faster than Bluetooth, with video and calls.';
+
+  @override
+  String get netStarting => 'Starting the network…';
+
+  @override
+  String get netHosting => 'Your network is on';
+
+  @override
+  String get netHostingSub =>
+      'People next to you running Wasl on \"Both\" are offered to join. Anyone else can join from Wi-Fi settings with this name and password.';
+
+  @override
+  String get netName => 'Network name';
+
+  @override
+  String get netPassword => 'Password';
+
+  @override
+  String get netShowPass => 'Show';
+
+  @override
+  String get netCopied => 'Copied';
+
+  @override
+  String get netStop => 'Turn it off';
+
+  @override
+  String netOfferTitle(String name) {
+    return '$name has a Wasl network next to you';
+  }
+
+  @override
+  String get netOfferSub =>
+      'Join it: faster than Bluetooth, with video and calls.';
+
+  @override
+  String get netJoin => 'Join';
+
+  @override
+  String get netJoining => 'Connecting… accept your phone\'s prompt';
+
+  @override
+  String netJoined(String name) {
+    return 'You\'re on $name\'s network';
+  }
+
+  @override
+  String get netJoinedSub =>
+      'Messages go over Wi-Fi, and your phone still links the people on Bluetooth.';
+
+  @override
+  String get netLeave => 'Leave';
+
+  @override
+  String get netNotNow => 'Not now';
+
+  @override
+  String get netNeedBoth =>
+      'To join it you need \"Both\": go back to the first screen and pick it.';
+
+  @override
+  String netOldAndroid(String ssid, String pass) {
+    return 'Your phone (older than Android 10) can\'t join from the app: in Wi-Fi settings pick \"$ssid\" with password $pass';
+  }
+
+  @override
+  String get netErrIncompatible =>
+      'Couldn\'t start it: turn off your regular hotspot first.';
+
+  @override
+  String get netErrDisallowed =>
+      'This phone doesn\'t allow starting a network (device or company policy).';
+
+  @override
+  String get netErrPermission =>
+      'We need the \"Nearby devices\" permission (or location on older phones) to start the network.';
+
+  @override
+  String get netErrLocation =>
+      'Turn on location first; Android needs it to start the network.';
+
+  @override
+  String get netErrFailed =>
+      'Couldn\'t start the network right now, try again.';
+
+  @override
+  String get netErrJoin =>
+      'Couldn\'t join the network (declined or out of range).';
+
+  @override
+  String get netLost => 'The Wasl network you were on stopped';
+
+  @override
+  String get netHostLost => 'Your Wasl network was turned off';
+
+  @override
+  String get guideNetTitle => 'Wasl network';
+
+  @override
+  String get guideNetWhat =>
+      'Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a \"Join\" button and are in with one tap; nobody types a password.';
+
+  @override
+  String get guideNetWhen =>
+      'When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one.';
+
+  @override
+  String get guideNetFacts =>
+      'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on \"Both\" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.';
+
+  @override
+  String get guideNetHow =>
+      'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.';
 }

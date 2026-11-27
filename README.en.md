@@ -58,6 +58,8 @@ the phone's language, and you can switch it in Settings.
 - **No internet, no server, no account** — a name and an avatar; your identity is a key generated on your phone.
 - **Three ways to connect** — Bluetooth (no network at all), Wi-Fi / hotspot (faster, with video and calls), or
   **both at once**, which turns your phone into a bridge between a Wi-Fi network and people on Bluetooth.
+- **Wasl network** — no router? Your phone makes its own Wi-Fi network and people next to you join with one tap, no
+  password typing. Networks link up over Bluetooth, so the network grows with no router at all.
 - **Mesh** — messages hop through other phones (up to 6 hops); relays can't read private chats.
 - **Private chats** — end-to-end encrypted automatically, with an optional safety code to verify each other.
 - **Groups** — open, password-protected or join-by-request, with an owner and admins who can remove members and

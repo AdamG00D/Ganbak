@@ -41,6 +41,8 @@ class LanLink extends MeshLink {
   RawDatagramSocket? _udp;
   Timer? _beaconTimer;
   Timer? _pruneTimer;
+  Timer? _addrTimer;
+  bool _refreshing = false;
   int _port = AppConfig.lanPort;
   int _counter = 0;
   bool _running = false;
@@ -111,6 +113,7 @@ class LanLink extends MeshLink {
     }
     _beaconTimer = Timer.periodic(_beaconEvery, (_) => _beacon());
     _pruneTimer = Timer.periodic(const Duration(seconds: 2), (_) => _prune());
+    _addrTimer = Timer.periodic(const Duration(seconds: 3), (_) => _refreshAddresses());
     _beacon();
     setPhase(LinkPhase.running);
   }
@@ -124,6 +127,46 @@ class LanLink extends MeshLink {
     } else {
       await start();
     }
+  }
+
+  /// الشبكة ممكن تتغير وإحنا شغالين (فتحنا "شبكة وصل" أو دخلنا واحدة، أو الواي فاي اتوصل):
+  /// بنلاحظ لوحدنا ونفتح منفذ الإعلان من جديد عشان يمشي على الشبكة الجديدة.
+  Future<void> _refreshAddresses() async {
+    if (!_running || _refreshing) return;
+    _refreshing = true;
+    try {
+      final now = await findLocalAddresses();
+      if (!_running || _sameList(now, localAddresses)) return;
+      final had = hasNetwork;
+      localAddresses = now;
+      await _reopenBeacons();
+      if (!had && hasNetwork) clearError();
+      _beacon();
+      notifyListeners();
+    } finally {
+      _refreshing = false;
+    }
+  }
+
+  static bool _sameList(List<String> a, List<String> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  Future<void> _reopenBeacons() async {
+    _udp?.close();
+    _udp = null;
+    try {
+      _udp = await RawDatagramSocket.bind(InternetAddress.anyIPv4, AppConfig.lanBeaconPort, reuseAddress: true);
+      _udp!
+        ..broadcastEnabled = true
+        ..listen((e) {
+          if (e == RawSocketEvent.read) _onDatagram();
+        });
+    } catch (_) {}
   }
 
   static Future<List<String>> findLocalAddresses() async {
@@ -293,6 +336,7 @@ class LanLink extends MeshLink {
     _running = false;
     _beaconTimer?.cancel();
     _pruneTimer?.cancel();
+    _addrTimer?.cancel();
     for (final c in _conns.values.toList()) {
       _close(c);
     }

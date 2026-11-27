@@ -35,12 +35,22 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
   The GitHub social preview (`../wasl_social_preview*.png`, outside the repo, uploaded by hand) is still the old look.
 - Dice / coin in chat was dropped from this release (not asked for again).
 
-## Next release: 1.4 — "Wasl network" (شبكة وصل)
+## "Wasl network" (planned as 1.4) — implemented, folded into the unreleased 1.3 (ask the owner)
 
-The app opens a Local-Only Hotspot by itself and hands the SSID/password to nearby phones over Bluetooth; they join
-with one tap (`WifiNetworkSpecifier`, Android 10+; QR / manual on 8–9). Hotspot owners keep Bluetooth on and bridge
-hotspots together, so the network grows without any router. Needs real-device testing by the owner (Samsung, Xiaomi).
-Also add its explanation to the in-app guide. Not started — do it after 1.3 ships.
+The app opens an Android Local-Only Hotspot (no internet) and puts `w {s, p, x}` in its presence; direct Bluetooth
+neighbours on "Both" get an offer banner and join with one tap (`WifiNetworkSpecifier`, Android 10+, then
+`bindProcessToNetwork`); Android 8–9 get the name/password to enter in Wi-Fi settings. Hosting needs Android 8+,
+"Nearby devices" (13+) or location + location on (≤ 12). `LanLink` re-reads its addresses every 3 s and reopens the
+beacon socket, so it follows the new network. UI: card in the Nearby tab (wifi / both), offer banner on the home
+screen (join button only on "Both"; on Bluetooth it says to pick "Both"), "Start a Wasl network" on the no-network
+card, a section with a drawing in the guide.
+
+- Code: `android/.../WaslNet.kt` (channel `wasl/net`), `lib/features/net/`, presence parsing in `mesh_router.dart`
+  (`WifiOffer`), hub wiring (`_describe`, `stop()` → `WaslNetwork.shutdown()`), tests in `test/net_test.dart`.
+- **Not verified on devices and the Kotlin is not compiled yet** (the owner said not to build). First build: check it
+  compiles; then test: host on Android 13+ and on 9, join from 10+, join from 9 (manual), two hotspots bridged by a
+  phone on "Both", hotspot closing when Wasl closes, Samsung / Xiaomi quirks (STA drop while hosting).
+- Not done (ideas): automatic hosting when many people are on Bluetooth only; QR code for phones without Wasl.
 
 ## Decisions taken with the owner
 
@@ -109,3 +119,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — owner: postpone the phone test, don't build, tidy the repo, then start 1.4. Repo: new README
   screenshots (ar + en) and banners in the new look, games/guide rows in the READMEs, CI runs the large-text check,
   PR/bug templates mention screenshots and games. Next: 1.4 (Wasl network).
+- 2026-11-27 — Wasl network implemented (see its section): Kotlin + Dart + UI + guide + docs + tests; screenshots
+  reviewed; the large-text check also caught an old overflow in the Nearby list (fixed). Release notes: added to 1.3
+  because 1.3 was never published — ask the owner whether to ship one release or split 1.3 / 1.4.

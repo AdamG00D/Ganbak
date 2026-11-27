@@ -88,6 +88,8 @@ lib/
     games/                  core/ (GameKind, GameEngine, GameRoom, GameCenter), engines/ (rules of the 9 games,
                             createEngine, autoMoves), data/ (spy words, quiz bank), ui/ (picker, chat card, game
                             screen, boards, help page) — see docs/GAMES.md
+    net/                    "Wasl network": wasl_network.dart (WaslNetwork: host a Local-Only Hotspot / join one;
+                            the offer rides in presence as `w`), wasl_net_ui.dart (card in Nearby, offer banner)
     guide/guide_screen.dart "Wasl guide" (settings + ؟ on the transport screen): connecting with drawings, groups,
                             games, safety
     groups/                 group.dart (GroupInfo: keys, roles, admin state + GroupOps: sealed admin commands),
@@ -107,6 +109,7 @@ android/app/src/main/kotlin/com/adam/wasl/
   KeyVault.kt        Keystore AES key + BiometricGate
   ChatService.kt     foreground service + Notifications (MessagingStyle per chat, reply / mark-read receiver);
                      onTaskRemoved kills the process
+  WaslNet.kt         wasl/net: Local-Only Hotspot (host) + WifiNetworkSpecifier join + bindProcessToNetwork
   ChatFiles.kt, NativeCrypto.kt (wasl/crypto), VoiceRecorder.kt (wasl/voice), VideoCompressor.kt (wasl/video), ImageCompressor.kt
 ```
 
@@ -170,6 +173,8 @@ android/app/src/main/kotlin/com/adam/wasl/
   + `U {t: gm}` sealed per recipient with `Box.pairKey(..., 'wasl/game')` (acts, secrets, secret chat). The host runs
   the engine; `view`/`pv`/`bye`/`psay` only from the host; acts are numbered and re-sent until acknowledged (`ac`);
   25 s of host silence closes the room. RPS picks and battleship boards are commitments, revealed later.
+- **Wasl network**: presence `w {s, p, x}` only while hosting; offered to direct neighbours only; `LanLink` re-reads
+  its addresses every 3 s and reopens the beacon socket when they change (needed after hosting / joining).
 - **Saving**: default off. A conversation is written to disk only if `saveOverride ?? AppSettings.saveChats`; media of
   saved chats moves to `vault/media/<id>/`. Unsaved chats live in memory until the hub stops.
 
