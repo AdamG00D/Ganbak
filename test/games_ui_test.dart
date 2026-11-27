@@ -99,4 +99,26 @@ void main() {
     final room = GameRoom(id: '00112233aabb', kind: GameKind.mafia, host: me, link: _Link());
     expect(room.rng.runtimeType.toString(), Random.secure().runtimeType.toString());
   });
+
+  testWidgets('النتيجة: كل رقم جنب صاحبه (بالعربي من اليمين للشمال)', (tester) async {
+    phone(tester);
+    final other = others.first;
+    final room = GameRoom(id: '00112233aabc', kind: GameKind.xo, host: me, link: _Link(), engineFactory: createEngine)
+      ..players = [me, other];
+    room.names[me] = 'أنا';
+    room.names[other] = 'كريم';
+    room.start();
+    room.wins = {me: 3, other: 0};
+    await tester.pumpWidget(_app(GameScreen(room: room)));
+    await tester.pump(const Duration(milliseconds: 300));
+    final myScore = tester.getCenter(find.byKey(const ValueKey('score-mine')));
+    final theirScore = tester.getCenter(find.byKey(const ValueKey('score-other')));
+    final myName = tester.getCenter(find.text('أنا').first);
+    final theirName = tester.getCenter(find.text('كريم').first);
+    // رقمي في نفس ناحية اسمي
+    expect((myScore.dx > theirScore.dx), (myName.dx > theirName.dx));
+    expect(tester.widget<Text>(find.byKey(const ValueKey('score-mine'))).data, '3');
+    room.close(RoomEnd.ended);
+    await tester.pump();
+  });
 }

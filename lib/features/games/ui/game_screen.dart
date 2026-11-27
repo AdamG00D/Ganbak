@@ -639,15 +639,18 @@ class DuelHeader extends StatelessWidget {
           child: Row(
             children: [
               side(mine, false),
+              // كل رقم جنب صاحبه: صف بيتقلب مع اتجاه اللغة زي الأسامي (مش نص واحد من الشمال لليمين)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: Text(
-                  '${s[mine] ?? 0}  –  ${s[other] ?? 0}',
-                  textDirection: TextDirection.ltr,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    fontFeatures: [FontFeature.tabularFigures()],
+                child: DefaultTextStyle.merge(
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, fontFeatures: [FontFeature.tabularFigures()]),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('${s[mine] ?? 0}', key: const ValueKey('score-mine')),
+                      const Text('  –  '),
+                      Text('${s[other] ?? 0}', key: const ValueKey('score-other')),
+                    ],
                   ),
                 ),
               ),
