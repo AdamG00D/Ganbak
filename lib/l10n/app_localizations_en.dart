@@ -2797,7 +2797,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideNetHow =>
-      'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.';
+      'Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone\'s prompt.\nA phone can\'t join from inside Wasl? Tap \"Network QR\" and let them scan it with the camera.';
 
   @override
   String get sosAsk => 'Need help?';
@@ -2880,4 +2880,26 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guideMailBody =>
       'If the person you\'re writing to isn\'t around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can\'t read it. Text only (not photos or voice), with people you\'ve talked to before.';
+
+  @override
+  String netSuggestTitle(String n) {
+    return '$n people around you are on Bluetooth only';
+  }
+
+  @override
+  String get netSuggestSub =>
+      'Open a Wasl network and chats and photos get much faster for everyone. The others will be offered to join with one tap.';
+
+  @override
+  String get netQr => 'Network QR';
+
+  @override
+  String get netQrTitle => 'Scan to join the network';
+
+  @override
+  String get netQrSub =>
+      'If someone\'s phone can\'t join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi.';
+
+  @override
+  String get netOpenShort => 'Open it';
 }

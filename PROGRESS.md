@@ -62,7 +62,7 @@ card, a section with a drawing in the guide.
 | 1 | Dependencies: pub upgrade incl. gal 3 / permission_handler 13 (compileSdk 37; "permanently denied" now only from `request()`) | done — **gradle/compile not verified until the next build** |
 | 2 | SOS: emergency status in presence (`sos {t}`), banner + generic notification for everyone in the mesh, card in Nearby, guide entry | done (`lib/features/sos/`) |
 | 3 | Offline messages ("the message waits for its owner") | done — see below |
-| 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | todo |
+| 4 | Wasl network: automatic suggestion when many people are on Bluetooth only + Wi-Fi QR code | done — see below |
 | 5 | GitHub social preview, F-Droid metadata, external-audit brief, design doc for signed names/messages | todo |
 | 6 | Docs, version 1.4, release notes, checks; build only with the owner's OK | todo |
 
@@ -80,6 +80,17 @@ card, a section with a drawing in the guide.
   envelope is gone becomes failed). The carry box is memory only.
 - Tests: `test/mailbox_test.dart` (crypto, limits) + `test/mailbox_net_test.dart` (A → C carries → B, receipt back to
   A). Screenshot `chat-away` (normal + big). Guide entry under connection.
+
+### Step 4 — Wasl network suggestion + QR (done)
+
+- QR: "Network QR" button on the hosting card opens a sheet with a standard Wi-Fi QR (`WifiOffer.qrText`,
+  `WIFI:T:WPA|SAE|nopass;S:…;P:…;;`, special characters escaped), black on white in both themes. Drawn by
+  `WifiQr` with the pure-Dart `qr` package (BSD-3, GPL-compatible). For phones that can't join from inside Wasl.
+- Suggestion: `WaslNetSuggestBanner` (home, "Both" mode only) when ≥ 3 direct neighbours are on Bluetooth only, no
+  Wasl network is offered nearby, and my id is the smallest among them (`WaslNetwork.suggestAmong`) — so one phone
+  gets it, not everyone. "Not now" hides it until the hub stops; it doesn't come back after hosting once.
+- Tests in `test/net_test.dart`; screenshots `net-qr`, `net-suggest` (normal + big). Guide "how to start" mentions
+  the QR. No wire change.
 
 Notes:
 - `emoji_picker_flutter` and `flutter_webrtc` still apply the old Kotlin Gradle plugin (warning at build); they are at
@@ -169,4 +180,6 @@ a phone's large-font setting): any text that spills out of its box fails the run
 - 2026-11-27 — 1.4 step 1 (dependencies) and step 2 (SOS) done and pushed.
 - 2026-11-27 — 1.4 step 3 (offline messages) done: mailbox service, text-only input while the person is away,
   outbox kept for saved chats, mesh test, PROTOCOL §9, SECURITY, guide. Next: step 4 (Wasl network suggestion + QR).
+- 2026-11-27 — 1.4 step 4 done: Wi-Fi QR on the hosting card, one-phone suggestion to open a Wasl network when
+  many people are on Bluetooth only. Next: step 5 (social preview, F-Droid metadata, audit brief, signing design).
 

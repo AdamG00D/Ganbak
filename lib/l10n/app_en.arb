@@ -798,7 +798,7 @@
   "guideNetWhat": "Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a \"Join\" button and are in with one tap; nobody types a password.",
   "guideNetWhen": "When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one.",
   "guideNetFacts": "Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on \"Both\" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.",
-  "guideNetHow": "Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone's prompt.",
+  "guideNetHow": "Pick \"Both\" (so Bluetooth can pass the name and password to people next to you).\nUnder \"Nearby\" tap \"Start a Wasl network\".\nPeople next to you see \"Join\": they tap it and accept their phone's prompt.\nA phone can't join from inside Wasl? Tap \"Network QR\" and let them scan it with the camera.",
   "sosAsk": "Need help?",
   "sosAskSub": "Send an SOS to everyone running Wasl around you, even far away through the phones in between.",
   "sosOpen": "SOS",
@@ -821,5 +821,11 @@
   "mailHint": "Leave a message…",
   "mailArrived": "Arrived while away",
   "guideMailTitle": "Messages wait for their owner",
-  "guideMailBody": "If the person you're writing to isn't around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can't read it. Text only (not photos or voice), with people you've talked to before."
+  "guideMailBody": "If the person you're writing to isn't around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can't read it. Text only (not photos or voice), with people you've talked to before.",
+  "netSuggestTitle": "{n} people around you are on Bluetooth only",
+  "netSuggestSub": "Open a Wasl network and chats and photos get much faster for everyone. The others will be offered to join with one tap.",
+  "netQr": "Network QR",
+  "netQrTitle": "Scan to join the network",
+  "netQrSub": "If someone's phone can't join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi.",
+  "netOpenShort": "Open it"
 }

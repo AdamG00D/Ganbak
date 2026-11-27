@@ -252,9 +252,24 @@ void main() {
         await t.pump();
         await t.pump(const Duration(milliseconds: 900));
       });
+      await Shots.shoot(tester, 'net-qr', () => const HomeScreen(kind: TransportKind.wifi), themes: light,
+          then: (t) async {
+        await t.tap(find.byType(NavigationDestination).at(2));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 900));
+        await t.tap(find.byIcon(Icons.qr_code_2_rounded));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 600));
+      });
       WaslNetwork.instance
         ..state = NetState.idle
         ..hosted = null;
+      await Shots.shoot(
+        tester,
+        'net-suggest',
+        () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetSuggestCard(count: 4)]))),
+        themes: light,
+      );
     });
 
     for (final (name, make) in <(String, Future<GameRoom> Function(String))>[
@@ -338,6 +353,29 @@ void main() {
         ..state = NetState.hosting
         ..hosted = offer;
       await Shots.shoot(tester, 'net-hosting', () => const HomeScreen(kind: TransportKind.wifi), then: nearby);
+    });
+
+    testWidgets('net qr', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      net
+        ..state = NetState.hosting
+        ..hosted = offer;
+      await Shots.shoot(tester, 'net-qr', () => const HomeScreen(kind: TransportKind.wifi), then: (t) async {
+        await nearby(t);
+        await t.tap(find.byIcon(Icons.qr_code_2_rounded));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 600));
+      });
+    });
+
+    testWidgets('net suggest', (tester) async {
+      Shots.phone(tester);
+      await Shots.shoot(
+        tester,
+        'net-suggest',
+        () => const Scaffold(body: SafeArea(child: Column(children: [WaslNetSuggestCard(count: 4)]))),
+      );
     });
 
     testWidgets('net card joined', (tester) async {

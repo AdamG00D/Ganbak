@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr/qr.dart';
 
 import '../../core/theme/app_theme.dart';
 import '../../l10n/l10n.dart';
@@ -92,12 +93,28 @@ class _WaslNetCardState extends State<WaslNetCard> {
                     ),
             ),
             const SizedBox(height: 12),
-            SecondaryButton(
-              label: l.netStop,
-              icon: Icons.portable_wifi_off_rounded,
-              color: Colors.white,
-              height: 46,
-              onPressed: net.stopHosting,
+            Row(
+              children: [
+                Expanded(
+                  child: SecondaryButton(
+                    label: l.netQr,
+                    icon: Icons.qr_code_2_rounded,
+                    color: Colors.white,
+                    height: 46,
+                    onPressed: () => showWifiQr(context, o),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SecondaryButton(
+                    label: l.netStop,
+                    icon: Icons.portable_wifi_off_rounded,
+                    color: Colors.white,
+                    height: 46,
+                    onPressed: net.stopHosting,
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -161,6 +178,98 @@ class _WaslNetCardState extends State<WaslNetCard> {
       ),
     );
   }
+}
+
+/// كود QR للشبكة: أي موبايل يصوّره بالكاميرا يدخل الواي فاي (حتى من غير وصل أو على أندرويد قديم).
+Future<void> showWifiQr(BuildContext context, WifiOffer offer) => showActionSheet<void>(
+      context,
+      builder: (ctx) {
+        final l = ctx.l10n;
+        final p = ctx.palette;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                l.netQrTitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 14),
+              Container(
+                // الكود لازم يبقى أسود على أبيض في الوضعين (الكاميرات بتقراه كده)
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(color: p.border),
+                ),
+                child: WifiQr(data: offer.qrText, size: 220),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                offer.ssid,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.5),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                l.netQrSub,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: p.textMuted, height: 1.6, fontSize: 13.5),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+/// رسم كود QR (مكتبة qr — BSD).
+class WifiQr extends StatelessWidget {
+  const WifiQr({super.key, required this.data, this.size = 200});
+
+  final String data;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final QrImage image;
+    try {
+      image = QrImage(QrCode.fromData(data: data, errorCorrectLevel: QrErrorCorrectLevel.M));
+    } catch (_) {
+      return SizedBox.square(dimension: size);
+    }
+    return Semantics(
+      label: context.l10n.netQr,
+      image: true,
+      child: SizedBox.square(dimension: size, child: CustomPaint(painter: _QrPainter(image))),
+    );
+  }
+}
+
+class _QrPainter extends CustomPainter {
+  _QrPainter(this.image);
+  final QrImage image;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final n = image.moduleCount;
+    final cell = size.width / n;
+    final paint = Paint()
+      ..color = Colors.black
+      ..isAntiAlias = false;
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        if (image.isDark(r, c)) {
+          canvas.drawRect(Rect.fromLTWH(c * cell, r * cell, cell + 0.5, cell + 0.5), paint);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_QrPainter old) => old.image != image;
 }
 
 /// سطر "الاسم: …" أو "الباسورد: …" بنسخ.
@@ -296,6 +405,113 @@ class WaslNetOfferBanner extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// اللي جنبي مباشرة على البلوتوث بس (مش على الواي فاي).
+List<String> _bluetoothNeighbours(ChatHub hub) {
+  final link = hub.link;
+  final router = hub.router;
+  if (link is! DualLink || router == null) return const [];
+  return [
+    for (final n in hub.people)
+      if (n.hops == 1)
+        if (router.linkOf(n.id) case final l? when !link.isWifi(l)) n.id,
+  ];
+}
+
+/// اقتراح: "ناس كتير حواليك على البلوتوث بس — افتح شبكة وصل". بيظهر لواحد بس (أصغر معرّف) في وضع "الاتنين".
+class WaslNetSuggestBanner extends StatelessWidget {
+  const WaslNetSuggestBanner({super.key, required this.kind});
+
+  final TransportKind kind;
+
+  @override
+  Widget build(BuildContext context) {
+    if (kind != TransportKind.both) return const SizedBox.shrink();
+    final net = WaslNetwork.instance;
+    final hub = ChatHub.instance;
+    return ListenableBuilder(
+      listenable: Listenable.merge([net, hub]),
+      builder: (context, _) {
+        final bt = _bluetoothNeighbours(hub);
+        final show = WaslNetwork.suggestAmong(
+          myId: hub.myId,
+          bluetoothNeighbours: bt,
+          anyOffer: hub.people.any((n) => n.wifi != null),
+          state: net.state,
+          dismissed: net.suggestDismissed,
+        );
+        if (!show) return const SizedBox.shrink();
+        return WaslNetSuggestCard(count: bt.length);
+      },
+    );
+  }
+}
+
+/// شكل الاقتراح نفسه (منفصل عشان صور الشاشات).
+class WaslNetSuggestCard extends StatelessWidget {
+  const WaslNetSuggestCard({super.key, required this.count});
+
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final net = WaslNetwork.instance;
+    final p = context.palette;
+    final l = context.l10n;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 8),
+      child: StitchedBox(
+        color: p.isDark ? const Color(0xFF2A3060) : p.ink,
+        pattern: true,
+        radius: 20,
+        stitch: p.saffron.withValues(alpha: 0.45),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.wifi_tethering_rounded, color: p.saffron),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    l.netSuggestTitle(count.toString()),
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(l.netSuggestSub, style: const TextStyle(color: Colors.white70, fontSize: 13, height: 1.5)),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: SecondaryButton(
+                    label: l.netNotNow,
+                    color: Colors.white,
+                    height: 42,
+                    onPressed: net.dismissSuggestion,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: PrimaryButton(
+                    label: l.netOpenShort,
+                    icon: Icons.wifi_tethering_rounded,
+                    height: 42,
+                    loading: net.state == NetState.starting,
+                    onPressed: () => startWaslNetwork(context),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

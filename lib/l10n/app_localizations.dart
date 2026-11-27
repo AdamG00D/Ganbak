@@ -4889,7 +4889,7 @@ abstract class AppLocalizations {
   /// No description provided for @guideNetHow.
   ///
   /// In ar, this message translates to:
-  /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.'**
+  /// **'اختار \"الاتنين مع بعض\" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي \"القريبين\" دوس \"افتح شبكة وصل\".\nاللي جنبك هيطلعلهم \"ادخلها\": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه وصل؟ دوس \"كود الشبكة\" وخليه يصوّره بالكاميرا.'**
   String get guideNetHow;
 
   /// No description provided for @sosAsk.
@@ -5029,6 +5029,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لو اللي بتكلمه مش موجود، اكتب عادي: الرسالة بتتقفل ليه هو بس، وموبايلك والموبايلات اللي جنبك بيشيلوها لحد 48 ساعة ويسلّموها أول ما يظهر. اللي بيشيلها مبيقدرش يقراها. بتشتغل للكلام بس (مش الصور ولا الفويس)، ومع الناس اللي اتكلمت معاهم قبل كده.'**
   String get guideMailBody;
+
+  /// No description provided for @netSuggestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} أشخاص حواليك على البلوتوث بس'**
+  String netSuggestTitle(String n);
+
+  /// No description provided for @netSuggestSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح شبكة وصل والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.'**
+  String get netSuggestSub;
+
+  /// No description provided for @netQr.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود الشبكة'**
+  String get netQr;
+
+  /// No description provided for @netQrTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الكود عشان تدخل الشبكة'**
+  String get netQrTitle;
+
+  /// No description provided for @netQrSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو موبايل حد مقدرش يدخل من جوه وصل (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح وصل على الواي فاي.'**
+  String get netQrSub;
+
+  /// No description provided for @netOpenShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتحها'**
+  String get netOpenShort;
 }
 
 class _AppLocalizationsDelegate

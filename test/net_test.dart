@@ -147,4 +147,25 @@ void main() {
       }
     });
   });
+
+  group('كود الشبكة والاقتراح', () {
+    test('نص الـ QR بيتعمل صح والحروف الخاصة بتتهرّب', () {
+      expect(const WifiOffer(ssid: 'AndroidShare_4821', pass: 'k3v9x2m8q1').qrText,
+          'WIFI:T:WPA;S:AndroidShare_4821;P:k3v9x2m8q1;;');
+      expect(const WifiOffer(ssid: 'a;b', pass: r'p:a\ss,"1', security: 2).qrText, r'WIFI:T:SAE;S:a\;b;P:p\:a\\ss\,\"1;;');
+      expect(const WifiOffer(ssid: 'open', pass: '', security: 0).qrText, 'WIFI:T:nopass;S:open;;');
+    });
+
+    test('الاقتراح بيظهر لواحد بس: أصغر معرّف، و3 على الأقل على البلوتوث، ومفيش شبكة', () {
+      const ids = ['22', '33', '44'];
+      bool s(String me, {List<String> bt = ids, bool offer = false, NetState st = NetState.idle, bool dis = false}) =>
+          WaslNetwork.suggestAmong(myId: me, bluetoothNeighbours: bt, anyOffer: offer, state: st, dismissed: dis);
+      expect(s('11'), isTrue);
+      expect(s('23'), isFalse, reason: 'فيه حد معرّفه أصغر');
+      expect(s('11', bt: ['22', '33']), isFalse, reason: 'أقل من 3');
+      expect(s('11', offer: true), isFalse, reason: 'فيه شبكة مفتوحة');
+      expect(s('11', st: NetState.joined), isFalse);
+      expect(s('11', dis: true), isFalse);
+    });
+  });
 }

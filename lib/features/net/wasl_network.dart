@@ -170,6 +170,7 @@ class WaslNetwork extends ChangeNotifier {
   Future<void> shutdown() async {
     await stopHosting();
     await leave();
+    suggestDismissed = false;
   }
 
   /// حدث من النظام.
@@ -186,10 +187,36 @@ class WaslNetwork extends ChangeNotifier {
 
   void _reset() {
     state = NetState.idle;
+    if (hosted != null) suggestDismissed = true;
     hosted = null;
     joined = null;
     joinedFrom = null;
     notifyListeners();
+  }
+
+  /// المستخدم قال "مش دلوقتي" على اقتراح فتح الشبكة (لحد ما الـ hub يقف).
+  bool suggestDismissed = false;
+
+  void dismissSuggestion() {
+    suggestDismissed = true;
+    notifyListeners();
+  }
+
+  /// أقل عدد ناس جنبي على البلوتوث بس عشان نقترح فتح شبكة.
+  static const suggestAt = 3;
+
+  /// نقترح عليّا أنا أفتح شبكة وصل؟ لما يكون جنبي [suggestAt] أو أكتر على البلوتوث بس، ومفيش حد فاتح شبكة،
+  /// وأنا أصغر معرّف بينهم (عشان واحد بس يتقاله، مش الكل يفتحوا شبكات مع بعض).
+  static bool suggestAmong({
+    required String myId,
+    required List<String> bluetoothNeighbours,
+    required bool anyOffer,
+    required NetState state,
+    bool dismissed = false,
+  }) {
+    if (dismissed || anyOffer || state != NetState.idle) return false;
+    if (bluetoothNeighbours.length < suggestAt) return false;
+    return bluetoothNeighbours.every((id) => myId.compareTo(id) < 0);
   }
 
   /// شبكات وصل قريبة أقدر أدخلها: من جيران مباشرين (البلوتوث = جنبي فعلاً)، ومش شبكتي ولا اللي أنا فيها.

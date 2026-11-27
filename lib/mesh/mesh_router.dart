@@ -45,6 +45,17 @@ class WifiOffer {
 
   Map<String, dynamic> toWire() => {'s': ssid, 'p': pass, 'x': security};
 
+  /// نص كود الـ QR بتاع الواي فاي (الكاميرا في أي موبايل بتفهمه): `WIFI:T:WPA;S:اسم;P:باسورد;;`
+  String get qrText {
+    String esc(String v) => v.replaceAllMapped(RegExp(r'[\\;,:"]'), (m) => '\\${m[0]}');
+    final type = switch (security) {
+      0 => 'nopass',
+      2 => 'SAE',
+      _ => 'WPA',
+    };
+    return security == 0 ? 'WIFI:T:nopass;S:${esc(ssid)};;' : 'WIFI:T:$type;S:${esc(ssid)};P:${esc(pass)};;';
+  }
+
   static WifiOffer? fromWire(Object? raw) {
     if (raw is! Map) return null;
     final s = raw['s'], p = raw['p'], x = raw['x'];

@@ -184,6 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 _LinkProblems(link: link),
                 const SosBanner(),
                 WaslNetOfferBanner(kind: widget.kind),
+                WaslNetSuggestBanner(kind: widget.kind),
                 Expanded(
                   // اسحب يمين وشمال عشان تتنقل بين الصفحات
                   child: PageView(

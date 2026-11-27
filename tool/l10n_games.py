@@ -300,7 +300,7 @@ S = {
     'guideNetWhat': ('موبايلك بيفتح شبكة واي فاي لوحده من جوه التطبيق، باسم وباسورد عشوائيين ومن غير إنترنت. اللي جنبك وفاتحين وصل بيطلعلهم "ادخلها" ويدخلوا بضغطة، من غير ما حد يكتب باسورد.', 'Your phone starts its own Wi-Fi network from inside the app, with a random name and password and no internet. People next to you running Wasl get a "Join" button and are in with one tap; nobody types a password.'),
     'guideNetWhen': ('لما مفيش راوتر: في رحلة، في الشارع، في قاعة أو عزومة. البلوتوث بطيء والواي فاي مش موجود، فوصل بيعمل واحد.', "When there is no router: on a trip, outdoors, in a hall or at a party. Bluetooth is slow and there is no Wi-Fi, so Wasl makes one."),
     'guideNetFacts': ('كل شبكة بتشيل حوالي 5 لـ 10 موبايلات. لو العدد أكبر، حد تاني يفتح شبكة كمان، والموبايلات اللي على "الاتنين مع بعض" بتوصّل الشبكات ببعض بالبلوتوث، فالشبكة تفضل تكبر من غير راوتر.\nفتح الشبكة محتاج أندرويد 8 أو أحدث، والدخول من التطبيق أندرويد 10 أو أحدث (الأقدم يدخل من إعدادات الواي فاي).\nبعض الموبايلات بتقطع الواي فاي العادي عن اللي فاتح الشبكة.\nالشبكة بتتقفل لما تقفل وصل.', 'Each network takes about 5 to 10 phones. When there are more, someone else starts another one, and phones on "Both" link the networks over Bluetooth, so the network keeps growing with no router.\nStarting a network needs Android 8+, joining from the app Android 10+ (older phones join from Wi-Fi settings).\nSome phones drop their normal Wi-Fi while hosting.\nThe network closes when you close Wasl.'),
-    'guideNetHow': ('اختار "الاتنين مع بعض" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي "القريبين" دوس "افتح شبكة وصل".\nاللي جنبك هيطلعلهم "ادخلها": يدوسوها ويوافقوا على رسالة الموبايل.', 'Pick "Both" (so Bluetooth can pass the name and password to people next to you).\nUnder "Nearby" tap "Start a Wasl network".\nPeople next to you see "Join": they tap it and accept their phone\'s prompt.'),
+    'guideNetHow': ('اختار "الاتنين مع بعض" (عشان البلوتوث يوصّل الاسم والباسورد للي جنبك).\nفي "القريبين" دوس "افتح شبكة وصل".\nاللي جنبك هيطلعلهم "ادخلها": يدوسوها ويوافقوا على رسالة الموبايل.\nموبايل مقدرش يدخل من جوه وصل؟ دوس "كود الشبكة" وخليه يصوّره بالكاميرا.', 'Pick "Both" (so Bluetooth can pass the name and password to people next to you).\nUnder "Nearby" tap "Start a Wasl network".\nPeople next to you see "Join": they tap it and accept their phone\'s prompt.\nA phone can\'t join from inside Wasl? Tap "Network QR" and let them scan it with the camera.'),
     # ---------------- الاستغاثة ----------------
     'sosAsk': ('محتاج مساعدة؟', 'Need help?'),
     'sosAskSub': ('ابعت استغاثة لكل اللي فاتحين وصل حواليك، حتى البعيدين عن طريق الموبايلات اللي في النص.', 'Send an SOS to everyone running Wasl around you, even far away through the phones in between.'),
@@ -326,6 +326,13 @@ S = {
     'mailArrived': ('وصلت وهو مش موجود', 'Arrived while away'),
     'guideMailTitle': ('الرسالة تستنى صاحبها', 'Messages wait for their owner'),
     'guideMailBody': ('لو اللي بتكلمه مش موجود، اكتب عادي: الرسالة بتتقفل ليه هو بس، وموبايلك والموبايلات اللي جنبك بيشيلوها لحد 48 ساعة ويسلّموها أول ما يظهر. اللي بيشيلها مبيقدرش يقراها. بتشتغل للكلام بس (مش الصور ولا الفويس)، ومع الناس اللي اتكلمت معاهم قبل كده.', "If the person you're writing to isn't around, just type: the message is sealed for them alone, and your phone and the phones near you carry it for up to 48 hours and hand it over as soon as they appear. Carriers can't read it. Text only (not photos or voice), with people you've talked to before."),
+    # ---------------- اقتراح شبكة وصل + كود الشبكة ----------------
+    'netSuggestTitle': ('{n} أشخاص حواليك على البلوتوث بس', '{n} people around you are on Bluetooth only'),
+    'netSuggestSub': ('افتح شبكة وصل والكلام والصور هيبقوا أسرع بكتير للكل. التانيين هيظهرلهم يدخلوها بضغطة.', "Open a Wasl network and chats and photos get much faster for everyone. The others will be offered to join with one tap."),
+    'netOpenShort': ('افتحها', 'Open it'),
+    'netQr': ('كود الشبكة', 'Network QR'),
+    'netQrTitle': ('صوّر الكود عشان تدخل الشبكة', 'Scan to join the network'),
+    'netQrSub': ('لو موبايل حد مقدرش يدخل من جوه وصل (أندرويد قديم مثلاً): يفتح الكاميرا ويصوّر الكود، وبعدين يفتح وصل على الواي فاي.', "If someone's phone can't join from inside Wasl (an older Android, say): open the camera, scan this code, then open Wasl on Wi-Fi."),
 }
 
 
