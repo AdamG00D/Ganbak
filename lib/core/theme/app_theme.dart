@@ -64,6 +64,23 @@ const avatarColors = <Color>[
 
 Color avatarColor(int index) => avatarColors[index.abs() % avatarColors.length];
 
+/// ألوان الألعاب (قماش كل لعبة) — ثابتة في الفاتح والغامق، والكلام فوقها أبيض أو حبر حسب [Palette.onColor].
+class GameColors {
+  GameColors._();
+  static const xo = Color(0xFF3A3F8F);
+  static const connect4 = Color(0xFFD7263D);
+  static const battleship = Color(0xFF0F8B8D);
+  static const rps = Color(0xFFE0612B);
+  static const dots = Color(0xFF2B8A3E);
+  static const memory = Color(0xFFF4B400);
+  static const spy = Color(0xFF2A3060);
+  static const quiz = Color(0xFF7B3FA0);
+  static const mafia = Color(0xFF8E1B2E);
+
+  /// ألوان اللاعبين على اللوح (بالترتيب).
+  static const players = [Color(0xFFF4B400), Color(0xFF0F8B8D), Color(0xFFD7263D), Color(0xFF7B3FA0), Color(0xFF2B8A3E), Color(0xFFE0612B)];
+}
+
 /// ألوان التصميم (Design tokens) — تتغير حسب الوضع الفاتح/الداكن واللون الأساسي.
 @immutable
 class Palette extends ThemeExtension<Palette> {

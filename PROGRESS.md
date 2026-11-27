@@ -15,9 +15,9 @@ one commit per step (plain message, no AI attribution), **never build the APK wi
 |---|------|-------|
 | 1 | Screenshot tool (`tool/shots/`) + this file | done |
 | 2 | Visual identity "Khayamiya" (palette, stitch line, pattern, bunting, launcher icon) — see docs/DESIGN.md | done |
-| 3 | Game framework: invites, wire protocol, room host, picker sheet, game screen shell, help pages | todo |
-| 4 | Two-player games: tic-tac-toe, connect four, battleship, rock-paper-scissors, dots & boxes, memory, dice/coin | todo |
-| 5 | Group games: memory & dots (group), spy (مين الجاسوس), quiz, mafia | todo |
+| 3 | Game framework: invites, wire protocol, room host, picker sheet, game screen shell, help pages | done |
+| 4 | Two-player games: tic-tac-toe, connect four, battleship, rock-paper-scissors, dots & boxes, memory | done (dice/coin dropped for now) |
+| 5 | Group games: memory & dots (group), spy (مين الجاسوس), quiz, mafia | done |
 | 6 | "Wasl guide" (دليل وصل) in settings + "؟" on the transport screen | todo |
 | 7 | Docs (GAMES.md, DESIGN.md, PROTOCOL.md, SECURITY, READMEs, AGENTS.md), version 1.3, release notes | todo |
 | 8 | Full check: analyze, tests, screenshots of every screen reviewed, release build | todo |
@@ -56,6 +56,21 @@ help button (`؟` in Arabic, `?` in English) that opens a detailed rules page.
 Font (IBM Plex Sans Arabic), layout and the 24 cartoon avatars stay. Other accent colours stay as options in settings;
 the default becomes "wasl". Preview the owner approved: https://claude.ai/artifact/X2pPEhPXr5vdNNTt9qV4UJ
 
+## Where the games live
+
+- `lib/features/games/core/` — `GameKind` (ids on the wire), `GameEngine`/`TurnEngine` (rules base, commit helper),
+  `GameRoom` (one room; host runs the engine, players send `act`s; message list in its doc comment),
+  `GameCenter` (rooms of one conversation + their cards in the chat, 1 s pulse, `GameTransport`).
+- `lib/features/games/engines/` — rules per game + `createEngine` + `autoMoves` (automatic reveal/answer moves).
+- `lib/features/games/data/` — spy words and the quiz bank (bilingual `عربي|English`; quiz: right answer first).
+- `lib/features/games/ui/` — picker sheet, chat card + running banner, game screen (lobby, result bar, reactions,
+  game chat, countdown), boards (`boards_classic/secret/party.dart`), help page, per-game look (`game_look.dart`).
+- Wiring: `ChatHub` gives every conversation a `GameCenter` (`_DirectGames` / `_GroupGames`); private group messages
+  are control frames `{t: gm}` sealed with `Box.pairKey(..., 'wasl/game')`. Strings: `tool/l10n_games.py` writes them
+  into both ARB files (`python3 tool/l10n_games.py && flutter gen-l10n`).
+- Tests: `test/games_test.dart` (rules + rooms on a fake net), `test/mesh_test.dart` "الألعاب فوق الشبكة".
+- Boards are always laid out LTR so both players see the same board whatever their language.
+
 ## Screenshots (design check)
 
 `flutter test tool/shots/shots_test.dart` renders real screens with the real font into `build/shots/`
@@ -68,4 +83,7 @@ RTL and LTR, light and dark, long names, small phones. It is not part of `flutte
 - 2026-11-27 — plan agreed with the owner; step 1 (screenshot tool) done.
 - 2026-11-27 — step 2 (identity) done: `wasl` accent (default), `accentInk` for brand-coloured text, ink/saffron/
   tentRed/teal tokens, stitch/pattern/bunting/help widgets, khayamiya transport cards, "around you now" strip on the
-  chats tab, stitched empty states, new launcher icon. Next: step 3 (game framework).
+  chats tab, stitched empty states, new launcher icon.
+- 2026-11-27 — steps 3–5 (games) done: 9 games, picker, cards, help pages; screenshots reviewed (fixed: mirrored
+  boards in Arabic, clipped grids, bidi of "{name}'s", narrow input field). Next: step 6 (Wasl guide in settings +
+  `؟` on the transport screen), then step 7 (docs, version 1.3).

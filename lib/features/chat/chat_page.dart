@@ -13,6 +13,8 @@ import '../../mesh/mesh_router.dart';
 import '../../widgets/feedback.dart';
 import '../../widgets/focus_guard.dart';
 import '../../widgets/ui.dart';
+import '../games/ui/game_card.dart';
+import '../games/ui/game_picker.dart';
 import '../groups/group_ui.dart';
 import '../hub/chat_hub.dart';
 import 'call/call_controller.dart';
@@ -843,6 +845,7 @@ class _ChatPageState extends State<ChatPage> {
                     color: p.textMuted,
                     text: l.noDeviceNearby,
                   ),
+                if (alive) GameRunningBanner(conversation: c),
                 Expanded(
                   child: s.messages.isEmpty
                       ? _EmptyChat(group: group != null, saved: c.saved)
@@ -853,6 +856,7 @@ class _ChatPageState extends State<ChatPage> {
                           typingLabel: group != null ? typingLabel : null,
                           myReactionKey: s.myReactionKey,
                           onReact: canSend ? (m, e) => s.react(m, e) : null,
+                          gameCard: (m) => GameCard(conversation: c, message: m),
                           senderLook: group == null
                               ? null
                               : (m) {
@@ -902,6 +906,7 @@ class _ChatPageState extends State<ChatPage> {
                                 cartoon: n.cartoon,
                               ),
                         ],
+                  onGames: alive ? () => showGamePicker(context, c) : null,
                   reply: _reply,
                   replyTitle: _reply == null ? null : (_reply!.toMine ? l.you : (_reply!.author ?? c.title)),
                   onCancelReply: () {

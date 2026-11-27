@@ -35,7 +35,11 @@ class MessageList extends StatelessWidget {
     this.onSenderTap,
     this.myReactionKey = ChatSession.reactMe,
     this.onReact,
+    this.gameCard,
   });
+
+  /// كارت لعبة (رسالة فيها game).
+  final Widget Function(ChatMessage message)? gameCard;
 
   final List<ChatMessage> messages;
   final bool peerTyping;
@@ -89,6 +93,7 @@ class MessageList extends StatelessWidget {
         if (peerTyping && index == 0) return _TypingBubble(label: typingLabel);
         final at = messages.length - 1 - (index - extra);
         final m = messages[at];
+        if (m.game != null && gameCard != null) return KeyedSubtree(key: ValueKey(m.id), child: gameCard!(m));
         if (m.kind == MessageKind.system) return _SystemLine(text: m.text);
         // الأفاتار بيظهر جنب آخر رسالة في مجموعة رسايل ورا بعض من نفس الشخص
         final look = m.kind == MessageKind.theirs && m.senderId != null ? senderLook?.call(m) : null;

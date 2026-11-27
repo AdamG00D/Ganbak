@@ -39,7 +39,11 @@ class ChatInputBar extends StatefulWidget {
     this.replyTitle,
     this.onCancelReply,
     this.mentionCandidates,
+    this.onGames,
   });
+
+  /// زرار الألعاب 🎮 (null = مفيش).
+  final VoidCallback? onGames;
 
   /// في الجروبات: الأعضاء اللي ينفع يتعملهم منشن (اكتب @ عشان يظهروا).
   final List<MentionCandidate> Function()? mentionCandidates;
@@ -454,6 +458,7 @@ class ChatInputBarState extends State<ChatInputBar> {
       children: [
         IconButton(
           tooltip: _emoji ? context.l10n.keyboard : context.l10n.emoji,
+          visualDensity: VisualDensity.compact,
           onPressed: enabled ? _toggleEmoji : null,
           icon: Icon(
             _emoji ? Icons.keyboard_rounded : Icons.emoji_emotions_outlined,
@@ -479,6 +484,7 @@ class ChatInputBarState extends State<ChatInputBar> {
             style: const TextStyle(fontSize: 16, height: 1.35),
             decoration: InputDecoration(
               hintText: enabled ? context.l10n.messageHint : context.l10n.waitingConnection,
+              hintMaxLines: 1,
               filled: false,
               isDense: true,
               contentPadding: const EdgeInsets.symmetric(vertical: 13),
@@ -489,10 +495,18 @@ class ChatInputBarState extends State<ChatInputBar> {
             ),
           ),
         ),
+        if (!_hasText && widget.onGames != null)
+          IconButton(
+            tooltip: context.l10n.games,
+            visualDensity: VisualDensity.compact,
+            onPressed: enabled ? widget.onGames : null,
+            icon: Icon(Icons.sports_esports_rounded, color: enabled ? p.accentInk : p.textMuted),
+          ),
         Transform.rotate(
           angle: -0.6,
           child: IconButton(
             tooltip: context.l10n.attachments,
+            visualDensity: VisualDensity.compact,
             onPressed: enabled
                 ? () => showAttachSheet(
                     context,
@@ -516,6 +530,7 @@ class ChatInputBarState extends State<ChatInputBar> {
                   )
                 : null,
             child: IconButton(
+              visualDensity: VisualDensity.compact,
               tooltip: widget.link.supportsVideo
                   ? context.l10n.photoHoldVideo
                   : context.l10n.photo,
