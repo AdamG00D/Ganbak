@@ -171,12 +171,12 @@ class World {
         ),
         ChatMessage(
           id: 's5',
-          text: '@آدم هات معاك الشاحن بتاعي 😅',
+          text: '@زياد هات معاك الشاحن بتاعي 😅',
           kind: MessageKind.theirs,
           sender: 'منى',
           senderId: mona.id,
           time: ago(2),
-          mentions: {hub.myId: 'آدم'},
+          mentions: {hub.myId: 'زياد'},
         )..mentionsMe = true,
       ]);
     shilla

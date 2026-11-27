@@ -38,7 +38,7 @@ void main() {
     await Vault.instance.init(root: await Directory.systemTemp.createTemp('wasl_readme_'));
     ChatStore.instance.reset();
     await Shots.loadFonts();
-    await ProfileStore.instance.create(name: 'آدم', color: 4, cartoon: 5);
+    await ProfileStore.instance.create(name: 'زياد', color: 4, cartoon: 5);
     Shots.out = Directory('build/readme');
   });
 

@@ -7,17 +7,17 @@ import 'package:wasl/widgets/fingerprint.dart';
 /// مقارنة الأسامي للتحذير، ورسم البصمة.
 void main() {
   test('نفس الاسم حتى لو اتكتب بشكل تاني', () {
-    expect(NameMatch.same('آدم', 'ادم'), isTrue);
+    expect(NameMatch.same('آمال', 'امال'), isTrue);
     expect(NameMatch.same('أحمد', 'احمد'), isTrue);
     expect(NameMatch.same('مُنى', 'منى'), isTrue, reason: 'تشكيل');
     expect(NameMatch.same('سلمى', 'سلمي'), isTrue);
     expect(NameMatch.same('فاطمة', 'فاطمه'), isTrue);
     expect(NameMatch.same('كـريم', 'كريم'), isTrue, reason: 'تطويل');
-    expect(NameMatch.same('Adam', 'adam '), isTrue);
-    expect(NameMatch.same('Аdam', 'Adam'), isTrue, reason: 'A روسي');
-    expect(NameMatch.same('Ad\u200Bam', 'Adam'), isTrue, reason: 'حرف مخفي');
-    expect(NameMatch.same('\u202Eمدآ', 'مدآ'), isTrue, reason: 'علامة اتجاه');
-    expect(NameMatch.same('آدم', 'أحمد'), isFalse);
+    expect(NameMatch.same('Ziad', 'ziad '), isTrue);
+    expect(NameMatch.same('Аmal', 'Amal'), isTrue, reason: 'A روسي');
+    expect(NameMatch.same('Zi\u200Bad', 'Ziad'), isTrue, reason: 'حرف مخفي');
+    expect(NameMatch.same('\u202Eلامآ', 'لامآ'), isTrue, reason: 'علامة اتجاه');
+    expect(NameMatch.same('آمال', 'أحمد'), isFalse);
     expect(NameMatch.same('', ''), isFalse, reason: 'الفاضي مش اسم');
   });
 

@@ -15,7 +15,7 @@ class _Link implements RoomLink {
   @override
   String get myId => 'aaaaaaaaaaaaaaa1';
   @override
-  String get myName => 'آدم';
+  String get myName => 'زياد';
   @override
   bool get trustedPublic => true;
   @override

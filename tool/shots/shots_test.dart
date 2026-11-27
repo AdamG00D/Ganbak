@@ -45,7 +45,7 @@ void main() {
     await Vault.instance.init(root: await Directory.systemTemp.createTemp('wasl_shots_'));
     ChatStore.instance.reset();
     await Shots.loadFonts();
-    await ProfileStore.instance.create(name: 'آدم', color: 1, cartoon: 3);
+    await ProfileStore.instance.create(name: 'زياد', color: 1, cartoon: 3);
   });
 
   testWidgets('core transport', (tester) async {
@@ -277,7 +277,7 @@ void main() {
         id: 'game-old',
         text: 'old',
         kind: MessageKind.system,
-        game: {'g': '99887766aabb', 'k': 'xo', 'h': hub.myId, 'st': 'done', 'w': {hub.myId: 2, Sample.karim: 1}, 'nm': {hub.myId: 'آدم', Sample.karim: 'كريم'}},
+        game: {'g': '99887766aabb', 'k': 'xo', 'h': hub.myId, 'st': 'done', 'w': {hub.myId: 2, Sample.karim: 1}, 'nm': {hub.myId: 'زياد', Sample.karim: 'كريم'}},
       ));
       await Shots.shoot(tester, 'chat-game-cards', () => ChatPage(conversation: c));
     });

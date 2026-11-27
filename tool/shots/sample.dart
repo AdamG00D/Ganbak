@@ -50,11 +50,11 @@ class Sample {
       ChatMessage(id: 'g2', text: 'عند البوابة الساعة 5', kind: MessageKind.mine, status: MessageStatus.read),
       ChatMessage(
         id: 'g3',
-        text: '@آدم هات الشاحن معاك 😅',
+        text: '@زياد هات الشاحن معاك 😅',
         kind: MessageKind.theirs,
         sender: 'منى',
         senderId: mona,
-        mentions: {hub.myId: 'آدم'},
+        mentions: {hub.myId: 'زياد'},
       )
         ..mentionsMe = true
         ..reactions[karim] = '😂',

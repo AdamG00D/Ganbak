@@ -66,7 +66,7 @@ class GameSamples {
   /// لعبة لاتنين: أنا وكريم. [hostMe] = أنا اللي فتحتها.
   static Future<(GameRoom mine, GameRoom theirs)> duel(String me, GameKind kind, {bool hostMe = true}) async {
     final net = GameNet();
-    final a = net.add(me, 'آدم', group: false);
+    final a = net.add(me, 'زياد', group: false);
     final b = net.add(people[0], 'كريم', group: false);
     final host = hostMe ? a : b;
     final guest = hostMe ? b : a;
@@ -187,7 +187,7 @@ class GameSamples {
   static Future<(GameRoom mine, GameNet net, String roomId)> party(String me, GameKind kind, {int players = 4}) async {
     final net = GameNet();
     final ids = [me, ...people].take(players).toList();
-    final names = ['آدم', 'كريم', 'سلمى', 'منى', 'عمر', 'نور'];
+    final names = ['زياد', 'كريم', 'سلمى', 'منى', 'عمر', 'نور'];
     for (var i = 0; i < ids.length; i++) {
       net.add(ids[i], names[i]);
     }

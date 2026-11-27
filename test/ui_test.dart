@@ -70,7 +70,7 @@ void main() {
     var done = false;
     await tester.pumpWidget(app(ProfileEditor(onDone: () => done = true)));
     expect(find.text('اعمل بروفايلك'), findsOneWidget);
-    await tester.enterText(find.byType(TextField), 'آدم');
+    await tester.enterText(find.byType(TextField), 'زياد');
     await tester.scrollUntilVisible(find.text('يلا نبدأ'), 200, scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('يلا نبدأ'));
     for (var i = 0; i < 20 && !done; i++) {
@@ -78,7 +78,7 @@ void main() {
       await tester.pump();
     }
     expect(done, isTrue);
-    expect(ProfileStore.instance.current!.name, 'آدم');
+    expect(ProfileStore.instance.current!.name, 'زياد');
     expect(ProfileStore.instance.current!.id.length, 16);
   });
 
@@ -193,9 +193,9 @@ void main() {
         kind: MessageKind.theirs,
         sender: 'منى',
         senderId: 'aaaaaaaaaaaaaaaa',
-        reply: const ReplyInfo(id: 'a', preview: 'أهلاً بيكم', toMine: true, author: 'آدم'),
+        reply: const ReplyInfo(id: 'a', preview: 'أهلاً بيكم', toMine: true, author: 'زياد'),
         forwarded: true,
-        mentions: {hub.myId: 'آدم'},
+        mentions: {hub.myId: 'زياد'},
       )
         ..mentionsMe = true
         ..reactions['bbbbbbbbbbbbbbbb'] = '👍',

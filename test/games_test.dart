@@ -372,21 +372,21 @@ void main() {
   group('الغرف على الشبكة', () {
     test('الخاص: عزومة ← موافقة ← اللعبة تبدأ لوحدها ← كسب ← ماتش تاني', () async {
       final net = _Net();
-      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final pa = net.add(a, 'زياد', group: false), pb = net.add(b, 'كريم', group: false);
       final room = pa.center.invite(GameKind.xo)!;
       await settle();
       // الكارت نزل عند الاتنين
       expect(pa.session.messages.single.game!['g'], room.id);
       final card = pb.session.messages.single;
       expect(card.game!['k'], 'xo');
-      expect(card.text, contains('آدم'));
+      expect(card.text, contains('زياد'));
       final rb = pb.room(room.id);
       rb.join('كريم');
       await settle();
       expect(room.phase, RoomPhase.playing);
       expect(rb.phase, RoomPhase.playing);
-      expect(rb.names[a], 'آدم');
-      // آدم بيبدأ (X)
+      expect(rb.names[a], 'زياد');
+      // زياد بيبدأ (X)
       for (final (p, i) in [(a, 0), (b, 3), (a, 1), (b, 4), (a, 2)]) {
         (p == a ? room : rb).act({'t': 'put', 'i': i});
         await settle();
@@ -409,7 +409,7 @@ void main() {
 
     test('حجر ورقة مقص على الشبكة: الكشف بيحصل لوحده وصاحب الغرفة ميعرفش الاختيار بدري', () async {
       final net = _Net();
-      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final pa = net.add(a, 'زياد', group: false), pb = net.add(b, 'كريم', group: false);
       final room = pa.center.invite(GameKind.rps)!;
       await settle();
       pb.room(room.id).join('كريم');
@@ -438,7 +438,7 @@ void main() {
 
     test('حرب السفن على الشبكة: الرد بيحصل لوحده، والكدب بيتكشف في الآخر', () async {
       final net = _Net();
-      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final pa = net.add(a, 'زياد', group: false), pb = net.add(b, 'كريم', group: false);
       final room = pa.center.invite(GameKind.battleship)!;
       await settle();
       final rb = pb.room(room.id)..join('كريم');
@@ -457,7 +457,7 @@ void main() {
       }
       expect(room.view['phase'], 'fire');
       expect(room.view['turn'], a);
-      // آدم بيضرب كل سفن كريم (عارفينها في الاختبار) — الرد بييجي لوحده من موبايل كريم
+      // زياد بيضرب كل سفن كريم (عارفينها في الاختبار) — الرد بييجي لوحده من موبايل كريم
       final targets = [for (var i = 0; i < 64; i++) if (boards[b]![i] != '.') i];
       for (final t in targets) {
         room.act({'t': 'shot', 'i': t});
@@ -478,7 +478,7 @@ void main() {
 
     test('الجروب: لوبي ← بدء ← السر بيروح لصاحبه بس، والتصويت مقفول', () async {
       final net = _Net();
-      final peers = [net.add(a, 'آدم'), net.add(b, 'كريم'), net.add(c, 'سلمى'), net.add(d, 'منى')];
+      final peers = [net.add(a, 'زياد'), net.add(b, 'كريم'), net.add(c, 'سلمى'), net.add(d, 'منى')];
       final room = peers[0].center.invite(GameKind.spy)!;
       await settle();
       for (final p in peers.skip(1)) {
@@ -560,7 +560,7 @@ void main() {
     test('صاحب الغرفة اختفى: الغرفة بتتقفل عند الباقيين', () async {
       GameRoom.hostSilence = const Duration(milliseconds: 1200);
       final net = _Net();
-      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final pa = net.add(a, 'زياد', group: false), pb = net.add(b, 'كريم', group: false);
       final room = pa.center.invite(GameKind.connect4)!;
       await settle();
       final rb = pb.room(room.id)..join('كريم');
@@ -574,7 +574,7 @@ void main() {
 
     test('الأمان: في الجروب حركة مش مقفولة (ممكن تكون مزوّرة) بتترمي', () async {
       final net = _Net();
-      final peers = [net.add(a, 'آدم'), net.add(b, 'كريم'), net.add(c, 'سلمى')];
+      final peers = [net.add(a, 'زياد'), net.add(b, 'كريم'), net.add(c, 'سلمى')];
       final room = peers[0].center.invite(GameKind.spy)!;
       await settle();
       for (final p in peers.skip(1)) {
@@ -598,7 +598,7 @@ void main() {
       final net = _Net();
       final pb = net.add(b, 'كريم', group: false);
       for (var i = 0; i < 10; i++) {
-        pb.center.receive(a, {'g': '0123456789a$i', 'y': 'inv', 'kind': 'xo', 'hn': 'آدم'}, private: false);
+        pb.center.receive(a, {'g': '0123456789a$i', 'y': 'inv', 'kind': 'xo', 'hn': 'زياد'}, private: false);
       }
       expect(pb.center.rooms, hasLength(1));
       expect(pb.session.messages.where((m) => m.game != null), hasLength(1));
@@ -606,7 +606,7 @@ void main() {
 
     test('الأمان: حالة بايظة الشكل من صاحب الغرفة بتترمي', () async {
       final net = _Net();
-      final pa = net.add(a, 'آدم', group: false), pb = net.add(b, 'كريم', group: false);
+      final pa = net.add(a, 'زياد', group: false), pb = net.add(b, 'كريم', group: false);
       final room = pa.center.invite(GameKind.xo)!;
       await settle();
       final rb = pb.room(room.id)..join();
@@ -631,7 +631,7 @@ void main() {
       pb.center.receive(a, {'g': '0123456789ab', 'y': 'inv', 'kind': 'spy'}, private: false); // لعبة جروب في الخاص
       pb.center.receive('not-an-id', {'g': '0123456789ab', 'y': 'inv', 'kind': 'xo'}, private: false);
       expect(pb.center.rooms, isEmpty);
-      pb.center.receive(a, {'g': '0123456789ab', 'y': 'inv', 'kind': 'xo', 'hn': 'آدم'}, private: false);
+      pb.center.receive(a, {'g': '0123456789ab', 'y': 'inv', 'kind': 'xo', 'hn': 'زياد'}, private: false);
       expect(pb.center.rooms, hasLength(1));
       // حالة من حد مش صاحب الغرفة
       pb.center.receive(c, {'g': '0123456789ab', 'y': 'view', 'n': 9, 'v': {'over': true}}, private: false);
