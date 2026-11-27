@@ -3026,4 +3026,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mailFromAnyoneOff => 'Only from people you’ve talked to before';
+
+  @override
+  String get inviteToGroup => 'Invite someone';
+
+  @override
+  String get inviteToGroupSub =>
+      'Pick someone nearby to invite — they join with one tap, no password';
+
+  @override
+  String get inviteNoOne => 'Nobody nearby who isn’t in the group';
+
+  @override
+  String inviteSent(String name) {
+    return 'Invite sent to $name';
+  }
+
+  @override
+  String get invitesTitle => 'Invites for you';
+
+  @override
+  String inviteFrom(String name, String group) {
+    return '$name invites you to \"$group\"';
+  }
+
+  @override
+  String get inviteJoin => 'Join';
+
+  @override
+  String get inviteNo => 'No thanks';
 }

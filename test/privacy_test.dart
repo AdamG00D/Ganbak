@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wasl/core/crypto/box.dart';
 import 'package:wasl/core/crypto/kdf.dart';
 import 'package:wasl/core/profile/profile.dart';
+import 'package:wasl/features/groups/group_tags.dart';
 import 'package:wasl/mesh/mesh_router.dart';
 import 'package:wasl/mesh/route_tags.dart';
 
@@ -79,5 +80,21 @@ void main() {
     for (final r in routers.values) {
       await r.stop();
     }
+  });
+
+  test('العضوية المخفية: كود مختلف لكل عضو، والأعضاء بس يعرفوه، والبصمة متغطية', () {
+    final key = Kdf.randomBytes(32), other = Kdf.randomBytes(32);
+    final now = DateTime.now();
+    final e = GroupTags.epochAt(now);
+    final t1 = GroupTags.tag(key, 'aaaaaaaaaaaaaaa1', e), t2 = GroupTags.tag(key, 'aaaaaaaaaaaaaaa2', e);
+    expect(t1, isNot(t2), reason: 'مختلف لكل عضو — اللي برا ميعرفش إنهم في نفس الجروب');
+    expect(GroupTags.matches(key, 'aaaaaaaaaaaaaaa1', t1, now), isTrue);
+    expect(GroupTags.matches(key, 'aaaaaaaaaaaaaaa2', t1, now), isFalse);
+    expect(GroupTags.matches(other, 'aaaaaaaaaaaaaaa1', t1, now), isFalse, reason: 'من غير مفتاح الجروب');
+    expect(GroupTags.tag(key, 'aaaaaaaaaaaaaaa1', e + 1), isNot(t1), reason: 'بيتغير كل فترة');
+    expect(GroupTags.matches(key, 'aaaaaaaaaaaaaaa1', GroupTags.tag(key, 'aaaaaaaaaaaaaaa1', e - 1), now), isTrue);
+    final hidden = GroupTags.hideDigest(key, t1, '1a2b3c4d');
+    expect(hidden, isNot('1a2b3c4d'));
+    expect(GroupTags.showDigest(key, t1, hidden), '1a2b3c4d');
   });
 }

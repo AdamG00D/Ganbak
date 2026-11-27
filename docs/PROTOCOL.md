@@ -85,6 +85,20 @@ Rules:
   drop the field, not the presence. Additive: older versions ignore it.
 - **Group ad**: `{i: id, n: name, m: o|p|a, o: owner id, c?: key check, h?: admin-state digest}`.
 
+**Route tags (1.6)** — a node that sets `pr: 1` in its presence understands tagged frames. For such a peer, `D` and
+`U` frames carry, instead of ids, `src = tag(me)` and `dst = tag(peer)` where `tag(X, e)` = hex of the first 8 bytes of
+`HMAC-SHA256(pairKey(me, peer, "wasl/route/v1"), "wasl/route/v1|" + X + "|" + e)` and `e` = 10-minute epoch. They look
+like ids, so any relay forwards them; routes are learned for tags like for ids. A receiver precomputes tags for every
+`pr` node for epochs e-1, e, e+1 and maps them back to the peer (src and dst must belong to the same peer). Peers
+without `pr` (1.5) still get plain ids. Encrypted direct-chat payloads and group packets carry a `pd` filler so the
+sealed size is 256, 1024 or a multiple of 4096 bytes.
+
+**Hidden group membership (1.6)** — in password / join-request groups, a member who isn't owner or admin doesn't put
+the group ad in `g`; it puts `gt: [{t, h}]` with `t = HMAC-SHA256(group key, "wasl/group-tag/v1|" + member id + "|" +
+e)[0..8]` (different per member, rotating every 10 minutes) and `h` = the admin-state digest XOR
+`HMAC-SHA256(group key, "wasl/group-digest/v1|" + t)`. Members recognise each other; outsiders see random tags. Owner and
+admins keep advertising the group so newcomers can find it.
+
 Control messages (`U`, JSON with `t`):
 
 | `t` | purpose | authenticated by |
@@ -95,6 +109,7 @@ Control messages (`U`, JSON with `t`):
 | `gr` | join request rejected | same pair key, aad `wasl/reject\|gid\|member` |
 | `ga` | group admin command (§6) | pair key, see below |
 | `gm` | game message to one player (§8) | pair key `"wasl/game"`, aad `wasl/game\|gid\|from\|to` |
+| `gi` | group invite: `{g, d}` with `d` = AES-GCM(pair key `"wasl/group-invite"`, `{ad, k?, n}`, aad `wasl/group-invite\|gid\|from\|to`) — open groups: no key; password: the group key (checked against `c`); ask: the key, trusted only from the owner, who adds the invitee to `members` first. Max 3 pending per sender, 20 in all; dropped if a nearby ad shows the same group with another owner | pair key |
 | `mb` | sealed offline message, to its recipient or to a carrier (§9) | sealed to the recipient (see §9) |
 | `mbd` | "delivered": drop your copy / sealed receipt for the sender / receipt received (§9) | receipt: pair key `"wasl/mailbox-receipt"` |
 

@@ -20,6 +20,7 @@ import 'package:wasl/features/games/core/game_room.dart';
 import 'package:wasl/features/games/ui/game_help.dart';
 import 'package:wasl/features/games/ui/game_picker.dart';
 import 'package:wasl/features/games/ui/game_screen.dart';
+import 'package:wasl/features/groups/group_ui.dart';
 import 'package:wasl/features/guide/guide_screen.dart';
 import 'package:wasl/features/net/wasl_net_ui.dart';
 import 'package:wasl/features/share/share_screen.dart';
@@ -153,6 +154,22 @@ void main() {
       });
       r.nodes.remove(mona2);
       r.nodes.remove(fakeKarim);
+    });
+
+    // دعوة لجروب: الكارت في صفحة الجروبات، وزرار "ادعي حد" في بيانات الجروب
+    testWidgets('invites', (tester) async {
+      Shots.phone(tester);
+      await world(tester);
+      const ad = GroupAd(id: 'f0f1f2f3f4f5f6f7', name: 'رحلة سيوة', mode: GroupMode.password, owner: Sample.karim);
+      final inv = GroupInvite(ad, Uint8List(32), Sample.karim, 'كريم');
+      hub.invites.add(inv);
+      await Shots.shoot(tester, 'invite-card', () => const HomeScreen(kind: TransportKind.wifi), then: (t) async {
+        await t.tap(find.byType(NavigationDestination).at(1));
+        await t.pump();
+        await t.pump(const Duration(milliseconds: 500));
+      });
+      hub.invites.remove(inv);
+      await Shots.shoot(tester, 'invite-button', () => GroupInfoScreen(group: Sample.shilla));
     });
 
     // الرسالة تستنى صاحبها: كريم مش موجود، والكلام بس متاح

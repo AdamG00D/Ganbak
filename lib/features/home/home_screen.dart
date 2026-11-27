@@ -750,7 +750,8 @@ class _GroupsTab extends StatelessWidget {
     final hub = ChatHub.instance;
     final mine = hub.groupChats;
     final nearby = hub.nearbyGroups;
-    if (mine.isEmpty && nearby.isEmpty) {
+    final invites = hub.invites;
+    if (mine.isEmpty && nearby.isEmpty && invites.isEmpty) {
       return EmptyState(
         icon: Icons.groups_outlined,
         title: context.l10n.noGroupsTitle,
@@ -764,6 +765,11 @@ class _GroupsTab extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.only(top: 0, bottom: 96),
       children: [
+        if (invites.isNotEmpty) ...[
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 14), child: SectionLabel(context.l10n.invitesTitle)),
+          for (final inv in invites)
+            Padding(padding: const EdgeInsets.fromLTRB(16, 0, 16, 10), child: _InviteCard(invite: inv)),
+        ],
         if (mine.isNotEmpty) ...[
           Padding(padding: const EdgeInsets.symmetric(horizontal: 14), child: SectionLabel(context.l10n.myGroups)),
           for (final g in mine) _ConversationTile(key: ValueKey(g.id), conversation: g),
@@ -774,6 +780,69 @@ class _GroupsTab extends StatelessWidget {
             Padding(padding: const EdgeInsets.fromLTRB(16, 0, 16, 10), child: _NearbyGroupCard(group: g)),
         ],
       ],
+    );
+  }
+}
+
+/// دعوة لجروب: ادخل / لأ.
+class _InviteCard extends StatelessWidget {
+  const _InviteCard({required this.invite});
+
+  final GroupInvite invite;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final l = context.l10n;
+    final hub = ChatHub.instance;
+    return StitchedBox(
+      color: p.isDark ? const Color(0xFF2A3060) : p.ink,
+      pattern: true,
+      radius: 20,
+      stitch: p.saffron.withValues(alpha: 0.45),
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.mail_outline_rounded, color: p.saffron),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  l.inviteFrom(hub.directFor(invite.fromId)?.title ?? invite.fromName, invite.ad.name),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 15),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: SecondaryButton(
+                  label: l.inviteNo,
+                  color: Colors.white,
+                  height: 42,
+                  onPressed: () => hub.answerInvite(invite, false),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: PrimaryButton(
+                  label: l.inviteJoin,
+                  icon: Icons.login_rounded,
+                  height: 42,
+                  onPressed: () async {
+                    final g = await hub.answerInvite(invite, true);
+                    if (g != null && context.mounted) ChatPage.open(context, g);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

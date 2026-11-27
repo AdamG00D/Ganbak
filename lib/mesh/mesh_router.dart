@@ -164,6 +164,9 @@ class MeshNode {
   int? cartoon;
   List<GroupAd> groups = const [];
 
+  /// جروبات خاصة بيعلنها بكود سري (الكود، وبصمة الحالة متغطية) — الأعضاء بس يعرفوها.
+  List<(String, String?)> hiddenGroups = const [];
+
   /// فاتح "شبكة وصل" (null = لأ).
   WifiOffer? wifi;
 
@@ -692,6 +695,11 @@ class MeshRouter extends ChangeNotifier {
       for (final g in (m['g'] as List? ?? const []).take(16))
         if (GroupAd.fromWire(g) case final GroupAd ad) ad,
     ];
+    final hidden = <(String, String?)>[
+      for (final x in (m['gt'] as List? ?? const []).take(16))
+        if (x is Map && x['t'] is String && isId(x['t'] as String))
+          (x['t'] as String, x['h'] is String && (x['h'] as String).length <= 16 ? x['h'] as String : null),
+    ];
     final direct = isDirect(src);
     final newHops = direct ? 1 : hops.clamp(2, maxHops);
     final wifi = WifiOffer.fromWire(m['w']);
@@ -705,7 +713,9 @@ class MeshRouter extends ChangeNotifier {
         node.avatar != avatar ||
         node.cartoon != cartoon ||
         node.hops != newHops ||
-        !_sameGroups(node.groups, groups);
+        !_sameGroups(node.groups, groups) ||
+        node.hiddenGroups.length != hidden.length ||
+        [for (var i = 0; i < hidden.length; i++) if (node.hiddenGroups[i] != hidden[i]) i].isNotEmpty;
     final privateRoutes = m['pr'] == 1;
     if (node.privateRoutes != privateRoutes) {
       node.privateRoutes = privateRoutes;
@@ -717,6 +727,7 @@ class MeshRouter extends ChangeNotifier {
       ..avatar = avatar
       ..cartoon = cartoon
       ..groups = groups
+      ..hiddenGroups = hidden
       ..wifi = wifi
       ..sos = sos
       ..hops = newHops

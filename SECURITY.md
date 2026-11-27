@@ -39,8 +39,12 @@ These are known and documented so nobody relies on something that isn't there:
 4. **Removing a member** re-keys **join-request** groups (a real removal). In **password** and **open** groups the
    removed person can still decrypt messages with a modified client; normal apps ignore their messages and remove them.
 5. **No forward secrecy in groups.** Anyone who has the group key can decrypt any recorded message sent with it.
-6. **Metadata is visible to devices nearby**: who is present (id and name), who is in which group, who talks to whom,
-   and the size and timing of frames — not the content. Wasl is not an anonymity tool.
+6. **Some metadata is still visible nearby.** Who is present (name, picture) is public — that's how people find each
+   other. Since 1.6 private chats and control messages travel with rotating secret tags instead of ids, sizes are
+   padded, members of private groups are hidden (only owner and admins advertise a group), and offline messages carry
+   no sender or recipient — so relays can't tell **who talks to whom**. What remains: the phone right next to you sees
+   that *your* phone sent something (not to whom), and timing; phones on 1.5 still use plain ids. Wasl is not a full
+   anonymity tool.
 7. **Notifications** show the sender and text unless the app lock is enabled. The phone's lock screen only ever
    shows "new message". Enable the app lock if you don't want content in notifications.
 8. **An unlocked or compromised phone.** If someone has your phone unlocked, or it runs malware with high privileges,

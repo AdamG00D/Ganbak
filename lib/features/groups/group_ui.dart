@@ -469,6 +469,42 @@ class GroupInfoScreen extends StatelessWidget {
   static Future<void> open(BuildContext context, GroupChat g) =>
       Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => GroupInfoScreen(group: g)));
 
+  /// يختار حد قريب مش في الجروب ويبعتله دعوة.
+  Future<void> _invite(BuildContext context) async {
+    final hub = ChatHub.instance;
+    final inside = {for (final m in hub.membersOf(group.id)) m.id};
+    final people = [
+      for (final n in hub.people)
+        if (!inside.contains(n.id) && !group.info.banned.contains(n.id)) n,
+    ];
+    if (people.isEmpty) {
+      showToast(context, context.l10n.inviteNoOne);
+      return;
+    }
+    final pick = await showActionSheet<MeshNode>(
+      context,
+      builder: (ctx) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+            child: Text(ctx.l10n.inviteToGroup, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+          ),
+          for (final n in people)
+            ListTile(
+              leading: Avatar(name: n.name, color: n.color, avatarHash: n.avatar, cartoon: n.cartoon, size: 40),
+              title: Text(hub.directFor(n.id)?.title ?? n.name),
+              onTap: () => Navigator.pop(ctx, n),
+            ),
+        ],
+      ),
+    );
+    if (pick == null || !context.mounted) return;
+    final err = await hub.sendInvite(group, pick.id);
+    if (!context.mounted) return;
+    showToast(context, err ?? context.l10n.inviteSent(hub.directFor(pick.id)?.title ?? pick.name), error: err != null);
+  }
+
   Future<void> _rename(BuildContext context) async {
     final name = await promptText(context, title: context.l10n.groupName, initial: group.title);
     if (name == null || !context.mounted) return;
@@ -572,6 +608,18 @@ class GroupInfoScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                 ],
+              ],
+              if (hub.canInvite(g)) ...[
+                AppCard(
+                  padding: EdgeInsets.zero,
+                  child: ListTile(
+                    leading: Icon(Icons.person_add_alt_1_rounded, color: p.accentInk),
+                    title: Text(context.l10n.inviteToGroup, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    subtitle: Text(context.l10n.inviteToGroupSub),
+                    onTap: () => _invite(context),
+                  ),
+                ),
+                const SizedBox(height: 8),
               ],
               SectionLabel(context.l10n.onlineCount(members.length + 1)),
               AppCard(

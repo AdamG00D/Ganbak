@@ -2992,4 +2992,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mailFromAnyoneOff => 'بس من الناس اللي اتكلمت معاهم قبل كده';
+
+  @override
+  String get inviteToGroup => 'ادعي حد';
+
+  @override
+  String get inviteToGroupSub =>
+      'اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد';
+
+  @override
+  String get inviteNoOne => 'مفيش حد قريب مش في الجروب';
+
+  @override
+  String inviteSent(String name) {
+    return 'اتبعتت الدعوة لـ $name';
+  }
+
+  @override
+  String get invitesTitle => 'دعوات ليك';
+
+  @override
+  String inviteFrom(String name, String group) {
+    return '$name بيدعوك تدخل \"$group\"';
+  }
+
+  @override
+  String get inviteJoin => 'ادخل';
+
+  @override
+  String get inviteNo => 'لأ شكراً';
 }

@@ -369,6 +369,15 @@ S = {
     'mailFromAnyone': ('رسايل وانا مش موجود من أي حد', 'Waiting messages from anyone'),
     'mailFromAnyoneOn': ('أي حد يقدر يسيبلك رسالة تستناك', 'Anyone can leave you a message that waits'),
     'mailFromAnyoneOff': ('بس من الناس اللي اتكلمت معاهم قبل كده', 'Only from people you’ve talked to before'),
+    # ---------------- دعوة للجروب ----------------
+    'inviteToGroup': ('ادعي حد', 'Invite someone'),
+    'inviteToGroupSub': ('اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد', 'Pick someone nearby to invite — they join with one tap, no password'),
+    'inviteNoOne': ('مفيش حد قريب مش في الجروب', 'Nobody nearby who isn’t in the group'),
+    'inviteSent': ('اتبعتت الدعوة لـ {name}', 'Invite sent to {name}'),
+    'invitesTitle': ('دعوات ليك', 'Invites for you'),
+    'inviteFrom': ('{name} بيدعوك تدخل "{group}"', '{name} invites you to "{group}"'),
+    'inviteJoin': ('ادخل', 'Join'),
+    'inviteNo': ('لأ شكراً', 'No thanks'),
 }
 
 

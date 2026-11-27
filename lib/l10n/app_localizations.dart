@@ -5263,6 +5263,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بس من الناس اللي اتكلمت معاهم قبل كده'**
   String get mailFromAnyoneOff;
+
+  /// No description provided for @inviteToGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادعي حد'**
+  String get inviteToGroup;
+
+  /// No description provided for @inviteToGroupSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار حد قريب تبعتله دعوة — يدخل بضغطة من غير باسورد'**
+  String get inviteToGroupSub;
+
+  /// No description provided for @inviteNoOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفيش حد قريب مش في الجروب'**
+  String get inviteNoOne;
+
+  /// No description provided for @inviteSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتبعتت الدعوة لـ {name}'**
+  String inviteSent(String name);
+
+  /// No description provided for @invitesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعوات ليك'**
+  String get invitesTitle;
+
+  /// No description provided for @inviteFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} بيدعوك تدخل \"{group}\"'**
+  String inviteFrom(String name, String group);
+
+  /// No description provided for @inviteJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل'**
+  String get inviteJoin;
+
+  /// No description provided for @inviteNo.
+  ///
+  /// In ar, this message translates to:
+  /// **'لأ شكراً'**
+  String get inviteNo;
 }
 
 class _AppLocalizationsDelegate

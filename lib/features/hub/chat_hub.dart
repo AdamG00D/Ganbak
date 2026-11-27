@@ -30,6 +30,7 @@ import '../chat/call/call_screen.dart';
 import '../chat/core/chat_session.dart';
 import '../games/core/game_center.dart';
 import '../groups/group.dart';
+import '../groups/group_tags.dart';
 import '../groups/group_session.dart';
 import '../mailbox/mailbox.dart';
 import '../net/wasl_network.dart';
@@ -206,6 +207,15 @@ class DirectChat extends Conversation {
 }
 
 /// طلب انضمام لجروب (بيظهر لصاحب الجروب).
+/// دعوة لجروب وصلتني من حد ("فلان بيدعوك").
+class GroupInvite {
+  GroupInvite(this.ad, this.key, this.fromId, this.fromName);
+  final GroupAd ad;
+  final Uint8List key;
+  final String fromId;
+  final String fromName;
+}
+
 class JoinRequest {
   JoinRequest(this.groupId, this.nodeId, this.name, this.color, this.avatar, this.cartoon);
   final String groupId;
@@ -290,6 +300,9 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
 
   /// جروبات بعتنا طلب انضمام ليها ومستنيين الرد.
   final Set<String> pendingJoins = {};
+
+  /// دعوات لجروبات مستنية ردّي.
+  final List<GroupInvite> invites = [];
 
   /// آخر نتيجة لطلب انضمام (للواجهة): معرّف الجروب ← اتقبل؟
   final StreamController<(GroupAd, bool)> _joinResults = StreamController.broadcast();
@@ -447,6 +460,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     mail = null;
     _queuedBubbles.clear();
     pendingJoins.clear();
+    invites.clear();
     _requestedAds.clear();
     _syncedAt.clear();
     // الألعاب اللي أنا صاحبها بتتقفل عند الكل
@@ -489,7 +503,15 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
         'pr': 1,
         'a': ?_me.avatarHash,
         'e': ?_me.cartoon,
-        'g': [for (final g in _groups.values.take(16)) g.info.ad.toWire()],
+        // العام، وصاحب الجروب/المديرين: إعلان عادي • العضو العادي في جروب خاص: كود سري بس
+        'g': [
+          for (final g in _groups.values.take(16))
+            if (!_hiddenIn(g)) g.info.ad.toWire(),
+        ],
+        'gt': [
+          for (final g in _groups.values.take(16))
+            if (_hiddenIn(g)) _hiddenAd(g),
+        ],
         'w': ?WaslNetwork.instance.hosted?.toWire(),
         'sos': ?mySos?.toWire(),
       };
@@ -542,10 +564,36 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     return list;
   }
 
-  List<MeshNode> membersOf(String groupId) => [
-        for (final n in router?.nodes.values ?? const <MeshNode>[])
-          if (n.groups.any((g) => g.id == groupId)) n,
-      ];
+  List<MeshNode> membersOf(String groupId) {
+    final key = _groups[groupId]?.info.key;
+    return [
+      for (final n in router?.nodes.values ?? const <MeshNode>[])
+        if (n.groups.any((g) => g.id == groupId) ||
+            (key != null && n.hiddenGroups.any((h) => GroupTags.matches(key, n.id, h.$1))))
+          n,
+    ];
+  }
+
+  /// عضويتي في الجروب ده مخفية؟ (جروب خاص وأنا مش صاحبه ولا مدير)
+  bool _hiddenIn(GroupChat g) => g.info.mode != GroupMode.open && !g.iAmAdmin;
+
+  Map<String, dynamic> _hiddenAd(GroupChat g) {
+    final key = g.info.key;
+    final tag = GroupTags.tag(key, myId, GroupTags.epochAt(DateTime.now()));
+    return {'t': tag, 'h': GroupTags.hideDigest(key, tag, g.info.digest)};
+  }
+
+  /// بصمة حالة الإدارة اللي [n] بيعلنها للجروب ده (عادي أو مخفي) — null = مش عضو.
+  (bool, String?)? _adDigest(MeshNode n, GroupChat g) {
+    final ad = n.groups.where((a) => a.id == g.id).firstOrNull;
+    if (ad != null) return (true, ad.digest);
+    for (final (tag, h) in n.hiddenGroups) {
+      if (GroupTags.matches(g.info.key, n.id, tag)) {
+        return (true, h == null ? null : GroupTags.showDigest(g.info.key, tag, h));
+      }
+    }
+    return null;
+  }
 
   int get totalUnread =>
       _directs.values.fold(0, (s, c) => s + c.unread) + _groups.values.fold(0, (s, c) => s + c.unread);
@@ -909,6 +957,85 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// أقدر أدعي حد للجروب ده؟ (العام وبكلمة سر: أي عضو • بطلب انضمام: صاحبه بس)
+  bool canInvite(GroupChat g) => g.info.mode != GroupMode.ask || g.iAmOwner;
+
+  /// يبعت دعوة لـ [peer] يدخل [g] — مقفولة بمفتاح مشترك بيننا، وفيها مفتاح الجروب (يدخل من غير باسورد).
+  /// في جروب بطلب انضمام الدعوة من صاحبه = موافقة مقدّماً. يرجّع رسالة خطأ أو null.
+  Future<String?> sendInvite(GroupChat g, String peer) async {
+    final r = router;
+    final node = r?.nodes[peer];
+    if (r == null || node == null || !r.reachable(peer)) return tr.ownerOffline;
+    if (!canInvite(g) || g.info.banned.contains(peer)) return tr.sendRequestFailed;
+    try {
+      if (g.info.mode == GroupMode.ask && !g.info.members.contains(peer)) {
+        g.info
+          ..members.add(peer)
+          ..bump();
+        await _saveGroup(g);
+        await _broadcastOp(g, g.info.stateOp(withKey: false));
+      }
+      final pair = await Box.pairKey(_me.keyPair, node.publicKey, 'wasl/group-invite');
+      final body = jsonEncode({
+        'ad': g.info.ad.toWire(),
+        'k': g.info.mode == GroupMode.open ? null : base64.encode(g.info.key),
+        'n': _me.name,
+      });
+      final sealed = await Box.seal(pair, utf8.encode(body), utf8.encode('wasl/group-invite|${g.id}|$myId|$peer'));
+      await r.sendControl(peer, {'t': 'gi', 'g': g.id, 'd': base64.encode(sealed)});
+      return null;
+    } catch (_) {
+      return tr.sendRequestFailed;
+    }
+  }
+
+  Future<void> _onInvite(String src, String gid, Object? d) async {
+    final node = router?.nodes[src];
+    if (node == null || d is! String || d.length > 4096 || _store.blocked.contains(src)) return;
+    if (_groups.containsKey(gid) || invites.any((i) => i.ad.id == gid)) return;
+    // محدش يغرّقني بدعوات: 3 من نفس الشخص و20 في المجموع
+    if (invites.where((i) => i.fromId == src).length >= 3 || invites.length >= 20) return;
+    try {
+      final pair = await Box.pairKey(_me.keyPair, node.publicKey, 'wasl/group-invite');
+      final clear = await Box.open(pair, base64.decode(d), utf8.encode('wasl/group-invite|$gid|$src|$myId'));
+      if (clear == null) return;
+      final m = jsonDecode(utf8.decode(clear));
+      if (m is! Map) return;
+      final ad = GroupAd.fromWire(m['ad']);
+      if (ad == null || ad.id != gid) return;
+      // لو الجروب ده معلَن حواليك بصاحب تاني: دعوة مزيفة لجروب حد تاني
+      for (final n in router?.nodes.values ?? const <MeshNode>[]) {
+        if (n.groups.any((a) => a.id == gid && a.owner != ad.owner)) return;
+      }
+      final Uint8List key;
+      switch (ad.mode) {
+        case GroupMode.open:
+          key = await GroupInfo.openKey(gid);
+        case GroupMode.password:
+          final k = Sign.key(m['k']);
+          if (k == null || !await GroupInfo.matches(ad, k)) return;
+          key = Uint8List.fromList(k);
+        case GroupMode.ask:
+          // المفتاح بنثق فيه بس لو جاي من صاحب الجروب نفسه
+          final k = Sign.key(m['k']);
+          if (k == null || ad.owner != src) return;
+          key = Uint8List.fromList(k);
+      }
+      if (_groups.containsKey(gid) || invites.any((i) => i.ad.id == gid)) return;
+      invites.add(GroupInvite(ad, key, src, node.name));
+      notifyListeners();
+      if (!_foreground) SystemBridge.notify('request');
+    } catch (_) {}
+  }
+
+  /// أرد على دعوة: أدخل أو لأ.
+  Future<GroupChat?> answerInvite(GroupInvite inv, bool accept) async {
+    invites.remove(inv);
+    notifyListeners();
+    if (!accept || _groups.containsKey(inv.ad.id)) return _groups[inv.ad.id];
+    return _enter(await GroupInfo.fromAd(inv.ad, inv.key), announce: true);
+  }
+
   void cancelJoinRequest(String groupId) {
     pendingJoins.remove(groupId);
     _requestedAds.remove(groupId);
@@ -1093,13 +1220,13 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
       final info = g.info;
       final mine = info.digest;
       for (final n in r.nodes.values) {
-        final ad = n.groups.where((a) => a.id == g.id).firstOrNull;
+        final ad = _adDigest(n, g);
         if (ad == null) continue;
         if (info.banned.contains(n.id)) {
           if (_syncDue('k|${g.id}|${n.id}', const Duration(seconds: 20))) {
             _sendOp(g, n.id, {'op': 'kick', 'id': n.id, 'rev': info.rev}).catchError((Object _) {});
           }
-        } else if (ad.digest != null && ad.digest != mine) {
+        } else if (ad.$2 != null && ad.$2 != mine) {
           if (_syncDue('s|${g.id}|${n.id}', const Duration(seconds: 12))) {
             final trusted = n.id == info.owner || info.admins.contains(n.id) || info.members.contains(n.id);
             _sendOp(g, n.id, info.stateOp(withKey: trusted)).catchError((Object _) {});
@@ -1186,6 +1313,8 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
           final hash = await Avatars.store(base64.decode(d));
           if (hash != null && hash == m['h']) notifyListeners();
         } catch (_) {}
+      case 'gi':
+        await _onInvite(src, gid, m['d']);
       case 'gj':
         // حد عايز يدخل جروب أنا صاحبه
         final g = _groups[gid];

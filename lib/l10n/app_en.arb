@@ -860,5 +860,13 @@
   "guideIdentityBody": "Names in Wasl are free and can repeat, but everyone has a \"fingerprint\" from their key (chat menu → About). If two people show the same name, a small pattern appears next to each; if someone shows up with the name of a person you talked to before but isn’t them, Wasl says \"Not them?\". You can also give anyone a name of your own. The sure way: the safety code, face to face.",
   "mailFromAnyone": "Waiting messages from anyone",
   "mailFromAnyoneOn": "Anyone can leave you a message that waits",
-  "mailFromAnyoneOff": "Only from people you’ve talked to before"
+  "mailFromAnyoneOff": "Only from people you’ve talked to before",
+  "inviteToGroup": "Invite someone",
+  "inviteToGroupSub": "Pick someone nearby to invite — they join with one tap, no password",
+  "inviteNoOne": "Nobody nearby who isn’t in the group",
+  "inviteSent": "Invite sent to {name}",
+  "invitesTitle": "Invites for you",
+  "inviteFrom": "{name} invites you to \"{group}\"",
+  "inviteJoin": "Join",
+  "inviteNo": "No thanks"
 }
