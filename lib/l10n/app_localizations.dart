@@ -5395,6 +5395,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اتأكدنا: الأدوار متغيرتش من أول اللعبة'**
   String get mafiaRolesChecked;
+
+  /// No description provided for @guidePrivacyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مين بيكلم مين؟ محدش يعرف'**
+  String get guidePrivacyTitle;
+
+  /// No description provided for @guidePrivacyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشات الخاص بيمشي في الشبكة بأكواد سرية بتتغير كل 10 دقايق بدل الأسامي، وكل الرسايل بأحجام ثابتة، فالموبايلات اللي في النص ميعرفوش مين بيكلم مين ولا قد إيه. وفي الجروبات الخاصة الأعضاء مخفيين، والجروب السري محدش يشوفه خالص وبيدخلوه بدعوة بس (من بيانات الجروب ← ادعي حد).'**
+  String get guidePrivacyBody;
 }
 
 class _AppLocalizationsDelegate

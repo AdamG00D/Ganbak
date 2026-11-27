@@ -270,4 +270,12 @@ a phone's large-font setting): any text that spills out of its box fails the run
   (build script now also writes `Wasl-android.apk` / `Wasl-android-universal.apk`; both added to the v1.5 release);
   "protests" removed from the site (README / fastlane still mention it — ask the owner).
   Waiting for the owner: OK on the games plan (crypto dealing for spy, dealing + role commitment for mafia).
+- 2026-11-27 — 1.6 finished (not built): privacy parts 1–3, join-request invites need the owner's approval unless the
+  owner invited (`gj` carries `by`), **secret groups** (mode `s`: never advertised, everyone announces `gt` tags,
+  invite-only from owner/admins; new admin op `add`, the owner keeps admin-added members on state sync),
+  **fair dealing for Who's the spy** (`games/core/fair_deal.dart` + `spyMoves`: host never knows the spy or the word;
+  caught player proves with `e`; everyone reveals and `DealCheck.verify` runs on every phone), **mafia role
+  commitment** (`rc`/`rs`, `mafiaCheck`, banner at the end). "Protests" removed from READMEs and store texts.
+  Version 1.6.0+7, release notes 1.6v (since 1.5), fastlane changelogs/7, READMEs, site, guide entry. Security review
+  done for each part (see SECURITY en/ar). Waiting for the owner: OK to build + publish 1.6, real-phone test.
 

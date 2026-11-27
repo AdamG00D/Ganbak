@@ -3075,4 +3075,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mafiaRolesChecked => 'اتأكدنا: الأدوار متغيرتش من أول اللعبة';
+
+  @override
+  String get guidePrivacyTitle => 'مين بيكلم مين؟ محدش يعرف';
+
+  @override
+  String get guidePrivacyBody =>
+      'الشات الخاص بيمشي في الشبكة بأكواد سرية بتتغير كل 10 دقايق بدل الأسامي، وكل الرسايل بأحجام ثابتة، فالموبايلات اللي في النص ميعرفوش مين بيكلم مين ولا قد إيه. وفي الجروبات الخاصة الأعضاء مخفيين، والجروب السري محدش يشوفه خالص وبيدخلوه بدعوة بس (من بيانات الجروب ← ادعي حد).';
 }

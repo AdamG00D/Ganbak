@@ -394,6 +394,8 @@ S = {
     'spyFailed': ('التوزيع موقفش صح (حد خرج أو مردّش) — ابدأوا ماتش تاني.', 'The deal didn’t finish (someone left or didn’t answer) — start a new match.'),
     'mafiaRolesChanged': ('⚠️ الأدوار اتغيرت في النص — اللي فتح اللعبة غش', '⚠️ Roles changed mid-game — whoever opened the game cheated'),
     'mafiaRolesChecked': ('اتأكدنا: الأدوار متغيرتش من أول اللعبة', 'Checked: the roles didn’t change since the start'),
+    'guidePrivacyTitle': ('مين بيكلم مين؟ محدش يعرف', 'Who talks to whom? Nobody can tell'),
+    'guidePrivacyBody': ('الشات الخاص بيمشي في الشبكة بأكواد سرية بتتغير كل 10 دقايق بدل الأسامي، وكل الرسايل بأحجام ثابتة، فالموبايلات اللي في النص ميعرفوش مين بيكلم مين ولا قد إيه. وفي الجروبات الخاصة الأعضاء مخفيين، والجروب السري محدش يشوفه خالص وبيدخلوه بدعوة بس (من بيانات الجروب ← ادعي حد).', 'Private chats travel through the mesh with secret tags that change every 10 minutes instead of names, and every message has a fixed size, so phones in between can’t tell who talks to whom or how much. In private groups members stay hidden, and a secret group can’t be seen at all — people join by invite only (Group info → Invite someone).'),
 }
 
 

@@ -61,7 +61,8 @@ the phone's language, and you can switch it in Settings.
   **both at once**, which turns your phone into a bridge between a Wi-Fi network and people on Bluetooth.
 - **Wasl network** — no router? Your phone makes its own Wi-Fi network and people next to you join with one tap, no
   password typing. Networks link up over Bluetooth, so the network grows with no router at all.
-- **Mesh** — messages hop through other phones (up to 6 hops); relays can't read private chats.
+- **Mesh** — messages hop through other phones (up to 6 hops); relays can't read private chats, and since 1.6 they can't
+  tell who talks to whom either (rotating secret tags, fixed message sizes, hidden members in private groups).
 - **Messages wait for their owner** — text for someone who isn't around is sealed for them and carried by phones
   nearby until they show up (up to 48 hours); carriers can't read it.
 - **SOS** — ask everyone running Wasl in the mesh for help with one tap.
@@ -70,8 +71,8 @@ the phone's language, and you can switch it in Settings.
 - **Private chats** — end-to-end encrypted automatically, with an optional safety code to verify each other.
 - **Nobody can speak for you** — names and group messages are signed; everyone has a key fingerprint, and Wasl warns
   you ("Not them?") when someone shows up with the name of a person you know but another key.
-- **Groups** — open, password-protected or join-by-request, with an owner and admins who can remove members and
-  delete messages.
+- **Groups** — open, password-protected, join-by-request or **secret** (invite-only, invisible), with an owner and admins
+  who can remove members and delete messages, and invites with one tap.
 - **Everything you'd expect from a chat app** — photos, files, voice notes, replies, edits, delete for everyone,
   emoji reactions, @mentions, forwarding, search, read receipts, "typing…", voice and video calls over Wi-Fi.
 - **Games inside chats** 🎮 — tic-tac-toe, four in a row, battleships, rock paper scissors, dots and boxes and memory

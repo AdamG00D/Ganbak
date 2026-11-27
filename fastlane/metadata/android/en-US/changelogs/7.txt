@@ -1,0 +1,4 @@
+• More privacy: secret rotating tags instead of names, fixed message sizes, hidden members in private groups.
+• Secret groups and group invites.
+• Who's the spy: nobody, not even the host, knows the spy.
+• Mafia: role fingerprint checked by every phone.
