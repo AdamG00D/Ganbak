@@ -1396,7 +1396,7 @@ class ChatHub extends ChangeNotifier with WidgetsBindingObserver {
     for (final e in saved.entries) {
       final envs = [
         for (final raw in e.value)
-          if (Envelope.fromWire(raw) case final env?) env,
+          ?Envelope.fromWire(raw),
       ];
       if (envs.isEmpty) continue;
       m.outbox.putIfAbsent(e.key, () => []).addAll(envs);
