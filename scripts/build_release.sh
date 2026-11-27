@@ -6,6 +6,7 @@
 #     Wasl-<X.Y>-x86_64.apk        المحاكي / Chromebook
 #     Wasl-<X.Y>-universal.apk     أي موبايل (أكبر)
 #     SHA256SUMS.txt + Release_Notes.txt
+#   Wasl-android.apk / Wasl-android-universal.apk  ← نفس arm64 / الشاملة بأسامي ثابتة (لزرار التحميل في الموقع)
 #   Releases/Wasl.apk  ← آخر إصدار (النسخة الشاملة)
 #
 # كل النسخ بنفس رقم الإصدار الداخلي (versionCode): اللي سطّب نسخة يقدر يحدّث بأي نسخة تانية.
@@ -54,6 +55,10 @@ flutter build apk "${COMMON[@]}" --split-per-abi
 for ABI in arm64-v8a armeabi-v7a x86_64; do
   cp "$APKS/app-${ABI}-release.apk" "$OUT/Wasl-${VERSION}-${ABI}.apk"
 done
+
+# نسخ بأسامي ثابتة: زرار التحميل في الموقع بيشاور على releases/latest/download/<الاسم> فبيجيب آخر إصدار على طول
+cp "$OUT/Wasl-${VERSION}-arm64-v8a.apk" "$OUT/Wasl-android.apk"
+cp "$OUT/Wasl-${VERSION}-universal.apk" "$OUT/Wasl-android-universal.apk"
 
 cp "$NOTES" "$OUT/Release_Notes.txt"
 (cd "$OUT" && sha256sum Wasl-*.apk > SHA256SUMS.txt)

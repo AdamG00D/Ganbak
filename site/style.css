@@ -15,6 +15,7 @@ nav{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-conte
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--saffron);color:var(--ink);font-weight:700;font-size:18px;padding:14px 22px;border-radius:16px;text-decoration:none}
 .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
 .hero .meta{font-size:14px;color:#B9BBD0;margin-top:14px}
+.hero .meta a{color:#F6D27A}
 main{max-width:1040px;margin:0 auto;padding:0 16px}
 section{padding:48px 0 8px}
 h2{font-size:28px;margin:0 0 18px;color:var(--saffron-ink);text-align:center}

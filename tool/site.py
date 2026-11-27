@@ -12,7 +12,10 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / 'site'
 BASE = 'https://adamg00d.github.io/Wasl/'
 REPO = 'https://github.com/AdamG00D/Wasl'
-DOWNLOAD = REPO + '/releases/latest'
+# التحميل المباشر لآخر إصدار (أسامي ثابتة بيعملها scripts/build_release.sh)
+DOWNLOAD = REPO + '/releases/latest/download/Wasl-android.apk'
+DOWNLOAD_ALL = REPO + '/releases/latest/download/Wasl-android-universal.apk'
+RELEASES = REPO + '/releases/latest'
 SHOTS = ['chats', 'group-chat', 'nearby', 'games', 'game-mafia', 'guide']
 
 T = {
@@ -24,6 +27,7 @@ T = {
         'heroSub': 'وصل بيخلّي الموبايلات القريبة تكلم بعض بالبلوتوث والواي فاي، وتوصّل الرسايل لبعض كشبكة — من غير نت، ولا سيرفر، ولا حساب.',
         'download': 'حمّل وصل لأندرويد', 'source': 'الكود على GitHub',
         'meta': 'مجاني • مفتوح المصدر (GPL-3.0) • أندرويد 7 أو أحدث',
+        'old': 'موبايل قديم أو التثبيت فشل؟ حمّل النسخة الشاملة', 'all': 'كل النسخ',
         'featTitle': 'ليه وصل؟',
         'feats': [
             ('📡', 'من غير إنترنت', 'بلوتوث، أو واي فاي / هوت سبوت، أو الاتنين مع بعض — وموبايلك يبقى كوبري بينهم.'),
@@ -37,7 +41,7 @@ T = {
             ('👥', 'جروبات', 'عامة، أو بكلمة سر، أو بطلب انضمام — بصاحب ومشرفين.'),
         ],
         'whenTitle': 'إمتى تحتاجه؟',
-        'when': 'لما الشبكة تقع أو تبقى زحمة: الحفلات والمظاهرات والملاعب، الرحلات والصحرا، الجامعات، وانقطاع الكهربا والطوارئ.',
+        'when': 'لما الشبكة تقع أو تبقى زحمة: الحفلات والملاعب، الرحلات والصحرا، الجامعات، وانقطاع الكهربا والطوارئ.',
         'shotsTitle': 'شكله',
         'shareTitle': 'صاحبك مفيهوش وصل؟',
         'share': 'من الإعدادات ← "شارك وصل": موبايلك يفتح شبكة، وصاحبك يصوّر كودين ويحمّل التطبيق من موبايلك على طول — من غير نت.',
@@ -60,6 +64,7 @@ T = {
         'heroSub': 'Wasl lets nearby phones talk over Bluetooth and Wi-Fi and relay messages for each other as a mesh — no internet, no server, no account.',
         'download': 'Get Wasl for Android', 'source': 'Source on GitHub',
         'meta': 'Free • Open source (GPL-3.0) • Android 7+',
+        'old': 'Older phone or install failed? Get the universal build', 'all': 'All builds',
         'featTitle': 'Why Wasl?',
         'feats': [
             ('📡', 'No internet needed', 'Bluetooth, Wi-Fi / hotspot, or both at once — your phone becomes a bridge between them.'),
@@ -73,7 +78,7 @@ T = {
             ('👥', 'Groups', 'Open, password or join-request groups with an owner and admins.'),
         ],
         'whenTitle': 'When do you need it?',
-        'when': 'When the network is down or overloaded: festivals, protests, stadiums, trips and deserts, campuses, power cuts and emergencies.',
+        'when': 'When the network is down or overloaded: festivals, stadiums, trips and deserts, campuses, power cuts and emergencies.',
         'shotsTitle': 'What it looks like',
         'shareTitle': 'Your friend doesn’t have it?',
         'share': 'Settings → “Share Wasl”: your phone opens a network, your friend scans two codes and downloads the app straight from your phone — no internet.',
@@ -108,7 +113,7 @@ def page(lang: str) -> str:
         'name': 'Wasl', 'alternateName': 'وَصْل', 'operatingSystem': 'Android 7.0+',
         'applicationCategory': 'CommunicationApplication', 'description': t['desc'],
         'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'},
-        'downloadUrl': DOWNLOAD, 'license': 'https://www.gnu.org/licenses/gpl-3.0.html',
+        'downloadUrl': DOWNLOAD, 'installUrl': DOWNLOAD, 'license': 'https://www.gnu.org/licenses/gpl-3.0.html',
         'url': url, 'image': BASE + 'img/banner.en.png', 'codeRepository': REPO, 'inLanguage': ['ar', 'en'],
     }
     faq_ld = {
@@ -161,6 +166,7 @@ def page(lang: str) -> str:
 <div class="cta"><a class="btn" href="{DOWNLOAD}">{dl_icon}{e(t['download'])}</a>
 <a class="btn ghost" href="{REPO}">{e(t['source'])}</a></div>
 <p class="meta">{e(t['meta'])}</p>
+<p class="meta"><a href="{DOWNLOAD_ALL}">{e(t['old'])}</a> • <a href="{RELEASES}">{e(t['all'])}</a></p>
 </div>
 </header>
 <main>
@@ -200,6 +206,7 @@ nav{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-conte
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--saffron);color:var(--ink);font-weight:700;font-size:18px;padding:14px 22px;border-radius:16px;text-decoration:none}
 .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4)}
 .hero .meta{font-size:14px;color:#B9BBD0;margin-top:14px}
+.hero .meta a{color:#F6D27A}
 main{max-width:1040px;margin:0 auto;padding:0 16px}
 section{padding:48px 0 8px}
 h2{font-size:28px;margin:0 0 18px;color:var(--saffron-ink);text-align:center}
